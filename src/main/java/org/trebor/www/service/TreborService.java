@@ -37,13 +37,19 @@ public class TreborService {
     ForceTreeNode root = new ForceTreeNode("root");
 
     ForceTreeNode a = new ForceTreeNode("A");
+    ForceTreeNode b = new ForceTreeNode("B");
     root.add(a);
-    root.add(new ForceTreeNode("B", 2000));
-    root.add(new ForceTreeNode("C", 3000));
+    root.add(b);
+    root.add(new ForceTreeNode("C", 40000));
     
-    a.add(new ForceTreeNode("1", 1000));
-    a.add(new ForceTreeNode("2", 2000));
-    a.add(new ForceTreeNode("3", 3000));
+    a.add(new ForceTreeNode("1", 10000));
+    a.add(new ForceTreeNode("2", 20000));
+    a.add(new ForceTreeNode("3", 30000));
+    
+    b.add(new ForceTreeNode("1", 10000));
+    b.add(new ForceTreeNode("2", 20000));
+    b.add(new ForceTreeNode("3", 30000));
+
 
     return root;
   }

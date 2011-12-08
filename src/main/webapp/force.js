@@ -1,5 +1,5 @@
-var w = 960,
-    h = 500,
+var w = screen.width,
+    h = screen.height,
     fill = d3.scale.category20();
 
 var vis = d3.select("#chart")

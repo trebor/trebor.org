@@ -15,18 +15,19 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
     private JAXBContext context;
     private Class<?>[] types = { ForceNetwork.class, ForceTreeNode.class};
 
-    public JAXBContextResolver() throws Exception {
-//      JSONConfiguration config = JSONConfiguration.natural().usePrefixesAtNaturalAttributes().build();
-      JSONConfiguration config = JSONConfiguration.mapped().arrays("children").nonStrings("size").build();
-        context = new JSONJAXBContext(config, types);
-    } 
+  public JAXBContextResolver() throws Exception
+  {
+    JSONConfiguration config =
+      JSONConfiguration.mapped().arrays("children").nonStrings("size").build();
+    context = new JSONJAXBContext(config, types);
+  } 
 
-    public JAXBContext getContext(Class<?> objectType) {
-        for (Class<?> type : types) {
-            if (type == objectType) {
-                return context;
-            }
-        }
-        return null;
-    }
+  public JAXBContext getContext(Class<?> objectType)
+  {
+    for (Class<?> type : types)
+      if (type == objectType)
+        return context;
+
+    return null;
+  }
 }

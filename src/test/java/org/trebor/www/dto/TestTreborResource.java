@@ -2,8 +2,6 @@ package org.trebor.www.dto;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.ws.rs.core.MediaType;
-
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;

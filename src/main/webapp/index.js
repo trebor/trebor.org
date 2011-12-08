@@ -1,4 +1,8 @@
-var w = 960, h = 500, node, link, root;
+var w = screen.width - 10,
+    h = screen.height - 200,
+    node,
+    link,
+    root;
 
 var force = d3.layout.force().on("tick", tick)
 	.charge(function(d) {return d._children ? -d.size / 100 : -30;})
@@ -45,7 +49,7 @@ function update() {
 	// Exit any old links.
 	link.exit().remove();
 
-	// Update the nodesâ€¦
+	// Update the nodesâ...
 	node = vis.selectAll("circle.node").data(nodes, function(d) {
 		return d.id;
 	}).style("fill", color);
