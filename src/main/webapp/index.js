@@ -1,5 +1,5 @@
-var w = screen.width - 10,
-    h = screen.height - 200,
+var w = window.innerWidth - 8,
+    h = window.innerHeight - 22,
     node,
     link,
     root;
@@ -11,9 +11,7 @@ var force = d3.layout.force().on("tick", tick)
 
 var vis = d3.select("#chart").append("svg").attr("width", w).attr("height", h);
 
-var dataSource = 
-//	"./d3/examples/data/flare.json";
-	"http://localhost:8080/trebor/tree.json";
+var dataSource = "http://localhost:8080/trebor/tree.json";
 
 d3.json(dataSource, function(json) {
 	root = json;
@@ -21,6 +19,10 @@ d3.json(dataSource, function(json) {
 	root.x = w / 2;
 	root.y = h / 2;
 	update();
+	
+    // close all nodes for starters (this is a bad/wrong way to do this!)
+
+    vis.selectAll("circle.node").attr("foo", function(d){return click(d);});
 });
 
 function update() {
