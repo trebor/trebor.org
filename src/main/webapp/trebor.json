@@ -1,0 +1,47 @@
+{
+    "links": [
+        {
+            "source": 0, 
+            "target": 1, 
+            "value": 1
+        }, 
+        {
+            "source": 1, 
+            "target": 2, 
+            "value": 10
+        }, 
+        {
+            "source": 2, 
+            "target": 3, 
+            "value": 100
+        }, 
+        {
+            "source": 3, 
+            "target": 0, 
+            "value": 4
+        }, 
+        {
+            "source": 1, 
+            "target": 3, 
+            "value": 5
+        }
+    ], 
+    "nodes": [
+        {
+            "group": 1, 
+            "name": "alpha"
+        }, 
+        {
+            "group": 1, 
+            "name": "bravo"
+        }, 
+        {
+            "group": 2, 
+            "name": "charlie"
+        }, 
+        {
+            "group": 2, 
+            "name": "delta"
+        }
+    ]
+}
