@@ -14,31 +14,33 @@ import org.apache.log4j.Logger;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ForceTreeNode {
 
+  private static final String UNDEFINED = "<UNDEFINED>";
+
   @SuppressWarnings("unused")
   private static final Logger logger = Logger.getLogger(ForceTreeNode.class);
 
+  @XmlElement(name="imageName")
+  private String mImageName;
   @XmlElement(name="name")
   private String mName;
-  @XmlElement(name="size", required=false)  
-  private Integer mSize;
   @XmlElement(name="children", required=false)
   public List<ForceTreeNode> mChildren;
 
   public ForceTreeNode()
   {
-    this("<UNDEFINED>", null);
+    this(UNDEFINED, UNDEFINED);
   }
 
   public ForceTreeNode(String name)
   {
-    this(name, null);
+    this(name, UNDEFINED);
   }
   
-  public ForceTreeNode(String name, Integer size)
+  public ForceTreeNode(String name, String imageName)
   {
     mChildren = null;
     mName = name;
-    mSize = size;
+    mImageName = imageName;
   }
   
   public ForceTreeNode add(ForceTreeNode node)
@@ -55,11 +57,6 @@ public class ForceTreeNode {
     return mName;
   }
   
-  public Integer getSize()
-  {
-    return mSize;
-  }
-  
   public List<ForceTreeNode> getChildren()
   {
     return mChildren;
@@ -70,8 +67,13 @@ public class ForceTreeNode {
     mName = name;
   }
 
-  public void setSize(int size)
+  public void setImageName(String imageName)
   {
-    mSize = size;
+    mImageName = imageName;
+  }
+
+  public String getImageName()
+  {
+    return mImageName;
   }
 }

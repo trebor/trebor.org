@@ -1,11 +1,18 @@
-circle.node {
-  cursor: pointer;
-  stroke: #000;
-  stroke-width: .5px;
+image.node 
+{
+  cursor: move; /* progress; //crosshair; //pointer; */
 }
 
-line.link {
+line.link 
+{
   fill: none;
-  stroke: #9ecae1;
-  stroke-width: 1.5px;
+  stroke: #D0D0D0;
+  stroke-width: 5px;
+  stroke-linecap: round;
+}
+
+text
+{
+  fill: #909090;
+  font:bold 20px Courier New;
 }

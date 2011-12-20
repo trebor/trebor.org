@@ -11,12 +11,10 @@ public class TestForceTreeNode
 
     ForceTreeNode a = null;
     root.add(a = new ForceTreeNode("A"));
-    root.add(new ForceTreeNode("B", 2000));
-    root.add(new ForceTreeNode("C", 3000));
+    root.add(new ForceTreeNode("B"));
+    root.add(new ForceTreeNode("C"));
     
-    a.add(new ForceTreeNode("1", 1000));
-    a.add(new ForceTreeNode("2", 2000));
-    
-    
+    a.add(new ForceTreeNode("1"));
+    a.add(new ForceTreeNode("2"));
   }
 }

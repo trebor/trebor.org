@@ -34,23 +34,22 @@ public class TreborService {
 
   public ForceTreeNode getTree()
   {
-    ForceTreeNode root = new ForceTreeNode("root");
+    ForceTreeNode root = new ForceTreeNode("", "tat");
 
-    ForceTreeNode a = new ForceTreeNode("A");
-    ForceTreeNode b = new ForceTreeNode("B");
+    ForceTreeNode a = new ForceTreeNode("work", "work");
+    ForceTreeNode b = new ForceTreeNode("swarm", "swarm");
     root.add(a);
     root.add(b);
-    root.add(new ForceTreeNode("C", 40000));
+    root.add(new ForceTreeNode("test 1", "smile"));
     
-    a.add(new ForceTreeNode("1", 10000));
-    a.add(new ForceTreeNode("2", 20000));
-    a.add(new ForceTreeNode("3", 30000));
+    a.add(new ForceTreeNode("work 1", "smile"));
+    a.add(new ForceTreeNode("work 2", "smile"));
+    a.add(new ForceTreeNode("work 3", "smile"));
     
-    b.add(new ForceTreeNode("1", 10000));
-    b.add(new ForceTreeNode("2", 20000));
-    b.add(new ForceTreeNode("3", 30000));
-
-
+    b.add(new ForceTreeNode("swarm 1", "smile"));
+    b.add(new ForceTreeNode("swarm 2", "smile"));
+    b.add(new ForceTreeNode("swarm 3", "smile"));
+    
     return root;
   }
   

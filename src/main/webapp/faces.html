@@ -19,7 +19,7 @@ var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
-d3.json("graph.json", function(json) {
+d3.json("faces-graph.json", function(json) {
     var force = self.force = d3.layout.force()
         .nodes(json.nodes)
         .links(json.links)
@@ -46,12 +46,11 @@ d3.json("graph.json", function(json) {
 
     node.append("svg:image")
         .attr("class", "circle")
-        .attr("xlink:href", "http://localhost:8080/trebor/static/image/glyph-glow-100x97.png")
-//        .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png")
-        .attr("x", "-40px")
-        .attr("y", "-40px")
-        .attr("width", "80px")
-        .attr("height", "80px");
+        .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png")
+        .attr("x", "-8px")
+        .attr("y", "-8px")
+        .attr("width", "16px")
+        .attr("height", "16px");
 
     node.append("svg:text")
         .attr("class", "nodetext")
