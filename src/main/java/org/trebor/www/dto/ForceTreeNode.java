@@ -23,6 +23,8 @@ public class ForceTreeNode {
   private String mImageName;
   @XmlElement(name="name")
   private String mName;
+  @XmlElement(name="link", required=false)
+  private String mLink;
   @XmlElement(name="children", required=false)
   public List<ForceTreeNode> mChildren;
 
@@ -38,9 +40,15 @@ public class ForceTreeNode {
   
   public ForceTreeNode(String name, String imageName)
   {
+    this(name, imageName, null);
+  }
+  
+  public ForceTreeNode(String name, String imageName, String link)
+  {
     mChildren = null;
     mName = name;
     mImageName = imageName;
+    mLink = link;
   }
   
   public ForceTreeNode add(ForceTreeNode node)
@@ -75,5 +83,15 @@ public class ForceTreeNode {
   public String getImageName()
   {
     return mImageName;
+  }
+
+  public void setLink(String link)
+  {
+    mLink = link;
+  }
+
+  public String getLink()
+  {
+    return mLink;
   }
 }

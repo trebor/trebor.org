@@ -34,22 +34,23 @@ public class TreborService {
 
   public ForceTreeNode getTree()
   {
-    ForceTreeNode root = new ForceTreeNode("", "tat");
+    ForceTreeNode root = new ForceTreeNode("trebor.org", "tat");
 
-    ForceTreeNode a = new ForceTreeNode("work", "work");
-    ForceTreeNode b = new ForceTreeNode("swarm", "swarm");
-    root.add(a);
-    root.add(b);
-    root.add(new ForceTreeNode("test 1", "smile"));
+    ForceTreeNode work = new ForceTreeNode("work", "work");
+    work.add(new ForceTreeNode("NASA", "nasa", "http://human-factors.arc.nasa.gov/cognition/personnel/robh.html"));
+    work.add(new ForceTreeNode("Xuggle", "xuggle", "http://xuggle.com"));
     
-    a.add(new ForceTreeNode("work 1", "smile"));
-    a.add(new ForceTreeNode("work 2", "smile"));
-    a.add(new ForceTreeNode("work 3", "smile"));
+    ForceTreeNode projects = new ForceTreeNode("projects", "work");
+    projects.add(new ForceTreeNode("Swarm", "swarm", "http://orbswarm.com/"));
+    projects.add(new ForceTreeNode("trebor.org", "tat", "/trebor/static/index.html"));
     
-    b.add(new ForceTreeNode("swarm 1", "smile"));
-    b.add(new ForceTreeNode("swarm 2", "smile"));
-    b.add(new ForceTreeNode("swarm 3", "smile"));
+    ForceTreeNode subProjects = new ForceTreeNode("sub-projects", "work");
+    subProjects.add(new ForceTreeNode("Swarm", "swarm", "http://orbswarm.com/"));
+    subProjects.add(new ForceTreeNode("trebor.org", "tat", "/trebor/static/index.html"));
+    projects.add(subProjects);
     
+    root.add(work);
+    root.add(projects);
     return root;
   }
   

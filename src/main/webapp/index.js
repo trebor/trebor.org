@@ -6,12 +6,14 @@ var h = window.innerHeight - 22;
 var node;
 var link;
 var root;
-var nodeSize = 80;
+var discount = 0.8;
+var nodeSize = 120;
 var nodeOffset = nodeSize / 2;
-var linkLength = nodeSize * 1.25;
-var iconSize = 20;
+var linkLength = nodeSize * 0.95;
+var iconSize = nodeSize * 0.25;
+var nodeBuffer = 20;
 
-// construct the force layout
+//construct the force layout
 
 var force = d3
   .layout
@@ -19,7 +21,7 @@ var force = d3
   .on("tick", tick)
   .gravity(0)
   .charge(-200)
-  .linkDistance(linkLength)
+  .linkDistance(linkDistance)
   .size([w, h]);
 
 //  create the svg work area
@@ -40,12 +42,13 @@ d3.json(dataSource, function(json)
 
   // close all nodes for starters
 
-  vis.selectAll("g.node")
-    .each(function(d) {return click(d);});
+  vis.selectAll("g.node").each(toggleChildren);
 });
 
-function update() {
-  var nodes = flatten(root), links = d3.layout.tree().links(nodes);
+function update() 
+{
+  var nodes = flatten(root);
+  var links = d3.layout.tree().links(nodes);
 
   // Restart the force layout.
   force.nodes(nodes).links(links).start();
@@ -86,7 +89,7 @@ function update() {
 
   en.append("svg:image")
     .attr("class", "nodeImage")
-    .attr("xlink:href", imagePath)
+    .attr("xlink:href", function(d) {return imagePath(d.imageName);})
     .attr("x", imagePosition)
     .attr("y", imagePosition)
     .attr("width", imageSize)
@@ -97,17 +100,17 @@ function update() {
   en.append("svg:image")
     .attr("class", "nodeIcon")
     .attr("xlink:href", selectIcon)
-    .attr("x", nodeSize / 2 - iconSize)
-    .attr("y", nodeSize / 2 - iconSize)
+    .attr("x", function(d) {return imageSize(d) / 2 - iconSize;})
+    .attr("y", function(d) {return imageSize(d) / -2;})
     .attr("width", iconSize)
     .attr("height", iconSize);
   
   // append text
   
   en.append("svg:text")
-    .attr("class", "nodetext")
+    .attr("class", "nodeText")
     .attr("dx", 0)
-    .attr("dy", nodeOffset * 1.3)
+    .attr("dy", function(d) {return imageSize(d) / 2 + 15;})
     .attr("text-anchor", "middle")
     .text(function(node) {return node.name;});
 
@@ -118,15 +121,18 @@ function update() {
 
 function selectIcon(node)
 {
-    display(node);
+  var imageName = "unknown";
+  
+  if (node._children)
+    imageName = "expand";
 
-    if (node._children != null)
-        return imagesPath + "expand" + imageType;
+  else if (node.children)
+    imageName = "collapse";
+    
+  else if (node.link)
+    imageName = isLocalUrl(node.link) ? "inlink" : "link";
 
-    if (node.children != null)
-        return imagesPath + "collapse" + imageType;
-
-    return imagesPath + "link" + imageType;
+  return imagePath(imageName);
 }
 
 function tick() {
@@ -142,61 +148,101 @@ function tick() {
 //    .attr("y", function(d) {return d.y - nodeOffset;});
 }
 
-function imagePath(node)
+function imagePath(name)
 {
-  return imagesPath + node.imageName + imageType;
+  return imagesPath + name + imageType;
 }
+
+// establish the image positino for a given node
 
 function imagePosition(node)
 {
-  return "-" + nodeOffset + "px";
+  return -imageSize(node) / 2;
 }
+
+// establish the image size for a given node
 
 function imageSize(node)
 {
-  return nodeSize + "px";
+    return nodeSize * Math.pow(discount, node.depth);
 }
 
-// Color leaf nodes orange, and packages white or blue.
-function color(d) {
-  return d._children ? "#ff0000" : d.children ? "#00ff00" : "#0000ff";
-//  return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
-}
+// establish the distance between two links
 
-
-
-// Toggle children on click.
-function click(d)
+function linkDistance(link) 
 {
-  if (d.children) 
+  return (imageSize(link.source) + imageSize(link.target)) / 2 + nodeBuffer;
+}
+
+// toggle children open or closed
+
+function toggleChildren(node)
+{
+  if (node.children) 
   {
-    d._children = d.children;
-    d.children = null;
+    node._children = node.children;
+    node.children = null;
   }
-  else
+  else if (node._children)
   {
-    d.children = d._children;
-    d._children = null;
+    node.children = node._children;
+    node._children = null;
   }
+
+  // update icon
+
+  vis
+    .selectAll("[class=nodeIcon]")
+    .filter(function (d) {return d == node;})
+    .attr("href", selectIcon(node));
+
   update();
 }
 
-// Returns a list of all nodes under the root.
+// handle a node click
+
+function click(node)
+{
+  if (node.children || node._children)
+    toggleChildren(node);
+  else if (node.link)
+  {
+    if (isLocalUrl(node.link))
+      window.location = node.link;
+    else
+      window.open(node.link, '_blank');
+  }
+}
+
+// tests if a url is local to this domain
+
+function isLocalUrl(url)
+{
+  return url.indexOf("http") != 0;
+}
+
+// returns a list of all nodes under the root
+
 function flatten(root) 
 {
   var nodes = [], i = 0;
 
-  function recurse(node) 
+  function recurse(node, depth)
   {
     if (node.children)
-      node.size = node.children.reduce(function(p, v) {return p + recurse(v);  }, 0);
+      node.size = node.children.reduce(
+          function(p, v)
+          {
+            return p + recurse(v, depth + 1);
+          }, 0);
     if (!node.id)
       node.id = ++i;
     nodes.push(node);
+    node.depth = depth;
     return node.size;
   }
 
-  root.size = recurse(root);
+  root.size = recurse(root, 0);
   return nodes;
 }
 
