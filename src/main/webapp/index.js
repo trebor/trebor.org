@@ -95,16 +95,6 @@ function update()
     .attr("width", imageSize)
     .attr("height", imageSize);
 
-  // add node icon
-
-  en.append("svg:image")
-    .attr("class", "nodeIcon")
-    .attr("xlink:href", selectIcon)
-    .attr("x", function(d) {return imageSize(d) / -2;})
-    .attr("y", function(d) {return imageSize(d) / -2;})
-    .attr("width", iconSize)
-    .attr("height", iconSize);
-  
   // add node text
   
   en.append("svg:text")
@@ -114,6 +104,26 @@ function update()
     .attr("text-anchor", "middle")
     .text(function(node) {return node.name;});
   
+  // add node icon
+
+  en.append("svg:image")
+    .attr("class", "nodeIcon")
+    .attr("xlink:href", selectIcon)
+    .attr("x", function(d) {return imageSize(d) / 2 - iconSize;})
+    .attr("y", function(d) {return imageSize(d) / 2 - iconSize;})
+    .attr("width", iconSize)
+    .attr("height", iconSize);
+
+  // add click text
+  
+  en.append("svg:text")
+    .attr("class", "clickText")
+    .attr("dx", function(d) {return imageSize(d) / 2;})
+    .attr("dy", function(d) {return imageSize(d) / 2 - 0.5 * iconSize;})
+    .attr("text-anchor", "start")
+    .attr("dominant-baseline", "middle")
+    .text(function(node) {return node.clickAct;});
+
   // add summary icon
 
   en.filter(function(d) {return d.summary != null;})
@@ -124,36 +134,61 @@ function update()
     .attr("y", function(d) {return imageSize(d) / -2;})
     .attr("width", iconSize)
     .attr("height", iconSize);
+  
+  // add summary text
 
   // add summary text
 
-  en.filter(function(d) {return d.summary != null;})
-    .append("svg:text")
+  var text = en.filter(function(d) {return d.summary != null;})
+    .append("svg:foreignObject")
     .attr("class", "summaryText")
-    .attr("dx", function(d) {return imageSize(d) / 2;})
-    .attr("dy", 0)
-    .attr("text-anchor", "start")
-    .text(function(node) {return node.summary;});
+    .attr("x", function(d) {return imageSize(d) / 2;})
+    .attr("y", function(d) {return imageSize(d) / -2;})
+    .attr("width", 300)
+    .attr("height", 500)
+    .append("xhtml:body")
+    .html(function(d) {return d.summary});
 
   // remove old nodes
   
   node.exit().remove();
 }
 
-function selectIcon(node)
+function selectIconName(node)
 {
-  var imageName = "unknown";
+  var iconName = "unknown";
   
   if (node._children)
-    imageName = "expand";
+  {
+    node.clickAct = "expand";
+    iconName = "expand";
+  }
 
   else if (node.children)
-    imageName = "collapse";
-    
+  {
+    node.clickAct = "collapse";
+    iconName = "collapse";
+  }    
   else if (node.link)
-    imageName = isLocalUrl(node.link) ? "inlink" : "link";
+  {
+      if (isLocalUrl(node.link))
+      {
+          node.clickAct = "link";
+          iconName = "inlink";
+      }
+      else
+      {
+          node.clickAct = "exteranl link";
+          iconName = "link";
+      }
+  }
+  
+  return iconName;
+}
 
-  return imagePath(imageName);
+function selectIcon(node)
+{
+  return imagePath(selectIconName(node));
 }
 
 function tick() {
@@ -217,6 +252,11 @@ function toggleChildren(node)
     .filter(function (d) {return d == node;})
     .attr("href", selectIcon(node));
 
+  vis
+    .selectAll("[class=clickText]")
+    .filter(function (d) {return d == node;})
+    .text(function(node) {return node.clickAct;});
+
   update();
 }
 
@@ -269,16 +309,16 @@ function flatten(root)
 
 function display(thing)
 {
-    if (thing instanceof Array)
-    {
-        console.log("array: ");
-        for (n in thing)
-            console.log("  ", n, ": ", thing[n]);
-    }
-    else if (typeof(thing) == "object")
-        console.log("object: ", thing);
-    else
-        console.log(typeof(thing), "?: ", thing);
+  if (thing instanceof Array)
+  {
+    console.log("array: ");
+    for (n in thing)
+      console.log("  ", n, ": ", thing[n]);
+  } 
+  else if (typeof(thing) == "object")
+    console.log("object: ", thing);
+  else
+    console.log(typeof(thing), "?: ", thing);
 
-    return "bar";
+  return "bar";
 }

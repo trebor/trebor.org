@@ -11,16 +11,39 @@
   visibility:hidden;
 }
 
-.nodeText, .summaryText
+.summaryText
 {
-  fill: #000;
+  fill: #888;
   font:bold 20px Courier New;
-  opacity:0.3;
-  -ms-filter:'alpha(opacity=30)'; /* For IE8 and earlier */
+  opacity:0.8;
+  -ms-filter:'alpha(opacity=80)'; /* For IE8 and earlier */
+  visibility:hidden;
+}
+
+.nodeText
+{
+  fill: #888;
+  font:bold 18px Courier New;
+  opacity:0.8;
+  -ms-filter:'alpha(opacity=80)'; /* For IE8 and earlier */
+  visibility:hidden;
+}
+
+.clickText
+{
+  fill: #888;
+  font:bold 14px Courier New;
+  opacity:0.8;
+  -ms-filter:'alpha(opacity=80)'; /* For IE8 and earlier */
   visibility:hidden;
 }
 
 .node:hover > .summaryIcon:hover + .summaryText
+{
+  visibility:visible;
+}
+
+.node:hover > .nodeIcon:hover + .clickText
 {
   visibility:visible;
 }
