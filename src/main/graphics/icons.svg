@@ -25,11 +25,11 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.30103704"
-     inkscape:cx="1328.3392"
-     inkscape:cy="5.2964299"
+     inkscape:cx="796.84312"
+     inkscape:cy="-245.71418"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:snap-bbox-edge-midpoints="true"
      inkscape:bbox-nodes="true"
@@ -67,6 +67,16 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
+       inkscape:export-ydpi="45"
+       inkscape:export-xdpi="45"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/image/summary.png"
+       style="opacity:0.31308407999999999;fill:none;stroke:none"
+       id="rect6401"
+       width="400"
+       height="400"
+       x="250"
+       y="1402.3622" />
+    <rect
        style="opacity:0.31308408;fill:none;stroke:none"
        id="rect3819"
        width="400"
@@ -82,7 +92,7 @@
        height="400"
        width="400"
        id="rect3939"
-       style="opacity:0.31308408;fill:none;stroke:none"
+       style="opacity:0.31308407999999999;fill:none;stroke:none"
        inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/image/download.png"
        inkscape:export-xdpi="45"
        inkscape:export-ydpi="45" />
@@ -377,6 +387,30 @@
          d="m 1488.9375,1535.8438 c -1.8857,-0.01 -3.7904,0.015 -5.7187,0.031 -28.0487,0.2387 -60.5616,2.8373 -95.75,9.875 a 30.003,30.003 0 1 0 11.7812,58.8125 c 45.7498,-9.15 85.056,-9.9846 114.3438,-8.2187 l -134.375,134.375 a 30.007773,30.007773 0 0 0 42.4374,42.4374 l 134.375,-134.375 c 1.7567,29.2878 0.9001,68.594 -8.25,114.3438 a 30.003,30.003 0 1 0 58.8438,11.75 c 22.5207,-112.6032 -0.4687,-197.625 -0.4688,-197.625 a 30.003,30.003 0 0 0 -21.0624,-21.0312 c 0,0 -37.6996,-10.2149 -96.1563,-10.375 z"
          id="path3973"
          inkscape:connector-curvature="0" />
+    </g>
+    <g
+       id="g6405"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/image/summary.png"
+       inkscape:export-xdpi="45"
+       inkscape:export-ydpi="45">
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path6389"
+         d="m 309.99998,1752.3622 280.00004,0"
+         style="fill:#e6e6e6;stroke:#ff0000;stroke-width:60;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         style="fill:#e6e6e6;stroke:#ff0000;stroke-width:60;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 309.99999,1602.3622 280.00002,0"
+         id="path6395"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:#e6e6e6;stroke:#ff0000;stroke-width:60;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 309.99998,1452.3622 280.00004,0"
+         id="path6397"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
     </g>
   </g>
 </svg>

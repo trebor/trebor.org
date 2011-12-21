@@ -35,6 +35,7 @@ public class TreborService {
   public ForceTreeNode getTree()
   {
     ForceTreeNode root = new ForceTreeNode("trebor.org", "tat");
+    root.setSummary("welcome to trebor.org\nthe personal site of robert harris");
 
     ForceTreeNode work = new ForceTreeNode("work", "work");
     work.add(new ForceTreeNode("NASA", "nasa", "http://human-factors.arc.nasa.gov/cognition/personnel/robh.html"));

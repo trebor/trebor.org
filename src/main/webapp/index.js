@@ -85,7 +85,7 @@ function update()
     .on("click", click)
     .call(force.drag);
 
-  // add image
+  // add node image
 
   en.append("svg:image")
     .attr("class", "nodeImage")
@@ -95,17 +95,17 @@ function update()
     .attr("width", imageSize)
     .attr("height", imageSize);
 
-  // add icon
+  // add node icon
 
   en.append("svg:image")
     .attr("class", "nodeIcon")
     .attr("xlink:href", selectIcon)
-    .attr("x", function(d) {return imageSize(d) / 2 - iconSize;})
+    .attr("x", function(d) {return imageSize(d) / -2;})
     .attr("y", function(d) {return imageSize(d) / -2;})
     .attr("width", iconSize)
     .attr("height", iconSize);
   
-  // append text
+  // add node text
   
   en.append("svg:text")
     .attr("class", "nodeText")
@@ -113,6 +113,27 @@ function update()
     .attr("dy", function(d) {return imageSize(d) / 2 + 15;})
     .attr("text-anchor", "middle")
     .text(function(node) {return node.name;});
+  
+  // add summary icon
+
+  en.filter(function(d) {return d.summary != null;})
+    .append("svg:image")
+    .attr("class", "summaryIcon")
+    .attr("xlink:href", function(d) {return imagePath("summary");})
+    .attr("x", function(d) {return (imageSize(d) / 2) - iconSize;})
+    .attr("y", function(d) {return imageSize(d) / -2;})
+    .attr("width", iconSize)
+    .attr("height", iconSize);
+
+  // add summary text
+
+  en.filter(function(d) {return d.summary != null;})
+    .append("svg:text")
+    .attr("class", "summaryText")
+    .attr("dx", function(d) {return imageSize(d) / 2;})
+    .attr("dy", 0)
+    .attr("text-anchor", "start")
+    .text(function(node) {return node.summary;});
 
   // remove old nodes
   
