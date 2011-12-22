@@ -97,13 +97,15 @@ function update()
 
   // add node text
   
-  en.append("svg:text")
+  en.append("svg:foreignObject")
     .attr("class", "nodeText")
-    .attr("dx", 0)
-    .attr("dy", function(d) {return imageSize(d) / 2 + 15;})
-    .attr("text-anchor", "middle")
-    .text(function(node) {return node.name;});
-  
+    .attr("width", 150)
+    .attr("height", 30)
+    .attr("x", 150 / -2)
+    .attr("y", function(d) {return imageSize(d) / -2 - 30;})
+    .append("xhtml:body")
+    .html(function(node) {return "<center>" + node.name + "</center>";});
+
   // add node icon
 
   en.append("svg:image")
@@ -116,13 +118,14 @@ function update()
 
   // add click text
   
-  en.append("svg:text")
+  en.append("svg:foreignObject")
     .attr("class", "clickText")
-    .attr("dx", function(d) {return imageSize(d) / 2;})
-    .attr("dy", function(d) {return imageSize(d) / 2 - 0.5 * iconSize;})
-    .attr("text-anchor", "start")
-    .attr("dominant-baseline", "middle")
-    .text(function(node) {return node.clickAct;});
+    .attr("x", function(d) {return imageSize(d) / 2;})
+    .attr("y", function(d) {return imageSize(d) / 2 - iconSize;})
+    .attr("width", 150)
+    .attr("height", 30)
+    .append("xhtml:body")
+    .html(function(node) {return node.clickAct;});
 
   // add summary icon
 
@@ -135,8 +138,6 @@ function update()
     .attr("width", iconSize)
     .attr("height", iconSize);
   
-  // add summary text
-
   // add summary text
 
   var text = en.filter(function(d) {return d.summary != null;})

@@ -13,28 +13,34 @@
 
 .summaryText
 {
-  fill: #888;
+  color: #000;
   font:bold 20px Courier New;
-  opacity:0.8;
-  -ms-filter:'alpha(opacity=80)'; /* For IE8 and earlier */
+  text-shadow: 0.1em 0.1em 0.2em black;
+
+  opacity:0.75;
+  -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
   visibility:hidden;
 }
 
 .nodeText
 {
-  fill: #888;
+  color: #000;
   font:bold 18px Courier New;
-  opacity:0.8;
-  -ms-filter:'alpha(opacity=80)'; /* For IE8 and earlier */
+  text-shadow: 0.1em 0.1em 0.2em black;
+
+  opacity:0.75;
+  -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
   visibility:hidden;
 }
 
 .clickText
 {
-  fill: #888;
+  color: #000;
   font:bold 14px Courier New;
-  opacity:0.8;
-  -ms-filter:'alpha(opacity=80)'; /* For IE8 and earlier */
+  text-shadow: 0.1em 0.1em 0.2em black;
+	
+  opacity:0.75;
+  -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
   visibility:hidden;
 }
 
