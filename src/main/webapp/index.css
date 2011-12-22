@@ -11,37 +11,31 @@
   visibility:hidden;
 }
 
-.summaryText
+.summaryText, .nodeText, .clickText
 {
   color: #000;
-  font:bold 20px Courier New;
   text-shadow: 0.1em 0.1em 0.2em black;
 
   opacity:0.75;
   -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
   visibility:hidden;
+  font-weight: bold;
+  font-family: Courier New;
+}
+
+.summaryText
+{
+  font-size: 20px;
 }
 
 .nodeText
 {
-  color: #000;
-  font:bold 18px Courier New;
-  text-shadow: 0.1em 0.1em 0.2em black;
-
-  opacity:0.75;
-  -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
-  visibility:hidden;
+  font-size: 18px;
 }
 
 .clickText
 {
-  color: #000;
-  font:bold 14px Courier New;
-  text-shadow: 0.1em 0.1em 0.2em black;
-	
-  opacity:0.75;
-  -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
-  visibility:hidden;
+  font-size: 14px;
 }
 
 .node:hover > .summaryIcon:hover + .summaryText

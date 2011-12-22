@@ -7,7 +7,7 @@ var node;
 var link;
 var root;
 var discount = 0.8;
-var nodeSize = 120;
+var nodeSize = 150;
 var nodeOffset = nodeSize / 2;
 var linkLength = nodeSize * 0.95;
 var iconSize = nodeSize * 0.25;
@@ -108,7 +108,8 @@ function update()
 
   // add node icon
 
-  en.append("svg:image")
+  en.filter(selectIcon)
+    .append("svg:image")
     .attr("class", "nodeIcon")
     .attr("xlink:href", selectIcon)
     .attr("x", function(d) {return imageSize(d) / 2 - iconSize;})
@@ -118,7 +119,8 @@ function update()
 
   // add click text
   
-  en.append("svg:foreignObject")
+  en.filter(selectIcon)
+    .append("svg:foreignObject")
     .attr("class", "clickText")
     .attr("x", function(d) {return imageSize(d) / 2;})
     .attr("y", function(d) {return imageSize(d) / 2 - iconSize;})
