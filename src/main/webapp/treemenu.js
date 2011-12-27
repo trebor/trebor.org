@@ -1,4 +1,4 @@
-var dataSource = "/trebor/tree.json";
+var dataSource = "/trebor/tree/" + getUrlVars()["page"];
 var imagesPath = "image/";
 var imageType = ".png";
 var w = window.innerWidth - 8;
@@ -129,17 +129,6 @@ function update()
     .append("xhtml:body")
     .html(function(node) {return node.clickAct;});
 
-  // add summary icon
-
-  en.filter(function(d) {return d.summary != null;})
-    .append("svg:image")
-    .attr("class", "summaryIcon")
-    .attr("xlink:href", function(d) {return imagePath("summary");})
-    .attr("x", function(d) {return (imageSize(d) / 2) - iconSize;})
-    .attr("y", function(d) {return imageSize(d) / -2;})
-    .attr("width", iconSize)
-    .attr("height", iconSize);
-  
   // add summary text
 
   var text = en.filter(function(d) {return d.summary != null;})
@@ -147,8 +136,8 @@ function update()
     .attr("class", "summaryText")
     .attr("x", function(d) {return imageSize(d) / 2;})
     .attr("y", function(d) {return imageSize(d) / -2;})
-    .attr("width", 300)
-    .attr("height", 500)
+    .attr("width", "20em")
+    .attr("height", "5em")
     .append("xhtml:body")
     .html(function(d) {return d.summary});
 
@@ -159,7 +148,7 @@ function update()
 
 function selectIconName(node)
 {
-  var iconName = "unknown";
+  var iconName = null;
   
   if (node._children)
   {
@@ -310,18 +299,28 @@ function flatten(root)
   return nodes;
 }
 
+function getUrlVars()
+{
+  var vars = {};
+  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+      function(m,key,value)
+      {
+        vars[key] = value;
+      });
+  return vars;
+}
+
+
 function display(thing)
 {
-  if (thing instanceof Array)
+  if (!thing)
+    console.log(typeof(thing), ": NULL");
+  else if (thing instanceof Array)
   {
     console.log("array: ");
     for (n in thing)
-      console.log("  ", n, ": ", thing[n]);
+      console.log("   ", typeof(thing[n]), " [", n, "]: ", thing[n]);
   } 
-  else if (typeof(thing) == "object")
-    console.log("object: ", thing);
   else
-    console.log(typeof(thing), "?: ", thing);
-
-  return "bar";
+    console.log(typeof(thing), ": ", thing);
 }

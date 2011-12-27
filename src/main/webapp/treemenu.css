@@ -3,7 +3,7 @@
   cursor: pointer; /* progress; crosshair; move; */
 }
 
-.nodeIcon, .summaryIcon
+.nodeIcon
 {
   cursor: pointer;
   opacity:0.75;
@@ -38,11 +38,6 @@
   font-size: 14px;
 }
 
-.node:hover > .summaryIcon:hover + .summaryText
-{
-  visibility:visible;
-}
-
 .node:hover > .nodeIcon:hover + .clickText
 {
   visibility:visible;
@@ -50,12 +45,12 @@
 
 /* when hover over a node, expose detail */
 
-.node:hover .nodeIcon
+.node:hover .summaryText
 {
   visibility:visible;
 }
 
-.node:hover .summaryIcon
+.node:hover .nodeIcon
 {
   visibility:visible;
 }
