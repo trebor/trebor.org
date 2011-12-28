@@ -1,15 +1,20 @@
 package org.trebor.www.dto;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.openrdf.repository.object.annotations.iri;
 
 import org.apache.log4j.Logger;
 
+import static org.trebor.www.rdf.NameSpace.*;
+
+@iri(TREE_NODE)
 @XmlRootElement()
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ForceTreeNode {
@@ -19,14 +24,23 @@ public class ForceTreeNode {
   @SuppressWarnings("unused")
   private static final Logger logger = Logger.getLogger(ForceTreeNode.class);
 
+  @iri(HAS_NODE_IMAGE)
   @XmlElement(name="imageName")
   private String mImageName;
+  
+  @iri(HAS_NAME)
   @XmlElement(name="name")
   private String mName;
+  
+  @iri(HAS_NODE_LINK)
   @XmlElement(name="link", required=false)
   private String mLink;
+  
+  @iri(HAS_NODE_SUMMARY)
   @XmlElement(name="summary", required=false)
   private String mSummary;
+  
+  @iri(HAS_NODE_CHILDREN)
   @XmlElement(name="children", required=false)
   public List<ForceTreeNode> mChildren;
 
@@ -75,7 +89,7 @@ public class ForceTreeNode {
   
   public List<ForceTreeNode> getChildren()
   {
-    return mChildren;
+    return mChildren == null ? Collections.<ForceTreeNode>emptyList() : mChildren;
   }
 
   public void setName(String name)
@@ -111,5 +125,26 @@ public class ForceTreeNode {
   public String getSummary()
   {
     return mSummary;
+  }
+
+  public String toString()
+  {
+    return "ForceTreeNode [mImageName=" + mImageName + ", mName=" + mName +
+      ", mLink=" + mLink + ", mSummary=" + mSummary + ", mChildren=" +
+      mChildren + "]";
+  }
+  
+  public ForceTreeNode copy()
+  {
+    ForceTreeNode copy = new ForceTreeNode();
+    copy.setImageName(getImageName());
+    copy.setName(getName());
+    copy.setLink(getLink());
+    copy.setSummary(getSummary());
+    
+    for (ForceTreeNode child: getChildren())
+      copy.add(child.copy());
+    
+    return copy;
   }
 }

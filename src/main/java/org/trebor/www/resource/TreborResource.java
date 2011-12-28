@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.result.MultipleResultException;
+import org.openrdf.result.NoResultException;
 import org.trebor.www.service.TreborService;
 
 import com.sun.jersey.api.core.InjectParam;
@@ -70,7 +72,7 @@ public class TreborResource
   @GET
   @Produces("application/json")
   @Path("tree/{path}")
-  public Response treeMenu(@PathParam("path") String path)
+  public Response treeMenu(@PathParam("path") String path) throws NoResultException, MultipleResultException, MalformedQueryException, RepositoryException, QueryEvaluationException
   {
     log.debug("tree/" + path);
     return Response.ok(mTreborService.getTree(path)).build();

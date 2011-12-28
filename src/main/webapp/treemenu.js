@@ -68,6 +68,7 @@ function update()
     .attr("y2", function(d) {return d.target.y;});
 
   // Exit any old links.
+  
   link.exit().remove();
 
   // select all nodes and add new nodes

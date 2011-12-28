@@ -1,20 +1,33 @@
 package org.trebor.www.service;
 
+import static org.trebor.www.rdf.NameSpace.*;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.ValueFactory;
 import org.openrdf.query.GraphQuery;
 import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
+import org.openrdf.repository.object.ObjectConnection;
+import org.openrdf.repository.object.ObjectQuery;
+import org.openrdf.repository.object.config.ObjectRepositoryFactory;
+import org.openrdf.repository.query.NamedQuery;
+import org.openrdf.result.MultipleResultException;
+import org.openrdf.result.NoResultException;
 import org.trebor.www.dto.ForceNetwork;
 import org.trebor.www.dto.ForceTreeNode;
 import org.trebor.www.dto.InteractionSummaryTable;
 import org.trebor.www.dto.ForceNetwork.Node;
+import org.trebor.www.rdf.MockRepositoryFactory;
 import org.trebor.www.util.RepositoryContext;
 import org.trebor.www.util.RepositoryContextFactory;
 
@@ -24,11 +37,33 @@ public class TreborService
   private Logger log = Logger.getLogger(getClass());
 
   private final RepositoryContext mRepositoryContext;
+  private final ObjectConnection mObjectConnection;
 
-  public TreborService() throws RepositoryException
+  private NamedQuery mNamedTreeNodequery;
+
+  public TreborService() throws RepositoryException, RepositoryConfigException
   {
     mRepositoryContext =
-      RepositoryContextFactory.createRemoteContext("localhost", 8080, "mim");
+          RepositoryContextFactory.createRemoteContext("localhost", 8080, "mim");
+
+
+    // establish an in memory repository
+    
+    Repository repository = MockRepositoryFactory.getMockRepository();
+    ObjectRepositoryFactory orf = new ObjectRepositoryFactory();
+    mObjectConnection = orf.createRepository(repository).getConnection();
+
+    // initialize tree with test data
+    
+    mObjectConnection.addObject(testTree());
+
+    // initialize named queries
+    
+    ValueFactory vf = repository.getValueFactory();
+    URI myQueryID = vf.createURI(TOI + "query/getNamedTreeNode");
+    mNamedTreeNodequery = mObjectConnection.getRepository().createNamedQuery(myQueryID,
+      PREFIX  +
+      "SELECT ?doc WHERE {?doc too:hasName ?name. ?doc a too:treeNode.}");
   }
 
   public InteractionSummaryTable getSummary()
@@ -37,17 +72,23 @@ public class TreborService
     return table;
   }
 
-  public ForceTreeNode getTree(String path)
+  public ForceTreeNode getTree(String path) throws MalformedQueryException, RepositoryException, NoResultException, MultipleResultException, QueryEvaluationException
   {
-    if (path.equals("test"))
-      return testTree();
-    
-    ForceTreeNode root = new ForceTreeNode("trebor.org", "tat");
-    log.debug("path: " + path);
-    root.setSummary(String.format("this is a <del>%s</del> node.  cool huh?",
-      path));
-    
-    return root;
+    ObjectQuery query = mObjectConnection.prepareObjectQuery(mNamedTreeNodequery.getQueryString());
+    query.setObject("name", path);
+    ForceTreeNode node = (ForceTreeNode)query.evaluate().singleResult();
+    log.debug(node);
+    return node.copy();
+//    
+//    if (path.equals("test"))
+//      return testTree();
+//    
+//    ForceTreeNode root = new ForceTreeNode("trebor.org", "tat");
+//    log.debug("path: " + path);
+//    root.setSummary(String.format("this is a <del>%s</del> node.  cool huh?",
+//      path));
+//    
+//    return root;
   }
 
   public ForceTreeNode testTree()
@@ -64,11 +105,11 @@ public class TreborService
 
     ForceTreeNode projects = new ForceTreeNode("projects", "work");
     projects.add(new ForceTreeNode("Swarm", "swarm"));
-    projects.add(new ForceTreeNode("trebor.org", "tat"));
+    projects.add(new ForceTreeNode("trebor-1", "tat"));
 
     ForceTreeNode subProjects = new ForceTreeNode("sub-projects", "work");
     subProjects.add(new ForceTreeNode("Swarm", "swarm"));
-    subProjects.add(new ForceTreeNode("trebor.org", "tat"));
+    subProjects.add(new ForceTreeNode("trebor-2", "tat"));
     projects.add(subProjects);
 
     root.add(work);
