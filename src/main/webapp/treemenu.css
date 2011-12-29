@@ -11,11 +11,12 @@
   visibility:hidden;
 }
 
-.summaryText, .nodeText, .clickText
+.summaryText, .clickText
 {
   color: #000;
-  text-shadow: 0.1em 0.1em 0.2em black;
-
+  text-shadow: 0 0 0.1em #fff, 0 0 0.1em #fff, 0 0 0.1em #fff;
+  padding-left: 1em;
+  
   opacity:0.75;
   -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
   visibility:hidden;
@@ -25,11 +26,6 @@
 
 .summaryText
 {
-  font-size: 20px;
-}
-
-.nodeText
-{
   font-size: 18px;
 }
 
@@ -38,7 +34,12 @@
   font-size: 14px;
 }
 
-.node:hover > .nodeIcon:hover + .clickText
+.summaryTextObject, .clickTextObject
+{
+  visibility:hidden;
+}  
+
+.node:hover > .nodeIcon:hover + .clickTextObject .clickText
 {
   visibility:visible;
 }
@@ -51,11 +52,6 @@
 }
 
 .node:hover .nodeIcon
-{
-  visibility:visible;
-}
-
-.node:hover .nodeText
 {
   visibility:visible;
 }

@@ -14,6 +14,7 @@ import org.openrdf.query.TupleQuery;
 import org.openrdf.query.impl.DatasetImpl;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
+import org.trebor.www.rdf.RdfUtil;
 
 class DefaultRepositoryContext implements RepositoryContext {
   private final Logger logger = Logger.getLogger(getClass());

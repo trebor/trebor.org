@@ -1,0 +1,54 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- home node --- #
+
+_:home              a                   too:treeNode;
+                    too:hasName         "home";
+                    too:hasNodeImage    "tat";
+                    too:hasNodeChildren _:home_kids;
+                    too:hasNodeSummary
+
+"hello, i am robert harris and this is my personal personal site.  my hope is that your visit here will help you to learn something about me, my ideas, and my asthetics.".
+
+_:home_kids         a                    rdfs:Container;
+                    rdf:_1               _:influences.
+
+# --- influences --- #
+
+_:influences        a                   too:treeNode;
+                    too:hasName         "influences";
+                    too:hasNodeImage    "influences";
+                    too:hasNodeChildren _:influences_kids;
+                    too:hasNodeSummary
+
+"these luminaries have had real impact on the way i think, and i would encourge anyone to delve into thier works.".
+
+_:influences_kids   a                    rdfs:Container;
+                    rdf:_1               _:dawkins;
+                    rdf:_2               _:pinker;
+                    rdf:_2               _:tufte.
+
+_:dawkins				    a                   too:treeNode;
+                    too:hasName         "richard dawkins";
+                    too:hasNodeImage    "unknown";
+                    too:hasNodeSummary
+
+"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
+
+_:pinker				    a                   too:treeNode;
+                    too:hasName         "stephen pinker";
+                    too:hasNodeImage    "unknown";
+                    too:hasNodeSummary
+
+"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
+
+_:tufte				    	a                   too:treeNode;
+                    too:hasName         "edward tufte";
+                    too:hasNodeImage    "unknown";
+                    too:hasNodeSummary
+
+"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".

@@ -50,15 +50,18 @@ function update()
   var nodes = flatten(root);
   var links = d3.layout.tree().links(nodes);
 
-  // Restart the force layout.
+  // restart the force layout.
+  
   force.nodes(nodes).links(links).start();
 
-  // Update the links
+  // update the links
+  
   link = vis
     .selectAll("line.link")
     .data(links, function(d) {return d.target.id;});
 
-  // Enter any new links.
+  // enter any new links
+  
   link.enter()
     .insert("line", ".node")
     .attr("class", "link")
@@ -67,7 +70,7 @@ function update()
     .attr("x2", function(d) {return d.target.x;})
     .attr("y2", function(d) {return d.target.y;});
 
-  // Exit any old links.
+  // exit any old links
   
   link.exit().remove();
 
@@ -96,17 +99,6 @@ function update()
     .attr("width", imageSize)
     .attr("height", imageSize);
 
-  // add node text
-  
-  en.append("svg:foreignObject")
-    .attr("class", "nodeText")
-    .attr("width", 150)
-    .attr("height", 30)
-    .attr("x", 150 / -2)
-    .attr("y", function(d) {return imageSize(d) / -2 - 30;})
-    .append("xhtml:body")
-    .html(function(node) {return "<center>" + node.name + "</center>";});
-
   // add node icon
 
   en.filter(selectIcon)
@@ -122,29 +114,42 @@ function update()
   
   en.filter(selectIcon)
     .append("svg:foreignObject")
-    .attr("class", "clickText")
-    .attr("x", function(d) {return imageSize(d) / 2;})
-    .attr("y", function(d) {return imageSize(d) / 2 - iconSize;})
-    .attr("width", 150)
-    .attr("height", 30)
+    .attr("class", "clickTextObject")
+    .attr("width", "10em")
+    .attr("height", "2em")
+    .attr("x", function(d) {return getEmSize(this) * -5 + imageSize(d) / 2 - iconSize / 2;})
+    .attr("y", function(d) {return imageSize(d) / 2 - getEmSize(this) / 2;})
     .append("xhtml:body")
-    .html(function(node) {return node.clickAct;});
+    .attr("class", "clickText")
+    .html(getNodeClickText);
 
   // add summary text
 
-  var text = en.filter(function(d) {return d.summary != null;})
+  var text = en.filter(function(d) {return d.name || d.summary;})
     .append("svg:foreignObject")
-    .attr("class", "summaryText")
-    .attr("x", function(d) {return imageSize(d) / 2;})
-    .attr("y", function(d) {return imageSize(d) / -2;})
-    .attr("width", "20em")
-    .attr("height", "5em")
+    .attr("class", "summaryTextObject")
+    .attr("y", function(d) {return imageSize(d) / -2 - getEmSize(this) * .45;})
+    .attr("x", function(d) {return imageSize(d) / 2 - getEmSize(this) * .45;})
+    .attr("width", "25em")
+    .attr("height", "10em")
     .append("xhtml:body")
-    .html(function(d) {return d.summary});
+    .attr("class", "summaryText")
+    .html(function(d) 
+        {
+          var name = d.name ? "<big>" + d.name + "</big>" : "";
+          var space = d.name && d.summary ? "<br/><br>" : "";
+          var summary = d.summary ? d.summary : "";
+          return name + space + summary;
+        });
 
   // remove old nodes
   
   node.exit().remove();
+}
+
+function getEmSize(el)
+{
+  return Number(getComputedStyle(el, '').fontSize.match(/(\d+)px/)[1]);
 }
 
 function selectIconName(node)
@@ -248,10 +253,16 @@ function toggleChildren(node)
   vis
     .selectAll("[class=clickText]")
     .filter(function (d) {return d == node;})
-    .text(function(node) {return node.clickAct;});
+    .html(getNodeClickText);
 
   update();
 }
+
+function getNodeClickText(node)
+{
+  return "<center>" + node.clickAct + "</center>";
+}
+
 
 // handle a node click
 

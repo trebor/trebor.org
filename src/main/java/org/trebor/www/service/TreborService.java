@@ -2,6 +2,7 @@ package org.trebor.www.service;
 
 import static org.trebor.www.rdf.NameSpace.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,11 +24,14 @@ import org.openrdf.repository.object.config.ObjectRepositoryFactory;
 import org.openrdf.repository.query.NamedQuery;
 import org.openrdf.result.MultipleResultException;
 import org.openrdf.result.NoResultException;
+import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFParseException;
 import org.trebor.www.dto.ForceNetwork;
 import org.trebor.www.dto.ForceTreeNode;
 import org.trebor.www.dto.InteractionSummaryTable;
 import org.trebor.www.dto.ForceNetwork.Node;
 import org.trebor.www.rdf.MockRepositoryFactory;
+import org.trebor.www.rdf.RdfUtil;
 import org.trebor.www.util.RepositoryContext;
 import org.trebor.www.util.RepositoryContextFactory;
 
@@ -41,21 +45,34 @@ public class TreborService
 
   private NamedQuery mNamedTreeNodequery;
 
-  public TreborService() throws RepositoryException, RepositoryConfigException
+  public static final String BASE_PATH = "/";
+  
+  public static final String[] INPUT_FILES = 
+  {
+    BASE_PATH + "rdf/ontology/www.ttl",
+    BASE_PATH + "rdf/ontology/trebor.ttl",
+    BASE_PATH + "rdf/data/home.ttl",
+  };
+  
+  public TreborService() throws RepositoryException, RepositoryConfigException, RDFParseException, IOException
   {
     mRepositoryContext =
           RepositoryContextFactory.createRemoteContext("localhost", 8080, "mim");
-
 
     // establish an in memory repository
     
     Repository repository = MockRepositoryFactory.getMockRepository();
     ObjectRepositoryFactory orf = new ObjectRepositoryFactory();
     mObjectConnection = orf.createRepository(repository).getConnection();
-
-    // initialize tree with test data
     
+    // initialize data store
+
     mObjectConnection.addObject(testTree());
+    for (String input: INPUT_FILES)
+    {
+      File file = new File(this.getClass().getResource(input).toString().split(":")[1]);
+      RdfUtil.importFile(repository, file, RDFFormat.TURTLE);
+    }
 
     // initialize named queries
     
@@ -78,7 +95,7 @@ public class TreborService
     query.setObject("name", path);
     ForceTreeNode node = (ForceTreeNode)query.evaluate().singleResult();
     log.debug(node);
-    return node.copy();
+      return node.copy();
 //    
 //    if (path.equals("test"))
 //      return testTree();
