@@ -28,27 +28,38 @@ _:influences        a                   too:treeNode;
 "these luminaries have had real impact on the way i think, and i would encourge anyone to delve into thier works.".
 
 _:influences_kids   a                    rdfs:Container;
-                    rdf:_1               _:dawkins;
-                    rdf:_2               _:pinker;
-                    rdf:_2               _:tufte.
+                    rdf:_1               _:norman;
+                    rdf:_2               _:dawkins;
+                    rdf:_3               _:pinker;
+                    rdf:_4               _:tufte.
+
+_:norman				    a                   too:treeNode;
+                    too:hasName         "<a href=\"http://www.jnd.org/\" target=\"_blank\">donald norman<a>";
+                    too:hasNodeImage    "norman";
+                    too:hasNodeSummary
+
+"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
+
 
 _:dawkins				    a                   too:treeNode;
-                    too:hasName         "richard dawkins";
-                    too:hasNodeImage    "dummy";
+                    too:hasName         "<a href=\"http://richarddawkins.net/\" target=\"_blank\">richard dawkins<a>";
+                    too:hasNodeImage    "dawkins";
                     too:hasNodeSummary
 
 "lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
 
 _:pinker				    a                   too:treeNode;
-                    too:hasName         "stephen pinker";
-                    too:hasNodeImage    "dummy";
+                    too:hasName         "<a href=\"http://stevenpinker.com/\" target=\"_blank\">stephen pinker<a>";
+
+                    too:hasName         "";
+                    too:hasNodeImage    "pinker";
                     too:hasNodeSummary
 
 "lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
 
 _:tufte				    	a                   too:treeNode;
-                    too:hasName         "edward tufte";
-                    too:hasNodeImage    "unknown";
+                    too:hasName         "<a href=\"http://www.deaedwardtufte.com/tufte/\" target=\"_blank\">edward tufte<a>";
+                    too:hasNodeImage    "tufte";
                     too:hasNodeSummary
 
 "lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".

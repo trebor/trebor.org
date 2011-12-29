@@ -1,3 +1,13 @@
+a:visited
+{
+  color:#888;
+}
+
+a:link
+{
+  color:#844;
+}
+
 .nodeImage
 {
   cursor: pointer; /* progress; crosshair; move; */
