@@ -12,7 +12,7 @@ _:home              a                   too:treeNode;
                     too:hasNodeChildren _:home_kids;
                     too:hasNodeSummary
 
-"hello, i am robert harris and this is my personal personal site.  my hope is that your visit here will help you to learn something about me, my ideas, and my asthetics.".
+"hello, i am robert harris and this is my personal site. while here i hope you to learn something about my ideas and asthetics.".
 
 _:home_kids         a                    rdfs:Container;
                     rdf:_1               _:influences.
@@ -34,14 +34,14 @@ _:influences_kids   a                    rdfs:Container;
 
 _:dawkins				    a                   too:treeNode;
                     too:hasName         "richard dawkins";
-                    too:hasNodeImage    "unknown";
+                    too:hasNodeImage    "dummy";
                     too:hasNodeSummary
 
 "lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
 
 _:pinker				    a                   too:treeNode;
                     too:hasName         "stephen pinker";
-                    too:hasNodeImage    "unknown";
+                    too:hasNodeImage    "dummy";
                     too:hasNodeSummary
 
 "lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".

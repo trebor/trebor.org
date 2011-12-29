@@ -186,7 +186,8 @@ function selectIconName(node)
 
 function selectIcon(node)
 {
-  return imagePath(selectIconName(node));
+  var iconName = selectIconName(node);
+  return iconName ? imagePath(iconName) : null;
 }
 
 function tick() {
