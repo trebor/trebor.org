@@ -64,6 +64,7 @@ public class NameSpace
 
   public static final String HAS_DATETIME = TOO + "hasDateTime";
   public static final String HAS_NAME = TOO + "hasName";
+  public static final String HAS_TITLE = TOO + "hasTitle";
   
   // www classes
   

@@ -1,11 +1,11 @@
 a:visited
 {
-  color:#888;
+  color:#444;
 }
 
 a:link
 {
-  color:#844;
+  color:#000;
 }
 
 .nodeImage
@@ -23,11 +23,11 @@ a:link
 
 .summaryText, .clickText
 {
-  color: #000;
+  color: #444;
   text-shadow: 0 0 0.1em #fff, 0 0 0.1em #fff, 0 0 0.1em #fff;
   
-  opacity:0.75;
-  -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
+  opacity:1.0;
+  -ms-filter:'alpha(opacity=100)'; /* For IE8 and earlier */
   visibility:hidden;
   font-weight: bold;
   font-family: Courier New;

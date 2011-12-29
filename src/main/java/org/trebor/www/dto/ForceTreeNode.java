@@ -24,13 +24,17 @@ public class ForceTreeNode {
   @SuppressWarnings("unused")
   private static final Logger logger = Logger.getLogger(ForceTreeNode.class);
 
-  @iri(HAS_NODE_IMAGE)
-  @XmlElement(name="imageName")
-  private String mImageName;
-  
   @iri(HAS_NAME)
   @XmlElement(name="name")
   private String mName;
+  
+  @iri(HAS_TITLE)
+  @XmlElement(name="title")
+  private String mTitle;
+
+  @iri(HAS_NODE_IMAGE)
+  @XmlElement(name="imageName")
+  private String mImageName;
   
   @iri(HAS_NODE_LINK)
   @XmlElement(name="link", required=false)
@@ -137,8 +141,9 @@ public class ForceTreeNode {
   public ForceTreeNode copy()
   {
     ForceTreeNode copy = new ForceTreeNode();
-    copy.setImageName(getImageName());
     copy.setName(getName());
+    copy.setTitle(getTitle());
+    copy.setImageName(getImageName());
     copy.setLink(getLink());
     copy.setSummary(getSummary());
     
@@ -146,5 +151,15 @@ public class ForceTreeNode {
       copy.add(child.copy());
     
     return copy;
+  }
+
+  public void setTitle(String title)
+  {
+    mTitle = title;
+  }
+
+  public String getTitle()
+  {
+    return mTitle;
   }
 }

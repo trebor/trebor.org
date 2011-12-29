@@ -125,7 +125,7 @@ function update()
 
   // add summary text
 
-  var text = en.filter(function(d) {return d.name || d.summary;})
+  var text = en.filter(function(d) {return d.title || d.summary;})
     .append("svg:foreignObject")
     .attr("class", "summaryTextObject")
     .attr("y", function(d) {return imageSize(d) / -2 - getEmSize(this) * .45;})
@@ -136,10 +136,10 @@ function update()
     .attr("class", "summaryText")
     .html(function(d) 
         {
-          var name = d.name ? "<big>" + d.name + "</big>" : "";
-          var space = d.name && d.summary ? "<br/><br>" : "";
+          var title = d.title ? "<big>" + d.title + "</big>" : "";
+          var space = d.title && d.summary ? "<br/><br>" : "";
           var summary = d.summary ? d.summary : "";
-          return name + space + summary;
+          return title + space + summary;
         });
 
   // remove old nodes
