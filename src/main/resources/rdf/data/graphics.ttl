@@ -33,10 +33,9 @@ _:trebor_logo       a                   too:treeNode;
 
 """
 i created the \"tat&nbsp;sign\" as a sort of personal 
-<a href=\"http://en.wikipedia.org/wiki/Glyph\">glyph</a>,
-and is the primary brand for this site.
+<a href=\"http://en.wikipedia.org/wiki/Glyph\">glyph</a>.
+you will see a lot of it around here.
 """.
-
 
 _:freesand_logo     a                   too:treeNode;
                     too:hasName         "freesand_logo";
@@ -46,7 +45,7 @@ _:freesand_logo     a                   too:treeNode;
 
 """
 despite its simple composition, i was pleased with the logo for the freesand project.
-it was based on an anonymouse sand dune image i found online, and is now lost to me.
+it was based on an anonymouse sand dune image i found online, which is now lost to me.
 """.
 
 _:coolneon_logo     a                   too:treeNode;
@@ -59,7 +58,7 @@ _:coolneon_logo     a                   too:treeNode;
 <a href=\"http://www.coolneon.com/wp-content/gallery/cool-neon-elves/bencrop.gif\">benny</a> 
 asked me to create a logo for
 <a href=\"http://www.coolneon.com/\">coolneon</a>.
-it is intended to show that their el-wire product is cool to the touch, and inspired by 
+it is intended to show that coolneon el-wire is cool to the touch, and was inspired by 
 <a href=\"http://en.wikipedia.org/wiki/Mudra\">mudra</a>.
 benny worked with me to polish the logo for real-world use.
 """.
@@ -73,7 +72,8 @@ _:social_revolution_logo a              too:treeNode;
 
 """
 <a href=\"http://www.coolneon.com/wp-content/gallery/cool-neon-elves/bencrop.gif\">benny</a> 
-asked me to create a head-tube medallion logo for his amazing \"social revolution\" tricycle project.
+asked me to create a head-tube medallion for his amazing \"social revolution\" tricycle project.
+the trike has no web presents for me to link to at the moment.
 """.
 
 
@@ -84,9 +84,10 @@ _:xuggle_logo       a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-i created the logo for
+i created this logo for
 <a href=\"http://xuggle.com\">xuggle</a>
-a company i co-founded.  the name was a play on the word \"juggle\" and i based the logo on the path balls travel in a
+a company i co-founded.
+the name was a play on the word \"juggle\" and i based the logo on the path balls travel in a
 <a href=\"http://en.wikipedia.org/wiki/Cascade_%28juggling%29\">cascade</a>
 pattern.
 """.

@@ -27,8 +27,14 @@ _:norman				    a                   too:treeNode;
                     too:hasTitle        "<a href=\"http://www.jnd.org/\" target=\"_blank\">donald norman<a>";
                     too:hasNodeSummary
 
-"""<a href=\"http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things\" target=\"_blank\">the design of everyday things</a> and 
-<a href=\"http://www.youtube.com/watch?v=RlQEoJaLQRA\" target=\"_blank\">the three ways that good design makes you happy</a>""".
+"""
+early on i read
+<a href=\"http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things\" target=\"_blank\">the design of everyday things</a>
+in which norman describes good design.  he also talks about why many products are poorly designed.
+i saw a more recent desgin
+<a href=\"http://www.youtube.com/watch?v=RlQEoJaLQRA\" target=\"_blank\">ted talk</a>
+he gave which highlights his evolving asthetics, and underscores the utility of beauty.
+""".
 
 _:dawkins				    a                   too:treeNode;
                     too:hasName         "dawkins";
@@ -36,7 +42,19 @@ _:dawkins				    a                   too:treeNode;
                     too:hasTitle         "<a href=\"http://richarddawkins.net/\" target=\"_blank\">richard dawkins<a>";
                     too:hasNodeSummary
 
-"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
+"""
+<a href=\"http://en.wikipedia.org/wiki/The_Selfish_Gene\" target=\"_blank\">the selfish gene</a>
+was a seminal book on evolution, from which we get the word
+<a href=\"http://en.wikipedia.org/wiki/Meme\" target=\"_blank\">meme</a>.
+after reading it, i felt i and an end-to-end understanding of the rise of life on earth.
+dawkins is also an outspoken
+<a href=\"http://en.wikipedia.org/wiki/Atheist\" target=\"_blank\">atheist</a>,
+and proponent of
+<a href=\"http://en.wikipedia.org/wiki/Rationalism\" target=\"_blank\">rationalism</a>.
+""".
+
+#<a href=\"\" target=\"_blank\"></a>
+
 
 _:pinker				    a                   too:treeNode;
                     too:hasName         "pinker";
@@ -49,7 +67,7 @@ _:pinker				    a                   too:treeNode;
 _:tufte				    	a                   too:treeNode;
                     too:hasName         "tufte";
                     too:hasNodeImage    "tufte";
-                    too:hasTitle         "<a href=\"http://www.deaedwardtufte.com/tufte/\" target=\"_blank\">edward tufte<a>";
+                    too:hasTitle         "<a href=\"http://www.edwardtufte.com/tufte/\" target=\"_blank\">edward tufte<a>";
                     too:hasNodeSummary
 
 "lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
