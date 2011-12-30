@@ -48,6 +48,7 @@ public class TreborService
     BASE_PATH + "rdf/data/home.ttl",
     BASE_PATH + "rdf/data/influences.ttl",
     BASE_PATH + "rdf/data/graphics.ttl",
+    BASE_PATH + "rdf/data/software.ttl",
   };
   
   public TreborService() throws RepositoryException, RepositoryConfigException, RDFParseException, IOException

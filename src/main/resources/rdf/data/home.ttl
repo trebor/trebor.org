@@ -13,8 +13,9 @@ toi:home            a                   too:treeNode;
                     too:hasNodeChildren _:home_kids;
                     too:hasNodeSummary
 
-"welcome. i am robert and this is my site. i hope that while here, you absorb some of my ideas & asthetics.".
+"welcome. my name is robert and i have built this site with the hope that visitors can absorb some of what i think and do.  please enjoy your stay.".
 
 _:home_kids         a                    rdfs:Container;
                     rdf:_1               toi:influences;
-                    rdf:_2               toi:graphics.
+                    rdf:_2               toi:graphics;
+                    rdf:_3               toi:software.

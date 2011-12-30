@@ -1,0 +1,78 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- software projects --- #
+
+toi:software        a                   too:treeNode;
+                    too:hasName         "software";
+                    too:hasTitle        "software projects";
+                    too:hasNodeImage    "disk";
+                    too:hasNodeChildren _:software_kids;
+                    too:hasNodeSummary
+
+"""
+the following are some of the software i've written for fun over the years.
+all of these projects are released under one open source licence or another.
+""".
+
+
+_:software_kids     a                    rdfs:Container;
+                    rdf:_1               _:splink;
+                    rdf:_2               _:sarynpaint;
+                    rdf:_3	               _:swarm.
+
+                    
+_:splink            a                   too:treeNode;
+                    too:hasName         "splink";
+                    too:hasTitle        "<a href=\"https://github.com/treboresque/Splink/wiki\">splink</a>";
+                    too:hasNodeImage    "splink";
+                    too:hasNodeSummary
+
+"""
+splink is a pure java
+<a href=\"http://en.wikipedia.org/wiki/Graphical_user_interface\">gui</a>
+for querying
+<a href=\"http://en.wikipedia.org/wiki/Resource_Description_Framework\">rdf</a> 
+repositories using
+<a href=\"http://en.wikipedia.org/wiki/SPARQL\">sparql</a>.
+it useses the
+<a href=\"http://www.openrdf.org/\">openrdf</a>
+libraries to communicate with repositories.
+""".
+
+
+_:sarynpaint        a                   too:treeNode;
+                    too:hasName         "sarynpaint";
+                    too:hasTitle        "<a href=\"http://code.google.com/p/sarynpaint/\">saryn paint</a>";
+                    too:hasNodeImage    "sarynpaint";
+                    too:hasNodeSummary
+
+"""
+saryn paint is a pure java paint program for very young children.
+i wrote it for my friend saryn, who at the time could move the mouse, but was unable to click.
+later she recorded the audio cues used in the program.
+""".
+
+
+
+_:swarm             a                   too:treeNode;
+                    too:hasName         "swarm";
+                    too:hasTitle        "<a href=\"http://orbswarm.com/\">orb swarm</a>";
+                    too:hasNodeImage    "swarm";
+                    too:hasNodeSummary
+
+"""
+i contributed to the orb swarm robotic-art project.
+<a href=\"http://wiki.orbswarm.com/index.php?title=In_The_Media\">pictures</a>
+are worth a 1k word.
+i was working specifically on an effort to advance from remote to
+autonomous orb control.  we never quite got there, but
+<a href=\"http://wiki.orbswarm.com/index.php?title=AutomonyImages\">here</a>
+are some results from our field tests.
+i also build an orb simulator and choreography editor which i hope to repurpose to other projects.
+""".
+
+#<a href=\"\"></a>

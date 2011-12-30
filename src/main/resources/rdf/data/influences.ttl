@@ -12,8 +12,9 @@ toi:influences      a                   too:treeNode;
                     too:hasNodeImage    "influences";
                     too:hasNodeChildren _:influences_kids;
                     too:hasNodeSummary
-
-"these luminaries have had an impact on the way i think.  i would encourge anyone to delve into their works.".
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
 
 _:influences_kids   a                    rdfs:Container;
                     rdf:_1               _:norman;
@@ -24,50 +25,68 @@ _:influences_kids   a                    rdfs:Container;
 _:norman				    a                   too:treeNode;
                     too:hasName         "norman";
                     too:hasNodeImage    "norman";
-                    too:hasTitle        "<a href=\"http://www.jnd.org/\" target=\"_blank\">donald norman<a>";
+                    too:hasTitle        "<a href=\"http://www.jnd.org/\">donald norman<a>";
                     too:hasNodeSummary
 
 """
 early on i read
-<a href=\"http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things\" target=\"_blank\">the design of everyday things</a>
-in which norman describes good design.  he also talks about why many products are poorly designed.
-i saw a more recent desgin
-<a href=\"http://www.youtube.com/watch?v=RlQEoJaLQRA\" target=\"_blank\">ted talk</a>
-he gave which highlights his evolving asthetics, and underscores the utility of beauty.
+<a href=\"http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things\">the design of everyday things</a>
+in which norman describes some aspects good design, and where i learned the word
+<a href=\"http://en.wikipedia.org/wiki/Affordance\">affordance</a>.
+he also talks about why many products are poorly designed.
+in a more recent design
+<a href=\"http://www.youtube.com/watch?v=RlQEoJaLQRA\">ted talk</a>
+he underscores the utility of beauty, and importance of factoring emotion into design.
 """.
 
 _:dawkins				    a                   too:treeNode;
                     too:hasName         "dawkins";
                     too:hasNodeImage    "dawkins";
-                    too:hasTitle         "<a href=\"http://richarddawkins.net/\" target=\"_blank\">richard dawkins<a>";
+                    too:hasTitle         "<a href=\"http://richarddawkins.net/\">richard dawkins<a>";
                     too:hasNodeSummary
 
 """
-<a href=\"http://en.wikipedia.org/wiki/The_Selfish_Gene\" target=\"_blank\">the selfish gene</a>
+<a href=\"http://en.wikipedia.org/wiki/The_Selfish_Gene\">the selfish gene</a>
 was a seminal book on evolution, from which we get the word
-<a href=\"http://en.wikipedia.org/wiki/Meme\" target=\"_blank\">meme</a>.
-after reading it, i felt i and an end-to-end understanding of the rise of life on earth.
+<a href=\"http://en.wikipedia.org/wiki/Meme\">meme</a>.
+it left me with an end-to-end understanding of the rise of life on earth.
 dawkins is also an outspoken
-<a href=\"http://en.wikipedia.org/wiki/Atheist\" target=\"_blank\">atheist</a>,
+<a href=\"http://en.wikipedia.org/wiki/Atheist\">atheist</a>,
 and proponent of
-<a href=\"http://en.wikipedia.org/wiki/Rationalism\" target=\"_blank\">rationalism</a>.
+<a href=\"http://en.wikipedia.org/wiki/Rationalism\">rationalism</a>.
 """.
-
-#<a href=\"\" target=\"_blank\"></a>
-
 
 _:pinker				    a                   too:treeNode;
                     too:hasName         "pinker";
                     too:hasNodeImage    "pinker";
-                    too:hasTitle         "<a href=\"http://stevenpinker.com/biocv\" target=\"_blank\">stephen pinker<a>";
+                    too:hasTitle         "<a href=\"http://stevenpinker.com/biocv\">stephen pinker<a>";
                     too:hasNodeSummary
 
-"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
+"""
+i started with
+<a href=\"http://en.wikipedia.org/wiki/The_Language_Instinct\">the language instinct</a>
+which posits that humans are born with an innate capacity to develop gramatical language.
+here is a facinating
+<a href=\"http://comment.rsablogs.org.uk/videos/\">rsa animate</a>
+<a href=\"http://www.youtube.com/watch?v=3-son3EJTrU\">talk</a>
+he gave on language and behavior.
+i'm currently reading
+<a href=\"http://en.wikipedia.org/wiki/The_Better_Angels_of_Our_Nature\">the better angels of our nature</a>
+which, despite its gruesome descriptions of violence present and past, leaves me optomistic about mankind's future.
+""".
 
 _:tufte				    	a                   too:treeNode;
                     too:hasName         "tufte";
                     too:hasNodeImage    "tufte";
-                    too:hasTitle         "<a href=\"http://www.edwardtufte.com/tufte/\" target=\"_blank\">edward tufte<a>";
+                    too:hasTitle         "<a href=\"http://www.edwardtufte.com/tufte/\">edward tufte<a>";
                     too:hasNodeSummary
+                    
+#<a href=\"\"></a>
 
-"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
+"""
+tufte's
+<a href=\"http://www.edwardtufte.com/tufte/courses\">one day course</a>
+had a huge and immediate impact on my understanding of visual design.  he provides
+a rational aproach for evaluating visual representations, and techniques to improve them.
+if data visualization is your thing, check him out.
+""".
