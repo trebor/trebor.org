@@ -15,14 +15,15 @@ toi:software        a                   too:treeNode;
 
 """
 the following are some of the software i've written for fun over the years.
-all of these projects are released under one open source licence or another.
+most of these projects are released under one open source licence or another.
 """.
 
 
 _:software_kids     a                    rdfs:Container;
                     rdf:_1               _:splink;
                     rdf:_2               _:sarynpaint;
-                    rdf:_3	               _:swarm.
+                    rdf:_3	             _:swarm;
+                    rdf:_4	             _:trebor_org.
 
                     
 _:splink            a                   too:treeNode;
@@ -57,7 +58,6 @@ later she recorded the audio cues used in the program.
 """.
 
 
-
 _:swarm             a                   too:treeNode;
                     too:hasName         "swarm";
                     too:hasTitle        "<a href=\"http://orbswarm.com/\">orb swarm</a>";
@@ -67,12 +67,36 @@ _:swarm             a                   too:treeNode;
 """
 i contributed to the orb swarm robotic-art project.
 <a href=\"http://wiki.orbswarm.com/index.php?title=In_The_Media\">pictures</a>
-are worth a 1k word.
+are worth kilo-words.
 i was working specifically on an effort to advance from remote to
 autonomous orb control.  we never quite got there, but
 <a href=\"http://wiki.orbswarm.com/index.php?title=AutomonyImages\">here</a>
-are some results from our field tests.
-i also build an orb simulator and choreography editor which i hope to repurpose to other projects.
+are some results from field tests.
+specifically i built an orb simulator and a choreography editor, which i hope to repurpose to other projects.
+""".
+
+
+_:trebor_org        a                   too:treeNode;
+                    too:hasName         "trebor";
+                    too:hasTitle        "trebor.org";
+                    too:hasNodeImage    "tat";
+                    too:hasNodeSummary
+
+"""
+the website you are currently soaking in is composed of three elements.  the data for the site is stored as
+<a href=\"http://en.wikipedia.org/wiki/Resource_Description_Framework\">rdf</a> 
+in an
+<a href=\"http://www.openrdf.org/\">openrdf</a>
+sesame store.
+page requests are handled by a
+<a href=\"http://jersey.java.net/\">jersey</a>
+based 
+<a href=\"http://en.wikipedia.org/wiki/REST\">restful</a>
+service running under
+<a href=\"http://tomcat.apache.org/\">tomcat</a>.
+<a href=\"http://mbostock.github.com/d3/\">d3.js</a>
+is driving the browser expereince.
+i have been very happy with this set of tools.
 """.
 
 #<a href=\"\"></a>
