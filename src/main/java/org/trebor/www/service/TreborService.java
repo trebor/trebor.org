@@ -4,15 +4,11 @@ import static org.trebor.www.rdf.NameSpace.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
-import org.openrdf.query.GraphQuery;
-import org.openrdf.query.GraphQueryResult;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.Repository;
@@ -32,15 +28,13 @@ import org.trebor.www.dto.InteractionSummaryTable;
 import org.trebor.www.dto.ForceNetwork.Node;
 import org.trebor.www.rdf.MockRepositoryFactory;
 import org.trebor.www.rdf.RdfUtil;
-import org.trebor.www.util.RepositoryContext;
-import org.trebor.www.util.RepositoryContextFactory;
 
 public class TreborService
 {
   @SuppressWarnings("unused")
   private Logger log = Logger.getLogger(getClass());
 
-  private final RepositoryContext mRepositoryContext;
+//  private final RepositoryContext mRepositoryContext;
   private final ObjectConnection mObjectConnection;
 
   private NamedQuery mNamedTreeNodequery;
@@ -52,12 +46,16 @@ public class TreborService
     BASE_PATH + "rdf/ontology/www.ttl",
     BASE_PATH + "rdf/ontology/trebor.ttl",
     BASE_PATH + "rdf/data/home.ttl",
+    BASE_PATH + "rdf/data/influences.ttl",
+    BASE_PATH + "rdf/data/graphics.ttl",
   };
   
   public TreborService() throws RepositoryException, RepositoryConfigException, RDFParseException, IOException
   {
-    mRepositoryContext =
-          RepositoryContextFactory.createRemoteContext("localhost", 8080, "mim");
+    log.debug("init repository");
+    
+//    mRepositoryContext =
+//          RepositoryContextFactory.createRemoteContext("localhost", 8080, "mim");
 
     // establish an in memory repository
     
@@ -67,7 +65,6 @@ public class TreborService
     
     // initialize data store
 
-    mObjectConnection.addObject(testTree());
     for (String input: INPUT_FILES)
     {
       File file = new File(this.getClass().getResource(input).toString().split(":")[1]);
@@ -96,77 +93,41 @@ public class TreborService
     ForceTreeNode node = (ForceTreeNode)query.evaluate().singleResult();
     log.debug(node);
       return node.copy();
-//    
-//    if (path.equals("test"))
-//      return testTree();
-//    
-//    ForceTreeNode root = new ForceTreeNode("trebor.org", "tat");
-//    log.debug("path: " + path);
-//    root.setSummary(String.format("this is a <del>%s</del> node.  cool huh?",
-//      path));
-//    
-//    return root;
   }
 
-  public ForceTreeNode testTree()
-  {
-    ForceTreeNode root = new ForceTreeNode("trebor.org", "tat");
-    root
-      .setSummary("welcome to <a href=\"http://www.trebor.org\" target=\"_blank\">trebor.org</a>, the personal site for robert harris, aka trebor.");
-
-    ForceTreeNode work = new ForceTreeNode("work", "work");
-    work.add(new ForceTreeNode("NASA", "nasa",
-      "http://human-factors.arc.nasa.gov/cognition/personnel/robh.html",
-      "you know, the space people!"));
-    work.add(new ForceTreeNode("Xuggle", "xuggle", "http://xuggle.com"));
-
-    ForceTreeNode projects = new ForceTreeNode("projects", "work");
-    projects.add(new ForceTreeNode("Swarm", "swarm"));
-    projects.add(new ForceTreeNode("trebor-1", "tat"));
-
-    ForceTreeNode subProjects = new ForceTreeNode("sub-projects", "work");
-    subProjects.add(new ForceTreeNode("Swarm", "swarm"));
-    subProjects.add(new ForceTreeNode("trebor-2", "tat"));
-    projects.add(subProjects);
-
-    root.add(work);
-    root.add(projects);
-    return root;
-  }
-
-  public ForceNetwork browseUri(String uri) throws RepositoryException,
-    MalformedQueryException, QueryEvaluationException, IOException
-  {
-    // query to describe uri
-
-    GraphQuery query =
-      mRepositoryContext.prepareGraphQuery("DESCRIBE " + uri);
-    GraphQueryResult result = query.evaluate();
-
-    // create force network
-
-    Map<String, Node> nodes = new HashMap<String, Node>();
-    final ForceNetwork fn = new ForceNetwork();
-    int width = 1;
-    while (result.hasNext())
-    {
-      Statement statement = result.next();
-      Node subject = getNode(fn, statement.getSubject().stringValue(), nodes);
-      String predicateUri = statement.getPredicate().stringValue();
-      Node object = getNode(fn, statement.getObject().stringValue(), nodes);
-      fn.link(subject, object, width++, predicateUri);
-    }
-
-    // color the target node differently
-
-    for (Node node : nodes.values())
-      if (uri.contains(node.getName()))
-        node.setGroup(2);
-
-    // return network
-
-    return fn;
-  }
+//  public ForceNetwork browseUri(String uri) throws RepositoryException,
+//    MalformedQueryException, QueryEvaluationException, IOException
+//  {
+//    // query to describe uri
+//
+//    GraphQuery query =
+//      mRepositoryContext.prepareGraphQuery("DESCRIBE " + uri);
+//    GraphQueryResult result = query.evaluate();
+//
+//    // create force network
+//
+//    Map<String, Node> nodes = new HashMap<String, Node>();
+//    final ForceNetwork fn = new ForceNetwork();
+//    int width = 1;
+//    while (result.hasNext())
+//    {
+//      Statement statement = result.next();
+//      Node subject = getNode(fn, statement.getSubject().stringValue(), nodes);
+//      String predicateUri = statement.getPredicate().stringValue();
+//      Node object = getNode(fn, statement.getObject().stringValue(), nodes);
+//      fn.link(subject, object, width++, predicateUri);
+//    }
+//
+//    // color the target node differently
+//
+//    for (Node node : nodes.values())
+//      if (uri.contains(node.getName()))
+//        node.setGroup(2);
+//
+//    // return network
+//
+//    return fn;
+//  }
 
   public static Node getNode(ForceNetwork fn, String uri,
     Map<String, Node> nodes)

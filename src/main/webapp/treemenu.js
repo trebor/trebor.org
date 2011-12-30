@@ -86,6 +86,8 @@ function update()
     .enter()
     .append("svg:g")
     .attr("class", "node")
+    .on("mouseover", mouseover)
+    .on("mouseout", mouseout)
     .on("click", click)
     .call(force.drag);
 
@@ -145,6 +147,34 @@ function update()
   // remove old nodes
   
   node.exit().remove();
+}
+
+function mouseover(node)
+{
+  vis
+    .selectAll(".link")
+    .transition()
+    .attr("opacity", "0");
+
+  vis
+    .selectAll(".nodeImage")
+    .filter(function (d) {return d != node;})
+    .transition()
+    .attr("opacity", "0.2");
+}
+
+function mouseout(node)
+{
+  vis
+    .selectAll(".nodeImage")
+    .filter(function (d) {return d != node;})
+    .transition()
+    .attr("opacity", "1");
+
+  vis
+    .selectAll(".link")
+    .transition()
+    .attr("opacity", "1");
 }
 
 function getEmSize(el)
@@ -278,6 +308,8 @@ function click(node)
     else
       window.open(node.link, '_blank');
   }
+  
+  mouseover(node);
 }
 
 // tests if a url is local to this domain

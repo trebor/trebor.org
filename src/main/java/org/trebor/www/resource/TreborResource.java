@@ -1,13 +1,9 @@
 package org.trebor.www.resource;
 
-import java.io.IOException;
-
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
@@ -28,46 +24,6 @@ public class TreborResource
 
   @InjectParam
   private TreborService mTreborService;
-
-  public TreborResource()
-  {
-  }
-
-  @GET
-  @Produces(
-  {
-    "application/json", "application/xml"
-  })
-  @Path("summary")
-  public Response summary()
-  {
-    return Response.ok(mTreborService.getSummary()).build();
-  }
-
-  @GET
-  @Path("mim")
-  @Produces("application/json")
-  public Response mim(
-    @DefaultValue("http://sunshine.com/dysmorph/ShortAbductedThumbs") @QueryParam("uri") String uri)
-    throws RepositoryException, MalformedQueryException,
-    QueryEvaluationException, IOException
-  {
-    log.debug("mim: " + uri);
-    return Response.ok(mTreborService.browseUri("<" + uri + ">")).build();
-  }
-
-  @GET
-  @Path("thumbs")
-  @Produces("application/json")
-  public Response thumbs() throws RepositoryException,
-    MalformedQueryException, QueryEvaluationException, IOException
-  {
-    log.debug("thumbs");
-    return Response.ok(
-      mTreborService
-        .browseUri("<http://sunshine.com/dysmorph/ShortAbductedThumbs>"))
-      .build();
-  }
 
   @GET
   @Produces("application/json")

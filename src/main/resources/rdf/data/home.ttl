@@ -6,64 +6,15 @@
 
 # --- home node --- #
 
-_:home              a                   too:treeNode;
+toi:home            a                   too:treeNode;
                     too:hasName         "home";
                     too:hasTitle        "trebor.org";
                     too:hasNodeImage    "tat";
                     too:hasNodeChildren _:home_kids;
                     too:hasNodeSummary
 
-"welcome to trebor.org. i am robert harris, and i hope while here that you to learn something about my ideas and asthetics.".
+"welcome. i am robert and this is my site. i hope that while here, you absorb some of my ideas & asthetics.".
 
 _:home_kids         a                    rdfs:Container;
-                    rdf:_1               _:influences.
-
-# --- influences --- #
-
-_:influences        a                   too:treeNode;
-                    too:hasName         "influences";
-                    too:hasTitle        "influences";
-                    too:hasNodeImage    "influences";
-                    too:hasNodeChildren _:influences_kids;
-                    too:hasNodeSummary
-
-"these luminaries have had real impact on the way i think, and i would encourge anyone to delve into thier works.".
-
-_:influences_kids   a                    rdfs:Container;
-                    rdf:_1               _:norman;
-                    rdf:_2               _:dawkins;
-                    rdf:_3               _:pinker;
-                    rdf:_4               _:tufte.
-
-_:norman				    a                   too:treeNode;
-                    too:hasName         "norman";
-                    too:hasNodeImage    "norman";
-                    too:hasTitle        "<a href=\"http://www.jnd.org/\" target=\"_blank\">donald norman<a>";
-                    too:hasNodeSummary
-
-"""<a href=\"http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things\" target=\"_blank\">the design of everyday things</a> and 
-<a href=\"http://www.youtube.com/watch?v=RlQEoJaLQRA\" target=\"_blank\">the three ways that good design makes you happy</a>""".
-
-_:dawkins				    a                   too:treeNode;
-                    too:hasName         "dawkins";
-                    too:hasNodeImage    "dawkins";
-                    too:hasTitle         "<a href=\"http://richarddawkins.net/\" target=\"_blank\">richard dawkins<a>";
-                    too:hasNodeSummary
-
-"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
-
-_:pinker				    a                   too:treeNode;
-                    too:hasName         "pinker";
-                    too:hasNodeImage    "pinker";
-                    too:hasTitle         "<a href=\"http://stevenpinker.com/biocv\" target=\"_blank\">stephen pinker<a>";
-                    too:hasNodeSummary
-
-"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
-
-_:tufte				    	a                   too:treeNode;
-                    too:hasName         "tufte";
-                    too:hasNodeImage    "tufte";
-                    too:hasTitle         "<a href=\"http://www.deaedwardtufte.com/tufte/\" target=\"_blank\">edward tufte<a>";
-                    too:hasNodeSummary
-
-"lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.".
+                    rdf:_1               toi:influences;
+                    rdf:_2               toi:graphics.
