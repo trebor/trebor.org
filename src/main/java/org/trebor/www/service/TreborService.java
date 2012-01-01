@@ -24,7 +24,6 @@ import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 import org.trebor.www.dto.ForceNetwork;
 import org.trebor.www.dto.ForceTreeNode;
-import org.trebor.www.dto.InteractionSummaryTable;
 import org.trebor.www.dto.ForceNetwork.Node;
 import org.trebor.www.rdf.MockRepositoryFactory;
 import org.trebor.www.rdf.RdfUtil;
@@ -32,12 +31,12 @@ import org.trebor.www.rdf.RdfUtil;
 public class TreborService
 {
   @SuppressWarnings("unused")
-  private Logger log = Logger.getLogger(getClass());
+  private static Logger log = Logger.getLogger(TreborService.class);
 
 //  private final RepositoryContext mRepositoryContext;
-  private final ObjectConnection mObjectConnection;
+  private static ObjectConnection mObjectConnection;
 
-  private NamedQuery mNamedTreeNodequery;
+  private static NamedQuery mNamedTreeNodequery;
 
   public static final String BASE_PATH = "/";
   
@@ -51,8 +50,10 @@ public class TreborService
     BASE_PATH + "rdf/data/software.ttl",
   };
   
-  public TreborService() throws RepositoryException, RepositoryConfigException, RDFParseException, IOException
+  static 
   {
+    try
+    {
     log.debug("init repository");
     
 //    mRepositoryContext =
@@ -68,7 +69,7 @@ public class TreborService
 
     for (String input: INPUT_FILES)
     {
-      File file = new File(this.getClass().getResource(input).toString().split(":")[1]);
+      File file = new File(TreborService.class.getResource(input).toString().split(":")[1]);
       RdfUtil.importFile(repository, file, RDFFormat.TURTLE);
     }
 
@@ -79,13 +80,23 @@ public class TreborService
     mNamedTreeNodequery = mObjectConnection.getRepository().createNamedQuery(myQueryID,
       PREFIX  +
       "SELECT ?doc WHERE {?doc too:hasName ?name. ?doc a too:treeNode.}");
+    }
+    catch (Exception e)
+    {
+      log.error("TreborService static init failure.", e);
+    }
   }
 
-  public InteractionSummaryTable getSummary()
+  public TreborService() throws RepositoryException, RepositoryConfigException, RDFParseException, IOException
   {
-    InteractionSummaryTable table = new InteractionSummaryTable();
-    return table;
+    
   }
+  
+//  public InteractionSummaryTable getSummary()
+//  {
+//    InteractionSummaryTable table = new InteractionSummaryTable();
+//    return table;
+//  }
 
   public ForceTreeNode getTree(String path) throws MalformedQueryException, RepositoryException, NoResultException, MultipleResultException, QueryEvaluationException
   {

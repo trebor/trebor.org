@@ -17,6 +17,23 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 """.
 
 _:influences_kids   a                    rdfs:Container;
+                    rdf:_1               _:luminaries.
+
+# --- luminaries --- #
+
+_:luminaries        a                   too:treeNode;
+                    too:hasName         "luminaries";
+                    too:hasTitle        "the luminaries";
+                    too:hasNodeImage    "spotlight";
+                    too:hasNodeChildren _:luminaries_kids;
+                    too:hasNodeSummary
+"""
+many of the ideas aspoused by these luminaries have been absorbed so completly into 
+current thinking that we may take them for granted, and forget that their notions were
+once noval.
+""".
+
+_:luminaries_kids   a                    rdfs:Container;
                     rdf:_1               _:norman;
                     rdf:_2               _:dawkins;
                     rdf:_3               _:pinker;
@@ -87,6 +104,6 @@ _:tufte				    	a                   too:treeNode;
 tufte's
 <a href=\"http://www.edwardtufte.com/tufte/courses\">one day course</a>
 had a huge and immediate impact on my understanding of visual design.  he provides
-a rational aproach for evaluating visual representations, and techniques to improve them.
+a systematic aproach for evaluating visual representations, and techniques to improve them.
 if data visualization is your thing, check him out.
 """.
