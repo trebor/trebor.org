@@ -32,8 +32,8 @@ public class ForceTreeNode {
   @XmlElement(name="title")
   private String mTitle;
 
-  @iri(HAS_NODE_IMAGE)
-  @XmlElement(name="imageName")
+  @iri(HAS_NODE_ICON)
+  @XmlElement(name="iconName")
   private String mImageName;
   
   @iri(HAS_NODE_LINK)

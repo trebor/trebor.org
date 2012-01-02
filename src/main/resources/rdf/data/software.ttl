@@ -9,7 +9,7 @@
 toi:software        a                   too:treeNode;
                     too:hasName         "software";
                     too:hasTitle        "software projects";
-                    too:hasNodeImage    "disk";
+                    too:hasNodeIcon     "disk";
                     too:hasNodeChildren _:software_kids;
                     too:hasNodeSummary
 
@@ -29,7 +29,7 @@ _:software_kids     a                    rdfs:Container;
 _:splink            a                   too:treeNode;
                     too:hasName         "splink";
                     too:hasTitle        "<a href=\"https://github.com/treboresque/Splink/wiki\">splink</a>";
-                    too:hasNodeImage    "splink";
+                    too:hasNodeIcon     "splink";
                     too:hasNodeSummary
 
 """
@@ -48,7 +48,7 @@ libraries to communicate with repositories.
 _:sarynpaint        a                   too:treeNode;
                     too:hasName         "sarynpaint";
                     too:hasTitle        "<a href=\"http://code.google.com/p/sarynpaint/\">saryn paint</a>";
-                    too:hasNodeImage    "sarynpaint";
+                    too:hasNodeIcon     "sarynpaint";
                     too:hasNodeSummary
 
 """
@@ -61,7 +61,7 @@ later she recorded the audio cues used in the program.
 _:swarm             a                   too:treeNode;
                     too:hasName         "swarm";
                     too:hasTitle        "<a href=\"http://orbswarm.com/\">orb swarm</a>";
-                    too:hasNodeImage    "swarm";
+                    too:hasNodeIcon     "swarm";
                     too:hasNodeSummary
 
 """
@@ -79,7 +79,7 @@ specifically i built an orb simulator and a choreography editor, which i hope to
 _:trebor_org        a                   too:treeNode;
                     too:hasName         "trebor";
                     too:hasTitle        "trebor.org";
-                    too:hasNodeImage    "tat";
+                    too:hasNodeIcon     "tat";
                     too:hasNodeSummary
 
 """

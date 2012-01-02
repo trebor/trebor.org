@@ -9,7 +9,7 @@
 toi:influences      a                   too:treeNode;
                     too:hasName         "influences";
                     too:hasTitle        "influences";
-                    too:hasNodeImage    "influences";
+                    too:hasNodeIcon     "influences";
                     too:hasNodeChildren _:influences_kids;
                     too:hasNodeSummary
 """
@@ -24,7 +24,7 @@ _:influences_kids   a                    rdfs:Container;
 _:luminaries        a                   too:treeNode;
                     too:hasName         "luminaries";
                     too:hasTitle        "the luminaries";
-                    too:hasNodeImage    "spotlight";
+                    too:hasNodeIcon     "spotlight";
                     too:hasNodeChildren _:luminaries_kids;
                     too:hasNodeSummary
 """
@@ -41,7 +41,7 @@ _:luminaries_kids   a                    rdfs:Container;
 
 _:norman				    a                   too:treeNode;
                     too:hasName         "norman";
-                    too:hasNodeImage    "norman";
+                    too:hasNodeIcon     "norman";
                     too:hasTitle        "<a href=\"http://www.jnd.org/\">donald norman<a>";
                     too:hasNodeSummary
 
@@ -58,7 +58,7 @@ he underscores the utility of beauty, and importance of factoring emotion into d
 
 _:dawkins				    a                   too:treeNode;
                     too:hasName         "dawkins";
-                    too:hasNodeImage    "dawkins";
+                    too:hasNodeIcon     "dawkins";
                     too:hasTitle         "<a href=\"http://richarddawkins.net/\">richard dawkins<a>";
                     too:hasNodeSummary
 
@@ -75,7 +75,7 @@ and proponent of
 
 _:pinker				    a                   too:treeNode;
                     too:hasName         "pinker";
-                    too:hasNodeImage    "pinker";
+                    too:hasNodeIcon     "pinker";
                     too:hasTitle         "<a href=\"http://stevenpinker.com/biocv\">stephen pinker<a>";
                     too:hasNodeSummary
 
@@ -94,7 +94,7 @@ which, despite its gruesome descriptions of violence present and past, leaves me
 
 _:tufte				    	a                   too:treeNode;
                     too:hasName         "tufte";
-                    too:hasNodeImage    "tufte";
+                    too:hasNodeIcon     "tufte";
                     too:hasTitle         "<a href=\"http://www.edwardtufte.com/tufte/\">edward tufte<a>";
                     too:hasNodeSummary
                     

@@ -9,7 +9,7 @@
 toi:work            a                   too:treeNode;
                     too:hasName         "work";
                     too:hasTitle        "profesional work";
-                    too:hasNodeImage    "work";
+                    too:hasNodeIcon     "work";
                     too:hasNodeChildren _:work_kids;
                     too:hasNodeSummary
 
@@ -31,7 +31,7 @@ _:work_kids         a                    rdfs:Container;
 _:workframe         a                   too:treeNode;
                     too:hasName         "workframe";
                     too:hasTitle        "workframe inc.";
-                    too:hasNodeImage    "dummy";
+                    too:hasNodeIcon     "dummy";
                     too:hasNodeSummary
 
 """
@@ -42,7 +42,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 _:netsource         a                   too:treeNode;
                     too:hasName         "netsource";
                     too:hasTitle        "netsource inc.";
-                    too:hasNodeImage    "netsource";
+                    too:hasNodeIcon     "netsource";
                     too:hasNodeSummary
 
 """
@@ -52,7 +52,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 _:nasa              a                   too:treeNode;
                     too:hasName         "nasa";
                     too:hasTitle        "<a href=\"http://www.nasa.gov/centers/ames\">nasa, ames research center</a>";
-                    too:hasNodeImage    "nasa";
+                    too:hasNodeIcon     "nasa";
                     too:hasNodeSummary
 
 """
@@ -62,7 +62,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 _:xuggle            a                   too:treeNode;
                     too:hasName         "xuggle";
                     too:hasTitle        "<a href=\"http://xuggle.com/\">xuggle, inc.</a>";
-                    too:hasNodeImage    "xuggle-logo";
+                    too:hasNodeIcon     "xuggle-logo";
                     too:hasNodeSummary
 
 """
@@ -73,7 +73,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 _:connectsolutions  a                   too:treeNode;
                     too:hasName         "connectsolutions";
                     too:hasTitle        "<a href=\"http://connectsolutions.com/\">connectsolutions, inc.</a>";
-                    too:hasNodeImage    "connectsolutions";
+                    too:hasNodeIcon     "connectsolutions";
                     too:hasNodeSummary
 
 """

@@ -9,7 +9,7 @@
 toi:home            a                   too:treeNode;
                     too:hasName         "home";
                     too:hasTitle        "trebor.org";
-                    too:hasNodeImage    "tat";
+                    too:hasNodeIcon     "tat";
                     too:hasNodeChildren _:home_kids;
                     too:hasNodeSummary
 

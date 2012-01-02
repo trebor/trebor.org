@@ -95,7 +95,7 @@ function update()
 
   en.append("svg:image")
     .attr("class", "nodeImage")
-    .attr("xlink:href", function(d) {return imagePath(d.imageName);})
+    .attr("xlink:href", function(d) {return iconPath(d.iconName);})
     .attr("x", imagePosition)
     .attr("y", imagePosition)
     .attr("width", imageSize)
@@ -217,7 +217,7 @@ function selectIconName(node)
 function selectIcon(node)
 {
   var iconName = selectIconName(node);
-  return iconName ? imagePath(iconName) : null;
+  return iconName ? iconPath(iconName) : null;
 }
 
 function tick() {
@@ -233,7 +233,7 @@ function tick() {
 //    .attr("y", function(d) {return d.y - nodeOffset;});
 }
 
-function imagePath(name)
+function iconPath(name)
 {
   return imagesPath + name + imageType;
 }

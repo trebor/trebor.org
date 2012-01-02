@@ -70,6 +70,7 @@ public class NameSpace
   
   public static final String TREE_NODE = TOO + "treeNode";
   public static final String HAS_NODE_LINK = TOO + "hasNodeLink";
+  public static final String HAS_NODE_ICON = TOO + "hasNodeIcon";
   public static final String HAS_NODE_IMAGE = TOO + "hasNodeImage";
   public static final String HAS_NODE_SUMMARY = TOO + "hasNodeSummary";
   public static final String HAS_NODE_CHILDREN = TOO + "hasNodeChildren";
