@@ -36,6 +36,10 @@ public class ForceTreeNode {
   @XmlElement(name="iconName")
   private String mIconName;
   
+  @iri(HAS_IMAGE)
+  @XmlElement(name="image", required=false)
+  private String mImage;
+
   @iri(HAS_NODE_LINK)
   @XmlElement(name="link", required=false)
   private String mLink;
@@ -68,11 +72,11 @@ public class ForceTreeNode {
     this(name, imageName, link, null);
   }
   
-  public ForceTreeNode(String name, String imageName, String link, String summary)
+  public ForceTreeNode(String name, String iconName, String link, String summary)
   {
     mChildren = null;
     mName = name;
-    mIconName = imageName;
+    mIconName = iconName;
     mLink = link;
     mSummary = summary;
   }
@@ -161,5 +165,15 @@ public class ForceTreeNode {
   public String getTitle()
   {
     return mTitle;
+  }
+
+  public void setImage(String image)
+  {
+    mImage = image;
+  }
+
+  public String getImage()
+  {
+    return mImage;
   }
 }

@@ -1,6 +1,6 @@
 var dataSource = "/trebor/tree/" + getUrlVars()["page"];
-var imagesPath = "image/";
-var imageType = ".png";
+var iconBasePath = "assets/icons/";
+var iconType = ".png";
 var w = window.innerWidth - 8;
 var h = window.innerHeight - 22;
 var node;
@@ -10,7 +10,7 @@ var discount = 0.8;
 var nodeSize = 150;
 var nodeOffset = nodeSize / 2;
 var linkLength = nodeSize * 0.95;
-var iconSize = nodeSize * 0.25;
+var actionIconSize = nodeSize * 0.25;
 var nodeBuffer = 20;
 
 //construct the force layout
@@ -91,26 +91,26 @@ function update()
     .on("click", click)
     .call(force.drag);
 
-  // add node image
+  // add node icon
 
   en.append("svg:image")
-    .attr("class", "nodeImage")
+    .attr("class", "nodeIcon")
     .attr("xlink:href", function(d) {return iconPath(d.iconName);})
-    .attr("x", imagePosition)
-    .attr("y", imagePosition)
-    .attr("width", imageSize)
-    .attr("height", imageSize);
+    .attr("x", iconPosition)
+    .attr("y", iconPosition)
+    .attr("width", iconSize)
+    .attr("height", iconSize);
 
-  // add node icon
+  // add node action icon
 
   en.filter(selectIcon)
     .append("svg:image")
-    .attr("class", "nodeIcon")
+    .attr("class", "nodeActionIcon")
     .attr("xlink:href", selectIcon)
-    .attr("x", function(d) {return imageSize(d) / 2 - iconSize;})
-    .attr("y", function(d) {return imageSize(d) / 2 - iconSize;})
-    .attr("width", iconSize)
-    .attr("height", iconSize);
+    .attr("x", function(d) {return iconSize(d) / 2 - actionIconSize;})
+    .attr("y", function(d) {return iconSize(d) / 2 - actionIconSize;})
+    .attr("width", actionIconSize)
+    .attr("height", actionIconSize);
 
   // add click text
   
@@ -119,8 +119,8 @@ function update()
     .attr("class", "clickTextObject")
     .attr("width", "10em")
     .attr("height", "2em")
-    .attr("x", function(d) {return getEmSize(this) * -5 + imageSize(d) / 2 - iconSize / 2;})
-    .attr("y", function(d) {return imageSize(d) / 2 - getEmSize(this) / 2;})
+    .attr("x", function(d) {return getEmSize(this) * -5 + iconSize(d) / 2 - actionIconSize / 2;})
+    .attr("y", function(d) {return iconSize(d) / 2 - getEmSize(this) / 2;})
     .append("xhtml:body")
     .attr("class", "clickText")
     .html(getNodeClickText);
@@ -130,8 +130,8 @@ function update()
   var text = en.filter(function(d) {return d.title || d.summary;})
     .append("svg:foreignObject")
     .attr("class", "summaryTextObject")
-    .attr("y", function(d) {return imageSize(d) / -2 - getEmSize(this) * .45;})
-    .attr("x", function(d) {return imageSize(d) / 2 - getEmSize(this) * .45;})
+    .attr("y", function(d) {return iconSize(d) / -2 - getEmSize(this) * .45;})
+    .attr("x", function(d) {return iconSize(d) / 2 - getEmSize(this) * .45;})
     .attr("width", "25em")
     .attr("height", "20em")
     .append("xhtml:body")
@@ -157,7 +157,7 @@ function mouseover(node)
     .attr("opacity", "0");
 
   vis
-    .selectAll(".nodeImage")
+    .selectAll(".nodeIcon")
     .filter(function (d) {return d != node;})
     .transition()
     .attr("opacity", "0.2");
@@ -166,7 +166,7 @@ function mouseover(node)
 function mouseout(node)
 {
   vis
-    .selectAll(".nodeImage")
+    .selectAll(".nodeIcon")
     .filter(function (d) {return d != node;})
     .transition()
     .attr("opacity", "1");
@@ -235,28 +235,28 @@ function tick() {
 
 function iconPath(name)
 {
-  return imagesPath + name + imageType;
+  return iconBasePath + name + iconType;
 }
 
-// establish the image positino for a given node
+// establish the icon position for a given node
 
-function imagePosition(node)
+function iconPosition(node)
 {
-  return -imageSize(node) / 2;
+  return -iconSize(node) / 2;
 }
 
-// establish the image size for a given node
+// establish the icon size for a given node
 
-function imageSize(node)
+function iconSize(node)
 {
-    return nodeSize * Math.pow(discount, node.depth);
+  return nodeSize * Math.pow(discount, node.depth);
 }
 
 // establish the distance between two links
 
 function linkDistance(link) 
 {
-  return (imageSize(link.source) + imageSize(link.target)) / 2 + nodeBuffer;
+  return (iconSize(link.source) + iconSize(link.target)) / 2 + nodeBuffer;
 }
 
 // toggle children open or closed
@@ -277,7 +277,7 @@ function toggleChildren(node)
   // update icon
 
   vis
-    .selectAll("[class=nodeIcon]")
+    .selectAll("[class=nodeActionIcon]")
     .filter(function (d) {return d == node;})
     .attr("href", selectIcon(node));
 

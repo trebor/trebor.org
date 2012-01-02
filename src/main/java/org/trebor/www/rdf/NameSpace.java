@@ -65,13 +65,13 @@ public class NameSpace
   public static final String HAS_DATETIME = TOO + "hasDateTime";
   public static final String HAS_NAME = TOO + "hasName";
   public static final String HAS_TITLE = TOO + "hasTitle";
+  public static final String HAS_IMAGE = TOO + "hasImage";
   
   // www classes
   
   public static final String TREE_NODE = TOO + "treeNode";
   public static final String HAS_NODE_LINK = TOO + "hasNodeLink";
   public static final String HAS_NODE_ICON = TOO + "hasNodeIcon";
-  public static final String HAS_NODE_IMAGE = TOO + "hasNodeImage";
   public static final String HAS_NODE_SUMMARY = TOO + "hasNodeSummary";
   public static final String HAS_NODE_CHILDREN = TOO + "hasNodeChildren";
 }

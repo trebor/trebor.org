@@ -8,12 +8,12 @@ a:link
   color:#000;
 }
 
-.nodeImage
+.nodeIcon
 {
   cursor: pointer; /* progress; crosshair; move; */
 }
 
-.nodeIcon
+.nodeActionIcon
 {
   cursor: pointer;
   opacity:0.75;
@@ -49,7 +49,7 @@ a:link
   visibility:hidden;
 }  
 
-.node:hover > .nodeIcon:hover + .clickTextObject .clickText
+.node:hover > .nodeActionIcon:hover + .clickTextObject .clickText
 {
   visibility:visible;
 }
@@ -61,7 +61,7 @@ a:link
   visibility:visible;
 }
 
-.node:hover .nodeIcon
+.node:hover .nodeActionIcon
 {
   visibility:visible;
 }
