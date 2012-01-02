@@ -18,4 +18,8 @@ toi:home            a                   too:treeNode;
 _:home_kids         a                    rdfs:Container;
                     rdf:_1               toi:influences;
                     rdf:_2               toi:graphics;
-                    rdf:_3               toi:software.
+                    rdf:_3               toi:software;
+                    rdf:_4               toi:work.
+
+#<a href=\"\"></a>
+                    

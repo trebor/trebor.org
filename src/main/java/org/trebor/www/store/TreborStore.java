@@ -44,6 +44,7 @@ public class TreborStore
     BASE_PATH + "data/influences.ttl",
     BASE_PATH + "data/graphics.ttl",
     BASE_PATH + "data/software.ttl",
+    BASE_PATH + "data/work.ttl",
   };
 
   public TreborStore() throws RepositoryException, RepositoryConfigException,

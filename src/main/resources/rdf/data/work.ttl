@@ -1,0 +1,81 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- work --- #
+
+toi:work            a                   too:treeNode;
+                    too:hasName         "work";
+                    too:hasTitle        "profesional work";
+                    too:hasNodeImage    "work";
+                    too:hasNodeChildren _:work_kids;
+                    too:hasNodeSummary
+
+"""
+i am a software engineer by profession.  my resume is available as a
+<a href=\"assets/RobertHarrisResume.pdf\">pdf</a>
+or you can explore futher here.  also, you can link to the dynamic resume
+<a href=\"treemenu.html?page=work\">directly</a>.
+""".
+
+_:work_kids         a                    rdfs:Container;
+                    rdf:_1               _:workframe;
+                    rdf:_2               _:netsource;
+                  	rdf:_3               _:nasa;
+                    rdf:_4               _:xuggle;
+                    rdf:_5               _:connectsolutions.
+
+
+_:workframe         a                   too:treeNode;
+                    too:hasName         "workframe";
+                    too:hasTitle        "workframe inc.";
+                    too:hasNodeImage    "dummy";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+                    
+
+_:netsource         a                   too:treeNode;
+                    too:hasName         "netsource";
+                    too:hasTitle        "netsource inc.";
+                    too:hasNodeImage    "netsource";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:nasa              a                   too:treeNode;
+                    too:hasName         "nasa";
+                    too:hasTitle        "<a href=\"http://www.nasa.gov/centers/ames\">nasa, ames research center</a>";
+                    too:hasNodeImage    "nasa";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:xuggle            a                   too:treeNode;
+                    too:hasName         "xuggle";
+                    too:hasTitle        "<a href=\"http://xuggle.com/\">xuggle, inc.</a>";
+                    too:hasNodeImage    "xuggle-logo";
+                    too:hasNodeSummary
+
+"""
+<a href=\"http://www.youtube.com/watch?v=fI0IduBqLWA\">octopus</a>
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:connectsolutions  a                   too:treeNode;
+                    too:hasName         "connectsolutions";
+                    too:hasTitle        "<a href=\"http://connectsolutions.com/\">connectsolutions, inc.</a>";
+                    too:hasNodeImage    "connectsolutions";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".

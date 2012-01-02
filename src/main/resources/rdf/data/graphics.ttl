@@ -9,7 +9,7 @@
 toi:graphics        a                   too:treeNode;
                     too:hasName         "graphics";
                     too:hasTitle        "graphic design";
-                    too:hasNodeImage    "ampersand";
+                    too:hasNodeImage    "tnr-ampersand";
                     too:hasNodeChildren _:graphics_kids;
                     too:hasNodeSummary
 
