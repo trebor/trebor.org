@@ -31,7 +31,7 @@ public class TreborResource
   public Response treeMenu(@PathParam("path") String path) throws NoResultException, MultipleResultException, MalformedQueryException, RepositoryException, QueryEvaluationException
   {
     log.debug("tree/" + path);
-    return Response.ok(mTreborService.getTree(path)).build();
+    return Response.ok(mTreborService.getTreeNode(path)).build();
   }
 
   public void setTreborService(TreborService treborService)
