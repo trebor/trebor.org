@@ -21,27 +21,35 @@ a:link
   visibility:hidden;
 }
 
-.summaryText, .clickText
+.summaryText, .clickText, #lbBottom
 {
   color: #444;
   text-shadow: 0 0 0.1em #fff, 0 0 0.1em #fff, 0 0 0.1em #fff;
   
   opacity:1.0;
   -ms-filter:'alpha(opacity=100)'; /* For IE8 and earlier */
-  visibility:hidden;
   font-weight: bold;
   font-family: Courier New;
 }
 
+/* for slimbox */
+
+#lbBottom
+{
+  font-size: 18px;
+}
+
 .summaryText
 {
+  font-size: 18px;
   padding-left: 1em;
-	font-size: 18px;
+  visibility: hidden;
 }
 
 .clickText
 {
-	font-size: 14px;
+  font-size: 14px;
+  visibility: hidden;
 }
 
 .summaryTextObject, .clickTextObject

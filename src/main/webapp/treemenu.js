@@ -88,7 +88,6 @@ function update()
     .attr("class", "node")
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
-    .on("click", click)
     .call(force.drag);
 
   // add node icon
@@ -99,7 +98,8 @@ function update()
     .attr("x", iconPosition)
     .attr("y", iconPosition)
     .attr("width", iconSize)
-    .attr("height", iconSize);
+    .attr("height", iconSize)
+    .on("click", click);
 
   // add node action icon
 
@@ -107,10 +107,11 @@ function update()
     .append("svg:image")
     .attr("class", "nodeActionIcon")
     .attr("xlink:href", selectIcon)
-    .attr("x", function(d) {return iconSize(d) / 2 - actionIconSize;})
+    .attr("x", function(d) {return iconSize(d) / -2;})
     .attr("y", function(d) {return iconSize(d) / 2 - actionIconSize;})
     .attr("width", actionIconSize)
-    .attr("height", actionIconSize);
+    .attr("height", actionIconSize)
+    .on("click", click);
 
   // add click text
   
@@ -119,7 +120,7 @@ function update()
     .attr("class", "clickTextObject")
     .attr("width", "10em")
     .attr("height", "2em")
-    .attr("x", function(d) {return getEmSize(this) * -5 + iconSize(d) / 2 - actionIconSize / 2;})
+    .attr("x", function(d) {return (iconSize(d) / -2) - (getEmSize(this) * 5) + actionIconSize / 2;})
     .attr("y", function(d) {return iconSize(d) / 2 - getEmSize(this) / 2;})
     .append("xhtml:body")
     .attr("class", "clickText")

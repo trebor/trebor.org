@@ -14,7 +14,7 @@ toi:software        a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-the following are some of the software i've written for fun over the years.
+the following are some of the software projects i've worked on for fun over the years.
 most of these projects are released under one open source licence or another.
 """.
 
@@ -33,7 +33,14 @@ _:splink            a                   too:treeNode;
                     too:hasImage        "assets/images/splink-screenshot.png";
                     too:hasImageDescription
 """
-prefixes are automatically appended to queires, and results are displayed in an easy to read stripped display, with auto-sized column widths.
+in this splink screen shot, geneitic disorder data from
+<a href=\"http://www.ncbi.nlm.nih.gov/omim\">omim</a>,
+which has been transformed into
+<a href=\"http://en.wikipedia.org/wiki/Resource_Description_Framework\">rdf</a>
+by 
+<a href=\"http://www.healthgrades.com/physician/dr-sunshine-weiss-3x6m3\">dr. sunshine weiss</a>,
+demonstrates use for
+<a href\"http://en.wikipedia.org/wiki/Differential_diagnosis\">differential diagnosis</a>.
 """;
                     
                     too:hasNodeSummary
@@ -58,13 +65,13 @@ _:sarynpaint        a                   too:treeNode;
                     too:hasImage        "assets/images/sarynpaint-screenshot.png";
                     too:hasImageDescription
 """
-a child can adjust paint-brush color and shape by mousing over the regions at the screen edges.
+a child can change paint-brush color and shape by mousing over the regions at either side of screen.
 """;
                     too:hasNodeSummary
 
 """
 saryn paint is a pure java paint program for very young children.
-i wrote it for my friend saryn, who at the time could move the mouse, but was unable to click.
+i wrote it for my friend saryn who, at the time, could move the mouse, but was unable to click.
 later she recorded the audio cues used in the program.
 """.
 
@@ -82,14 +89,14 @@ orb swarm in black rock city in 2008. (c) 2008 nk, burningcam.com.
                     too:hasNodeSummary
 
 """
-i contributed to the orb swarm robotic-art project.
-<a href=\"http://wiki.orbswarm.com/index.php?title=In_The_Media\">pictures</a>
-are worth kilo-words.
-i was working specifically on an effort to advance from remote to
-autonomous orb control.  we never quite got there, but
+i contributed to the orb swarm
+<a href=\"http://wiki.orbswarm.com/index.php?title=In_The_Media\">robotic-art</a> 
+project. i worked towards an effort to advance orbs from remote to
+autonomous control.  we never quite got there, but
 <a href=\"http://wiki.orbswarm.com/index.php?title=AutomonyImages\">here</a>
 are some results from field tests.
-specifically i built an orb simulator and a choreography editor, which i hope to repurpose to other projects.
+specifically i built an orb simulator and a choreography editor,
+which i hope to repurpose to other projects.
 """.
 
 

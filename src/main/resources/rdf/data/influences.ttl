@@ -17,7 +17,21 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 """.
 
 _:influences_kids   a                    rdfs:Container;
-                    rdf:_1               _:luminaries.
+                    rdf:_1               _:luminaries;
+                    rdf:_2               _:literature.
+
+# --- literature --- #
+
+_:literature        a                   too:treeNode;
+                    too:hasName         "literature";
+                    too:hasTitle        "the literature";
+                    too:hasNodeIcon     "book";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
 
 # --- luminaries --- #
 
