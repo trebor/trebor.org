@@ -40,6 +40,10 @@ public class ForceTreeNode {
   @XmlElement(name="image", required=false)
   private String mImage;
 
+  @iri(HAS_IMAGE_DESCRIPTION)
+  @XmlElement(name="imageDescription", required=false)
+  private String mImageDescription;
+  
   @iri(HAS_NODE_LINK)
   @XmlElement(name="link", required=false)
   private String mLink;
@@ -148,6 +152,8 @@ public class ForceTreeNode {
     copy.setName(getName());
     copy.setTitle(getTitle());
     copy.setIconName(getIconName());
+    copy.setImage(getImage());
+    copy.setImageDescription(getImageDescription());
     copy.setLink(getLink());
     copy.setSummary(getSummary());
     
@@ -175,5 +181,15 @@ public class ForceTreeNode {
   public String getImage()
   {
     return mImage;
+  }
+
+  public void setImageDescription(String imageDescription)
+  {
+    mImageDescription = imageDescription;
+  }
+
+  public String getImageDescription()
+  {
+    return mImageDescription;
   }
 }

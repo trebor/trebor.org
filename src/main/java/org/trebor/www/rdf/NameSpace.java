@@ -66,6 +66,7 @@ public class NameSpace
   public static final String HAS_NAME = TOO + "hasName";
   public static final String HAS_TITLE = TOO + "hasTitle";
   public static final String HAS_IMAGE = TOO + "hasImage";
+  public static final String HAS_IMAGE_DESCRIPTION = TOO + "hasImageDescription";
   
   // www classes
   

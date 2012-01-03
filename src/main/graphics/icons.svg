@@ -25,12 +25,12 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8724302"
-     inkscape:cx="-2538.3674"
-     inkscape:cy="-819.67932"
+     inkscape:zoom="0.60819163"
+     inkscape:cx="-462.75157"
+     inkscape:cy="285.9637"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:snap-bbox-edge-midpoints="false"
      inkscape:bbox-nodes="false"
@@ -38,12 +38,12 @@
      inkscape:snap-bbox-midpoints="true"
      showborder="false"
      inkscape:showpageshadow="false"
-     inkscape:window-width="720"
-     inkscape:window-height="857"
+     inkscape:window-width="877"
+     inkscape:window-height="861"
      inkscape:window-x="570"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:snap-nodes="false">
+     inkscape:snap-nodes="true">
     <inkscape:grid
        type="xygrid"
        id="grid2985"
@@ -717,5 +717,48 @@
          x="-2621.3264"
          id="tspan3988"
          sodipodi:role="line">&amp;</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:none"
+       id="rect3098"
+       width="400"
+       height="400"
+       x="-900"
+       y="402.36218"
+       ry="3.4037868e-16"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/assets/icons/image.png"
+       inkscape:export-xdpi="119.28"
+       inkscape:export-ydpi="119.28" />
+    <rect
+       ry="2.55284e-16"
+       y="452.36218"
+       x="-850"
+       height="300"
+       width="300"
+       id="rect3100"
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:40;stroke-miterlimit:4;stroke-dasharray:none;stroke-linejoin:round;stroke-linecap:round"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/assets/icons/image.png"
+       inkscape:export-xdpi="119.28"
+       inkscape:export-ydpi="119.28" />
+    <path
+       style="fill:#ff0000;stroke:none"
+       d="m -550,602.36218 0,150 -300,0 0,-150 c 100,-50 200,50 300,0 z"
+       id="path3870"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/assets/icons/image.png"
+       inkscape:export-xdpi="119.28"
+       inkscape:export-ydpi="119.28" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff0000;fill-opacity:1;stroke:none"
+       id="path3872"
+       sodipodi:cx="-625"
+       sodipodi:cy="527.36218"
+       sodipodi:rx="25"
+       sodipodi:ry="25"
+       d="m -600,527.36218 a 25,25 0 1 1 -50,0 25,25 0 1 1 50,0 z"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/assets/icons/image.png"
+       inkscape:export-xdpi="119.28"
+       inkscape:export-ydpi="119.28" />
   </g>
 </svg>

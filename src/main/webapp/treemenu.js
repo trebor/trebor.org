@@ -210,6 +210,11 @@ function selectIconName(node)
           iconName = "link";
       }
   }
+  else if (node.image)
+  {
+    node.clickAct = "view image";
+    iconName = "image";
+  }
   
   return iconName;
 }
@@ -301,6 +306,14 @@ function click(node)
 {
   if (node.children || node._children)
     toggleChildren(node);
+  else if (node.image)
+    jQuery.slimbox(node.image, node.imageDescription,
+    {
+      overlayOpacity: 0.5,
+      overlayFadeDuration: 250,
+      resizeDuration: 250,
+      captionAnimationDuration: 250,
+    });
   else if (node.link)
   {
     if (isLocalUrl(node.link))

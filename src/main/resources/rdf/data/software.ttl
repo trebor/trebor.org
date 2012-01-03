@@ -30,6 +30,12 @@ _:splink            a                   too:treeNode;
                     too:hasName         "splink";
                     too:hasTitle        "<a href=\"https://github.com/treboresque/Splink/wiki\">splink</a>";
                     too:hasNodeIcon     "splink";
+                    too:hasImage        "assets/images/splink-screenshot.png";
+                    too:hasImageDescription
+"""
+prefixes are automatically appended to queires, and results are displayed in an easy to read stripped display, with auto-sized column widths.
+""";
+                    
                     too:hasNodeSummary
 
 """
@@ -49,6 +55,11 @@ _:sarynpaint        a                   too:treeNode;
                     too:hasName         "sarynpaint";
                     too:hasTitle        "<a href=\"http://code.google.com/p/sarynpaint/\">saryn paint</a>";
                     too:hasNodeIcon     "sarynpaint";
+                    too:hasImage        "assets/images/sarynpaint-screenshot.png";
+                    too:hasImageDescription
+"""
+a child can adjust paint-brush color and shape by mousing over the regions at the screen edges.
+""";
                     too:hasNodeSummary
 
 """
@@ -62,6 +73,12 @@ _:swarm             a                   too:treeNode;
                     too:hasName         "swarm";
                     too:hasTitle        "<a href=\"http://orbswarm.com/\">orb swarm</a>";
                     too:hasNodeIcon     "swarm";
+                    too:hasImage        "assets/images/swarm-colors.jpg";
+                    too:hasImageDescription
+"""
+orb swarm in black rock city in 2008. (c) 2008 nk, burningcam.com.
+""";
+                    
                     too:hasNodeSummary
 
 """
