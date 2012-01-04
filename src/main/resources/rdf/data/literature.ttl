@@ -1,0 +1,59 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+
+# --- literature --- #
+
+toi:literature      a                   too:treeNode;
+                    too:hasName         "literature";
+                    too:hasTitle        "the literature";
+                    too:hasNodeChildren _:literature_kids;
+                    too:hasNodeIcon     "book";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:literature_kids   a                    rdfs:Container;
+                    rdf:_1               _:everydaythings;
+                    rdf:_2               _:elementsofstyle;
+                    rdf:_3               _:crowdsandpower.
+#                    rdf:_4               _:recursiveuniverse.
+
+_:everydaythings    a                   too:treeNode;
+                    too:hasName         "everydaythings";
+                    too:hasTitle        "<a href=\"http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things\">the design of everyday things</a>";
+                    too:hasNodeIcon     "everydaythings";
+                    too:hasImage        "assets/images/Design-of-Everyday-Things.jpg";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:elementsofstyle   a                   too:treeNode;
+                    too:hasName         "elementsofstyle";
+                    too:hasTitle        "<a href=\"http://en.wikipedia.org/wiki/The_elements_of_style\">the elements of style</a>";
+                    too:hasNodeIcon     "elementsofstyle";
+                    too:hasImage        "assets/images/Elements-of-Style.jpg";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:crowdsandpower    a                   too:treeNode;
+                    too:hasName         "crowdsandpower";
+                    too:hasTitle        "<a href=\"http://en.wikipedia.org/wiki/Crowds_and_Power\">crowds and power</a>";
+                    too:hasNodeIcon     "crowdsandpower";
+                    too:hasImage        "assets/images/Crowds-and-Power.jpg";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+

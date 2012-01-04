@@ -119,7 +119,7 @@ based
 service running under
 <a href=\"http://tomcat.apache.org/\">tomcat</a>.
 <a href=\"http://mbostock.github.com/d3/\">d3.js</a>
-is driving the browser expereince.
+is driving the browser experience.
 i have been very happy with this set of tools.
 """.
 
