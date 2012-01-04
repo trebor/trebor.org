@@ -1,0 +1,16 @@
+.link 
+{
+  fill: none;
+  stroke: #CCC;
+  stroke-width: 5px;
+  stroke-linecap: round;
+  opacity: 1.0;
+  -ms-filter:'alpha(opacity=100)'; /* For IE8 and earlier */
+} 
+
+.dot
+{
+  fill: none;
+  stroke: black;
+  stroke-width: 2px;
+}

@@ -65,6 +65,7 @@ function update()
   link.enter()
     .insert("line", ".node")
     .attr("class", "link")
+    .style("visibility", "hidden")
     .attr("x1",  function(d) {return d.source.x;})
     .attr("y1", function(d) {return d.source.y;})
     .attr("x2", function(d) {return d.target.x;})
@@ -86,6 +87,7 @@ function update()
     .enter()
     .append("svg:g")
     .attr("class", "node")
+    .style("visibility", "hidden")
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
     .call(force.drag);
@@ -137,17 +139,29 @@ function update()
     .attr("height", "20em")
     .append("xhtml:body")
     .attr("class", "summaryText")
-    .html(function(d) 
-        {
-          var title = d.title ? "<big>" + d.title + "</big>" : "";
-          var space = d.title && d.summary ? "<br/><br>" : "";
-          var summary = d.summary ? d.summary : "";
-          return title + space + summary;
-        });
+    .html(nodeHtml);
 
   // remove old nodes
   
   node.exit().remove();
+}
+
+function nodeHtml(node)
+{
+  var home = "<a href=\"treemenu.html?page=home\">home</a>";
+  var zoom = "<a href=\"treemenu.html?page=" + node.name + "\">zoom node</a>";
+  var site = "<a href=\"sitemap.html?page=home\">site map</a>";
+  var title = node.title ? "<big>" + node.title + "</big>" : "";
+  var space1 = node.title && node.summary ? "<br/><br/>" : "";
+  var summary = node.summary ? node.summary : "";
+  var space2 = node.title || node.summary ? "<br/><br/>" : "";
+  var menu  = 
+    "<small>" +
+    (root.name != "home" ? home + "&nbsp;" : "") +
+    (node.name != root.name ? zoom : site)  + "&nbsp;" +
+    "<\small>";
+
+  return title + space1 + summary + space2 + menu;
 }
 
 function mouseover(node)
@@ -228,15 +242,15 @@ function selectIcon(node)
 
 function tick() {
   link
+    .style("visibility", "visible")
     .attr("x1", function(d) {return d.source.x;})
     .attr("y1", function(d) {return d.source.y;})
     .attr("x2", function(d) {return d.target.x;})
     .attr("y2", function(d) {return d.target.y;});
 
   node
+    .style("visibility", "visible")
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-//    .attr("x", function(d) {return d.x - nodeOffset;})
-//    .attr("y", function(d) {return d.y - nodeOffset;});
 }
 
 function iconPath(name)

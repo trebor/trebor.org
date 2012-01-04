@@ -1,0 +1,22 @@
+body, #lbBottom /* for slimbox */
+{
+  color: #444;
+  text-shadow: 0 0 0.1em #fff, 0 0 0.1em #fff, 0 0 0.1em #fff;
+  opacity:1.0;
+  -ms-filter:'alpha(opacity=100)'; /* For IE8 and earlier */
+  font-weight: bold;
+  font-family: "Courier New", "Courier", monospace;
+  font-size: 18px;
+}
+
+a:visited
+{
+  color:#444;
+}
+
+a:link
+{
+  color:#000;
+}
+
+
