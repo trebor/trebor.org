@@ -88,8 +88,8 @@ function update()
     .append("svg:g")
     .attr("class", "node")
     .style("visibility", "hidden")
-    .on("mouseover", mouseover)
-    .on("mouseout", mouseout)
+    .on("mouseover", mouseoverNode)
+    .on("mouseout", mouseoutNode)
     .call(force.drag);
 
   // add node icon
@@ -108,11 +108,14 @@ function update()
   en.filter(selectIcon)
     .append("svg:image")
     .attr("class", "nodeActionIcon")
+    .style("visibility", "hidden")
     .attr("xlink:href", selectIcon)
     .attr("x", function(d) {return iconSize(d) / -2;})
     .attr("y", function(d) {return iconSize(d) / 2 - actionIconSize;})
     .attr("width", actionIconSize)
     .attr("height", actionIconSize)
+    .on("mouseover", mouseoverActionIcon)
+    .on("mouseout", mouseoutActionIcon)
     .on("click", click);
 
   // add click text
@@ -120,11 +123,13 @@ function update()
   en.filter(selectIcon)
     .append("svg:foreignObject")
     .attr("class", "clickTextObject")
+    .style("visibility", "hidden")
     .attr("width", "10em")
     .attr("height", "2em")
     .attr("x", function(d) {return (iconSize(d) / -2) - (getEmSize(this) * 5) + actionIconSize / 2;})
     .attr("y", function(d) {return iconSize(d) / 2 - getEmSize(this) / 2;})
     .append("xhtml:body")
+    .style("visibility", "hidden")
     .attr("class", "clickText")
     .html(getNodeClickText);
 
@@ -133,6 +138,7 @@ function update()
   var text = en.filter(function(d) {return d.title || d.summary;})
     .append("svg:foreignObject")
     .attr("class", "summaryTextObject")
+    .style("visibility", "hidden")
     .attr("y", function(d) {return iconSize(d) / -2 - getEmSize(this) * .45;})
     .attr("x", function(d) {return iconSize(d) / 2 - getEmSize(this) * .45;})
     .attr("width", "25em")
@@ -164,8 +170,26 @@ function nodeHtml(node)
   return title + space1 + summary + space2 + menu;
 }
 
-function mouseover(node)
+function mouseoverActionIcon(icon)
 {
+   vis.selectAll(".clickText")
+    .filter(function (d) {return d == icon;}).style("visibility", "visible");
+}
+
+function mouseoutActionIcon(icon)
+{
+   vis.selectAll(".clickText")
+    .filter(function (d) {return d == icon;}).style("visibility", "hidden");
+}
+
+
+function mouseoverNode(node)
+{
+  vis
+    .selectAll(".summaryText, .nodeActionIcon")
+    .filter(function (d) {return d == node;})
+    .style("visibility", "visible");
+
   vis
     .selectAll(".link")
     .transition()
@@ -176,10 +200,32 @@ function mouseover(node)
     .filter(function (d) {return d != node;})
     .transition()
     .attr("opacity", "0.2");
+
+  vis.selectAll(".node").sort(function(a, b) 
+  {
+    if (a == node)
+      return 1;
+
+    if (b == node)
+      return -1;
+
+     if (a.name < b.name)
+       return 1;
+
+     if (a.name > b.name)
+       return -1;
+
+    return 0;
+  });
 }
 
-function mouseout(node)
+function mouseoutNode(node)
 {
+  vis
+    .selectAll(".summaryText, .nodeActionIcon")
+    .filter(function (d) {return d == node;})
+    .style("visibility", "hidden");
+
   vis
     .selectAll(".nodeIcon")
     .filter(function (d) {return d != node;})
@@ -337,7 +383,7 @@ function click(node)
       window.open(node.link, '_blank');
   }
   
-  mouseover(node);
+  mouseoverNode(node);
 }
 
 // tests if a url is local to this domain

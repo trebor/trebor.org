@@ -9,6 +9,14 @@ body, #lbBottom /* for slimbox */
   font-size: 18px;
 }
 
+.link 
+{
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 6px;
+  stroke-linecap: round;
+}
+
 a:visited
 {
   color:#444;
@@ -18,5 +26,3 @@ a:link
 {
   color:#000;
 }
-
-

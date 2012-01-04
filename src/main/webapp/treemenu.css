@@ -8,49 +8,14 @@
   cursor: pointer;
   opacity:0.75;
   -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
-  visibility:hidden;
 }
-
-/* for slimbox */
 
 .summaryText
 {
   padding-left: 1em;
-  visibility: hidden;
 }
 
 .clickText
 {
   font-size: 14px;
-  visibility: hidden;
-}
-
-.summaryTextObject, .clickTextObject
-{
-  visibility:hidden;
-}  
-
-.node:hover > .nodeActionIcon:hover + .clickTextObject .clickText
-{
-  visibility:visible;
-}
-
-/* when hover over a node, expose detail */
-
-.node:hover .summaryText
-{
-  visibility:visible;
-}
-
-.node:hover .nodeActionIcon
-{
-  visibility:visible;
-}
-
-line.link 
-{
-  fill: none;
-  stroke: #DDD;
-  stroke-width: 5px;
-  stroke-linecap: round;
 }
