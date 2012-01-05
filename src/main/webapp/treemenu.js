@@ -199,7 +199,7 @@ function mouseoverNode(node)
     .selectAll(".nodeIcon")
     .filter(function (d) {return d != node;})
     .transition()
-    .attr("opacity", "0.4");
+    .attr("opacity", "0.2");
 
   vis.selectAll(".node").sort(function(a, b) 
   {
