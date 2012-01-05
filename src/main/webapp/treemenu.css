@@ -10,6 +10,21 @@
   -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
 }
 
+.nodeMenu
+{
+  font-size: smaller;
+}
+
+.nodeMenu > a:visited
+{
+  color: #aaa;
+}
+
+.nodeMenu > a:link
+{
+  color: #666;
+}
+
 .summaryText
 {
   padding-left: 1em;

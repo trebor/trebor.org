@@ -156,16 +156,16 @@ function nodeHtml(node)
 {
   var home = "<a href=\"treemenu.html?page=home\">home</a>";
   var zoom = "<a href=\"treemenu.html?page=" + node.name + "\">zoom node</a>";
-  var site = "<a href=\"sitemap.html?page=home\">site map</a>";
+  var site = "<a color=\"red\" href=\"sitemap.html?page=home\">site map</a>";
   var title = node.title ? "<big>" + node.title + "</big>" : "";
   var space1 = node.title && node.summary ? "<br/><br/>" : "";
   var summary = node.summary ? node.summary : "";
   var space2 = node.title || node.summary ? "<br/><br/>" : "";
   var menu  = 
-    "<small>" +
+    "<p class=\"nodeMenu\" align=\"right\">" +
     (root.name != "home" ? home + "&nbsp;" : "") +
     (node.name != root.name ? zoom : site)  + "&nbsp;" +
-    "<\small>";
+    "</p>";
 
   return title + space1 + summary + space2 + menu;
 }
@@ -199,7 +199,7 @@ function mouseoverNode(node)
     .selectAll(".nodeIcon")
     .filter(function (d) {return d != node;})
     .transition()
-    .attr("opacity", "0.2");
+    .attr("opacity", "0.4");
 
   vis.selectAll(".node").sort(function(a, b) 
   {
