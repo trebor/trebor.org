@@ -13,7 +13,7 @@ toi:home            a                   too:treeNode;
                     too:hasNodeChildren _:home_kids;
                     too:hasNodeSummary
 
-"welcome. my name is robert and i have built this site with the hope that visitors can absorb some of what i think and do.  please enjoy your stay.".
+"welcome. please explore.".
 
 _:home_kids         a                    rdfs:Container;
                     rdf:_1               toi:influences;

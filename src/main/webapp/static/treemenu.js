@@ -366,8 +366,13 @@ function getNodeClickText(node)
 function click(node)
 {
   if (node.children || node._children)
+  {
     toggleChildren(node);
+    mouseoutNode(node);
+  }
   else if (node.image)
+  {
+    mouseoutNode(node);
     jQuery.slimbox(node.image, node.imageDescription,
     {
       overlayOpacity: 0.5,
@@ -375,6 +380,7 @@ function click(node)
       resizeDuration: 250,
       captionAnimationDuration: 250,
     });
+  }
   else if (node.link)
   {
     if (isLocalUrl(node.link))
@@ -382,8 +388,6 @@ function click(node)
     else
       window.open(node.link, '_blank');
   }
-  
-  mouseoverNode(node);
 }
 
 // tests if a url is local to this domain

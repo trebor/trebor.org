@@ -27,7 +27,9 @@
 
 .summaryText
 {
-  padding-left: 1em;
+  border-radius: 15px;
+  background: rgba(204,204,204,0.25);
+	padding: 0.5em;
 }
 
 .clickText

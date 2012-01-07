@@ -15,7 +15,7 @@ toi:luminaries      a                   too:treeNode;
 """
 many of the ideas aspoused by these luminaries have been absorbed so completly into 
 current thinking that we may take them for granted, and forget that their notions were
-once noval.
+once novel.
 """.
 
 _:luminaries_kids   a                    rdfs:Container;
