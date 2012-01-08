@@ -39,7 +39,8 @@ d3.json(dataSource, function(json)
     .attr("x", iconSize / -2)
     .attr("y", iconSize / -2)
     .attr("width", iconSize)
-    .attr("height", iconSize);
+    .attr("height", iconSize)
+    .on("click", function (d) {window.location = getNodeUrl(d);});
 
   node.append("svg:foreignObject")
     .attr("width", "20em")
@@ -54,8 +55,13 @@ function nodeName(node)
 {
   var align = node.children ? "right" : "left";
   var title = 
-    "<a href=\"treemenu.html?page=" + node.name + "\">" + strip(node.title) + "</a>";
+    "<a href=\"" + getNodeUrl(node) + "\">" + strip(node.title) + "</a>";
   return "<p align=\"" + align + "\">" + title + "</p>";
+}
+
+function getNodeUrl(node)
+{
+  return "treemenu.html?page=" + node.name;
 }
 
 function iconPath(name)
