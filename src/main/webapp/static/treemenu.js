@@ -22,6 +22,7 @@ var force = d3
   .gravity(0)
   .charge(-200)
   .linkDistance(linkDistance)
+  .linkStrength(0.5)
   .size([w, h]);
 
 //  create the svg work area
@@ -31,6 +32,30 @@ var vis = d3
   .append("svg")
   .attr("width", w)
   .attr("height", h);
+
+// custom drag behavior
+
+var customDrag = d3.behavior.drag()
+  .on("dragstart", dragstart)
+  .on("drag", dragmove)
+  .on("dragend", dragend);
+
+function dragstart(d, i) 
+{
+  d.fixed = true;
+}
+
+function dragmove(d, i) 
+{
+  d.px += d3.event.dx;
+  d.py += d3.event.dy;
+  force.resume();
+}
+
+function dragend(d, i) 
+{
+  d.fixed = false;
+}
 
 d3.json(dataSource, function(json)
 {
@@ -42,7 +67,16 @@ d3.json(dataSource, function(json)
 
   // close all nodes for starters
 
-  vis.selectAll("g.node").each(toggleChildren);
+  collapseChildren(root);
+  update();
+  
+  // enable root mouse over and drag
+
+  node
+    .filter(function(d) {return d.name == root.name;})
+    .on("mouseover", mouseoverNode)
+    .on("mouseout", mouseoutNode)
+    .call(customDrag);
 });
 
 function update() 
@@ -81,16 +115,13 @@ function update()
     .selectAll("g.node")
     .data(nodes, function(d) {return d.id;});
 
-  // on the new "enter" nodes add drag and click
+  // on the new "enter" nodes create an svg  group element
   
   var en = node
     .enter()
     .append("svg:g")
     .attr("class", "node")
-    .style("visibility", "hidden")
-    .on("mouseover", mouseoverNode)
-    .on("mouseout", mouseoutNode)
-    .call(force.drag);
+    .style("visibility", "hidden");
 
   // add node icon
 
@@ -286,7 +317,37 @@ function selectIcon(node)
   return iconName ? iconPath(iconName) : null;
 }
 
-function tick() {
+function tick() 
+{
+  // handle node growth
+  
+  node
+    .filter(function(d) {return $(this).attr("parent-weight");})
+    .each(function (d) 
+    {
+      var parentWeight = $(this).attr("parent-weight");
+      d.x = weight(d.parent.x, d.x, parentWeight);
+      d.y = weight(d.parent.y, d.y, parentWeight);
+    })
+    .filter(function(d) {return $(this).attr("parent-weight") == 0;})
+    .on("mouseover", mouseoverNode)
+    .on("mouseout", mouseoutNode)
+    .call(customDrag)
+    .each(function (d)
+    {
+      $(this).attr("parent-weight", null);
+      if (d.parent.name != root.name)
+        d.parent.fixed = false;
+    });
+
+  // update node postion
+  
+  node
+    .style("visibility", "visible")
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+  // update link position
+    
   link
     .style("visibility", "visible")
     .attr("x1", function(d) {return d.source.x;})
@@ -294,9 +355,11 @@ function tick() {
     .attr("x2", function(d) {return d.target.x;})
     .attr("y2", function(d) {return d.target.y;});
 
-  node
-    .style("visibility", "visible")
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+function weight(a, b, aWeight)
+{
+  return a * aWeight + b * (1 - aWeight);
 }
 
 function iconPath(name)
@@ -325,20 +388,36 @@ function linkDistance(link)
   return (iconSize(link.source) + iconSize(link.target)) / 2 + nodeBuffer;
 }
 
+// collapse all a nodes children nodes (transitive)
+
+function collapseChildren(node)
+{
+  if (!node.children)
+    return;
+    
+  for (i in node.children)
+    collapseChildren(node.children[i]);
+
+  node._children = node.children;
+  node.children = null;
+}
+
+// expand a nodes children (one level deep only)
+
+function expandChildren(node)
+{
+  node.children = node._children;
+  node._children = null;
+}
+
 // toggle children open or closed
 
 function toggleChildren(node)
 {
   if (node.children) 
-  {
-    node._children = node.children;
-    node.children = null;
-  }
+    collapseChildren(node);
   else if (node._children)
-  {
-    node.children = node._children;
-    node._children = null;
-  }
+    expandChildren(node);
 
   // update icon
 
@@ -369,6 +448,35 @@ function click(node)
   {
     toggleChildren(node);
     mouseoutNode(node);
+    
+    for (i in node.children)
+    {
+      child = node.children[i];
+      child.parentWeight = 1.0;
+    }
+
+    // if this node is going to expand, 
+
+    if (node.children)
+    {
+      // fix it so it doesn't move
+
+      node.fixed = true;
+
+      // set parent weighting
+
+      for (i in node.children)
+      {
+        var child = node.children[i];
+        vis.selectAll("g.node")
+          .filter(function (d) {return d.name == child.name;})
+          .attr("parent-weight", 1)
+          .transition()
+//        .ease("circle-in-out")
+          .delay(500)
+          .attr("parent-weight", 0);
+      }
+    }
   }
   else if (node.image)
   {
@@ -409,6 +517,7 @@ function flatten(root)
       node.size = node.children.reduce(
           function(p, v)
           {
+            v.parent = node;
             return p + recurse(v, depth + 1);
           }, 0);
     if (!node.id)

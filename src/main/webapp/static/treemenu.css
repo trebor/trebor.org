@@ -28,8 +28,8 @@
 .summaryText
 {
   border-radius: 15px;
-  background: rgba(204,204,204,0.25);
-	padding: 0.5em;
+  background: rgba(0,0,0,0.03);
+  padding: 0.5em;
 }
 
 .clickText
