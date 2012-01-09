@@ -20,9 +20,9 @@ var force = d3
   .force()
   .on("tick", tick)
   .gravity(0)
-  .charge(-200)
+  .charge(-50)
   .linkDistance(linkDistance)
-  .linkStrength(0.5)
+  .linkStrength(0.3)
   .size([w, h]);
 
 //  create the svg work area
@@ -52,9 +52,10 @@ function dragmove(d, i)
   force.resume();
 }
 
-function dragend(d, i) 
+function dragend(d, i)
 {
-  d.fixed = false;
+  if (d != root)
+    d.fixed = false;
 }
 
 d3.json(dataSource, function(json)
@@ -67,17 +68,38 @@ d3.json(dataSource, function(json)
 
   // close all nodes for starters
 
-  collapseChildren(root);
-  update();
+  toggleChildren(root);
   
-  // enable root mouse over and drag
-
-  node
-    .filter(function(d) {return d.name == root.name;})
-    .on("mouseover", mouseoverNode)
-    .on("mouseout", mouseoutNode)
-    .call(customDrag);
+  // enable root mouse interaction
+ 
+  enableMouseInteraction(root);
 });
+
+function enableMouseInteraction(target)
+{
+  node
+    .filter(function(d) {return d == target;})
+    .on("mouseover", mouseoverNode)
+    .on("mouseout", mouseoutNode);
+
+  vis
+    .selectAll(".nodeIcon")
+    .filter(function(d) {return d == target;})
+    .on("click", click);
+}
+
+function disableMouseInteraction(target)
+{
+  node
+    .filter(function(d) {return d == target;})
+    .on("mouseover", null)
+    .on("mouseout", null);
+
+  vis
+    .selectAll(".nodeIcon")
+    .filter(function(d) {return d == target;})
+    .on("click", click);
+}
 
 function update() 
 {
@@ -100,6 +122,7 @@ function update()
     .insert("line", ".node")
     .attr("class", "link")
     .style("visibility", "hidden")
+    .attr("opacity", 1)
     .attr("x1",  function(d) {return d.source.x;})
     .attr("y1", function(d) {return d.source.y;})
     .attr("x2", function(d) {return d.target.x;})
@@ -121,18 +144,20 @@ function update()
     .enter()
     .append("svg:g")
     .attr("class", "node")
-    .style("visibility", "hidden");
+    .style("visibility", "hidden")
+    .call(customDrag);
 
   // add node icon
 
   en.append("svg:image")
     .attr("class", "nodeIcon")
     .attr("xlink:href", function(d) {return iconPath(d.iconName);})
+    .attr("opacity", 1)
     .attr("x", iconPosition)
     .attr("y", iconPosition)
     .attr("width", iconSize)
-    .attr("height", iconSize)
-    .on("click", click);
+    .attr("height", iconSize);
+
 
   // add node action icon
 
@@ -140,6 +165,7 @@ function update()
     .append("svg:image")
     .attr("class", "nodeActionIcon")
     .style("visibility", "hidden")
+    .attr("opacity", 1)
     .attr("xlink:href", selectIcon)
     .attr("x", function(d) {return iconSize(d) / -2;})
     .attr("y", function(d) {return iconSize(d) / 2 - actionIconSize;})
@@ -160,8 +186,8 @@ function update()
     .attr("x", function(d) {return (iconSize(d) / -2) - (getEmSize(this) * 5) + actionIconSize / 2;})
     .attr("y", function(d) {return iconSize(d) / 2 - getEmSize(this) / 2;})
     .append("xhtml:body")
-    .style("visibility", "hidden")
     .attr("class", "clickText")
+    .attr("opacity", 1)
     .html(getNodeClickText);
 
   // add summary text
@@ -176,6 +202,7 @@ function update()
     .attr("height", "20em")
     .append("xhtml:body")
     .attr("class", "summaryText")
+    .attr("opacity", 1)
     .html(nodeHtml);
 
   // remove old nodes
@@ -213,6 +240,9 @@ function mouseoutActionIcon(icon)
     .filter(function (d) {return d == icon;}).style("visibility", "hidden");
 }
 
+var fadeDuration = 250;
+var nodeIconFadeTo = 0.2;
+var linkFadeTo = 0;
 
 function mouseoverNode(node)
 {
@@ -221,16 +251,12 @@ function mouseoverNode(node)
     .filter(function (d) {return d == node;})
     .style("visibility", "visible");
 
-  vis
-    .selectAll(".link")
-    .transition()
-    .attr("opacity", "0");
+  // found out the other nodes and edges
 
-  vis
-    .selectAll(".nodeIcon")
-    .filter(function (d) {return d != node;})
-    .transition()
-    .attr("opacity", "0.2");
+  fadeToOpacity(node, ".nodeIcon", nodeIconFadeTo);
+  fadeToOpacity(node, ".link", linkFadeTo);
+
+  // sort selected element to the top of the view
 
   vis.selectAll(".node").sort(function(a, b) 
   {
@@ -257,16 +283,21 @@ function mouseoutNode(node)
     .filter(function (d) {return d == node;})
     .style("visibility", "hidden");
 
-  vis
-    .selectAll(".nodeIcon")
-    .filter(function (d) {return d != node;})
-    .transition()
-    .attr("opacity", "1");
+  fadeToOpacity(node, ".nodeIcon", 1);
+  fadeToOpacity(node, ".link", 1);
+}
 
+function fadeToOpacity(allBut, type, fadeTo)
+{
   vis
-    .selectAll(".link")
+    .selectAll(type)
+    .filter(function (d)
+    {
+      return d != allBut;
+    })
     .transition()
-    .attr("opacity", "1");
+    .duration(fadeDuration)
+    .attr("opacity", fadeTo);
 }
 
 function getEmSize(el)
@@ -328,23 +359,34 @@ function tick()
       var parentWeight = $(this).attr("parent-weight");
       d.x = weight(d.parent.x, d.x, parentWeight);
       d.y = weight(d.parent.y, d.y, parentWeight);
+      force.resume();
     })
     .filter(function(d) {return $(this).attr("parent-weight") == 0;})
-    .on("mouseover", mouseoverNode)
-    .on("mouseout", mouseoutNode)
-    .call(customDrag)
-    .each(function (d)
-    {
-      $(this).attr("parent-weight", null);
-      if (d.parent.name != root.name)
-        d.parent.fixed = false;
-    });
+    .attr("parent-weight", null);
 
-  // update node postion
+  // update node scale
   
   node
     .style("visibility", "visible")
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  node
+    .selectAll(".nodeIcon")
+    .filter(function(d) {return $(this).attr("node-icon-scale");})
+    .attr("transform", function(d) 
+          {
+            force.resume();
+            return "scale(" + $(this).attr("node-icon-scale") + ")";
+          })
+    .filter(function(d) {return $(this).attr("node-icon-scale") == 1;})
+    .attr("node-icon-scale", null)
+    .each(function (d)
+    {
+      enableMouseInteraction(d);
+      enableMouseInteraction(d.parent);
+      if (d.parent != root)
+        d.parent.fixed = false;
+    });
 
   // update link position
     
@@ -385,7 +427,7 @@ function iconSize(node)
 
 function linkDistance(link) 
 {
-  return (iconSize(link.source) + iconSize(link.target)) / 2 + nodeBuffer;
+  return ((iconSize(link.source) + iconSize(link.target)) / 2 + nodeBuffer) * 0.9;
 }
 
 // collapse all a nodes children nodes (transitive)
@@ -419,17 +461,21 @@ function toggleChildren(node)
   else if (node._children)
     expandChildren(node);
 
-  // update icon
+  // update action icon
 
   vis
-    .selectAll("[class=nodeActionIcon]")
+    .selectAll(".nodeActionIcon")
     .filter(function (d) {return d == node;})
     .attr("href", selectIcon(node));
 
+  // update click text
+
   vis
-    .selectAll("[class=clickText]")
+    .selectAll(".clickText")
     .filter(function (d) {return d == node;})
     .html(getNodeClickText);
+
+ // upate tree
 
   update();
 }
@@ -439,43 +485,71 @@ function getNodeClickText(node)
   return "<center>" + node.clickAct + "</center>";
 }
 
-
 // handle a node click
 
 function click(node)
 {
-  if (node.children || node._children)
+  // if collapse node
+
+  if (node.children)
   {
+    // collapse children
+
     toggleChildren(node);
+  }
+
+  // if expand  node
+
+  else if (node._children)
+  {
+    // expand children
+
+    toggleChildren(node);
+
+    // turn off node summary if showing
+
     mouseoutNode(node);
-    
+
+    // disable mouse interaction
+
+    disableMouseInteraction(node);
+
+    // fix it so it doesn't move
+
+    node.fixed = true;
+
+    // set parent weighting
+
+    var growDuration = 800;
+    var growLengthEase = "sin-out";
+    var growSizeEase = "linear";
+
+
     for (i in node.children)
     {
-      child = node.children[i];
-      child.parentWeight = 1.0;
-    }
-
-    // if this node is going to expand, 
-
-    if (node.children)
-    {
-      // fix it so it doesn't move
-
-      node.fixed = true;
-
-      // set parent weighting
-
-      for (i in node.children)
-      {
-        var child = node.children[i];
-        vis.selectAll("g.node")
-          .filter(function (d) {return d.name == child.name;})
-          .attr("parent-weight", 1)
-          .transition()
-//        .ease("circle-in-out")
-          .delay(500)
-          .attr("parent-weight", 0);
-      }
+      var child = node.children[i];
+      
+      // transition in the weight of the parent node in the position calcluation
+      
+      vis.selectAll("g.node")
+        .filter(function (d) {return d.name == child.name;})
+        .each(disableMouseInteraction)
+        .attr("parent-weight", 1)
+        .transition()
+        .ease(growLengthEase)
+        .duration(growDuration)
+        .attr("parent-weight", 0);
+      
+      // transition in size of the node
+      
+      vis.selectAll("g.node")
+        .filter(function (d) {return d.name == child.name;})
+        .selectAll(".nodeIcon")
+        .attr("node-icon-scale", 0)
+        .transition()
+        .duration(growDuration * 3)
+        .ease(growSizeEase)
+        .attr("node-icon-scale", 1);
     }
   }
   else if (node.image)
