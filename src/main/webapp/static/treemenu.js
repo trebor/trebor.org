@@ -258,6 +258,11 @@ function mouseoverNode(node)
 
   // sort selected element to the top of the view
 
+  moveToTop(node);
+}
+
+function moveToTop(node)
+{
   vis.selectAll(".node").sort(function(a, b) 
   {
     if (a == node)
@@ -505,6 +510,10 @@ function click(node)
     // expand children
 
     toggleChildren(node);
+
+    // move node to top
+
+    moveToTop(node);
 
     // turn off node summary if showing
 
