@@ -98,7 +98,7 @@ function disableMouseInteraction(target)
   vis
     .selectAll(".nodeIcon")
     .filter(function(d) {return d == target;})
-    .on("click", click);
+    .on("click", null);
 }
 
 function update() 
@@ -387,8 +387,11 @@ function tick()
     .attr("node-icon-scale", null)
     .each(function (d)
     {
-      enableMouseInteraction(d);
-      enableMouseInteraction(d.parent);
+      // this assumes all nodes go live at the same time, bad!
+
+      vis.selectAll("g.node")
+        .each(enableMouseInteraction);
+
       if (d.parent != root)
         d.parent.fixed = false;
     });
@@ -519,9 +522,11 @@ function click(node)
 
     mouseoutNode(node);
 
-    // disable mouse interaction
+    // disable mouse interaction with all nodes
 
-    disableMouseInteraction(node);
+    vis.selectAll("g.node")
+      .each(disableMouseInteraction);
+
 
     // fix it so it doesn't move
 
@@ -529,8 +534,8 @@ function click(node)
 
     // set parent weighting
 
-    var growDuration = 800;
-    var growLengthEase = "sin-out";
+    var growDuration = 500;
+    var growLengthEase = "linear";
     var growSizeEase = "linear";
 
 
@@ -542,10 +547,12 @@ function click(node)
       
       vis.selectAll("g.node")
         .filter(function (d) {return d.name == child.name;})
-        .each(disableMouseInteraction)
         .attr("parent-weight", 1)
         .transition()
-        .ease(growLengthEase)
+        .ease(function (t) {
+          var x = Math.cos(t * (Math.PI / 2) + Math.PI) + 1;
+          return t >= 1 ? 1 : x;
+        })
         .duration(growDuration)
         .attr("parent-weight", 0);
       
