@@ -27,67 +27,67 @@ _:luminaries_kids   a                    rdfs:Container;
 _:norman				    a                   too:treeNode;
                     too:hasName         "norman";
                     too:hasNodeIcon     "norman";
-                    too:hasTitle        "<a href=\"http://www.jnd.org/\">donald norman<a>";
+                    too:hasTitle        "[http://www.jnd.org/ donald norman]";
                     too:hasNodeSummary
 
 """
 early on i read
-<a href=\"http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things\">the design of everyday things</a>
+[[wikipedia:The_Design_of_Everyday_Things|the design of everyday things]]
 in which norman describes some aspects good design, and where i learned the word
-<a href=\"http://en.wikipedia.org/wiki/Affordance\">affordance</a>.
+[[wikipedia:Affordance affordance]].
 he also talks about why many products are poorly designed.
 in a more recent design
-<a href=\"http://www.youtube.com/watch?v=RlQEoJaLQRA\">ted talk</a>
+[[youtube:RlQEoJaLQRA|ted talk]]
 he underscores the utility of beauty, and importance of factoring emotion into design.
 """.
 
 _:dawkins				    a                   too:treeNode;
                     too:hasName         "dawkins";
                     too:hasNodeIcon     "dawkins";
-                    too:hasTitle         "<a href=\"http://richarddawkins.net/\">richard dawkins<a>";
+                    too:hasTitle         "[http://richarddawkins.net/ richard dawkins]";
                     too:hasNodeSummary
 
 """
-<a href=\"http://en.wikipedia.org/wiki/The_Selfish_Gene\">the selfish gene</a>
+[[wikipedia:The_Selfish_Gene|the selfish gene]]
 was a seminal book on evolution, from which we get the word
-<a href=\"http://en.wikipedia.org/wiki/Meme\">meme</a>.
+[[wikipedia:Meme|meme]].
 it left me with an end-to-end understanding of the rise of life on earth.
 dawkins is also an outspoken
-<a href=\"http://en.wikipedia.org/wiki/Atheist\">atheist</a>,
+[[wikipedia:Atheist|atheist]],
 and proponent of
-<a href=\"http://en.wikipedia.org/wiki/Rationalism\">rationalism</a>.
+[[wikipedia:Rationalism|rationalism]].
 """.
 
 _:pinker				    a                   too:treeNode;
                     too:hasName         "pinker";
                     too:hasNodeIcon     "pinker";
-                    too:hasTitle         "<a href=\"http://stevenpinker.com/biocv\">stephen pinker<a>";
+                    too:hasTitle         "[http://stevenpinker.com/biocv stephen pinker]";
                     too:hasNodeSummary
 
 """
 i started with
-<a href=\"http://en.wikipedia.org/wiki/The_Language_Instinct\">the language instinct</a>
+[[wikipedia:The_Language_Instinct|the language instinct]]
 which posits that humans are born with an innate capacity to develop gramatical language.
 here is a facinating
-<a href=\"http://comment.rsablogs.org.uk/videos/\">rsa animate</a>
-<a href=\"http://www.youtube.com/watch?v=3-son3EJTrU\">talk</a>
+[http://comment.rsablogs.org.uk/videos/ rsa animate]
+[[youtube:3-son3EJTrU|talk]]
 he gave on language and behavior.
 i'm currently reading
-<a href=\"http://en.wikipedia.org/wiki/The_Better_Angels_of_Our_Nature\">the better angels of our nature</a>
+[[wikipedia:The_Better_Angels_of_Our_Nature|the better angels of our nature]]
 which, despite its gruesome descriptions of violence present and past, leaves me optomistic about mankind's future.
 """.
 
 _:tufte				    	a                   too:treeNode;
                     too:hasName         "tufte";
                     too:hasNodeIcon     "tufte";
-                    too:hasTitle         "<a href=\"http://www.edwardtufte.com/tufte/\">edward tufte<a>";
+                    too:hasTitle         "[http://www.edwardtufte.com/tufte/ edward tufte]";
                     too:hasNodeSummary
                     
-#<a href=\"\"></a>
+#[ ]
 
 """
 tufte's
-<a href=\"http://www.edwardtufte.com/tufte/courses\">one day course</a>
+[http://www.edwardtufte.com/tufte/courses one day course]
 had a huge and immediate impact on my understanding of visual design.  he provides
 a systematic approach for evaluating visual representations, and techniques to improve them.
 if data visualization is your thing, check him out.

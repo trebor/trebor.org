@@ -34,6 +34,8 @@ public class TreborStore
 
   private final NamedQuery mNamedTreeNodequery;
 
+  private final MarkupRenderer mMarkupRenderer;
+  
   public static final String BASE_PATH = "/rdf/";
 
   public static final String[] INPUT_FILES =
@@ -55,7 +57,11 @@ public class TreborStore
   {
     log.debug("init store");
 
-    // establish an in memory repository
+    // construct wiki media model for conversiton of wiki markup to html
+    
+    mMarkupRenderer = new MarkupRenderer();
+    
+     // establish an in memory repository
 
     Repository repository = MockRepositoryFactory.getMockRepository();
     ObjectRepositoryFactory orf = new ObjectRepositoryFactory();
@@ -89,8 +95,17 @@ public class TreborStore
     ObjectQuery query =
       mObjectConnection.prepareObjectQuery(mNamedTreeNodequery
         .getQueryString());
-    query.setObject("name", nodeName);
+    query.setObject("name", nodeName.toLowerCase());
     ForceTreeNode node = (ForceTreeNode)query.evaluate().singleResult();
-    return node.copy();
+    return renderMarkup(node.copy());
+  }
+
+  private ForceTreeNode renderMarkup(ForceTreeNode node)
+  {
+    node.setTitle(mMarkupRenderer.render(node.getTitle()));
+    node.setSummary(mMarkupRenderer.render(node.getSummary()));
+    for (ForceTreeNode child: node.getChildren())
+        renderMarkup(child);
+    return node;
   }
 }

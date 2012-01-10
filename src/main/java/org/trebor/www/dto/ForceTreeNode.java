@@ -24,6 +24,10 @@ public class ForceTreeNode {
   @SuppressWarnings("unused")
   private static final Logger logger = Logger.getLogger(ForceTreeNode.class);
 
+  @iri(TOO + "test")
+  @XmlElement(name="arrayTest")
+  private String[] mTest = {"aa", "bb", "cc"};
+  
   @iri(HAS_NAME)
   @XmlElement(name="name")
   private String mName;
@@ -156,6 +160,7 @@ public class ForceTreeNode {
     copy.setImageDescription(getImageDescription());
     copy.setLink(getLink());
     copy.setSummary(getSummary());
+    copy.setTest(getTest());
     
     for (ForceTreeNode child: getChildren())
       copy.add(child.copy());
@@ -191,5 +196,15 @@ public class ForceTreeNode {
   public String getImageDescription()
   {
     return mImageDescription;
+  }
+
+  public void setTest(String[] test)
+  {
+    mTest = test;
+  }
+
+  public String[] getTest()
+  {
+    return mTest;
   }
 }

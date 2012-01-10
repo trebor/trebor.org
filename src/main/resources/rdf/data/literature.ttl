@@ -26,7 +26,7 @@ _:literature_kids   a                    rdfs:Container;
 
 _:everydaythings    a                   too:treeNode;
                     too:hasName         "everydaythings";
-                    too:hasTitle        "<a href=\"http://en.wikipedia.org/wiki/The_Design_of_Everyday_Things\">the design of everyday things</a>";
+                    too:hasTitle        "[[wikipedia:The_Design_of_Everyday_Things|the design of everyday things]]";
                     too:hasNodeIcon     "everydaythings";
                     too:hasImage        "assets/images/Design-of-Everyday-Things.jpg";
                     too:hasNodeSummary
@@ -37,7 +37,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 
 _:elementsofstyle   a                   too:treeNode;
                     too:hasName         "elementsofstyle";
-                    too:hasTitle        "<a href=\"http://en.wikipedia.org/wiki/The_elements_of_style\">the elements of style</a>";
+                    too:hasTitle        "[[wikipedia:The_elements_of_style|the elements of style]]";
                     too:hasNodeIcon     "elementsofstyle";
                     too:hasImage        "assets/images/Elements-of-Style.jpg";
                     too:hasNodeSummary
@@ -48,7 +48,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 
 _:crowdsandpower    a                   too:treeNode;
                     too:hasName         "crowdsandpower";
-                    too:hasTitle        "<a href=\"http://en.wikipedia.org/wiki/Crowds_and_Power\">crowds and power</a>";
+                    too:hasTitle        "[[wikipedia:Crowds_and_Power|crowds and power]]";
                     too:hasNodeIcon     "crowdsandpower";
                     too:hasImage        "assets/images/Crowds-and-Power.jpg";
                     too:hasNodeSummary

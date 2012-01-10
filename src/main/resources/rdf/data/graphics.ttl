@@ -33,7 +33,7 @@ _:trebor_logo       a                   too:treeNode;
 
 """
 i created the \"tat&nbsp;sign\" as a sort of personal 
-<a href=\"http://en.wikipedia.org/wiki/Glyph\">glyph</a>.
+[[wikipedia:Glyph|glyph]].
 you will see a lot of it around here.
 """.
 
@@ -55,11 +55,11 @@ _:coolneon_logo     a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-<a href=\"http://www.coolneon.com/wp-content/gallery/cool-neon-elves/bencrop.gif\">benny</a> 
+[http://www.coolneon.com/wp-content/gallery/cool-neon-elves/bencrop.gif benny] 
 asked me to create a logo for his company
-<a href=\"http://www.coolneon.com/\">coolneon</a>.
+[http://www.coolneon.com/ coolneon].
 it is intended to show that coolneon el-wire is cool to the touch, and was inspired by 
-<a href=\"http://en.wikipedia.org/wiki/Mudra\">mudra</a>.
+[[wikipedia:Mudra|mudra]].
 benny worked with me to polish the logo for real-world use.
 """.
 
@@ -71,7 +71,7 @@ _:social_revolution_logo a              too:treeNode;
                     too:hasNodeSummary
 
 """
-<a href=\"http://www.coolneon.com/wp-content/gallery/cool-neon-elves/bencrop.gif\">benny</a> 
+[http://www.coolneon.com/wp-content/gallery/cool-neon-elves/bencrop.gif benny] 
 asked me to create a head-tube medallion for his amazing \"social revolution\" tricycle project.
 it seats up to three people, side by side, with two wheels up front and one in the back for steering.
 """.
@@ -85,10 +85,9 @@ _:xuggle_logo       a                   too:treeNode;
 
 """
 i created this logo for
-<a href=\"http://xuggle.com\">xuggle</a>,
+[http://xuggle.com xuggle],
 a company i co-founded.
 the name was a play on the word \"juggle\" and i based the logo on the path balls travel in a
-<a href=\"http://en.wikipedia.org/wiki/Cascade_%28juggling%29\">cascade</a>
+[[wikipedia:Cascade_(juggling)|cascade]]
 pattern.
 """.
-

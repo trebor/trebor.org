@@ -9,15 +9,15 @@
 toi:work            a                   too:treeNode;
                     too:hasName         "work";
                     too:hasTitle        "profesional work";
-                    too:hasNodeIcon     "work";
+                    too:hasNodeIcon     "anvil";
                     too:hasNodeChildren _:work_kids;
                     too:hasNodeSummary
 
 """
 i am a software engineer by profession.  my resume is available as a
-<a href=\"assets/RobertHarrisResume.pdf\">pdf</a>
+[assets/RobertHarrisResume.pdf pdf]
 or you can explore futher here.  also, you can link to the dynamic resume
-<a href=\"treemenu.html?page=work\">directly</a>.
+[treemenu.html?page=work directly].
 """.
 
 _:work_kids         a                    rdfs:Container;
@@ -51,7 +51,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 
 _:nasa              a                   too:treeNode;
                     too:hasName         "nasa";
-                    too:hasTitle        "<a href=\"http://www.nasa.gov/centers/ames\">nasa, ames research center</a>";
+                    too:hasTitle        "[http://www.nasa.gov/centers/ames nasa, ames research center]";
                     too:hasNodeIcon     "nasa";
                     too:hasNodeSummary
 
@@ -61,18 +61,18 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 
 _:xuggle            a                   too:treeNode;
                     too:hasName         "xuggle";
-                    too:hasTitle        "<a href=\"http://xuggle.com/\">xuggle, inc.</a>";
+                    too:hasTitle        "[http://xuggle.com/ xuggle, inc.]";
                     too:hasNodeIcon     "xuggle-logo";
                     too:hasNodeSummary
 
 """
-<a href=\"http://www.youtube.com/watch?v=fI0IduBqLWA\">octopus</a>
+[http://www.youtube.com/watch?v=fI0IduBqLWA octopus]
 lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 """.
 
 _:connectsolutions  a                   too:treeNode;
                     too:hasName         "connectsolutions";
-                    too:hasTitle        "<a href=\"http://connectsolutions.com/\">connectsolutions, inc.</a>";
+                    too:hasTitle        "[http://connectsolutions.com/ connectsolutions, inc.]";
                     too:hasNodeIcon     "connectsolutions";
                     too:hasNodeSummary
 

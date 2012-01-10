@@ -3,7 +3,6 @@ package org.trebor.www.dto;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.sun.jersey.api.client.WebResource;
@@ -20,16 +19,14 @@ public class TestTreborResource extends JerseyTest
   }
   
   @Test
-  @Ignore
+//  @Ignore
   public void testService()
   {
     WebResource webResource = resource();
-//    webResource.accept(MediaType.APPLICATION_JSON);
-//    webResource.accept(MediaType.APPLICATION_JSON_TYPE);
-    
-    String target = "{\"name\":\"root\",\"children\":[{\"name\":\"A\",\"children\":[{\"name\":\"1\",\"size\":1000}]}]}";
-    String result = webResource.path("tree.json").get(String.class);
-    log.debug(String.format("result\n%s\n", result));
-    assertEquals(target, result);
+    String result = webResource.path("/tree/home").get(String.class);
+    assertEquals(11191, result.length());
+    ForceTreeNode ftn = webResource.path("/tree/home").get(ForceTreeNode.class);
+    assertEquals("home", ftn.getName());
+    assertEquals(4, ftn.getChildren().size());
   }
 }

@@ -213,19 +213,17 @@ function update()
 function nodeHtml(node)
 {
   var home = "<a href=\"treemenu.html?page=home\">home</a>";
-  var zoom = "<a href=\"treemenu.html?page=" + node.name + "\">zoom node</a>";
+  var focus = "<a href=\"treemenu.html?page=" + node.name + "\">focus</a>";
   var site = "<a color=\"red\" href=\"sitemap.html?page=home\">site map</a>";
   var title = node.title ? "<big>" + node.title + "</big>" : "";
-  var space1 = node.title && node.summary ? "<br/><br/>" : "";
   var summary = node.summary ? node.summary : "";
-  var space2 = node.title || node.summary ? "<br/><br/>" : "";
   var menu  = 
     "<p class=\"nodeMenu\" align=\"right\">" +
     (root.name != "home" ? home + "&nbsp;" : "") +
-    (node.name != root.name ? zoom : site)  + "&nbsp;" +
+    (node.name != root.name ? focus : site)  + "&nbsp;" +
     "</p>";
 
-  return title + space1 + summary + space2 + menu;
+  return title + summary + menu;
 }
 
 function mouseoverActionIcon(icon)
@@ -435,7 +433,7 @@ function iconSize(node)
 
 function linkDistance(link) 
 {
-  return ((iconSize(link.source) + iconSize(link.target)) / 2 + nodeBuffer) * 0.9;
+  return ((iconSize(link.source) + iconSize(link.target)) / 2 + nodeBuffer);
 }
 
 // collapse all a nodes children nodes (transitive)

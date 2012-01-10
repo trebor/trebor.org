@@ -13,13 +13,12 @@ toi:home            a                   too:treeNode;
                     too:hasNodeChildren _:home_kids;
                     too:hasNodeSummary
 
-"welcome. please explore.".
+"""
+welcome.  please explore and enjoy!  checkout [google.com|google], [[luminaries]] or [[wikipedia:Sunflower|sunflows]].
+""".
 
 _:home_kids         a                    rdfs:Container;
                     rdf:_1               toi:influences;
                     rdf:_2               toi:graphics;
                     rdf:_3               toi:software;
-                    rdf:_4               toi:work.
-
-#<a href=\"\"></a>
-                    
+                    rdf:_4               toi:work.                    

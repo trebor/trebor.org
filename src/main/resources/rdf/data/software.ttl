@@ -28,39 +28,39 @@ _:software_kids     a                    rdfs:Container;
                     
 _:splink            a                   too:treeNode;
                     too:hasName         "splink";
-                    too:hasTitle        "<a href=\"https://github.com/treboresque/Splink/wiki\">splink</a>";
+                    too:hasTitle        "[https://github.com/treboresque/Splink/wiki splink]";
                     too:hasNodeIcon     "splink";
                     too:hasImage        "assets/images/splink-screenshot.png";
                     too:hasImageDescription
 """
 in this splink screen shot, geneitic disorder data from
-<a href=\"http://www.ncbi.nlm.nih.gov/omim\">omim</a>,
+[http://www.ncbi.nlm.nih.gov/omim omim],
 which has been transformed into
-<a href=\"http://en.wikipedia.org/wiki/Resource_Description_Framework\">rdf</a>
+[[wikipedia:Resource_Description_Framework|rdf]]
 by 
-<a href=\"http://www.5un5.com/\">dr. sunshine weiss</a>,
+[http://www.5un5.com/ dr. sunshine weiss],
 demonstrates use for
-<a href\"http://en.wikipedia.org/wiki/Differential_diagnosis\">differential diagnosis</a>.
+[[wikipedia:Differential_diagnosis|differential diagnosis]].
 """;
                     
                     too:hasNodeSummary
 
 """
 splink is a pure java
-<a href=\"http://en.wikipedia.org/wiki/Graphical_user_interface\">gui</a>
+[wikipedia:Graphical_user_interface gui]
 for querying
-<a href=\"http://en.wikipedia.org/wiki/Resource_Description_Framework\">rdf</a> 
+[[wikipedia:Resource_Description_Framework|rdf]]
 repositories using
-<a href=\"http://en.wikipedia.org/wiki/SPARQL\">sparql</a>.
+[[wikipedia:SPARQL|sparql]].
 it useses the
-<a href=\"http://www.openrdf.org/\">openrdf</a>
+[[http://www.openrdf.org/|openrdf]]
 libraries to communicate with repositories.
 """.
 
 
 _:sarynpaint        a                   too:treeNode;
                     too:hasName         "sarynpaint";
-                    too:hasTitle        "<a href=\"http://code.google.com/p/sarynpaint/\">saryn paint</a>";
+                    too:hasTitle        "[http://code.google.com/p/sarynpaint/ saryn paint]";
                     too:hasNodeIcon     "sarynpaint";
                     too:hasImage        "assets/images/sarynpaint-screenshot.png";
                     too:hasImageDescription
@@ -78,7 +78,7 @@ later she recorded the audio cues used in the program.
 
 _:swarm             a                   too:treeNode;
                     too:hasName         "swarm";
-                    too:hasTitle        "<a href=\"http://orbswarm.com/\">orb swarm</a>";
+                    too:hasTitle        "[http://orbswarm.com/ orb swarm]";
                     too:hasNodeIcon     "swarm";
                     too:hasImage        "assets/images/swarm-colors.jpg";
                     too:hasImageDescription
@@ -90,10 +90,10 @@ orb swarm in black rock city in 2008. (c) 2008 nk, burningcam.com.
 
 """
 i contributed to the orb swarm
-<a href=\"http://wiki.orbswarm.com/index.php?title=In_The_Media\">robotic-art</a> 
+[http://wiki.orbswarm.com/index.php?title=In_The_Media robotic-art] 
 project. i worked towards an effort to advance orbs from remote to
 autonomous control.  we never quite got there, but
-<a href=\"http://wiki.orbswarm.com/index.php?title=AutomonyImages\">here</a>
+[http://wiki.orbswarm.com/index.php?title=AutomonyImages here]
 are some results from field tests.
 specifically i built an orb simulator and a choreography editor,
 which i hope to repurpose to other projects.
@@ -108,19 +108,17 @@ _:trebor_org        a                   too:treeNode;
 
 """
 the website you are currently soaking in is composed of three elements.  the data for the site is stored as
-<a href=\"http://en.wikipedia.org/wiki/Resource_Description_Framework\">rdf</a> 
+[[wikipedia:Resource_Description_Framework|rdf]]
 in an
-<a href=\"http://www.openrdf.org/\">openrdf</a>
+[http://www.openrdf.org/ openrdf]
 sesame store.
 page requests are handled by a
-<a href=\"http://jersey.java.net/\">jersey</a>
+[http://jersey.java.net/ jersey]
 based 
-<a href=\"http://en.wikipedia.org/wiki/REST\">restful</a>
+[[wikipedia:REST|restful]]
 service running under
-<a href=\"http://tomcat.apache.org/\">tomcat</a>.
-<a href=\"http://mbostock.github.com/d3/\">d3.js</a>
+[http://tomcat.apache.org/ tomcat].
+[http://mbostock.github.com/d3/ d3.js]
 is driving the browser experience.
 i have been very happy with this set of tools.
 """.
-
-#<a href=\"\"></a>
