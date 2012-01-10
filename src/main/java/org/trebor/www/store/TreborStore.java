@@ -104,6 +104,7 @@ public class TreborStore
   {
     node.setTitle(mMarkupRenderer.render(node.getTitle()));
     node.setSummary(mMarkupRenderer.render(node.getSummary()));
+    node.setImageDescription(mMarkupRenderer.render(node.getImageDescription()));
     for (ForceTreeNode child: node.getChildren())
         renderMarkup(child);
     return node;
