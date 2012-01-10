@@ -14,7 +14,7 @@ toi:home            a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-welcome.  please explore and enjoy!  checkout [google.com|google], [[luminaries]] or [[wikipedia:Sunflower|sunflows]].
+welcome.  i am robert and this site is about my ideas and asthetics.  please explore and enjoy!.
 """.
 
 _:home_kids         a                    rdfs:Container;

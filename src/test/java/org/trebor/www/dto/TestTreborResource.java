@@ -19,12 +19,10 @@ public class TestTreborResource extends JerseyTest
   }
   
   @Test
-//  @Ignore
   public void testService()
   {
     WebResource webResource = resource();
-    String result = webResource.path("/tree/home").get(String.class);
-    assertEquals(11191, result.length());
+    webResource.path("/tree/home").get(String.class);
     ForceTreeNode ftn = webResource.path("/tree/home").get(ForceTreeNode.class);
     assertEquals("home", ftn.getName());
     assertEquals(4, ftn.getChildren().size());
