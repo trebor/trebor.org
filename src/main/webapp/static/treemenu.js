@@ -245,8 +245,10 @@ var fadeDuration = 250;
 var nodeIconFadeTo = 0.2;
 var linkFadeTo = 0;
 
-function mouseoverNode(node)
+function mouseoverNode(node, index)
 {
+  var targetClass = $(d3.event.target).attr("class");
+
   vis
     .selectAll(".summaryText, .nodeActionIcon")
     .filter(function (d) {return d == node;})
@@ -259,12 +261,34 @@ function mouseoverNode(node)
 
   // sort selected element to the top of the view
 
-  moveToTop(node);
+  if (targetClass == "nodeIcon")
+      moveToTop(node);
 }
 
 function moveToTop(node)
 {
-  vis.selectAll(".node").sort(function(a, b) 
+  // get all the nodes
+
+  var nodes = vis.selectAll(".node")
+
+  // figure out if our target node is alreayd last
+
+  var lastIndex = nodes[0].length - 1;
+  var alreadyLast = false;
+  nodes.each(function (n, i) 
+  {
+    if (i == lastIndex && n == node) 
+      alreadyLast = true;
+  });
+
+  // if it is, no need to sort
+
+  if (alreadyLast)
+    return;
+
+  // sort target node to last (top)
+
+  nodes.sort(function(a, b) 
   {
     if (a == node)
       return 1;
