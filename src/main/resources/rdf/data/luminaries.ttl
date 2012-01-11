@@ -67,14 +67,14 @@ _:pinker				    a                   too:treeNode;
 """
 i started with
 [[wikipedia:The_Language_Instinct|the language instinct]]
-which posits that humans are born with an innate capacity to develop gramatical language.
-here is a facinating
+which posits that humans are born with an innate capacity to develop grammatical language.
+here is a fascinating
 [http://comment.rsablogs.org.uk/videos/ rsa animate]
 [[youtube:3-son3EJTrU|talk]]
 he gave on language and behavior.
 i'm currently reading
 [[wikipedia:The_Better_Angels_of_Our_Nature|the better angels of our nature]]
-which, despite its gruesome descriptions of violence present and past, leaves me optomistic about mankind's future.
+which, despite its gruesome descriptions of violence present and past, leaves me optimistic about mankind's future.
 """.
 
 _:tufte				    	a                   too:treeNode;

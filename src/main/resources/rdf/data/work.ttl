@@ -15,9 +15,7 @@ toi:work            a                   too:treeNode;
 
 """
 i am a software engineer by profession.  my resume is available as a
-[assets/RobertHarrisResume.pdf pdf]
-or you can explore futher here.  also, you can link to the dynamic resume
-[treemenu.html?page=work directly].
+[assets/RobertHarrisResume.pdf pdf] or you can explore futher here.
 """.
 
 _:work_kids         a                    rdfs:Container;
@@ -52,7 +50,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 _:nasa              a                   too:treeNode;
                     too:hasName         "nasa";
                     too:hasTitle        "[http://www.nasa.gov/centers/ames nasa, ames research center]";
-                    too:hasNodeIcon     "nasa";
+                    too:hasNodeIcon     "nasa-color";
                     too:hasNodeSummary
 
 """
@@ -73,7 +71,7 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 _:connectsolutions  a                   too:treeNode;
                     too:hasName         "connectsolutions";
                     too:hasTitle        "[http://connectsolutions.com/ connectsolutions, inc.]";
-                    too:hasNodeIcon     "connectsolutions";
+                    too:hasNodeIcon     "cs-cube";
                     too:hasNodeSummary
 
 """

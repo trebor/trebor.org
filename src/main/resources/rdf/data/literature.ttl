@@ -21,7 +21,8 @@ lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh 
 _:literature_kids   a                    rdfs:Container;
                     rdf:_1               _:everydaythings;
                     rdf:_2               _:elementsofstyle;
-                    rdf:_3               _:crowdsandpower.
+                    rdf:_3               _:crowdsandpower;
+                   	rdf:_4							 _:understandingcomics.
 #                    rdf:_4               _:recursiveuniverse.
 
 _:everydaythings    a                   too:treeNode;
@@ -51,6 +52,17 @@ _:crowdsandpower    a                   too:treeNode;
                     too:hasTitle        "[[wikipedia:Crowds_and_Power|crowds and power]]";
                     too:hasNodeIcon     "crowdsandpower";
                     too:hasImage        "assets/images/Crowds-and-Power.jpg";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:understandingcomics a                 too:treeNode;
+                    too:hasName         "understandingcomics";
+                    too:hasTitle        "[[wikipedia:Understanding_Comics|understanding comics]]";
+                    too:hasNodeIcon     "understandingcomics";
+                    too:hasImage        "assets/images/understanding-comics.jpg";
                     too:hasNodeSummary
 
 """

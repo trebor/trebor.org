@@ -65,7 +65,8 @@ _:sarynpaint        a                   too:treeNode;
                     too:hasImage        "assets/images/sarynpaint-screenshot.png";
                     too:hasImageDescription
 """
-a child can change paint-brush color and shape by mousing over the regions at either side of screen.
+in this screen shot, you can kind of see that the paint-brush color and shape
+can be changed by mousing over the regions at either side of screen.
 """;
                     too:hasNodeSummary
 
