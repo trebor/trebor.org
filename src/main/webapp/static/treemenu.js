@@ -212,15 +212,18 @@ function update()
 
 function nodeHtml(node)
 {
-  var home = "<a href=\"treemenu.html?page=home\">home</a>";
+  var parentName = node.parentName;
+  var home  = "<a href=\"treemenu.html?page=home\">home</a>";
   var focus = "<a href=\"treemenu.html?page=" + node.name + "\">focus</a>";
-  var site = "<a color=\"red\" href=\"sitemap.html?page=home\">site map</a>";
+  var site  = "<a href=\"sitemap.html?page=home\">site map</a>";
+  var up    = "<a href=\"treemenu.html?page=" + parentName + "\">up</a>";
   var title = node.title ? "<big>" + node.title + "</big>" : "";
   var summary = node.summary ? node.summary : "";
   var menu  = 
-    "<p class=\"nodeMenu\" align=\"right\">" +
-    (root.name != "home" ? home + "&nbsp;" : "") +
-    (node.name != root.name ? focus : site)  + "&nbsp;" +
+    "<p class=\"nodeMenu\" align=\"left\">" +
+    (node.name == root.name && parentName ? up + "&nbsp;" : "") +
+    (root.name != "home"                  ? home + "&nbsp;" : "") +
+    (node.name != root.name               ? focus : site)  + "&nbsp;" +
     "</p>";
 
   return title + summary + menu;

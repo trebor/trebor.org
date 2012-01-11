@@ -11,6 +11,7 @@ toi:luminaries      a                   too:treeNode;
                     too:hasTitle        "the luminaries";
                     too:hasNodeIcon     "spotlight";
                     too:hasNodeChildren _:luminaries_kids;
+	                  too:hasNodeParent   "influences";
                     too:hasNodeSummary
 """
 many of the ideas aspoused by these luminaries have been absorbed so completly into 
@@ -28,6 +29,7 @@ _:norman				    a                   too:treeNode;
                     too:hasName         "norman";
                     too:hasNodeIcon     "norman";
                     too:hasTitle        "[http://www.jnd.org/ donald norman]";
+                    too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
 
 """
@@ -44,7 +46,8 @@ he underscores the utility of beauty, and importance of factoring emotion into d
 _:dawkins				    a                   too:treeNode;
                     too:hasName         "dawkins";
                     too:hasNodeIcon     "dawkins";
-                    too:hasTitle         "[http://richarddawkins.net/ richard dawkins]";
+                    too:hasTitle        "[http://richarddawkins.net/ richard dawkins]";
+                    too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
 
 """
@@ -62,6 +65,7 @@ _:pinker				    a                   too:treeNode;
                     too:hasName         "pinker";
                     too:hasNodeIcon     "pinker";
                     too:hasTitle         "[http://stevenpinker.com/biocv stephen pinker]";
+                    too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
 
 """
@@ -81,6 +85,7 @@ _:tufte				    	a                   too:treeNode;
                     too:hasName         "tufte";
                     too:hasNodeIcon     "tufte";
                     too:hasTitle         "[http://www.edwardtufte.com/tufte/ edward tufte]";
+                    too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
                     
 #[ ]

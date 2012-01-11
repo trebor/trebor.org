@@ -11,6 +11,7 @@ toi:influences      a                   too:treeNode;
                     too:hasTitle        "influences";
                     too:hasNodeIcon     "influences";
                     too:hasNodeChildren _:influences_kids;
+                    too:hasNodeParent   "home";
                     too:hasNodeSummary
 """
 lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.

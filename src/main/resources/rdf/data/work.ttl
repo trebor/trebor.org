@@ -11,6 +11,7 @@ toi:work            a                   too:treeNode;
                     too:hasTitle        "profesional work";
                     too:hasNodeIcon     "anvil";
                     too:hasNodeChildren _:work_kids;
+                    too:hasNodeParent   "home";
                     too:hasNodeSummary
 
 """
@@ -30,6 +31,7 @@ _:workframe         a                   too:treeNode;
                     too:hasName         "workframe";
                     too:hasTitle        "workframe inc.";
                     too:hasNodeIcon     "dummy";
+                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
@@ -41,6 +43,7 @@ _:netsource         a                   too:treeNode;
                     too:hasName         "netsource";
                     too:hasTitle        "netsource inc.";
                     too:hasNodeIcon     "netsource";
+                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
@@ -51,6 +54,7 @@ _:nasa              a                   too:treeNode;
                     too:hasName         "nasa";
                     too:hasTitle        "[http://www.nasa.gov/centers/ames nasa, ames research center]";
                     too:hasNodeIcon     "nasa-color";
+                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
@@ -61,6 +65,7 @@ _:xuggle            a                   too:treeNode;
                     too:hasName         "xuggle";
                     too:hasTitle        "[http://xuggle.com/ xuggle, inc.]";
                     too:hasNodeIcon     "xuggle-logo";
+                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
@@ -72,6 +77,7 @@ _:connectsolutions  a                   too:treeNode;
                     too:hasName         "connectsolutions";
                     too:hasTitle        "[http://connectsolutions.com/ connectsolutions, inc.]";
                     too:hasNodeIcon     "cs-cube";
+                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """

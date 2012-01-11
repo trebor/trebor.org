@@ -11,6 +11,7 @@ toi:software        a                   too:treeNode;
                     too:hasTitle        "software projects";
                     too:hasNodeIcon     "disk";
                     too:hasNodeChildren _:software_kids;
+                    too:hasNodeParent   "home";
                     too:hasNodeSummary
 
 """
@@ -31,6 +32,7 @@ _:splink            a                   too:treeNode;
                     too:hasTitle        "[https://github.com/treboresque/Splink/wiki splink]";
                     too:hasNodeIcon     "splink";
                     too:hasImage        "assets/images/splink-screenshot.png";
+                    too:hasNodeParent   "software";
                     too:hasImageDescription
 """
 in this splink screen shot, geneitic disorder data from
@@ -63,6 +65,7 @@ _:sarynpaint        a                   too:treeNode;
                     too:hasTitle        "[http://code.google.com/p/sarynpaint/ saryn paint]";
                     too:hasNodeIcon     "sarynpaint";
                     too:hasImage        "assets/images/sarynpaint-screenshot.png";
+                    too:hasNodeParent   "software";
                     too:hasImageDescription
 """
 in this screen shot, you can kind of see that the paint-brush color and shape
@@ -82,6 +85,7 @@ _:swarm             a                   too:treeNode;
                     too:hasTitle        "[http://orbswarm.com/ orb swarm]";
                     too:hasNodeIcon     "swarm";
                     too:hasImage        "assets/images/swarm-colors.jpg";
+                    too:hasNodeParent   "software";
                     too:hasImageDescription
 """
 orb swarm in black rock city in 2008. (c) 2008 nk, burningcam.com.
@@ -105,6 +109,7 @@ _:trebor_org        a                   too:treeNode;
                     too:hasName         "trebor";
                     too:hasTitle        "trebor.org";
                     too:hasNodeIcon     "tat";
+                    too:hasNodeParent   "software";
                     too:hasNodeSummary
 
 """

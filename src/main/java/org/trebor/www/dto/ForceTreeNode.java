@@ -56,6 +56,11 @@ public class ForceTreeNode {
   @XmlElement(name="children", required=false)
   public List<ForceTreeNode> mChildren;
 
+  @iri(HAS_NODE_PARENT)
+  @XmlElement(name="parentName", required=false)
+  private String mParent;
+
+  
   public ForceTreeNode()
   {
     this(UNDEFINED, UNDEFINED);
@@ -156,6 +161,7 @@ public class ForceTreeNode {
     copy.setImageDescription(getImageDescription());
     copy.setLink(getLink());
     copy.setSummary(getSummary());
+    copy.setParent(getParent());
     
     for (ForceTreeNode child: getChildren())
       copy.add(child.copy());
@@ -191,5 +197,15 @@ public class ForceTreeNode {
   public String getImageDescription()
   {
     return mImageDescription;
+  }
+
+  public void setParent(String parent)
+  {
+    mParent = parent;
+  }
+
+  public String getParent()
+  {
+    return mParent;
   }
 }

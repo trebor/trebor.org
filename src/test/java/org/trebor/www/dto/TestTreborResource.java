@@ -21,10 +21,22 @@ public class TestTreborResource extends JerseyTest
   @Test
   public void testService()
   {
+    String[][] dataSet =
+    {
+      {"tufte", "luminaries", "0"},
+      {"luminaries", "influences", "4"},
+      {"literature", "influences", "4"},
+      {"influences", "home", "2"},
+      {"home", null, "4"},
+    };
+    
     WebResource webResource = resource();
-    webResource.path("/tree/home").get(String.class);
-    ForceTreeNode ftn = webResource.path("/tree/home").get(ForceTreeNode.class);
-    assertEquals("home", ftn.getName());
-    assertEquals(4, ftn.getChildren().size());
+    for (String[] data: dataSet)
+    {      
+      ForceTreeNode ftn1 = webResource.path("/tree/" + data[0]).get(ForceTreeNode.class);
+      assertEquals("node: " + data[0], data[0], ftn1.getName());
+      assertEquals("node: " + data[0], data[1], ftn1.getParent());
+      assertEquals("node: " + data[0], data[2], ftn1.getChildren().size() + "");
+    }
   }
 }

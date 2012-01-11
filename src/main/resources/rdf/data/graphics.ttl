@@ -11,6 +11,7 @@ toi:graphics        a                   too:treeNode;
                     too:hasTitle        "graphic design";
                     too:hasNodeIcon     "vitruvian";
                     too:hasNodeChildren _:graphics_kids;
+                    too:hasNodeParent   "home";
                     too:hasNodeSummary
 
 """
@@ -29,6 +30,7 @@ _:trebor_logo       a                   too:treeNode;
                     too:hasName         "trebor_logo";
                     too:hasTitle        "the tat sign";
                     too:hasNodeIcon     "tat";
+                    too:hasNodeParent   "graphics";
                     too:hasNodeSummary
 
 """
@@ -41,6 +43,7 @@ _:freesand_logo     a                   too:treeNode;
                     too:hasName         "freesand_logo";
                     too:hasTitle        "freesand logo";
                     too:hasNodeIcon     "freesand";
+                    too:hasNodeParent   "graphics";
                     too:hasNodeSummary
 
 """
@@ -52,6 +55,7 @@ _:coolneon_logo     a                   too:treeNode;
                     too:hasName         "coolneon_logo";
                     too:hasTitle        "coolneon logo";
                     too:hasNodeIcon     "coolneon";
+                    too:hasNodeParent   "graphics";
                     too:hasNodeSummary
 
 """
@@ -68,6 +72,7 @@ _:social_revolution_logo a              too:treeNode;
                     too:hasName         "social_revolution_logo";
                     too:hasTitle        "social revolution medallion";
                     too:hasNodeIcon     "social-revolution";
+                    too:hasNodeParent   "graphics";
                     too:hasNodeSummary
 
 """
@@ -81,6 +86,7 @@ _:xuggle_logo       a                   too:treeNode;
                     too:hasName         "xuggle_logo";
                     too:hasTitle        "xuggle logo";
                     too:hasNodeIcon     "xuggle-logo";
+                    too:hasNodeParent   "graphics";
                     too:hasNodeSummary
 
 """
