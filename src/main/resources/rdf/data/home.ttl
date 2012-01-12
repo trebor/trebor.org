@@ -17,6 +17,7 @@ toi:home            a                   too:treeNode;
 welcome to trebor.org.
 i am robert, and i created this site to express some of my ideas and asthetics.
 i encourge you to explore and discover, as there is more here then initially meets the eye.
+feel free to move things around to suit your needs.
 """.
 
 _:home_kids         a                    rdfs:Container;

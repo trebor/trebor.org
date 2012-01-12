@@ -21,6 +21,7 @@
       <properties>
         <tomcat-server>local</tomcat-server>
         <tomcat-url>http://localhost:8080/manager/text</tomcat-url>
+        <tomcat-service-name>/</tomcat-service-name>
       </properties>
     </profile>
     <profile>
@@ -30,7 +31,8 @@
       </activation>
       <properties>
         <tomcat-server>trebor-ec2</tomcat-server>
-        <tomcat-url>http://ec2-107-21-68-45.compute-1.amazonaws.com:8080/manager/text</tomcat-url>
+        <tomcat-url>http://ec2-50-18-8-157.us-west-1.compute.amazonaws.com:80/manager/text</tomcat-url>
+        <tomcat-service-name>/</tomcat-service-name>
       </properties>
     </profile>
   </profiles>
@@ -217,7 +219,7 @@
           <configuration>
             <server>${tomcat-server}</server>
             <url>${tomcat-url}</url>
-            <path>/${project.artifactId}</path>
+            <path>${tomcat-service-name}</path>
           </configuration>
         </plugin>
 

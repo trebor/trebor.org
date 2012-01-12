@@ -1,4 +1,4 @@
-var dataSource = "/trebor/tree/" + getUrlVars()["page"];
+var dataSource = "/tree/" + getUrlVars()["page"];
 var iconBasePath = "assets/icons/";
 var iconType = ".png";
 var w = window.innerWidth - 8;
