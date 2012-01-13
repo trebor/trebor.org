@@ -6,7 +6,7 @@ body, #lbBottom /* for slimbox */
   -ms-filter:'alpha(opacity=100)'; /* For IE8 and earlier */
   font-weight: bold;
   font-family: "Courier New", "Courier", monospace;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .link 

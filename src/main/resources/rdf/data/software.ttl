@@ -122,8 +122,6 @@ parts:
 *the back end: the data for this site, like this text
 technical specifics are described below, but conceptually this approach permits extreme
 flexibility in both the form of stored data, and the presentation of that data.
-
-the software used to develope and operate this site is all free and open source.
 """.
 
 
@@ -201,7 +199,7 @@ in an
 [[wikipedia:Sesame_(framework)|sesame]]
 [[wikipedia:Triplestore|tripple store]].
 this data can be rendered in an number of ways,
-for example the [[trebor-static:sitemap.html?page=home|site map]] 
+for example the [[sitemap:home|site map]]
 is a different view of the exact same data which drives the site.
 
 i like to think my web site has a nice ass.

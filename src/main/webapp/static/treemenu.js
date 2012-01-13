@@ -242,7 +242,7 @@ function mouseoutActionIcon(icon)
 }
 
 var fadeDuration = 250;
-var nodeIconFadeTo = 0.2;
+var nodeIconFadeTo = 0.1;
 var linkFadeTo = 0;
 
 function mouseoverNode(node, index)
