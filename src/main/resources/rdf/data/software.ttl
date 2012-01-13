@@ -108,23 +108,101 @@ which i hope to repurpose to other projects.
 _:trebor_org        a                   too:treeNode;
                     too:hasName         "trebor";
                     too:hasTitle        "trebor.org";
-                    too:hasNodeIcon     "tat";
+                    too:hasNodeIcon     "horse";
                     too:hasNodeParent   "software";
+                    too:hasNodeChildren _:trebor_org_kids;
                     too:hasNodeSummary
 
 """
-the website you are currently soaking in is composed of three elements.  the data for the site is stored as
+this site, as symbolized by a pretty pony, is composed of three
+[http://wikipedia.org/wiki/Decoupled#Software_Development decoupled]
+parts:
+*the front end: the interface you now see in the browser
+*the service: a service which translates between the interface and the backing data
+*the back end: the data for this site, like this text
+technical specifics are described below, but conceptually this approach permits extreme
+flexibility in both the form of stored data, and the presentation of that data.
+
+the software used to develope and operate this site is all free and open source.
+""".
+
+
+_:trebor_org_kids   a                    rdfs:Container;
+                    rdf:_1               _:head;
+                    rdf:_2               _:body;
+                    rdf:_3	             _:tail.
+
+	
+_:head              a                   too:treeNode;
+                    too:hasName         "www-ui";
+                    too:hasTitle        "the front end";
+                    too:hasNodeIcon     "horse-head";
+                    too:hasNodeParent   "trebor_org";
+                    too:hasNodeSummary
+
+"""
+the dynamic portions of this site are driven by
+[http://mbostock.github.com/d3/ d3.js]
+which uses
+[[wikipedia:HTML5|html5]]'s
+[[wikipedia:Scalable_Vector_Graphics|svg]]
+functionality to efficiently render graphics.
+this approach permites page elements to be styled with traditional
+[[wikipedia:CSS|css]].
+""".
+
+_:body              a                   too:treeNode;
+                    too:hasName         "www-service";
+                    too:hasTitle        "the service";
+                    too:hasNodeIcon     "horse-body";
+                    too:hasNodeParent   "trebor_org";
+                    too:hasNodeSummary
+
+"""
+data requests from the front end are handled by a
+[http://jersey.java.net/ jersey]
+based
+[[wikipedia:REST|restful]]
+service running under
+[http://tomcat.apache.org/ tomcat]
+hosted on
+[[wikipedia:Amazon_EC2|amazon ec2]].
+data is queried using a combination of
+[[wikipedia:SPARQL|sparql]]
+and
+[http://www.openrdf.org/alibaba.jsp alibaba].
+
+through the magic of java [[wikipedia:Java_annotation|anotation]]s the translation from
+[[wikipedia:Resource_Description_Framework|rdf]]
+to
+[[wikipedia:JSON|json]]
+is automatic, and thus this service is surprisingly thin.
+
+the text elements of the backing data may contain
+[[wikipedia:Wiki_markup|wiki markup]],
+the service uses
+[http://code.google.com/p/gwtwiki/ gwtwiki]
+to transform the markup text into
+[[wikipedia:HTML|html]].
+""".
+
+_:tail              a                   too:treeNode;
+                    too:hasName         "www-store";
+                    too:hasTitle        "the back end";
+                    too:hasNodeIcon     "horse-ass";
+                    too:hasNodeParent   "trebor_org";
+                    too:hasNodeSummary
+
+"""
+the data for this site is stored as
 [[wikipedia:Resource_Description_Framework|rdf]]
 in an
 [http://www.openrdf.org/ openrdf]
-sesame store.
-page requests are handled by a
-[http://jersey.java.net/ jersey]
-based 
-[[wikipedia:REST|restful]]
-service running under
-[http://tomcat.apache.org/ tomcat].
-[http://mbostock.github.com/d3/ d3.js]
-is driving the browser experience.
-i have been very happy with this set of tools.
+[[wikipedia:Sesame_(framework)|sesame]]
+[[wikipedia:Triplestore|tripple store]].
+this data can be rendered in an number of ways,
+for example the [[trebor-static:sitemap.html?page=home|site map]] 
+is a different view of the exact same data which drives the site.
+
+i like to think my web site has a nice ass.
 """.
