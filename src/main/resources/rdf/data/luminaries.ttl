@@ -14,9 +14,11 @@ toi:luminaries      a                   too:treeNode;
 	                  too:hasNodeParent   "influences";
                     too:hasNodeSummary
 """
-many of the ideas aspoused by these luminaries have been absorbed so completly into 
-current thinking that we may take them for granted, and forget that their notions were
-once novel.
+these are some of the people who have not only informed my thinking on one particular 
+subject or another, but have inspired me to question 'current thinking' in general.
+many of the ideas espoused by these thinkers have been so accepted and absorbed into 
+our understanding of how the world works, that it is easy to forget their notions were 
+once novel or controversial.
 """.
 
 _:luminaries_kids   a                    rdfs:Container;
@@ -35,9 +37,9 @@ _:norman				    a                   too:treeNode;
 """
 early on i read
 [[wikipedia:The_Design_of_Everyday_Things|the design of everyday things]]
-in which norman describes some aspects good design, and where i learned the word
+in which norman described aspects good design, and where i learned the word
 [[wikipedia:Affordance affordance]].
-he also talks about why many products are poorly designed.
+he also talked about why many products might be systematically poorly designed.
 in a more recent design
 [[youtube:RlQEoJaLQRA|ted talk]]
 he underscores the utility of beauty, and importance of factoring emotion into design.
@@ -59,12 +61,13 @@ dawkins is also an outspoken
 [[wikipedia:Atheist|atheist]],
 and proponent of
 [[wikipedia:Rationalism|rationalism]].
+he speaks clearly against magical thinking in all forms.
 """.
 
 _:pinker				    a                   too:treeNode;
                     too:hasName         "pinker";
                     too:hasNodeIcon     "pinker";
-                    too:hasTitle         "[http://stevenpinker.com/biocv stephen pinker]";
+                    too:hasTitle         "[http://stevenpinker.com/biocv steven pinker]";
                     too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
 
@@ -78,7 +81,8 @@ here is a fascinating
 he gave on language and behavior.
 i'm currently reading
 [[wikipedia:The_Better_Angels_of_Our_Nature|the better angels of our nature]]
-which, despite its gruesome descriptions of violence present and past, leaves me optimistic about mankind's future.
+which, despite its gruesome descriptions of violence present and past, 
+leaves me optimistic about the future.
 """.
 
 _:tufte				    	a                   too:treeNode;
@@ -88,12 +92,10 @@ _:tufte				    	a                   too:treeNode;
                     too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
                     
-#[ ]
-
 """
 tufte's
 [http://www.edwardtufte.com/tufte/courses one day course]
 had a huge and immediate impact on my understanding of visual design.  he provides
-a systematic approach for evaluating visual representations, and techniques to improve them.
+a systematic approach for evaluating visual representations, and a sound framework to improve them.
 if data visualization is your thing, check him out.
 """.

@@ -17,6 +17,8 @@ toi:influences      a                   too:treeNode;
 lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 """.
 
+# i like to think i have original ideas, but those ideas are heavily influnced by the minds of those 
+
 _:influences_kids   a                    rdfs:Container;
                     rdf:_1               toi:luminaries;
                     rdf:_2               toi:literature.
