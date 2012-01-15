@@ -10,6 +10,20 @@
   -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
 }
 
+p
+{
+  margin: 0.5em;
+}
+
+table
+{
+  width: 100%;
+}
+
+td
+{
+}
+
 .nodeMenu
 {
   font-size: smaller;

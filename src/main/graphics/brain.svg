@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.0707881"
-     inkscape:cx="-119.22385"
-     inkscape:cy="671.92434"
+     inkscape:zoom="0.62701625"
+     inkscape:cx="-146.09243"
+     inkscape:cy="800.64906"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -52,7 +52,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -73,7 +73,7 @@
     <g
        id="g3143"
        style="fill:#ff0000"
-       transform="matrix(-0.99308986,0,0,0.99308986,-592.15712,-222.82103)"
+       transform="matrix(-1.0564786,0,0,1.0564786,-607.61396,-269.10765)"
        inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/image/influences.png"
        inkscape:export-xdpi="60"
        inkscape:export-ydpi="60">
@@ -219,14 +219,6 @@
        d="m 79.0383,-894.2545 a 30.003,30.003 0 0 0 -30,30 l 0,180 a 30.003,30.003 0 0 0 30,30 l 180,0 a 30.003,30.003 0 0 0 30,-30 l 0,-145.0625 c -20.0006,19.994 -39.9995,39.9748 -60,59.9688 l 0,55.0937 -120,0 0,-120 54.7813,0 c 19.8064,-20.3369 40.282,-40.0416 60.4687,-60 l -145.25,0 z"
        id="rect3892"
        inkscape:connector-curvature="0" />
-    <path
-       inkscape:connector-curvature="0"
-       style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:60;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
-       d="m -99.774734,302.2189 c 0.742381,0.005 1.492239,-0.006 2.251394,-0.0121 11.042407,-0.094 23.842317,-1.11701 37.695545,-3.88766 a 11.811798,11.811798 0 1 0 -4.638106,-23.15373 c -18.011118,3.60225 -33.485473,3.93082 -45.015699,3.2356 l 52.901727,-52.9017 A 11.813696,11.813696 0 1 0 -73.286938,208.7922 l -52.901722,52.90172 c -0.69159,-11.53024 -0.35435,-27.00459 3.24792,-45.0157 a 11.811798,11.811798 0 1 0 -23.16605,-4.62583 c -8.8661,44.33045 0.18453,77.80244 0.18456,77.80244 a 11.811798,11.811798 0 0 0 8.29201,8.27972 c 0,0 14.84185,4.02146 37.855486,4.08449 z"
-       id="path3898"
-       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/image/influences.png"
-       inkscape:export-xdpi="60"
-       inkscape:export-ydpi="60" />
     <text
        xml:space="preserve"
        style="font-size:60px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:-11.80000019px;word-spacing:0px;fill:#000000;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch Bold"
@@ -235,9 +227,9 @@
        transform="translate(-2080.9617,-2226.6167)"
        x="-2570.1427"
        y="-2466.9736"><tspan
-   dx="-15.341171"
-   style="font-size:60px;letter-spacing:-11.80000019px"
-   id="tspan6434">meta</tspan></text>
+         dx="-15.341171"
+         style="font-size:60px;letter-spacing:-11.80000019px"
+         id="tspan6434">meta</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text6446"
@@ -246,8 +238,20 @@
        transform="translate(-2080.9617,-2226.6167)"
        x="-2762.1063"
        y="-2408.1503"><tspan
-   id="tspan6450"
-   style="font-size:100px;letter-spacing:-11.80000019px"
-   dx="-15.341171">meta</tspan></text>
+         id="tspan6450"
+         style="font-size:100px;letter-spacing:-11.80000019px"
+         dx="-15.341171">meta</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:25.53191566;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="M -62.765957,215.12981 -126.59574,278.9596"
+       id="path6940"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:25.53191566;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m -84.042553,278.9596 -42.553187,0 0,-42.5532"
+       id="path6942"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
   </g>
 </svg>

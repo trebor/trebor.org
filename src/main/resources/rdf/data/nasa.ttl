@@ -1,0 +1,59 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- nasa --- #
+
+toi:nasa            a                   too:treeNode;
+                    too:hasName         "nasa";
+                    too:hasTitle        "[http://www.nasa.gov/centers/ames nasa ames]";
+                    too:hasNodeIcon     "nasa-color";
+                    too:hasNodeParent   "work";
+                    too:hasNodeChildren _:nasa_kids;
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:nasa_kids         a                    rdfs:Container;
+                    rdf:_1               _:coglab;
+                    rdf:_2               _:apex;
+                  	rdf:_3               _:plexil.
+
+
+_:coglab            a                   too:treeNode;
+                    too:hasName         "coglab";
+                    too:hasTitle        "[http://human-factors.arc.nasa.gov/ihi/cognition/ cognition lab]";
+                    too:hasNodeIcon     "hsi";
+                    too:hasNodeParent   "nasa";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+
+_:apex              a                   too:treeNode;
+                    too:hasName         "apex";
+                    too:hasTitle        "apex";
+                    too:hasNodeIcon     "apex";
+                    too:hasNodeParent   "nasa";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:plexil            a                   too:treeNode;
+                    too:hasName         "plexil";
+                    too:hasTitle        "[[wikipedia:PLEXIL|plexil]]";
+                    too:hasNodeIcon     "plexil";
+                    too:hasNodeParent   "nasa";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".

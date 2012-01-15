@@ -20,9 +20,9 @@ var force = d3
   .force()
   .on("tick", tick)
   .gravity(0)
-  .charge(-50)
+  .charge(-100)
   .linkDistance(linkDistance)
-  .linkStrength(0.3)
+  .linkStrength(0.4)
   .size([w, h]);
 
 //  create the svg work area
@@ -220,13 +220,19 @@ function nodeHtml(node)
   var title = node.title ? "<big>" + node.title + "</big>" : "";
   var summary = node.summary ? node.summary : "";
   var menu  = 
-    "<p class=\"nodeMenu\" align=\"left\">" +
-    (node.name == root.name && parentName ? up + "&nbsp;" : "") +
-    (root.name != "home"                  ? home + "&nbsp;" : "") +
-    (node.name != root.name               ? focus : site)  + "&nbsp;" +
-    "</p>";
+    "<div class=\"nodeMenu\" align=\"right\">" +
+    (root.name != "home"                     ? home  + "&nbsp;" : "") +
+    (node.name == root.name && parentName    ? up    + "&nbsp;" : "") +
+    (node.name != root.name                  ? focus + "&nbsp;" : "") +
+    (node.name != "home"                     ? site  + "&nbsp;" : "") +
+    "</div>";
+  var table = 
+    "<table class=\"summaryBanner\">" +
+    "<tr><td>" + title + "</td><td> " +  menu + "</td></tr>" +
+    "<tr><td colspan=\"2\">" + summary + "</td></tr>" +
+   "</table>";
 
-  return title + summary + menu;
+  return table;
 }
 
 function mouseoverActionIcon(icon)

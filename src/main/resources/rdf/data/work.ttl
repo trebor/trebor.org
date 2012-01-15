@@ -22,10 +22,10 @@ i am a software engineer by profession.  my resume is available as a
 _:work_kids         a                    rdfs:Container;
                     rdf:_1               _:workframe;
                     rdf:_2               _:netsource;
-                  	rdf:_3               _:nasa;
+                  	rdf:_3               toi:nasa;
                     rdf:_4               _:xuggle;
                     rdf:_5               _:connectsolutions.
-
+                    
 
 _:workframe         a                   too:treeNode;
                     too:hasName         "workframe";
@@ -43,17 +43,6 @@ _:netsource         a                   too:treeNode;
                     too:hasName         "netsource";
                     too:hasTitle        "netsource inc.";
                     too:hasNodeIcon     "netsource";
-                    too:hasNodeParent   "work";
-                    too:hasNodeSummary
-
-"""
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-""".
-
-_:nasa              a                   too:treeNode;
-                    too:hasName         "nasa";
-                    too:hasTitle        "[http://www.nasa.gov/centers/ames nasa, ames research center]";
-                    too:hasNodeIcon     "nasa-color";
                     too:hasNodeParent   "work";
                     too:hasNodeSummary
 

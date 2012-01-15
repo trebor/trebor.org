@@ -107,21 +107,21 @@ which i hope to repurpose to other projects.
 
 _:trebor_org        a                   too:treeNode;
                     too:hasName         "trebor";
-                    too:hasTitle        "trebor.org";
+                    too:hasTitle        "the trebor.org site";
                     too:hasNodeIcon     "horse";
                     too:hasNodeParent   "software";
                     too:hasNodeChildren _:trebor_org_kids;
                     too:hasNodeSummary
 
 """
-this site, as symbolized by a pretty pony, is composed of three
-[http://wikipedia.org/wiki/Decoupled#Software_Development decoupled]
-parts:
-*the front end: the interface you now see in the browser
-*the service: a service which translates between the interface and the backing data
-*the back end: the data for this site, like this text
-technical specifics are described below, but conceptually this approach permits extreme
-flexibility in both the form of stored data, and the presentation of that data.
+this site, as symbolized by a pretty pony, is composed of three parts:
+*the front end: the user interface
+*the service: software that moves data between the front and the back
+*the back end: the site data, like text and links
+technical specifics are described below, but conceptually this approach 
+[http://wikipedia.org/wiki/Decoupled#Software_Development decouples]
+the front and back end and permits flexibility in both the form of stored data, 
+and the presentation of that data.
 """.
 
 
@@ -135,7 +135,7 @@ _:head              a                   too:treeNode;
                     too:hasName         "www-ui";
                     too:hasTitle        "the front end";
                     too:hasNodeIcon     "horse-head";
-                    too:hasNodeParent   "trebor_org";
+                    too:hasNodeParent   "trebor";
                     too:hasNodeSummary
 
 """
@@ -153,7 +153,7 @@ _:body              a                   too:treeNode;
                     too:hasName         "www-service";
                     too:hasTitle        "the service";
                     too:hasNodeIcon     "horse-body";
-                    too:hasNodeParent   "trebor_org";
+                    too:hasNodeParent   "trebor";
                     too:hasNodeSummary
 
 """
@@ -188,7 +188,7 @@ _:tail              a                   too:treeNode;
                     too:hasName         "www-store";
                     too:hasTitle        "the back end";
                     too:hasNodeIcon     "horse-ass";
-                    too:hasNodeParent   "trebor_org";
+                    too:hasNodeParent   "trebor";
                     too:hasNodeSummary
 
 """
@@ -197,7 +197,7 @@ the data for this site is stored as
 in an
 [http://www.openrdf.org/ openrdf]
 [[wikipedia:Sesame_(framework)|sesame]]
-[[wikipedia:Triplestore|tripple store]].
+[[wikipedia:Triplestore|triple store]].
 this data can be rendered in an number of ways,
 for example the [[sitemap:home|site map]]
 is a different view of the exact same data which drives the site.

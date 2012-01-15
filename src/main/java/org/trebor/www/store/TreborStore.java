@@ -50,6 +50,7 @@ public class TreborStore
     BASE_PATH + "data/graphics.ttl",
     BASE_PATH + "data/software.ttl",
     BASE_PATH + "data/work.ttl",
+    BASE_PATH + "data/nasa.ttl",
   };
 
   public TreborStore() throws RepositoryException, RepositoryConfigException,
@@ -71,6 +72,7 @@ public class TreborStore
 
     for (String input : INPUT_FILES)
     {
+      log.debug("import: " + input);
       File file =
         new File(
           TreborStore.class.getResource(input).toString().split(":")[1]);
