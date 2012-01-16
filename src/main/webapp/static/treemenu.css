@@ -1,11 +1,10 @@
 .nodeIcon
 {
-  cursor: pointer; /* progress; crosshair; move; */
+  cursor: move;
 }
 
 .nodeActionIcon
 {
-  cursor: pointer;
   opacity:0.75;
   -ms-filter:'alpha(opacity=75)'; /* For IE8 and earlier */
 }

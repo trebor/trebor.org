@@ -25,8 +25,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.62701625"
-     inkscape:cx="-146.09243"
-     inkscape:cy="800.64906"
+     inkscape:cx="236.67276"
+     inkscape:cy="864.44326"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -52,7 +52,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,14 +67,14 @@
        height="300"
        x="-350"
        y="202.36218"
-       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/image/influences.png"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/static/assets/icons/influences.png"
        inkscape:export-xdpi="60"
        inkscape:export-ydpi="60" />
     <g
        id="g3143"
        style="fill:#ff0000"
        transform="matrix(-1.0564786,0,0,1.0564786,-607.61396,-269.10765)"
-       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/image/influences.png"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/static/assets/icons/influences.png"
        inkscape:export-xdpi="60"
        inkscape:export-ydpi="60">
       <g
@@ -246,12 +246,18 @@
        d="M -62.765957,215.12981 -126.59574,278.9596"
        id="path6940"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/static/assets/icons/influences.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
     <path
        style="fill:none;stroke:#000000;stroke-width:25.53191566;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m -84.042553,278.9596 -42.553187,0 0,-42.5532"
        id="path6942"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc" />
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="/Users/trebor/active/trebor-org/src/main/webapp/static/assets/icons/influences.png"
+       inkscape:export-xdpi="60"
+       inkscape:export-ydpi="60" />
   </g>
 </svg>

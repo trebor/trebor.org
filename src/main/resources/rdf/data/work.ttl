@@ -8,7 +8,7 @@
 
 toi:work            a                   too:treeNode;
                     too:hasName         "work";
-                    too:hasTitle        "profesional work";
+                    too:hasTitle        "professional work";
                     too:hasNodeIcon     "anvil";
                     too:hasNodeChildren _:work_kids;
                     too:hasNodeParent   "home";
@@ -16,7 +16,7 @@ toi:work            a                   too:treeNode;
 
 """
 i am a software engineer by profession.  my resume is available as a
-[assets/RobertHarrisResume.pdf pdf] or you can explore futher here.
+[assets/RobertHarrisResume.pdf pdf] or you can explore further here.
 """.
 
 _:work_kids         a                    rdfs:Container;
@@ -35,7 +35,13 @@ _:workframe         a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+Summer 1987
+Prolog Programmer
+Implemented software to handle pre-printed forms.
+
+1989 to 1994
+Software Engineer
+Developed email agents.
 """.
                     
 
@@ -47,7 +53,9 @@ _:netsource         a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+1994 to 1997
+Software Engineer
+Developed real-time, fault tolerant telephony systems for international dial-back applications.
 """.
 
 _:xuggle            a                   too:treeNode;
@@ -59,7 +67,6 @@ _:xuggle            a                   too:treeNode;
 
 """
 [http://www.youtube.com/watch?v=fI0IduBqLWA octopus]
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 """.
 
 _:connectsolutions  a                   too:treeNode;
@@ -70,5 +77,7 @@ _:connectsolutions  a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+2010 to 2011
+Senior Software Engineer
+Developed back end services integrated with Linked Data and table based stores, GeoServer, and browser front ends.	
 """.
