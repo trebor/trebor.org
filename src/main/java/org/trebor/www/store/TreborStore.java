@@ -21,7 +21,7 @@ import org.openrdf.result.MultipleResultException;
 import org.openrdf.result.NoResultException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
-import org.trebor.www.dto.ForceTreeNode;
+import org.trebor.www.dto.MenuTreeNode;
 import org.trebor.www.rdf.MockRepositoryFactory;
 import org.trebor.www.rdf.RdfUtil;
 
@@ -99,7 +99,7 @@ public class TreborStore
           "SELECT ?doc WHERE {?doc too:hasName ?name. ?doc a too:treeNode.}");
   }
 
-  public ForceTreeNode getTreeNode(String nodeName)
+  public MenuTreeNode getTreeNode(String nodeName)
     throws MalformedQueryException, RepositoryException, NoResultException,
     MultipleResultException, QueryEvaluationException
   {
@@ -107,16 +107,16 @@ public class TreborStore
       mObjectConnection.prepareObjectQuery(mNamedTreeNodequery
         .getQueryString());
     query.setObject("name", nodeName.toLowerCase());
-    ForceTreeNode node = (ForceTreeNode)query.evaluate().singleResult();
+    MenuTreeNode node = (MenuTreeNode)query.evaluate().singleResult();
     return renderMarkup(node.copy());
   }
 
-  private ForceTreeNode renderMarkup(ForceTreeNode node)
+  private MenuTreeNode renderMarkup(MenuTreeNode node)
   {
     node.setTitle(mMarkupRenderer.render(node.getTitle()));
     node.setSummary(mMarkupRenderer.render(node.getSummary()));
     node.setImageDescription(mMarkupRenderer.render(node.getImageDescription()));
-    for (ForceTreeNode child: node.getChildren())
+    for (MenuTreeNode child: node.getChildren())
         renderMarkup(child);
     return node;
   }

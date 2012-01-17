@@ -6,7 +6,7 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.result.MultipleResultException;
 import org.openrdf.result.NoResultException;
-import org.trebor.www.dto.ForceTreeNode;
+import org.trebor.www.dto.MenuTreeNode;
 import org.trebor.www.store.TreborStore;
 
 import com.sun.jersey.api.core.InjectParam;
@@ -21,7 +21,7 @@ public class TreborService
   @InjectParam
   private static TreborStore mStore;
   
-  public ForceTreeNode getTreeNode(String name) throws MalformedQueryException, RepositoryException, NoResultException, MultipleResultException, QueryEvaluationException
+  public MenuTreeNode getMenuNode(String name) throws MalformedQueryException, RepositoryException, NoResultException, MultipleResultException, QueryEvaluationException
   {
     return mStore.getTreeNode(name).copy();
   }

@@ -33,7 +33,7 @@ public class TestTreborResource extends JerseyTest
     WebResource webResource = resource();
     for (String[] data: dataSet)
     {      
-      ForceTreeNode ftn1 = webResource.path("/menu/" + data[0]).get(ForceTreeNode.class);
+      MenuTreeNode ftn1 = webResource.path("/menu/" + data[0]).get(MenuTreeNode.class);
       assertEquals("node: " + data[0], data[0], ftn1.getName());
       assertEquals("node: " + data[0], data[1], ftn1.getParent());
       assertEquals("node: " + data[0], data[2], ftn1.getChildren().size() + "");

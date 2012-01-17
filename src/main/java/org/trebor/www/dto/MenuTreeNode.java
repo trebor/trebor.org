@@ -17,12 +17,12 @@ import static org.trebor.www.rdf.NameSpace.*;
 @iri(TREE_NODE)
 @XmlRootElement()
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ForceTreeNode {
+public class MenuTreeNode {
 
   private static final String UNDEFINED = "<UNDEFINED>";
 
   @SuppressWarnings("unused")
-  private static final Logger logger = Logger.getLogger(ForceTreeNode.class);
+  private static final Logger logger = Logger.getLogger(MenuTreeNode.class);
 
   @iri(HAS_NAME)
   @XmlElement(name="name")
@@ -54,34 +54,34 @@ public class ForceTreeNode {
   
   @iri(HAS_NODE_CHILDREN)
   @XmlElement(name="children", required=false)
-  public List<ForceTreeNode> mChildren;
+  public List<MenuTreeNode> mChildren;
 
   @iri(HAS_NODE_PARENT)
   @XmlElement(name="parentName", required=false)
   private String mParent;
 
   
-  public ForceTreeNode()
+  public MenuTreeNode()
   {
     this(UNDEFINED, UNDEFINED);
   }
 
-  public ForceTreeNode(String name)
+  public MenuTreeNode(String name)
   {
     this(name, UNDEFINED);
   }
   
-  public ForceTreeNode(String name, String imageName)
+  public MenuTreeNode(String name, String imageName)
   {
     this(name, imageName, null);
   }
   
-  public ForceTreeNode(String name, String imageName, String link)
+  public MenuTreeNode(String name, String imageName, String link)
   {
     this(name, imageName, link, null);
   }
   
-  public ForceTreeNode(String name, String iconName, String link, String summary)
+  public MenuTreeNode(String name, String iconName, String link, String summary)
   {
     mChildren = null;
     mName = name;
@@ -90,10 +90,10 @@ public class ForceTreeNode {
     mSummary = summary;
   }
   
-  public ForceTreeNode add(ForceTreeNode node)
+  public MenuTreeNode add(MenuTreeNode node)
   {
     if (mChildren == null)
-      mChildren = new ArrayList<ForceTreeNode>();
+      mChildren = new ArrayList<MenuTreeNode>();
     
     mChildren.add(node);
     return node;
@@ -104,9 +104,9 @@ public class ForceTreeNode {
     return mName;
   }
   
-  public List<ForceTreeNode> getChildren()
+  public List<MenuTreeNode> getChildren()
   {
-    return mChildren == null ? Collections.<ForceTreeNode>emptyList() : mChildren;
+    return mChildren == null ? Collections.<MenuTreeNode>emptyList() : mChildren;
   }
 
   public void setName(String name)
@@ -151,9 +151,9 @@ public class ForceTreeNode {
       mChildren + "]";
   }
   
-  public ForceTreeNode copy()
+  public MenuTreeNode copy()
   {
-    ForceTreeNode copy = new ForceTreeNode();
+    MenuTreeNode copy = new MenuTreeNode();
     copy.setName(getName());
     copy.setTitle(getTitle());
     copy.setIconName(getIconName());
@@ -163,7 +163,7 @@ public class ForceTreeNode {
     copy.setSummary(getSummary());
     copy.setParent(getParent());
     
-    for (ForceTreeNode child: getChildren())
+    for (MenuTreeNode child: getChildren())
       copy.add(child.copy());
     
     return copy;

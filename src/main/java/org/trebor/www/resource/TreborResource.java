@@ -35,7 +35,7 @@ public class TreborResource
   public Response treeMenu(@PathParam("page") String page) throws NoResultException, MultipleResultException, MalformedQueryException, RepositoryException, QueryEvaluationException
   {
     log.debug("menu/" + page);
-    return Response.ok(mTreborService.getTreeNode(page)).build();
+    return Response.ok(mTreborService.getMenuNode(page)).build();
   }
 
   @GET

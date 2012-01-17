@@ -59,30 +59,30 @@ public class TestForceTreeNode
 
     ObjectQuery query = objectConnection.prepareObjectQuery(named.getQueryString());
     query.setObject("name", "trebor.org");
-    ForceTreeNode node = (ForceTreeNode)query.evaluate().singleResult();
+    MenuTreeNode node = (MenuTreeNode)query.evaluate().singleResult();
     log.debug("node: " + node.getName());
     assertEquals(2, node.getChildren().size());
   }
 
-  public ForceTreeNode testTree()
+  public MenuTreeNode testTree()
   {
-    ForceTreeNode root = new ForceTreeNode("trebor.org", "tat");
+    MenuTreeNode root = new MenuTreeNode("trebor.org", "tat");
     root
       .setSummary("welcome to <a href=\"http://www.trebor.org\" target=\"_blank\">trebor.org</a>, the personal site for robert harris, aka trebor.");
     
-    ForceTreeNode work = new ForceTreeNode("work", "work");
-    work.add(new ForceTreeNode("NASA", "nasa",
+    MenuTreeNode work = new MenuTreeNode("work", "work");
+    work.add(new MenuTreeNode("NASA", "nasa",
       "http://human-factors.arc.nasa.gov/cognition/personnel/robh.html",
       "you know, the space people!"));
-    work.add(new ForceTreeNode("Xuggle", "xuggle", "http://xuggle.com"));
+    work.add(new MenuTreeNode("Xuggle", "xuggle", "http://xuggle.com"));
   
-    ForceTreeNode projects = new ForceTreeNode("projects", "work");
-    projects.add(new ForceTreeNode("Swarm", "swarm"));
-    projects.add(new ForceTreeNode("trebor.org 2", "tat"));
+    MenuTreeNode projects = new MenuTreeNode("projects", "work");
+    projects.add(new MenuTreeNode("Swarm", "swarm"));
+    projects.add(new MenuTreeNode("trebor.org 2", "tat"));
   
-    ForceTreeNode subProjects = new ForceTreeNode("sub-projects", "work");
-    subProjects.add(new ForceTreeNode("Swarm", "swarm"));
-    subProjects.add(new ForceTreeNode("trebor.org 3", "tat"));
+    MenuTreeNode subProjects = new MenuTreeNode("sub-projects", "work");
+    subProjects.add(new MenuTreeNode("Swarm", "swarm"));
+    subProjects.add(new MenuTreeNode("trebor.org 3", "tat"));
     projects.add(subProjects);
     root.add(work);
     root.add(projects);
