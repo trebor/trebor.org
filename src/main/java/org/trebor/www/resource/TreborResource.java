@@ -31,11 +31,11 @@ public class TreborResource
 
   @GET
   @Produces("application/json")
-  @Path("tree/{path}")
-  public Response treeMenu(@PathParam("path") String path) throws NoResultException, MultipleResultException, MalformedQueryException, RepositoryException, QueryEvaluationException
+  @Path("menu/{page}")
+  public Response treeMenu(@PathParam("page") String page) throws NoResultException, MultipleResultException, MalformedQueryException, RepositoryException, QueryEvaluationException
   {
-    log.debug("tree/" + path);
-    return Response.ok(mTreborService.getTreeNode(path)).build();
+    log.debug("menu/" + page);
+    return Response.ok(mTreborService.getTreeNode(page)).build();
   }
 
   @GET
@@ -43,10 +43,8 @@ public class TreborResource
   @Path("")
   public Response rootRedirect() throws URISyntaxException
   {
-    URI foo = new URI("/static/treemenu.html?page=home");
-   return Response.seeOther(foo).build();
+   return Response.seeOther(new URI("/static/fdlmenu.html?page=home")).build();
   }
-  
   
   public void setTreborService(TreborService treborService)
   {

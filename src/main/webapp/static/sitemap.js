@@ -1,4 +1,4 @@
-var dataSource = "/tree/" + getUrlVars()["page"];
+var dataSource = "/menu/" + getUrlVars()["page"];
 var iconBasePath = "assets/icons/";
 var iconType = ".png";
 var iconSize = 20;
@@ -62,7 +62,7 @@ function nodeName(node)
 
 function getNodeUrl(node)
 {
-  return "treemenu.html?page=" + node.name;
+  return "fdlmenu.html?page=" + node.name;
 }
 
 function iconPath(name)
