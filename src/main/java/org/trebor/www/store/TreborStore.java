@@ -54,7 +54,7 @@ public class TreborStore
   };
 
   public TreborStore() throws RepositoryException, RepositoryConfigException,
-    RDFParseException, IOException
+    IOException
   {
     log.debug("init store");
 
@@ -72,11 +72,17 @@ public class TreborStore
 
     for (String input : INPUT_FILES)
     {
-      log.debug("import: " + input);
       File file =
         new File(
           TreborStore.class.getResource(input).toString().split(":")[1]);
-      RdfUtil.importFile(repository, file, RDFFormat.TURTLE);
+      try
+      {
+        RdfUtil.importFile(repository, file, RDFFormat.TURTLE);
+      }
+      catch (RDFParseException e)
+      {
+        log.error("while parsing " + file, e);
+      }
     }
 
     // initialize named queries

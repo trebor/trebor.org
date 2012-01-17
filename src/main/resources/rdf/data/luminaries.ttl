@@ -16,9 +16,9 @@ toi:luminaries      a                   too:treeNode;
 """
 these are some of the people who have not only informed my thinking on one particular 
 subject or another, but have inspired me to question 'current thinking' in general.
-many of the ideas espoused by these thinkers have been so accepted and absorbed into 
-our understanding of how the world works, that it is easy to forget their notions were 
-once novel or controversial.
+many of the ideas espoused by these thinkers have been accepted and absorbed into 
+our understanding of how the world works.  it can be is easy to forget that their work
+was once novel or controversial.
 """.
 
 _:luminaries_kids   a                    rdfs:Container;
@@ -75,10 +75,10 @@ _:pinker				    a                   too:treeNode;
 i started with
 [[wikipedia:The_Language_Instinct|the language instinct]]
 which posits that humans are born with an innate capacity to develop grammatical language.
-here is a fascinating
+pinker often discusses interactions between language and behavior, here for example is an
 [http://comment.rsablogs.org.uk/videos/ rsa animate]
 [[youtube:3-son3EJTrU|talk]]
-he gave on language and behavior.
+on indirect speech.
 i'm currently reading
 [[wikipedia:The_Better_Angels_of_Our_Nature|the better angels of our nature]]
 which, despite its gruesome descriptions of violence present and past, 
@@ -95,7 +95,7 @@ _:tufte				    	a                   too:treeNode;
 """
 tufte's
 [http://www.edwardtufte.com/tufte/courses one day course]
-had a huge and immediate impact on my understanding of visual design.  he provides
-a systematic approach for evaluating visual representations, and a sound framework to improve them.
-if data visualization is your thing, check him out.
+had a huge impact on my understanding of visual design.  he provides
+a systematic approach for evaluating and improving visual representations.
+if you work with pixels, check out tufte.
 """.

@@ -42,21 +42,22 @@ d3.json(dataSource, function(json)
     .attr("height", iconSize)
     .on("click", function (d) {window.location = getNodeUrl(d);});
 
-  node.append("svg:foreignObject")
+  node.append("foreignObject")
+    .attr("x", "0")
+    .attr("y", "0")
     .attr("width", "20em")
-    .attr("height", "3em")
-    .attr("x", function(d) { return d.children ? "-20.5em" : "0.5em"; })
-    .attr("y", "-1.6em")
+    .attr("height", "1.5em")
+    .attr("x", function(d) { return d.children ? "-21em" : "1em"; })
+    .attr("y", "-.75em")
     .append("xhtml:body")
+    .style("margin", "0")
     .html(nodeName);
 });
 
 function nodeName(node)
 {
-  var align = node.children ? "right" : "left";
-  var title = 
-    "<a href=\"" + getNodeUrl(node) + "\">" + strip(node.title) + "</a>";
-  return "<p align=\"" + align + "\">" + title + "</p>";
+  var align = node.children ? "style=\"float:right;\"" : "";
+  return "<a " + align + " href=\"" + getNodeUrl(node) + "\">" + strip(node.title) + "</a>";
 }
 
 function getNodeUrl(node)

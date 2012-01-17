@@ -58,9 +58,17 @@ function dragend(d, i)
     d.fixed = false;
 }
 
+function stripHtml(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent||tmp.innerText;
+}
+
 d3.json(dataSource, function(json)
 {
   root = json;
+  document.title = stripHtml(root.title);
   root.fixed = true;
   root.x = w / 2;
   root.y = h / 2;

@@ -47,7 +47,12 @@ _:elementsofstyle   a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+this book, freely available
+[http://www.bartleby.com/141/ here],
+taught me how to write.  it contains simple demonstrations of how to transform 
+bad sentences into good.
+[http://www.bartleby.com/141/strunk5.html#13 "omit needless words."]
+has become core to my aesthetic.
 """.
 
 _:crowdsandpower    a                   too:treeNode;
