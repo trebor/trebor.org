@@ -17,7 +17,7 @@ public class TestTreborResource extends JerseyTest
   {
     super("org.trebor.www.resource");
   }
-  
+    
   @Test
   public void testService()
   {

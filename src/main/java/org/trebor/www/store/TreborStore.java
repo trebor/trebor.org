@@ -25,6 +25,9 @@ import org.trebor.www.dto.ForceTreeNode;
 import org.trebor.www.rdf.MockRepositoryFactory;
 import org.trebor.www.rdf.RdfUtil;
 
+import com.sun.jersey.spi.resource.Singleton;
+
+@Singleton
 public class TreborStore
 {
   @SuppressWarnings("unused")

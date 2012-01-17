@@ -27,10 +27,10 @@ public class TreborResource
   private Logger log = Logger.getLogger(getClass());
 
   @InjectParam
-  private TreborService mTreborService;
+  private static TreborService mTreborService;
 
   @GET
-  @Produces("application/json")
+  @Produces(MediaType.APPLICATION_JSON)
   @Path("menu/{page}")
   public Response treeMenu(@PathParam("page") String page) throws NoResultException, MultipleResultException, MalformedQueryException, RepositoryException, QueryEvaluationException
   {
@@ -40,10 +40,9 @@ public class TreborResource
 
   @GET
   @Produces(MediaType.TEXT_HTML)
-  @Path("")
   public Response rootRedirect() throws URISyntaxException
   {
-   return Response.seeOther(new URI("/static/fdlmenu.html?page=home")).build();
+    return Response.seeOther(new URI("http:static/fdlmenu.html?page=home")).build();
   }
   
   public void setTreborService(TreborService treborService)
