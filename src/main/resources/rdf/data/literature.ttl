@@ -51,8 +51,8 @@ this book, freely available
 [http://www.bartleby.com/141/ here],
 taught me how to write.  it contains simple demonstrations of how to transform 
 bad sentences into good.
-[http://www.bartleby.com/141/strunk5.html#13 "omit needless words."]
-has become core to my aesthetic.
+"[http://www.bartleby.com/141/strunk5.html#13 omit needless words]."
+is at the core of my aesthetic.
 """.
 
 _:crowdsandpower    a                   too:treeNode;

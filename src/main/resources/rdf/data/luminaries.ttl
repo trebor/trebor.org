@@ -17,7 +17,7 @@ toi:luminaries      a                   too:treeNode;
 these are some of the people who have not only informed my thinking on one particular 
 subject or another, but have inspired me to question 'current thinking' in general.
 many of the ideas espoused by these thinkers have been accepted and absorbed into 
-our understanding of how the world works.  it can be is easy to forget that their work
+our understanding of how the world works.  it can be easy to forget that their work
 was once novel or controversial.
 """.
 
@@ -37,8 +37,8 @@ _:norman				    a                   too:treeNode;
 """
 early on i read
 [[wikipedia:The_Design_of_Everyday_Things|the design of everyday things]]
-in which norman described aspects good design, and where i learned the word
-[[wikipedia:Affordance affordance]].
+in which norman described aspects of good design, and where i learned the word
+[[wikipedia:Affordance|affordance]].
 he also talked about why many products might be systematically poorly designed.
 in a more recent design
 [[youtube:RlQEoJaLQRA|ted talk]]
@@ -75,11 +75,11 @@ _:pinker				    a                   too:treeNode;
 i started with
 [[wikipedia:The_Language_Instinct|the language instinct]]
 which posits that humans are born with an innate capacity to develop grammatical language.
-pinker often discusses interactions between language and behavior, here for example is an
+pinker often discusses interactions between language and behavior;
+[[youtube:3-son3EJTrU|here]]
+for example is an
 [http://comment.rsablogs.org.uk/videos/ rsa animate]
-[[youtube:3-son3EJTrU|talk]]
-on indirect speech.
-i'm currently reading
+talk on indirect speech. i'm currently reading
 [[wikipedia:The_Better_Angels_of_Our_Nature|the better angels of our nature]]
 which, despite its gruesome descriptions of violence present and past, 
 leaves me optimistic about the future.

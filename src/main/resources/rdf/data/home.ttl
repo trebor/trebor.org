@@ -14,9 +14,9 @@ toi:home            a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-welcome to trebor.org.
-i am robert, and i created this site to express some of my ideas and aesthetics.
-i encourage you to explore and discover, as there is more here then initially meets the eye.
+welcome to trebor.org.  i created this site to express some of my ideas and
+[[wikipedia:Aesthetics|aesthetics]].
+i encourage you to explore and discover, as there is more here then first meets the eye.
 feel free to move things around to suit your needs.
 
 details about how this site was built can be found

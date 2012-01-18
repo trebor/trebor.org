@@ -3,9 +3,13 @@ var iconBasePath = "assets/icons/";
 var iconType = ".png";
 var w = window.innerWidth - 8;
 var h = window.innerHeight - 22;
+var mx = w / 2;
+var my = h / 2;
 var node;
 var link;
 var root;
+var summaryBoxEmWide = 30;
+var summaryBoxEmHigh = 30;
 var discount = 0.8;
 var nodeSize = 150;
 var nodeOffset = nodeSize / 2;
@@ -70,8 +74,8 @@ d3.json(dataSource, function(json)
   root = json;
   document.title = stripHtml(root.title);
   root.fixed = true;
-  root.x = w / 2;
-  root.y = h / 2;
+  root.x = mx;
+  root.y = my;
   update();
 
   // close all nodes for starters
@@ -203,19 +207,33 @@ function update()
   var text = en.filter(function(d) {return d.title || d.summary;})
     .append("svg:foreignObject")
     .attr("class", "summaryTextObject")
+    .attr("x", assignSummaryPositionX)
+    .attr("y", assignSummaryPositionY)
     .style("visibility", "hidden")
-    .attr("y", function(d) {return iconSize(d) / -2 - getEmSize(this) * .45;})
-    .attr("x", function(d) {return iconSize(d) / 2 - getEmSize(this) * .45;})
-    .attr("width", "30em")
-    .attr("height", "30em")
+    .attr("width", summaryBoxEmWide + "em")
+    .attr("height", summaryBoxEmHigh + "em")
     .append("xhtml:body")
     .attr("class", "summaryText")
     .attr("opacity", 1)
+    .style("margin", "0")
     .html(nodeHtml);
 
   // remove old nodes
   
   node.exit().remove();
+}
+
+function assignSummaryPositionX(d)
+{
+  var boxWidth = getEmSize(this) * summaryBoxEmWide;
+  var halfIcon = iconSize(d) / 2;
+  return (d.x > mx) ? -(halfIcon + boxWidth) : halfIcon;
+}
+
+function assignSummaryPositionY(d)
+{
+  var halfIcon = iconSize(d) / 2;
+  return -halfIcon;
 }
 
 function nodeHtml(node)
@@ -267,6 +285,12 @@ function mouseoverNode(node, index)
     .selectAll(".summaryText, .nodeActionIcon")
     .filter(function (d) {return d == node;})
     .style("visibility", "visible");
+
+  vis
+    .selectAll(".summaryTextObject")
+    .filter(function (d) {return d == node;})
+    .attr("x", assignSummaryPositionX)
+    .attr("y", assignSummaryPositionY);
 
   // found out the other nodes and edges
 

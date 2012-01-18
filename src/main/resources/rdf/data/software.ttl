@@ -16,7 +16,7 @@ toi:software        a                   too:treeNode;
 
 """
 the following are some of the software projects i've worked on for fun over the years.
-most of these projects are released under one open source licence or another.
+most of these projects are released under one open source license or another.
 """.
 
 
@@ -35,7 +35,7 @@ _:splink            a                   too:treeNode;
                     too:hasNodeParent   "software";
                     too:hasImageDescription
 """
-in this splink screen shot, geneitic disorder data from
+in this splink screen shot, genetic disorder data from
 [http://www.ncbi.nlm.nih.gov/omim omim],
 which has been transformed into
 [[wikipedia:Resource_Description_Framework|rdf]]
@@ -49,12 +49,12 @@ demonstrates use for
 
 """
 splink is a pure java
-[wikipedia:Graphical_user_interface gui]
+[[wikipedia:Graphical_user_interface|gui]]
 for querying
 [[wikipedia:Resource_Description_Framework|rdf]]
 repositories using
 [[wikipedia:SPARQL|sparql]].
-it useses the
+it uses the
 [[http://www.openrdf.org/|openrdf]]
 libraries to communicate with repositories.
 """.
@@ -101,7 +101,7 @@ autonomous control.  we never quite got there, but
 [http://wiki.orbswarm.com/index.php?title=AutomonyImages here]
 are some results from field tests.
 specifically i built an orb simulator and a choreography editor,
-which i hope to repurpose to other projects.
+which i hope to re-purpose to other projects.
 """.
 
 
@@ -145,7 +145,7 @@ which uses
 [[wikipedia:HTML5|html5]]'s
 [[wikipedia:Scalable_Vector_Graphics|svg]]
 functionality to efficiently render graphics.
-this approach permites page elements to be styled with traditional
+this approach permits page elements to be styled with traditional
 [[wikipedia:CSS|css]].
 """.
 
@@ -170,18 +170,18 @@ data is queried using a combination of
 and
 [http://www.openrdf.org/alibaba.jsp alibaba].
 
-through the magic of java [[wikipedia:Java_annotation|anotation]]s the translation from
-[[wikipedia:Resource_Description_Framework|rdf]]
-to
-[[wikipedia:JSON|json]]
-is automatic, and thus this service is surprisingly thin.
+jersey and alibaba both use
+[[wikipedia:Java_annotation|java annotation]]s
+to 
+[[wikipedia:Marshalling_(computer_science)|marshal]] 
+data, and thus this service contains very little custom code.
 
-the text elements of the backing data may contain
-[[wikipedia:Wiki_markup|wiki markup]],
-the service uses
-[http://code.google.com/p/gwtwiki/ gwtwiki]
-to transform the markup text into
-[[wikipedia:HTML|html]].
+the text elements of the stored data contain
+[[wikipedia:Wiki_markup|wiki markup]], 
+and are converted to
+[[wikipedia:HTML|html]]
+by 
+[http://code.google.com/p/gwtwiki/ gwtwiki].
 """.
 
 _:tail              a                   too:treeNode;

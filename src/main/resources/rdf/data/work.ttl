@@ -30,44 +30,55 @@ _:work_kids         a                    rdfs:Container;
 
 _:cybermation       a                   too:treeNode;
                     too:hasName         "cybermation";
-                    too:hasTitle        "cybermation inc.";
+                    too:hasTitle        "cybermation, inc.";
                     too:hasNodeIcon     "cybermation";
                     too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
-{{
-  resume:c++ programmer|summer '88|
-  implemented device drivers to interface between a graphical user interface and material cutting machinery.
+{{resume:intern|summer '88|
+i spent a summer building device drivers for a small company which developed 
+software to scan, create and edit graphics for signs, and used that software to drive
+hardware which could render those signs in paper, vinyl, plastic and steal.
+|c
 }}
 """.
 
 
 _:workframe         a                   too:treeNode;
                     too:hasName         "workframe";
-                    too:hasTitle        "workframe inc.";
+                    too:hasTitle        "workframe, inc.";
                     too:hasNodeIcon     "workframe";
                     too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
-{{resume:prolog programmer|summer '87|implemented software to handle pre-printed forms.}}
-{{resume:software engineer|jan '89 - oct '94|developed email agents.}}
+{{resume:prolog programmer|summer '87|
+i built software to locate fields in pre-printed paper forms using a
+[[wikipedia:Dot_matrix_printer|dot matrix printer]] and then to print 
+form data in those fields at a later time.
+|prolog
+}}
+
+{{resume:software engineer|jan '89 - sep '94|
+developed email agents.
+}}
 """.
 
 
 _:netsource         a                   too:treeNode;
                     too:hasName         "netsource";
-                    too:hasTitle        "netsource inc.";
+                    too:hasTitle        "netsource, inc.";
                     too:hasNodeIcon     "netsource";
                     too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
-{{
-  resume:software engineer|oct '94 - jan '97|
-  developed real-time, fault tolerant telephony systems for international dial-back
-  applications.
+{{resume:software engineer|sep '94 - jan '97|
+i developed real-time, fault tolerant telephony systems for international
+[[wikipedia:Callback_(telecommunications)|call-back]]
+applications.  specifically i built software which collected call data from 
+|c++
 }}
 """.
 
@@ -79,15 +90,15 @@ _:xuggle            a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-{{
-	resume:co-founder|??? '08 - mar '10|
-  released [http://xuggle.com/xuggler/ xuggler],
-  an open source java media transcoding framework which wraps
-  [[wikipedia:FFMPEG|ffmpeg]].
-  co-developed
-  [[youtube:fI0IduBqLWA|octopus]]
-  a real time video mixer based on xuggler.
-  xuggle, inc. was acquired by [[connectsolutions|connectsolutions]] in march of 2010.
+{{resume:co-founder|oct '08 - mar '10|
+released [http://xuggle.com/xuggler/ xuggler],
+an open source java media transcoding framework which wraps
+[[wikipedia:FFMPEG|ffmpeg]].
+co-developed
+[[youtube:fI0IduBqLWA|octopus]]
+a real time video mixer based on xuggler.
+
+xuggle was acquired by [[connectsolutions|connectsolutions]] in march of 2010.
 }}
 """.
 
@@ -99,9 +110,8 @@ _:connectsolutions  a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-{{
-  resume:senior software engineer|mar '10 - jul '11|
-  developed java/[[wikipedia:Tomcat|tomcat]] services, integrated developed ,
-  [http://geoserver.org/ geoserver], and browser front ends
+{{ resume:senior software engineer|mar '10 - jul '11|
+developed java/[[wikipedia:Tomcat|tomcat]] services, integrated developed ,
+[http://geoserver.org/ geoserver], and browser front ends
 }}
 """.

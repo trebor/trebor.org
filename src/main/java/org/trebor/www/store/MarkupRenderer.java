@@ -25,13 +25,17 @@ public class MarkupRenderer extends WikiModel
     public String parseFunction(List<String> parts, IWikiModel model,
       char[] src, int beginIndex, int endIndex) throws IOException
     {
+      String title = parts.get(0);
+      String dates = parts.get(1);
+      String description = parts.get(2);
+      
       return 
         "{|\n" +
         "|-\n" +
-        "! align=\"left\"  | <p>" + parts.get(0) + "</p>\n" +
-        "! align=\"right\" | "    + parts.get(1) + "\n" +
+        "! align=\"left\"  | <p><small>" + title + "</small></p>\n" +
+        "! align=\"right\" |    <small>" + dates + "</small>\n" +
         "|}\n" +
-        "<small>" + parts.get(2).replace("\n", "") + "</small>";
+        description;
     }
   };
   

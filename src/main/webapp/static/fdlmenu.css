@@ -17,7 +17,6 @@ p
 table
 {
   width: 100%;
-/*   padding-left: 0.4em; */
 }
 
 td
@@ -39,14 +38,17 @@ td
   color: #666;
 }
 
-.summaryText
+.summaryText, .summaryTextObject
 {
+  cursor: move;
   border-radius: 15px;
+  background-color: red;
   background: rgba(0,0,0,0.05);
   padding: 0.5em;
 }
 
 .clickText
 {
-  font-size: 14px;
+  background: transparent;
+	font-size: 14px;
 }
