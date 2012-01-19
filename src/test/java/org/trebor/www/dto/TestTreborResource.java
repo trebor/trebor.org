@@ -25,7 +25,7 @@ public class TestTreborResource extends JerseyTest
     {
       {"tufte", "luminaries", "0"},
       {"luminaries", "influences", "4"},
-      {"literature", "influences", "4"},
+      {"literature", "influences", "3"},
       {"influences", "home", "2"},
       {"home", null, "4"},
     };

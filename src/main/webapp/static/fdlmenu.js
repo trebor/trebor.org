@@ -347,7 +347,7 @@ function moveToTop(node)
 function mouseoutNode(node)
 {
   vis
-    .selectAll(".summaryText, .nodeActionIcon")
+    .selectAll(".summaryText, .nodeActionIcon, .clickText")
     .filter(function (d) {return d == node;})
     .style("visibility", "hidden");
 
