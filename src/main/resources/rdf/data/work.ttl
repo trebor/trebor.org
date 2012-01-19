@@ -37,9 +37,10 @@ _:cybermation       a                   too:treeNode;
 
 """
 {{resume:intern|summer '88|
-i spent a summer building device drivers for a small company which developed 
-software to scan, create and edit graphics for signs, and used that software to drive
-hardware which could render those signs in paper, vinyl, plastic and steal.
+i spent a summer building
+[[wikipedia:Device_driver|device drivers]]
+for a small company which developed software to scan, create and edit graphics for signs, 
+and drive hardware to render those signs in paper, vinyl, plastic and steal.
 |c
 }}
 """.
@@ -61,10 +62,12 @@ form data in those fields at a later time.
 }}
 
 {{resume:software engineer|jan '89 - sep '94|
-developed email agents.
+i lead a team of developers who built agents to automate common tasks for an archaic
+[[wikipedia:Store_and_forward|store-and-forward]]
+e-mail system.
+|c++
 }}
 """.
-
 
 _:netsource         a                   too:treeNode;
                     too:hasName         "netsource";
@@ -76,8 +79,7 @@ _:netsource         a                   too:treeNode;
 """
 {{resume:software engineer|sep '94 - jan '97|
 i developed real-time, fault tolerant telephony systems for international
-[[wikipedia:Callback_(telecommunications)|call-back]]
-applications.  specifically i built software which collected call data from 
+[[wikipedia:Callback_(telecommunications)|call-back]] applications.
 |c++
 }}
 """.
@@ -91,14 +93,18 @@ _:xuggle            a                   too:treeNode;
 
 """
 {{resume:co-founder|oct '08 - mar '10|
-released [http://xuggle.com/xuggler/ xuggler],
-an open source java media transcoding framework which wraps
+at xuggle we released
+[http://xuggle.com/xuggler/ xuggler],
+a popular open source java media
+[[wikipedia:Transcoding|transcoding]]
+framework which wraps
 [[wikipedia:FFMPEG|ffmpeg]].
-co-developed
-[[youtube:fI0IduBqLWA|octopus]]
-a real time video mixer based on xuggler.
+we then built
+[[youtube:fI0IduBqLWA|octopus]],
+a real-time video mixer, based on xuggler.
 
 xuggle was acquired by [[connectsolutions|connectsolutions]] in march of 2010.
+|java, flex/flash, c++
 }}
 """.
 
@@ -110,8 +116,15 @@ _:connectsolutions  a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-{{ resume:senior software engineer|mar '10 - jul '11|
-developed java/[[wikipedia:Tomcat|tomcat]] services, integrated developed ,
-[http://geoserver.org/ geoserver], and browser front ends
+{{resume:senior software engineer|mar '10 - jul '11|
+i worked on a team to develop, and performance tune, web based video conferencing services.
+i integrated [http://geoserver.org/ geoserver] into system monitoring software.
+
+at connectsolutions i learned about [http://jersey.java.net/ jersey] and the power of 
+[http://wikipedia.org/wiki/Decoupled#Software_Development decoupled]
+[[wikipedia:REST|restful]]
+web services.
+
+|java, tomcat, spring, jersey, goeserver, rdf, fms, jmeter, maven, git
 }}
 """.

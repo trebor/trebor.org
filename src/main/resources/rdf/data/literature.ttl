@@ -16,15 +16,16 @@ toi:literature      a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+these are some of the books that have had a lasting effect on how i think about the world.
 """.
 
 _:literature_kids   a                    rdfs:Container;
-                    rdf:_1               _:everydaythings;
-                    rdf:_2               _:elementsofstyle;
-                    rdf:_3               _:crowdsandpower;
-                   	rdf:_4							 _:understandingcomics.
+                    rdf:_1               _:elementsofstyle;
+                    rdf:_2               _:crowdsandpower;
+                   	rdf:_3							 _:understandingcomics.
+                   	
 #                    rdf:_4               _:recursiveuniverse.
+#                    rdf:_1               _:everydaythings;
 
 _:everydaythings    a                   too:treeNode;
                     too:hasName         "everydaythings";
@@ -52,7 +53,7 @@ this book, freely available
 taught me how to write.  it contains simple demonstrations of how to transform 
 bad sentences into good.
 "[http://www.bartleby.com/141/strunk5.html#13 omit needless words]."
-is at the core of my aesthetic.
+has become a core element of my aesthetic.
 """.
 
 _:crowdsandpower    a                   too:treeNode;
@@ -64,7 +65,10 @@ _:crowdsandpower    a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+[[wikipedia:Elias_Canetti|canetti]] wrote this book in two parts, the first
+describes types of crowds and how to control them, and the second classifies power 
+systems and how they relate to crowds.  he details the spiraling negative effects of 
+absolute power on the minds of [[wikipedia:Despotism|despots]].
 """.
 
 _:understandingcomics a                 too:treeNode;
@@ -76,6 +80,10 @@ _:understandingcomics a                 too:treeNode;
                     too:hasNodeSummary
 
 """
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+[[wikipedia:Scott_McCloud|mccloud]] exposes techniques used in comics that exploite 
+features of human cognition.   this book help to solidify my understanding of visual 
+[http://courses.washington.edu/hypertxt/cgi-bin/book/wordsimages/wordsimages.html abstraction].
+i found his concept of
+[http://mediawiki.middlebury.edu/wiki/MIDDMedia/Closure_in_comics closure]
+both fascinating, and applicable outside of a comics context.
 """.
-

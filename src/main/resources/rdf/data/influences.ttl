@@ -14,10 +14,12 @@ toi:influences      a                   too:treeNode;
                     too:hasNodeParent   "home";
                     too:hasNodeSummary
 """
-lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+as much as i'd like to think of myself as fountain of new ideas, often those ideas are 
+simple rehash of work of better minds.  what follows is a woefully incomplete list of 
+sources from which i draw.
 """.
 
-# i like to think i have original ideas, but those ideas are heavily influnced by the minds of those 
+# i like to think i have original ideas, but those ideas are heavily influenced by the minds of those 
 
 _:influences_kids   a                    rdfs:Container;
                     rdf:_1               toi:luminaries;

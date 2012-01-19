@@ -118,7 +118,7 @@ this site, as symbolized by a pretty pony, is composed of three parts:
 *the front end: the user interface
 *the service: software that moves data between the front and the back
 *the back end: the site data, like text and links
-technical specifics are described below, but conceptually this approach 
+you can expand the pony for technical specifics, but conceptually this approach 
 [http://wikipedia.org/wiki/Decoupled#Software_Development decouples]
 the front and back end and permits flexibility in both the form of stored data, 
 and the presentation of that data.

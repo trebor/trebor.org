@@ -17,8 +17,12 @@ toi:nasa            a                   too:treeNode;
 """
 {{resume:programmer/analyst|jan '97 - oct '08|
 i spent about 10 years working at the ames research center. during that time i learned a
-lot and had an enormous amount of fun doing so. apart from the domain specific...
-}}
+lot, and had an enormous amount of fun.
+
+of the many lessons learned, the most important
+was that there is much to know, and i will only ever capture a thin sliver of it all.
+oh, and also to listen with my ears, rather then my mouth.
+|c++,java,lisp,pascal}}
 """.
 
 _:nasa_kids         a                    rdfs:Container;
@@ -50,17 +54,25 @@ applications.
 
 _:apex              a                   too:treeNode;
                     too:hasName         "apex";
-                    too:hasTitle        "apex";
+                    too:hasTitle        "[http://www.ai.sri.com/project/APEX apex]";
                     too:hasNodeIcon     "apex";
                     too:hasNodeParent   "nasa";
                     too:hasNodeSummary
 
 """
 {{resume:programmer/analyst|'00 - '06|
-i help to develop apex a language for representing plans 
+i worked with the
+[http://www.ai.sri.com/project/APEX apex]
+group, lead by
+[http://www.ai.sri.com/people/freed michael freed]
+to develop the apex system.
 
-|lisp, java
-}}
+using apex i implemented the high level behavior for joint nasa/army autonomous 
+rotorcraft project, described in this 
+[http://human-factors.arc.nasa.gov/apex/docs/papers/ahs05/AHS05.pdf paper]
+and [[youtube:c3PGbWWHwVw|video]].
+
+|lisp, java}}
 """.
 
 _:plexil            a                   too:treeNode;
@@ -72,6 +84,11 @@ _:plexil            a                   too:treeNode;
 
 """
 {{resume:programmer/analyst|'06 - '08|
-
+i worked with the
+[http://sourceforge.net/apps/mediawiki/plexil/index.php?title=Main_Page plexil]
+group to develop the language and supporting software.  i built a graphical
+[http://sourceforge.net/apps/mediawiki/plexil/index.php?title=Viewing_Plan_Execution interface]
+to view and control plan execution. you can see a screen shot
+[http://sourceforge.net/apps/mediawiki/plexil/nfs/project/p/pl/plexil/a/a8/Stopatbkpoint.jpg here].
 }}
 """.
