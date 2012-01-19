@@ -30,7 +30,7 @@ td
 
 .nodeMenu > a:visited
 {
-  color: #aaa;
+  color: #666;
 }
 
 .nodeMenu > a:link
@@ -50,5 +50,5 @@ td
 .clickText
 {
   background: transparent;
-	font-size: 14px;
+  font-size: 14px;
 }
