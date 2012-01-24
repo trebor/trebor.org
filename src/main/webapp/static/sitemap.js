@@ -43,21 +43,23 @@ d3.json(dataSource, function(json)
     .on("click", function (d) {window.location = getNodeUrl(d);});
 
   node.append("foreignObject")
+    .attr("class", "titleObject")
     .attr("x", "0")
     .attr("y", "0")
     .attr("width", "20em")
     .attr("height", "1.5em")
-    .attr("x", function(d) { return d.children ? "-21em" : "1em"; })
-    .attr("y", "-.75em")
+    .attr("x", function(d) { return d.children ? "-21em" : "1em";})
+    .attr("y", "-.65em")
     .append("xhtml:body")
-    .style("margin", "0")
+    .attr("class", "title")
+    .attr("align", function (d) {return d.children ? "right" : "left";})
+    .style("text-align", function (d) {return d.children ? "right" : "left";})
     .html(nodeName);
 });
 
 function nodeName(node)
 {
-  var align = node.children ? "style=\"float:right;\"" : "";
-  return "<a " + align + " href=\"" + getNodeUrl(node) + "\">" + strip(node.title) + "</a>";
+  return "<a href=\"" + getNodeUrl(node) + "\">" + strip(node.title) + "</a>";
 }
 
 function getNodeUrl(node)
