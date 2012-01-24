@@ -12,8 +12,8 @@ public class MarkupRenderer extends WikiModel
 {
   public static final String STATIC_BASE = "/static/";
   public static final String IMAGE_BASE = STATIC_BASE + "assets/images/";
-  public static final String PAGE_BASE = STATIC_BASE + "fdlmenu.html?page=";
-  public static final String MAP_BASE = STATIC_BASE + "sitemap.html?page=";
+  public static final String PAGE_BASE = "/fdl/";
+  public static final String MAP_BASE = "/map/";
 
   private static final ITemplateFunction RESUME_TEMPLATE = new ITemplateFunction()
   {

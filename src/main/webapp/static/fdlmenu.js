@@ -1,6 +1,8 @@
-var dataSource = "/menu/" + getUrlVars()["page"];
-var iconBasePath = "assets/icons/";
+var dataSource = "/menu/" + getNodeName();
+var iconBasePath = "/static/assets/icons/";
 var iconType = ".png";
+var fdlBase = "/fdl/";
+var mapBase = "/map/";
 var w = window.innerWidth;
 var h = window.innerHeight - 6;
 var mx = w / 2;
@@ -232,10 +234,10 @@ function assignSummaryPositionY(d)
 function nodeHtml(node)
 {
   var parentName = node.parentName;
-  var home  = "<a href=\"fdlmenu.html?page=home\">home</a>";
-  var focus = "<a href=\"fdlmenu.html?page=" + node.name + "\">focus</a>";
-  var site  = "<a href=\"sitemap.html?page=home\">site-map</a>";
-  var up    = "<a href=\"fdlmenu.html?page=" + parentName + "\">up</a>";
+  var home  = "<a href=\"" + fdlBase + "home\">home</a>";
+  var focus = "<a href=\"" + fdlBase + node.name + "\">focus</a>";
+  var site  = "<a href=\"" + mapBase + "home\">site-map</a>";
+  var up    = "<a href=\"" + fdlBase + parentName + "\">up</a>";
   var title = node.title ? "<big>" + node.title + "</big>" : "";
   var summary = node.summary ? node.summary : "";
   var menu  = 
@@ -684,6 +686,12 @@ function flatten(root)
 
   root.size = recurse(root, 0);
   return nodes;
+}
+
+function getNodeName()
+{
+  var tokens = window.location.href.split('/');
+  return tokens[tokens.length - 1];
 }
 
 function getUrlVars()

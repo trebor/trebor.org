@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE urlrewrite
+   PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+   "http://www.tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<urlrewrite>
+  <rule>
+    <from>^/fdl/([a-zA-Z0-9_]+)$</from>
+    <to last="true">/static/fdlmenu.html?page=$1</to>
+  </rule>
+  
+  <rule>
+    <from>^/fdl/(.*)$</from>
+    <to last="true">/static/$1</to>
+  </rule>
+
+  <rule>
+    <from>^/map/([a-zA-Z0-9_]+)$</from>
+    <to last="true">/static/sitemap.html?page=$1</to>
+  </rule>
+  
+  <rule>
+    <from>^/map/(.*)$</from>
+    <to last="true">/static/$1</to>
+  </rule>
+  
+</urlrewrite>

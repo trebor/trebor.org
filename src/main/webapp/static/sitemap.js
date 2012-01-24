@@ -1,5 +1,5 @@
-var dataSource = "/menu/" + getUrlVars()["page"];
-var iconBasePath = "assets/icons/";
+var dataSource = "/menu/" + getNodeName();
+var iconBasePath = "/static/assets/icons/";
 var iconType = ".png";
 var iconSize = 20;
 var w = window.innerWidth - 8;
@@ -62,7 +62,7 @@ function nodeName(node)
 
 function getNodeUrl(node)
 {
-  return "fdlmenu.html?page=" + node.name;
+  return "/fdl/" + node.name;
 }
 
 function iconPath(name)
@@ -75,6 +75,12 @@ function strip(html)
   var tmp = document.createElement("DIV");
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText;
+}
+
+function getNodeName()
+{
+  var tokens = window.location.href.split('/');
+  return tokens[tokens.length - 1];
 }
 
 function getUrlVars()
