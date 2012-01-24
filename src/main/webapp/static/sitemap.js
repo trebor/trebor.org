@@ -6,16 +6,16 @@ var w = window.innerWidth - 8;
 var h = window.innerHeight - 22;
 
 var cluster = d3.layout.cluster()
-    .size([h, w - 600]);
+    .size([h, w - 450]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h)
+var vis = d3.select("#chart")
+    .append("svg")
+    .attr("class", "svg-area")
     .append("g")
-    .attr("transform", "translate(200, 0)");
+    .attr("transform", "translate(150, 0)");
 
 d3.json(dataSource, function(json) 
 {

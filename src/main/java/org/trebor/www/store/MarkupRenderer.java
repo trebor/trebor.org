@@ -32,8 +32,8 @@ public class MarkupRenderer extends WikiModel
       return 
         "{|\n" +
         "|-\n" +
-        "! align=\"left\"  | <p><small>" + title + "</small></p>\n" +
-        "! align=\"right\" |    <small>" + dates + "</small>\n" +
+        "! align=\"left\"  | <small>" + title + "</small>\n" +
+        "! align=\"right\" | <small>" + dates + "</small>\n" +
         "|}\n" +
         description;
     }

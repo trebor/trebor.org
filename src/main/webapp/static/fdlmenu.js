@@ -1,8 +1,8 @@
 var dataSource = "/menu/" + getUrlVars()["page"];
 var iconBasePath = "assets/icons/";
 var iconType = ".png";
-var w = window.innerWidth - 8;
-var h = window.innerHeight - 22;
+var w = window.innerWidth;
+var h = window.innerHeight - 6;
 var mx = w / 2;
 var my = h / 2;
 var node;
@@ -26,16 +26,14 @@ var force = d3
   .gravity(0)
   .charge(-100)
   .linkDistance(linkDistance)
-  .linkStrength(0.4)
-  .size([w, h]);
+  .linkStrength(0.4);
 
 //  create the svg work area
 
 var vis = d3
   .select("#chart")
-  .append("svg")
-  .attr("width", w)
-  .attr("height", h);
+  .append("svg")  
+  .attr("class", "svg-area");
 
 // custom drag behavior
 
@@ -134,7 +132,6 @@ function update()
     .insert("line", ".node")
     .attr("class", "link")
     .style("visibility", "hidden")
-    .attr("opacity", 1)
     .attr("x1",  function(d) {return d.source.x;})
     .attr("y1", function(d) {return d.source.y;})
     .attr("x2", function(d) {return d.target.x;})
@@ -177,7 +174,6 @@ function update()
     .append("svg:image")
     .attr("class", "nodeActionIcon")
     .style("visibility", "hidden")
-    .attr("opacity", 1)
     .attr("xlink:href", selectIcon)
     .attr("x", function(d) {return iconSize(d) / -2;})
     .attr("y", function(d) {return iconSize(d) / 2 - actionIconSize;})
@@ -199,7 +195,6 @@ function update()
     .attr("y", function(d) {return iconSize(d) / 2 - getEmSize(this) / 2;})
     .append("xhtml:body")
     .attr("class", "clickText")
-    .attr("opacity", 1)
     .html(getNodeClickText);
 
   // add summary text
@@ -214,8 +209,6 @@ function update()
     .attr("height", summaryBoxEmHigh + "em")
     .append("xhtml:body")
     .attr("class", "summaryText")
-    .attr("opacity", 1)
-    .style("margin", "0")
     .html(nodeHtml);
 
   // remove old nodes
@@ -241,17 +234,17 @@ function nodeHtml(node)
   var parentName = node.parentName;
   var home  = "<a href=\"fdlmenu.html?page=home\">home</a>";
   var focus = "<a href=\"fdlmenu.html?page=" + node.name + "\">focus</a>";
-  var site  = "<a href=\"sitemap.html?page=home\">site map</a>";
+  var site  = "<a href=\"sitemap.html?page=home\">site-map</a>";
   var up    = "<a href=\"fdlmenu.html?page=" + parentName + "\">up</a>";
   var title = node.title ? "<big>" + node.title + "</big>" : "";
   var summary = node.summary ? node.summary : "";
   var menu  = 
-    "<div class=\"nodeMenu\" align=\"right\">" +
+    "<p class=\"nodeMenu\" align=\"right\">" +
     (root.name != "home"                     ? home  + "&nbsp;" : "") +
     (node.name == root.name && parentName    ? up    + "&nbsp;" : "") +
     (node.name != root.name                  ? focus + "&nbsp;" : "") +
-    (node.name != "home"                     ? site  + "&nbsp;" : "") +
-    "</div>";
+    (true                                    ? site  + "&nbsp;" : "") +
+    "</p>";
   var table = 
     "<table class=\"summaryBanner\">" +
     "<tr><td>" + title + "</td><td> " +  menu + "</td></tr>" +
@@ -281,10 +274,14 @@ function mouseoverNode(node, index)
 {
   var targetClass = $(d3.event.target).attr("class");
 
+  // make visible the summary and node icon
+
   vis
     .selectAll(".summaryText, .nodeActionIcon")
     .filter(function (d) {return d == node;})
     .style("visibility", "visible");
+
+  // set posiont of summar text based on node icon postion on the page
 
   vis
     .selectAll(".summaryTextObject")
@@ -297,18 +294,33 @@ function mouseoverNode(node, index)
   fadeToOpacity(node, ".nodeIcon", nodeIconFadeTo);
   fadeToOpacity(node, ".link", linkFadeTo);
 
-  // sort selected element to the top of the view
+  // if this is a node icon, sort selected element to the top of the view
 
   if (targetClass == "nodeIcon")
       moveToTop(node);
+}
+
+function mouseoutNode(node)
+{
+  // hide summar, node action icon and click text
+
+  vis
+    .selectAll(".summaryText, .nodeActionIcon, .clickText")
+    .filter(function (d) {return d == node;})
+    .style("visibility", "hidden");
+
+  // fade everything else back up to normal opacity
+
+  fadeToOpacity(node, ".nodeIcon", 1);
+  fadeToOpacity(node, ".link", 1);
 }
 
 function moveToTop(node)
 {
   // get all the nodes
 
-  var nodes = vis.selectAll(".node")
-
+ var nodes = vis.selectAll(".node");
+  
   // figure out if our target node is alreayd last
 
   var lastIndex = nodes[0].length - 1;
@@ -344,16 +356,6 @@ function moveToTop(node)
   });
 }
 
-function mouseoutNode(node)
-{
-  vis
-    .selectAll(".summaryText, .nodeActionIcon, .clickText")
-    .filter(function (d) {return d == node;})
-    .style("visibility", "hidden");
-
-  fadeToOpacity(node, ".nodeIcon", 1);
-  fadeToOpacity(node, ".link", 1);
-}
 
 function fadeToOpacity(allBut, type, fadeTo)
 {

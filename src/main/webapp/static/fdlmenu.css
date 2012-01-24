@@ -11,16 +11,22 @@
 
 p
 {
-  margin: 0.5em;
+  margin: 0.5em 0em 1em 0em;
+  padding: 0;
 }
 
 table
 {
   width: 100%;
+  margin: 0;
+  padding: 0;
+  border-spacing: 0;
 }
 
 td
 {
+  margin: 0;
+  padding: 0;
 }
 
 .nodeMenu
@@ -31,20 +37,23 @@ td
 .nodeMenu > a:visited
 {
   color: #666;
+  text-decoration: none;
 }
 
 .nodeMenu > a:link
 {
   color: #666;
+  text-decoration: none;
 }
 
 .summaryText, .summaryTextObject
 {
+  opacity: 1;
   cursor: move;
   border-radius: 15px;
-  background-color: red;
   background: rgba(0,0,0,0.05);
-  padding: 0.5em;
+  padding: 0.5em 1em 0em 1em;
+  margin: 0;
 }
 
 .clickText
