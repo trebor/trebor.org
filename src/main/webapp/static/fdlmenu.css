@@ -46,13 +46,19 @@ td
   text-decoration: none;
 }
 
-.summaryText, .summaryTextObject
+.summaryText
 {
   opacity: 1;
   cursor: move;
   border-radius: 15px;
   background: rgba(0,0,0,0.05);
   padding: 0.5em 1em 0em 1em;
+  margin: 0;
+}
+
+.summaryTextObject
+{
+  padding: 0;
   margin: 0;
 }
 
