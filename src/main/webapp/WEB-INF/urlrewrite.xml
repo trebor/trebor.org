@@ -6,13 +6,33 @@
 
 <urlrewrite>
   <rule>
+    <from>^/fdl/?$</from>
+    <to last="true" type="redirect">/fdl/home</to>
+  </rule>
+
+  <rule>
+    <from>^/fdl/([a-zA-Z0-9_]+)/$</from>
+    <to last="true" type="redirect">/fdl/$1</to>
+  </rule>
+
+  <rule>
     <from>^/fdl/([a-zA-Z0-9_]+)$</from>
     <to last="true">/static/fdlmenu.html?page=$1</to>
   </rule>
   
   <rule>
-    <from>^/fdl/(.*)$</from>
+    <from>^/fdl/(.+)$</from>
     <to last="true">/static/$1</to>
+  </rule>
+
+  <rule>
+    <from>^/map/?$</from>
+    <to last="true" type="redirect">/map/home</to>
+  </rule>
+  
+  <rule>
+    <from>^/map/([a-zA-Z0-9_]+)/$</from>
+    <to last="true" type="redirect">/map/$1</to>
   </rule>
 
   <rule>
@@ -21,7 +41,7 @@
   </rule>
   
   <rule>
-    <from>^/map/(.*)$</from>
+    <from>^/map/(.+)$</from>
     <to last="true">/static/$1</to>
   </rule>
   

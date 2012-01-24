@@ -42,7 +42,7 @@ public class TreborResource
   @Produces(MediaType.TEXT_HTML)
   public Response rootRedirect() throws URISyntaxException
   {
-    return Response.seeOther(new URI("http:static/fdlmenu.html?page=home")).build();
+    return Response.seeOther(new URI("http:/fdl")).build();
   }
   
   public void setTreborService(TreborService treborService)
