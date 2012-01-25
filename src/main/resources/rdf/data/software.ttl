@@ -132,7 +132,7 @@ _:trebor_org_kids   a                    rdfs:Container;
 
 	
 _:head              a                   too:treeNode;
-                    too:hasName         "www-ui";
+                    too:hasName         "trebor_ui";
                     too:hasTitle        "the front end";
                     too:hasNodeIcon     "horse-head";
                     too:hasNodeParent   "trebor";
@@ -150,7 +150,7 @@ this approach permits page elements to be styled with traditional
 """.
 
 _:body              a                   too:treeNode;
-                    too:hasName         "www-service";
+                    too:hasName         "trebor_service";
                     too:hasTitle        "the service";
                     too:hasNodeIcon     "horse-body";
                     too:hasNodeParent   "trebor";
@@ -185,7 +185,7 @@ by
 """.
 
 _:tail              a                   too:treeNode;
-                    too:hasName         "www-store";
+                    too:hasName         "trebor_store";
                     too:hasTitle        "the back end";
                     too:hasNodeIcon     "horse-ass";
                     too:hasNodeParent   "trebor";
