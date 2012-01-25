@@ -32,7 +32,7 @@ _:early_years       a                   too:treeNode;
                     too:hasTitle        "the early years";
                     too:hasNodeIcon     "baby";
                     too:hasNodeChildren _:early_kids;
-                    too:hasNodeParent   "home";
+                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
@@ -52,7 +52,7 @@ _:cybermation       a                   too:treeNode;
                     too:hasName         "cybermation";
                     too:hasTitle        "cybermation, inc.";
                     too:hasNodeIcon     "cybermation";
-                    too:hasNodeParent   "work";
+                    too:hasNodeParent   "early_years";
                     too:hasNodeSummary
 
 """
@@ -70,7 +70,7 @@ _:workframe         a                   too:treeNode;
                     too:hasName         "workframe";
                     too:hasTitle        "workframe, inc.";
                     too:hasNodeIcon     "workframe";
-                    too:hasNodeParent   "work";
+                    too:hasNodeParent   "early_years";
                     too:hasNodeSummary
 
 """
@@ -93,7 +93,7 @@ _:netsource         a                   too:treeNode;
                     too:hasName         "netsource";
                     too:hasTitle        "netsource, inc.";
                     too:hasNodeIcon     "netsource";
-                    too:hasNodeParent   "work";
+                    too:hasNodeParent   "early_years";
                     too:hasNodeSummary
 
 """

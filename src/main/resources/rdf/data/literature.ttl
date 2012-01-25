@@ -78,7 +78,7 @@ _:understandingcomics a                 too:treeNode;
                     too:hasNodeSummary
 
 """
-[[wikipedia:Scott_McCloud|mccloud]] exposes techniques used in comics that exploite 
+[[wikipedia:Scott_McCloud|mccloud]] exposes techniques used in comics that exploit 
 features of human cognition.   this book helped to solidify my understanding of visual 
 [http://courses.washington.edu/hypertxt/cgi-bin/book/wordsimages/wordsimages.html abstraction].
 i found his concept of
