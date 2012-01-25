@@ -132,6 +132,7 @@ function update()
   
   link.enter()
     .insert("line", ".node")
+    .style("visibility", "hidden")
     .attr("class", "link")
     .attr("x1",  function(d) {return d.source.x;})
     .attr("y1", function(d) {return d.source.y;})
@@ -495,6 +496,7 @@ function tick()
   // update link position
     
   link
+    .style("visibility", "visible")
     .attr("x1", function(d) {return d.source.x;})
     .attr("y1", function(d) {return d.source.y;})
     .attr("x2", function(d) {return d.target.x;})
