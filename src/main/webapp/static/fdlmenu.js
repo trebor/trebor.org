@@ -133,7 +133,6 @@ function update()
   link.enter()
     .insert("line", ".node")
     .attr("class", "link")
-    .style("visibility", "hidden")
     .attr("x1",  function(d) {return d.source.x;})
     .attr("y1", function(d) {return d.source.y;})
     .attr("x2", function(d) {return d.target.x;})
@@ -199,9 +198,24 @@ function update()
     .attr("class", "clickText")
     .html(getNodeClickText);
 
+  var text = en.filter(function(d) {return d.title || d.summary;});
+
+  text
+    .append("svg:rect")
+    .attr("class", "summaryBackground")
+    .style("visibility", "hidden")
+    .attr("x", assignSummaryPositionX)
+    .attr("y", assignSummaryPositionY)
+    .attr("rx", "15px")
+    .attr("ry", "15px")
+    .attr("width", summaryBoxEmWide + "em")
+    .attr("height", summaryBoxEmHigh + "em")
+    .attr("opacity", 0.05)
+    .attr("fill", "black");
+
   // add summary text
 
-  var text = en.filter(function(d) {return d.title || d.summary;})
+  text
     .append("svg:foreignObject")
     .attr("class", "summaryTextObject")
     .attr("x", assignSummaryPositionX)
@@ -210,8 +224,11 @@ function update()
     .attr("width", summaryBoxEmWide + "em")
     .attr("height", summaryBoxEmHigh + "em")
     .append("xhtml:body")
+    .style("visibility", "hidden")
     .attr("class", "summaryText")
     .html(nodeHtml);
+
+
 
   // remove old nodes
   
@@ -279,17 +296,18 @@ function mouseoverNode(node, index)
   // make visible the summary and node icon
 
   vis
-    .selectAll(".summaryText, .nodeActionIcon")
+    .selectAll(".summaryText, .summaryBackground, .nodeActionIcon")
     .filter(function (d) {return d == node;})
     .style("visibility", "visible");
 
-  // set posiont of summar text based on node icon postion on the page
+  // set posiont of summary text based on node icon postion on the page
 
   vis
-    .selectAll(".summaryTextObject")
+    .selectAll(".summaryTextObject, .summaryBackground")
     .filter(function (d) {return d == node;})
     .attr("x", assignSummaryPositionX)
-    .attr("y", assignSummaryPositionY);
+    .attr("y", assignSummaryPositionY)
+    .attr("height", getTextHeight);
 
   // found out the other nodes and edges
 
@@ -302,12 +320,35 @@ function mouseoverNode(node, index)
       moveToTop(node);
 }
 
+function getTextHeight(node)
+{
+  var children1 = $(this).parent().children();
+  for (var c1 in children1)
+  {
+    var child1 = $(children1[c1]);
+    if (child1.attr("class") == "summaryTextObject")
+    {
+      var children2 = child1.children();
+      for (var c2 in children2)
+      {
+        var child2 = $(children2[c2]);
+        if (child2.attr("class") == "summaryText")
+          return $(child2).height();
+      }
+    }
+  }
+  
+  // in case of emergency, return something resonable
+
+  return 300;
+}
+
 function mouseoutNode(node)
 {
   // hide summar, node action icon and click text
 
   vis
-    .selectAll(".summaryText, .nodeActionIcon, .clickText")
+    .selectAll(".summaryText, .summaryBackground, .nodeActionIcon, .clickText")
     .filter(function (d) {return d == node;})
     .style("visibility", "hidden");
 
@@ -392,19 +433,7 @@ function selectIconName(node)
     node.clickAct = "collapse";
     iconName = "collapse";
   }    
-  else if (node.link)
-  {
-      if (isLocalUrl(node.link))
-      {
-          node.clickAct = "link";
-          iconName = "inlink";
-      }
-      else
-      {
-          node.clickAct = "exteranl link";
-          iconName = "link";
-      }
-  }
+
   else if (node.image)
   {
     node.clickAct = "view image";
@@ -466,12 +495,10 @@ function tick()
   // update link position
     
   link
-    .style("visibility", "visible")
     .attr("x1", function(d) {return d.source.x;})
     .attr("y1", function(d) {return d.source.y;})
     .attr("x2", function(d) {return d.target.x;})
     .attr("y2", function(d) {return d.target.y;});
-
 }
 
 function weight(a, b, aWeight)
