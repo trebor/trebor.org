@@ -6,6 +6,11 @@
 
 <urlrewrite>
   <rule>
+    <from>^/?$</from>
+    <to last="true" type="redirect">/fdl/home</to>
+  </rule>
+
+  <rule>
     <from>^/fdl/?$</from>
     <to last="true" type="redirect">/fdl/home</to>
   </rule>

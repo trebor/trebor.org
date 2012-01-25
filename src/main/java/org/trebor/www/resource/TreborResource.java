@@ -38,13 +38,6 @@ public class TreborResource
     return Response.ok(mTreborService.getMenuNode(page)).build();
   }
 
-  @GET
-  @Produces(MediaType.TEXT_HTML)
-  public Response rootRedirect() throws URISyntaxException
-  {
-    return Response.seeOther(new URI("http:/fdl")).build();
-  }
-  
   public void setTreborService(TreborService treborService)
   {
     mTreborService = treborService;
