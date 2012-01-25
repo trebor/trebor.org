@@ -21,9 +21,9 @@ most of these projects are released under one open source license or another.
 
 
 _:software_kids     a                    rdfs:Container;
-                    rdf:_1               _:splink;
-                    rdf:_2               _:sarynpaint;
-                    rdf:_3	             _:swarm;
+                    rdf:_1               _:sarynpaint;
+                    rdf:_2	             _:swarm;
+                    rdf:_3               _:splink;
                     rdf:_4	             _:trebor_org.
 
                     
