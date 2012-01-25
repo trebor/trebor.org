@@ -19,7 +19,7 @@ public class MarkupRenderer extends WikiModel
   {
     public String getFunctionDoc()
     {
-      return "title, dates, description";
+      return "title, dates, description, skills";
     }
 
     public String parseFunction(List<String> parts, IWikiModel model,
@@ -39,6 +39,20 @@ public class MarkupRenderer extends WikiModel
     }
   };
   
+  private static final ITemplateFunction NO_WRAP_TEMPLATE = new ITemplateFunction()
+  {
+    public String getFunctionDoc()
+    {
+      return "text to not wrap";
+    }
+
+    public String parseFunction(List<String> parts, IWikiModel model,
+      char[] src, int beginIndex, int endIndex) throws IOException
+    {
+      return parts.get(0).replace(" ", "&nbsp;");
+    }
+  };
+  
   private static Configuration mConfiguration = new Configuration()
   {
     {
@@ -47,9 +61,9 @@ public class MarkupRenderer extends WikiModel
       addInterwikiLink("sitemap", MAP_BASE + "${title}");
       addInterwikiLink("static", STATIC_BASE + "${title}");
       addTemplateFunction("resume", RESUME_TEMPLATE);
+      addTemplateFunction("nowrap", NO_WRAP_TEMPLATE);
     }
   };
-
 
   
   public MarkupRenderer()

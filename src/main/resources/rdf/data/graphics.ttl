@@ -59,26 +59,24 @@ _:coolneon_logo     a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-[http://www.coolneon.com/wp-content/gallery/cool-neon-elves/bencrop.gif benny] 
-asked me to create a logo for his company
-[http://www.coolneon.com/ coolneon].
-it is intended to show that coolneon el-wire is cool to the touch, and was inspired by 
-[[wikipedia:Mudra|mudra]].
-benny worked with me to polish the logo for real-world use.
+i created the logo for [http://www.coolneon.com/ coolneon].
+it is intended to show that their core product, el-wire, is cool to the touch, 
+and was inspired by [[wikipedia:Mudra|mudra]].
 """.
 
 
 _:social_revolution_logo a              too:treeNode;
                     too:hasName         "social_revolution_logo";
-                    too:hasTitle        "social revolution medallion";
+                    too:hasTitle        "{{nowrap:social revolution logo}}";
                     too:hasNodeIcon     "social-revolution";
                     too:hasNodeParent   "graphics";
                     too:hasNodeSummary
 
 """
-[http://www.coolneon.com/wp-content/gallery/cool-neon-elves/bencrop.gif benny] 
-asked me to create a head-tube medallion for his amazing \"social revolution\" tricycle project.
-it seats up to three people, side by side, with two wheels up front and one in the back for steering.
+i created a [[wikipedia:Head_tube|head-tube]] medallion for
+[http://www.coolneon.com/ coolneon]'s
+\"social revolution\" tricycle project.  it seats up to three people, side by side,
+with two wheels up front and one in the back for steering.
 """.
 
 
