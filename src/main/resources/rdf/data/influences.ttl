@@ -14,8 +14,8 @@ toi:influences      a                   too:treeNode;
                     too:hasNodeParent   "home";
                     too:hasNodeSummary
 """
-as much as i'd like to think of myself as fountain of new ideas, often those ideas are 
-simple rehash of work of better minds.  what follows is a woefully incomplete list of 
+as much as i'd like to think of myself as a fountain of new ideas, my ideas are 
+a rehash of the work of better minds.  what follows is a woefully incomplete list of 
 sources from which i draw.
 """.
 

@@ -16,12 +16,13 @@ toi:nasa            a                   too:treeNode;
 
 """
 {{resume:programmer/analyst|jan '97 - oct '08|
-i spent about 10 years working at the ames research center. during that time i learned a
-lot, and had an enormous amount of fun.
+i spent about 10 years working at the ames research center, and during that time i had 
+an enormous amount of fun.  i learned important lessons, such as:
 
-of the many lessons learned, the most important
-was that there is much to know, and i will only ever capture a thin sliver of it all.
-oh, and also to listen with my ears, rather then my mouth.
+* there is a great deal to know about the world, and i can expect to capture only a thin sliver of it all.
+* it is better to listen with my ears, rather than my mouth.
+
+expand this node to see details about my work at ames.
 |c++,java,lisp,pascal}}
 """.
 
@@ -45,7 +46,7 @@ i worked closely with
 to implement experiments for
 [[wikipedia:Basic_research|basic]]
 [[wikipedia:Dual-task_paradigm|dual task]]
-research and 
+research, and 
 [[wikipedia:Air_traffic_control|air traffic control]]
 applications.
 |pascal, c++
@@ -63,11 +64,11 @@ _:apex              a                   too:treeNode;
 {{resume:programmer/analyst|'00 - '06|
 i worked with the
 [http://www.ai.sri.com/project/APEX apex]
-group, lead by
+group, led by
 [http://www.ai.sri.com/people/freed michael freed]
 to develop the apex system.
 
-using apex i implemented the high level behavior for joint nasa/army autonomous 
+using apex i implemented the high level behavior for the joint nasa/army autonomous 
 rotorcraft project, described in this 
 [http://human-factors.arc.nasa.gov/apex/docs/papers/ahs05/AHS05.pdf paper]
 and [[youtube:c3PGbWWHwVw|video]].
@@ -88,7 +89,7 @@ i worked with the
 [http://sourceforge.net/apps/mediawiki/plexil/index.php?title=Main_Page plexil]
 group to develop the language and supporting software.  i built a graphical
 [http://sourceforge.net/apps/mediawiki/plexil/index.php?title=Viewing_Plan_Execution interface]
-to view and control plan execution. you can see a screen shot
-[http://sourceforge.net/apps/mediawiki/plexil/nfs/project/p/pl/plexil/a/a8/Stopatbkpoint.jpg here].
+to view and control plan execution. here can see a plexil interface
+[http://sourceforge.net/apps/mediawiki/plexil/nfs/project/p/pl/plexil/a/a8/Stopatbkpoint.jpg screen shot].
 }}
 """.

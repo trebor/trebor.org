@@ -4,7 +4,6 @@
 @prefix  too: <http://trebor.org/ns#>.
 @prefix  toi: <http://trebor.org/instance/>.
 
-
 # --- literature --- #
 
 toi:literature      a                   too:treeNode;
@@ -48,12 +47,11 @@ _:elementsofstyle   a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-this book, freely available
-[http://www.bartleby.com/141/ here],
-taught me how to write.  it contains simple demonstrations of how to transform 
+this book, which is [http://www.bartleby.com/141/ freely available],
+taught me how to write. it contains simple demonstrations of how to transform 
 bad sentences into good.
 "[http://www.bartleby.com/141/strunk5.html#13 omit needless words]."
-has become a core element of my aesthetic.
+has become a core part of my aesthetic.
 """.
 
 _:crowdsandpower    a                   too:treeNode;
@@ -81,7 +79,7 @@ _:understandingcomics a                 too:treeNode;
 
 """
 [[wikipedia:Scott_McCloud|mccloud]] exposes techniques used in comics that exploite 
-features of human cognition.   this book help to solidify my understanding of visual 
+features of human cognition.   this book helped to solidify my understanding of visual 
 [http://courses.washington.edu/hypertxt/cgi-bin/book/wordsimages/wordsimages.html abstraction].
 i found his concept of
 [http://mediawiki.middlebury.edu/wiki/MIDDMedia/Closure_in_comics closure]

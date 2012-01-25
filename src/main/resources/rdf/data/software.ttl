@@ -97,9 +97,9 @@ orb swarm in black rock city in 2008. (c) 2008 nk, burningcam.com.
 i contributed to the orb swarm
 [http://wiki.orbswarm.com/index.php?title=In_The_Media robotic-art] 
 project. i worked towards an effort to advance orbs from remote to
-autonomous control.  we never quite got there, but
-[http://wiki.orbswarm.com/index.php?title=AutomonyImages here]
-are some results from field tests.
+autonomous control.  we never quite got there, but here
+are some results from 
+[http://wiki.orbswarm.com/index.php?title=AutomonyImages field tests].
 specifically i built an orb simulator and a choreography editor,
 which i hope to re-purpose to other projects.
 """.

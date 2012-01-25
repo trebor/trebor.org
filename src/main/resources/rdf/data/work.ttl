@@ -15,8 +15,9 @@ toi:work            a                   too:treeNode;
                     too:hasNodeSummary
 
 """
-i am a software engineer by profession.  my resume is available as a
-[[static:assets/RobertHarrisResume.pdf|pdf]] or you can explore further here.
+i am a software engineer by profession.  my 
+[[static:assets/RobertHarrisResume.pdf|resume]] is available as a pdf,
+or you can explore further here.
 """.
 
 _:work_kids         a                    rdfs:Container;
@@ -62,7 +63,7 @@ form data in those fields at a later time.
 }}
 
 {{resume:software engineer|jan '89 - sep '94|
-i lead a team of developers who built agents to automate common tasks for an archaic
+i led a team of developers who built agents to automate common tasks for an archaic
 [[wikipedia:Store_and_forward|store-and-forward]]
 e-mail system.
 |c++
@@ -79,7 +80,7 @@ _:netsource         a                   too:treeNode;
 """
 {{resume:software engineer|sep '94 - jan '97|
 i developed real-time, fault tolerant telephony systems for international
-[[wikipedia:Callback_(telecommunications)|call-back]] applications.
+[[wikipedia:Callback_(telecommunications)|callback]] applications.
 |c++
 }}
 """.
