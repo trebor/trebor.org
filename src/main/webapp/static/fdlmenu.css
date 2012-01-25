@@ -11,7 +11,7 @@
 
 p
 {
-  margin: 0.5em 0em 1em 0em;
+  margin: .8em 0em .8em 0em;
   padding: 0;
 }
 
@@ -29,28 +29,28 @@ td
   padding: 0;
 }
 
-.nodeMenu
+.nodeMenu > a
 {
   font-size: smaller;
+  padding: 0 .4em 0 .4em;
+  border-radius: 0.2em;
+  text-decoration: none;
+  color: #666;
+  margin: 0;
 }
 
-.nodeMenu > a:visited
+.nodeMenu > a:hover
 {
-  color: #666;
-  text-decoration: none;
-}
-
-.nodeMenu > a:link
-{
-  color: #666;
-  text-decoration: none;
+  color: #222;
+  background: #AAA;
+  font-style: normal;
 }
 
 .summaryText
 {
   cursor: move;
   background: none;
-  padding: 0.25em 1em 0em 1em;
+  padding: 0em .8em 0em .8em;
   margin: 0;
 }
 
@@ -58,6 +58,12 @@ td
 {
   padding: 0;
   margin: 0;
+}
+
+.summaryBackground
+{
+  fill: black;
+  opacity: 0.05;
 }
 
 .clickText

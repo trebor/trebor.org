@@ -207,12 +207,12 @@ function update()
     .style("visibility", "hidden")
     .attr("x", assignSummaryPositionX)
     .attr("y", assignSummaryPositionY)
-    .attr("rx", "15px")
-    .attr("ry", "15px")
+    .attr("rx", ".4em")
+    .attr("ry", ".4em")
     .attr("width", summaryBoxEmWide + "em")
-    .attr("height", summaryBoxEmHigh + "em")
-    .attr("opacity", 0.05)
-    .attr("fill", "black");
+    .attr("height", summaryBoxEmHigh + "em");
+//     .attr("opacity", 0.05)
+//     .attr("fill", "black");
 
   // add summary text
 
@@ -260,10 +260,10 @@ function nodeHtml(node)
   var summary = node.summary ? node.summary : "";
   var menu  = 
     "<p class=\"nodeMenu\" align=\"right\">" +
-    (root.name != "home"                     ? home  + "&nbsp;" : "") +
-    (node.name == root.name && parentName    ? up    + "&nbsp;" : "") +
-    (node.name != root.name                  ? focus + "&nbsp;" : "") +
-    (true                                    ? site  + "&nbsp;" : "") +
+    (root.name != "home"                     ? home  : "") +
+    (node.name == root.name && parentName    ? up    : "") +
+    (node.name != root.name                  ? focus : "") +
+    (true                                    ? site  : "") +
     "</p>";
   var table = 
     "<table class=\"summaryBanner\">" +

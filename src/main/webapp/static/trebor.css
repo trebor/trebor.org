@@ -36,10 +36,16 @@ body, html, #lbBottom /* for slimbox */
 
 a:visited
 {
- color:#444;
+  color: #444;
 }
 
 a:link
 {
-  color:#000;
+  color: #000;
 }
+
+a:hover
+{
+  color: #800;
+}
+
