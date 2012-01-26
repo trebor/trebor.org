@@ -22,9 +22,10 @@ most of these projects are released under one open source license or another.
 
 _:software_kids     a                    rdfs:Container;
                     rdf:_1               _:sarynpaint;
-                    rdf:_2	             _:swarm;
-                    rdf:_3               _:splink;
-                    rdf:_4	             _:trebor_org.
+                    rdf:_2               _:freesand;
+                    rdf:_3	             _:swarm;
+                    rdf:_4               _:splink;
+                    rdf:_5	             _:trebor_org.
 
                     
 _:splink            a                   too:treeNode;
@@ -78,6 +79,24 @@ saryn paint is a pure java paint program for very young children.
 i wrote it for my friend saryn who, at the time, could move the mouse, but was unable to click.
 later she recorded the audio cues used in the program.
 """.
+
+
+_:freesand          a                   too:treeNode;
+                    too:hasName         "freesand";
+                    too:hasTitle        "[http://code.google.com/p/freesand/ freesand]";
+                    too:hasNodeIcon     "freesand";
+                    too:hasNodeParent   "software";
+                    too:hasNodeSummary
+
+"""
+freesand is a pure java implementation of a cellular automata simulation inspired by
+[[wikipedia:Falling-sand_game|falling sand games]].  you can download the
+[http://code.google.com/p/freesand/downloads/detail?name=freesand.dmg mac disk image] or 
+[http://code.google.com/p/freesand/downloads/detail?name=freesand.jar any os jar] 
+versions now.  be careful, it can be a bit of a time sink.
+""".
+
+
 
 
 _:swarm             a                   too:treeNode;
