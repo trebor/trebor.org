@@ -7,7 +7,8 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <openrdf-version>2.5.0</openrdf-version>
+    <openrdf-version>2.6.3</openrdf-version>
+    <alibaba-version>2.0-beta14</alibaba-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jersey.version>1.7</jersey.version>
   </properties>
@@ -89,7 +90,7 @@
     <dependency>
       <groupId>org.openrdf.alibaba</groupId>
       <artifactId>alibaba-repository-object</artifactId>
-      <version>2.0-beta14</version>
+      <version>${alibaba-version}</version>
     </dependency>
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
