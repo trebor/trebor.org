@@ -91,9 +91,10 @@ _:freesand          a                   too:treeNode;
 """
 freesand is a pure java implementation of a cellular automata simulation inspired by
 [[wikipedia:Falling-sand_game|falling sand games]].  you can download the
-[http://code.google.com/p/freesand/downloads/detail?name=freesand.dmg mac disk image] or 
-[http://code.google.com/p/freesand/downloads/detail?name=freesand.jar any os jar] 
-versions now.  be careful, it can be a bit of a time sink.
+[http://code.google.com/p/freesand/downloads/detail?name=freesand.dmg disk image] 
+for mac, or the
+[http://code.google.com/p/freesand/downloads/detail?name=freesand.jar jar] 
+for any os.  be careful, it can be a bit of a time sink.
 """.
 
 
