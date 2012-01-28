@@ -20,7 +20,7 @@ public class TreborService
 
   @InjectParam
   private static TreborStore mStore;
-  
+
   public MenuTreeNode getMenuNode(String name) throws MalformedQueryException, RepositoryException, NoResultException, MultipleResultException, QueryEvaluationException
   {
     return mStore.getTreeNode(name).copy();

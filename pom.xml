@@ -26,6 +26,17 @@
       </properties>
     </profile>
     <profile>
+      <id>test</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <tomcat-server>local</tomcat-server>
+        <tomcat-url>http://localhost:8080/manager/text</tomcat-url>
+        <tomcat-service-name>/trebor-test</tomcat-service-name>
+      </properties>
+    </profile>
+    <profile>
       <id>remote</id>
       <activation>
         <activeByDefault>false</activeByDefault>
@@ -208,6 +219,13 @@
     	<groupId>org.tuckey</groupId>
     	<artifactId>urlrewritefilter</artifactId>
     	<version>3.2.0</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>commons-configuration</groupId>
+    	<artifactId>commons-configuration</artifactId>
+    	<version>1.7</version>
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>

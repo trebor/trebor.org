@@ -3,11 +3,14 @@ package org.trebor.www.store;
 import java.io.IOException;
 import java.util.List;
 
+import com.sun.jersey.spi.resource.Singleton;
+
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.model.WikiModel;
 import info.bliki.wiki.template.ITemplateFunction;
 
+@Singleton
 public class MarkupRenderer extends WikiModel
 {
   public static final String STATIC_BASE = "/static/";
