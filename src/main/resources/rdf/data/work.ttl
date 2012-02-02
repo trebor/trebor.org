@@ -60,7 +60,7 @@ _:cybermation       a                   too:treeNode;
 i spent a summer building
 [[wikipedia:Device_driver|device drivers]]
 for a small company which developed software to scan, create and edit graphics for signs, 
-and drive hardware to render those signs in paper, vinyl, plastic and steal.
+and drive hardware to render those signs in paper, vinyl, plastic and steel.
 |c
 }}
 """.
