@@ -10,7 +10,10 @@ toi:luminaries      a                   too:treeNode;
                     too:hasName         "luminaries";
                     too:hasTitle        "the luminaries";
                     too:hasNodeIcon     "spotlight";
-                    too:hasNodeChildren _:luminaries_kids;
+                    too:hasNodeChild     _:norman;
+                    too:hasNodeChild     _:dawkins;
+                    too:hasNodeChild     _:pinker;
+                    too:hasNodeChild     _:tufte;
 	                  too:hasNodeParent   "influences";
                     too:hasNodeSummary
 """
@@ -20,12 +23,6 @@ many of the ideas espoused by these thinkers have been accepted and absorbed int
 our understanding of how the world works.  it can be easy to forget that their work
 was once novel or controversial.
 """.
-
-_:luminaries_kids   a                    rdfs:Container;
-                    rdf:_1               _:norman;
-                    rdf:_2               _:dawkins;
-                    rdf:_3               _:pinker;
-                    rdf:_4               _:tufte.
 
 _:norman				    a                   too:treeNode;
                     too:hasName         "norman";

@@ -10,7 +10,11 @@ toi:graphics        a                   too:treeNode;
                     too:hasName         "graphics";
                     too:hasTitle        "graphic design";
                     too:hasNodeIcon     "vitruvian";
-                    too:hasNodeChildren _:graphics_kids;
+                    too:hasNodeChild     _:trebor_logo;
+                    too:hasNodeChild     _:freesand_logo;
+                    too:hasNodeChild     _:coolneon_logo;
+                    too:hasNodeChild     _:social_revolution_logo;
+                    too:hasNodeChild     _:xuggle_logo;
                     too:hasNodeParent   "home";
                     too:hasNodeSummary
 
@@ -18,14 +22,6 @@ toi:graphics        a                   too:treeNode;
 i am by no means a professional graphic designer, but i enjoy visual work, especially logo design.
 """.
                     
-_:graphics_kids     a                    rdfs:Container;
-                    rdf:_1               _:trebor_logo;
-                    rdf:_2               _:freesand_logo;
-                    rdf:_3               _:coolneon_logo;
-                    rdf:_4               _:social_revolution_logo;
-                    rdf:_5               _:xuggle_logo.
-
-
 _:trebor_logo       a                   too:treeNode;
                     too:hasName         "trebor_logo";
                     too:hasTitle        "the tat sign";

@@ -10,7 +10,11 @@ toi:software        a                   too:treeNode;
                     too:hasName         "software";
                     too:hasTitle        "software projects";
                     too:hasNodeIcon     "disk";
-                    too:hasNodeChildren _:software_kids;
+                    too:hasNodeChild     _:sarynpaint;
+                    too:hasNodeChild     _:freesand;
+                    too:hasNodeChild     _:swarm;
+                    too:hasNodeChild     _:splink;
+                    too:hasNodeChild     _:trebor_org;
                     too:hasNodeParent   "home";
                     too:hasNodeSummary
 
@@ -19,15 +23,6 @@ the following are some of the software projects i've worked on for fun over the 
 most of these projects are released under one open source license or another.
 """.
 
-
-_:software_kids     a                    rdfs:Container;
-                    rdf:_1               _:sarynpaint;
-                    rdf:_2               _:freesand;
-                    rdf:_3	             _:swarm;
-                    rdf:_4               _:splink;
-                    rdf:_5	             _:trebor_org.
-
-                    
 _:splink            a                   too:treeNode;
                     too:hasName         "splink";
                     too:hasTitle        "[https://github.com/treboresque/Splink/wiki splink]";

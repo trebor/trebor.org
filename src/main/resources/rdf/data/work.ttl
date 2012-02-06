@@ -10,7 +10,10 @@ toi:work            a                   too:treeNode;
                     too:hasName         "work";
                     too:hasTitle        "professional work";
                     too:hasNodeIcon     "anvil";
-                    too:hasNodeChildren _:work_kids;
+                    too:hasNodeChild     _:early_years;
+                  	too:hasNodeChild     toi:nasa;
+                    too:hasNodeChild     _:xuggle;
+                    too:hasNodeChild     _:connectsolutions;
                     too:hasNodeParent   "home";
                     too:hasNodeSummary
 
@@ -20,18 +23,13 @@ i am a software engineer by profession.  my
 or you can explore further here.
 """.
 
-_:work_kids         a                    rdfs:Container;
-                    rdf:_1               _:early_years;
-                  	rdf:_2               toi:nasa;
-                    rdf:_3               _:xuggle;
-                    rdf:_4               _:connectsolutions.
-                    
-
 _:early_years       a                   too:treeNode;
                     too:hasName         "early_years";
                     too:hasTitle        "the early years";
                     too:hasNodeIcon     "baby";
-                    too:hasNodeChildren _:early_kids;
+                    too:hasNodeChild     _:cybermation;
+                    too:hasNodeChild     _:workframe;
+                    too:hasNodeChild     _:netsource;
                     too:hasNodeParent   "work";
                     too:hasNodeSummary
 
@@ -41,11 +39,6 @@ expand here to see some of my earlier work experiences.
 |c,c++,prolog
 }}
 """.
-
-_:early_kids        a                    rdfs:Container;
-                    rdf:_1               _:cybermation;
-                    rdf:_2               _:workframe;
-                    rdf:_3               _:netsource.
 
 
 _:cybermation       a                   too:treeNode;

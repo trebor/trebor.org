@@ -10,7 +10,10 @@ toi:home            a                   too:treeNode;
                     too:hasName         "home";
                     too:hasTitle        "trebor.org";
                     too:hasNodeIcon     "tat";
-                    too:hasNodeChildren _:home_kids;
+                    too:hasNodeChild     toi:influences;
+                    too:hasNodeChild     toi:graphics;
+                    too:hasNodeChild     toi:software;
+                    too:hasNodeChild     toi:work;
                     too:hasNodeSummary
 
 """
@@ -22,8 +25,3 @@ feel free to move things around to suit your needs.
 here are details about how this [[trebor|site was built]].
 """.
 
-_:home_kids         a                    rdfs:Container;
-                    rdf:_1               toi:influences;
-                    rdf:_2               toi:graphics;
-                    rdf:_3               toi:software;
-                    rdf:_4               toi:work.                    

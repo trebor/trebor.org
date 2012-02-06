@@ -10,7 +10,8 @@ toi:influences      a                   too:treeNode;
                     too:hasName         "influences";
                     too:hasTitle        "influences";
                     too:hasNodeIcon     "influences";
-                    too:hasNodeChildren _:influences_kids;
+                    too:hasNodeChild     toi:luminaries;
+                    too:hasNodeChild     toi:literature;
                     too:hasNodeParent   "home";
                     too:hasNodeSummary
 """
@@ -19,10 +20,6 @@ a rehash of the work of better minds.  what follows is a woefully incomplete lis
 sources from which i draw.
 """.
 
-# i like to think i have original ideas, but those ideas are heavily influenced by the minds of those 
 
-_:influences_kids   a                    rdfs:Container;
-                    rdf:_1               toi:luminaries;
-                    rdf:_2               toi:literature.
-#                   rdf:_3               _:peers.
+
                     

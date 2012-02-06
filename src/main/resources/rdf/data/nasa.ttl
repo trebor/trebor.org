@@ -11,7 +11,9 @@ toi:nasa            a                   too:treeNode;
                     too:hasTitle        "[http://www.nasa.gov/centers/ames nasa ames]";
                     too:hasNodeIcon     "nasa-color";
                     too:hasNodeParent   "work";
-                    too:hasNodeChildren _:nasa_kids;
+                    too:hasNodeChild     _:coglab;
+                    too:hasNodeChild     _:apex;
+                  	too:hasNodeChild     _:plexil;
                     too:hasNodeSummary
 
 """
@@ -25,12 +27,6 @@ an enormous amount of fun.  i learned important lessons, such as:
 expand this node to see details about my work at ames.
 |c++,java,lisp,pascal}}
 """.
-
-_:nasa_kids         a                    rdfs:Container;
-                    rdf:_1               _:coglab;
-                    rdf:_2               _:apex;
-                  	rdf:_3               _:plexil.
-
 
 _:coglab            a                   too:treeNode;
                     too:hasName         "coglab";

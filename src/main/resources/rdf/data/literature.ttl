@@ -9,7 +9,13 @@
 toi:literature      a                   too:treeNode;
                     too:hasName         "literature";
                     too:hasTitle        "the literature";
-                    too:hasNodeChildren _:literature_kids;
+                    too:hasNodeChild     _:elementsofstyle;
+                    too:hasNodeChild     _:crowdsandpower;
+                   	too:hasNodeChild     _:understandingcomics;
+
+#                    too:hasNodeChild     _:recursiveuniverse;
+#                    too:hasNodeChild     _:everydaythings;
+
                     too:hasNodeIcon     "book";
                     too:hasNodeParent   "influences";
                     too:hasNodeSummary
@@ -17,14 +23,6 @@ toi:literature      a                   too:treeNode;
 """
 these are some of the books that have had a lasting effect on how i think about the world.
 """.
-
-_:literature_kids   a                    rdfs:Container;
-                    rdf:_1               _:elementsofstyle;
-                    rdf:_2               _:crowdsandpower;
-                   	rdf:_3							 _:understandingcomics.
-                   	
-#                    rdf:_4               _:recursiveuniverse.
-#                    rdf:_1               _:everydaythings;
 
 _:everydaythings    a                   too:treeNode;
                     too:hasName         "everydaythings";
