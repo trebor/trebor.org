@@ -42,7 +42,7 @@ import org.openrdf.rio.UnsupportedRDFormatException;
 
 public class RdfUtil
 {
-  private static final Logger logger = Logger.getLogger(RdfUtil.class);
+  private static final Logger log = Logger.getLogger(RdfUtil.class);
 
   public static final String COUNT_QUERY =
     "SELECT (count(?s) as ?count) WHERE {?s ?p ?o}";
@@ -132,7 +132,7 @@ public class RdfUtil
         f.close();
     }
 
-    logger.debug(String.format("loaded: %s - %d bytes", fullResourcePath,
+    log.debug(String.format("loaded: %s - %d bytes", fullResourcePath,
       buffer.length));
 
     return new String(buffer);
@@ -333,16 +333,16 @@ public class RdfUtil
   {
 
     int count = 0;
-    logger.debug("--- graph query result ---");
+    log.debug("--- graph query result ---");
     while (result.hasNext())
     {
       Statement row = result.next();
-      logger.debug(format("%s %s %s", shortUri(repository, row.getSubject()),
+      log.debug(format("%s %s %s", shortUri(repository, row.getSubject()),
         shortUri(repository, row.getPredicate()),
         shortUri(repository, row.getObject())));
       ++count;
     }
-    logger.debug("------- end graph --------");
+    log.debug("------- end graph --------");
     return count;
   }
 
@@ -350,7 +350,7 @@ public class RdfUtil
     throws QueryEvaluationException
   {
     int count = 0;
-    logger.debug("--- tuple query result ---");
+    log.debug("--- tuple query result ---");
     while (result.hasNext())
     {
       StringBuffer buffer = new StringBuffer();
@@ -358,10 +358,10 @@ public class RdfUtil
       for (String col : result.getBindingNames())
         buffer.append(shortUri(repository, row.getBinding(col).getValue()) +
           "  ");
-      logger.debug(buffer);
+      log.debug(buffer);
       ++count;
     }
-    logger.debug("------- end tuple --------");
+    log.debug("------- end tuple --------");
     return count;
   }
 

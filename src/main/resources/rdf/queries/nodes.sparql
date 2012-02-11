@@ -1,0 +1,55 @@
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+PREFIX toi:<http://trebor.org/instance/>
+PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX too:<http://trebor.org/ns#>
+
+SELECT 
+  ?name
+  ?parent
+  ?title
+  ?icon
+  ?image
+  ?summary
+  ?imageDescription
+WHERE
+{
+  # establish the name of the target node
+
+  bind("%s" as ?targetName)
+
+  # establish the target node and all it's children
+  # using property paths
+
+  ?target too:hasName ?targetName.
+  ?target too:hasNodeChild* ?node.
+
+  # get the node details
+
+  ?node too:hasName         ?name;
+        too:hasTitle        ?title;
+        too:hasNodeIcon     ?icon;
+        too:hasNodeSummary  ?summary.
+
+  # non-root nodes have parents
+
+  optional
+  {
+    ?parentNode too:hasNodeChild ?node.
+    ?parentNode too:hasName ?parent.
+  }
+
+  # some nodes have images
+
+  optional
+  {
+    ?node   too:hasImage            ?image.
+  }
+
+  # some images have descriptions
+
+  optional
+  {
+    ?node   too:hasImageDescription ?imageDescription.
+  }
+}

@@ -1,7 +1,6 @@
 package org.trebor.www.util;
 
 import java.io.File;
-import java.net.URL;
 import java.util.Iterator;
 
 import org.apache.commons.configuration.CompositeConfiguration;
@@ -19,11 +18,15 @@ public class TreborConfiguration extends CompositeConfiguration
 
   private static final String EXTERNAL_PROPERTIES = "/opt/trebor.org/trebor.properties";
   private static final String INTERNAL_PROPERTIES = "/trebor.properties";
+  
   public static final String RDF_REMOTE = "rdf.remote";
   public static final String RDF_REPOSITORY = "rdf.repository";
   public static final String RDF_HOST = "rdf.host";
   public static final String RDF_PORT = "rdf.port";
-
+  public static final String RDF_DATAFILES = "rdf.datafiles";
+  
+  public static final String DEFAULT_DATA_FILES = "/rdf/ontology/www.ttl, /rdf/ontology/trebor.ttl, /rdf/data/home.ttl, /rdf/data/influences.ttl, /rdf/data/luminaries.ttl, /rdf/data/literature.ttl, /rdf/data/peers.ttl, /rdf/data/graphics.ttl, /rdf/data/software.ttl, /rdf/data/work.ttl, /rdf/data/nasa.ttl";
+  
   public TreborConfiguration() throws ConfigurationException
   {
     // default properties
@@ -32,6 +35,7 @@ public class TreborConfiguration extends CompositeConfiguration
     setProperty(RDF_HOST, "localhost");
     setProperty(RDF_PORT, 8080);
     setProperty(RDF_REPOSITORY, "trebor.org");
+    setProperty(RDF_DATAFILES, DEFAULT_DATA_FILES);
 
     // if external properties exist, add them in
     
@@ -40,7 +44,7 @@ public class TreborConfiguration extends CompositeConfiguration
     
     // report used properties
 
-    log.info("final configuration start");
+    log.info("configuration:");
     @SuppressWarnings("unchecked")
     Iterator<String> keys = getKeys();
     while (keys.hasNext())
@@ -48,25 +52,19 @@ public class TreborConfiguration extends CompositeConfiguration
         String key = keys.next();
         log.info(String.format("  %s: %s", key, getProperty(key)));
     }
-    log.info("final configuration end");
   }
   
   private void appendProperties(String propertiesFileName) throws ConfigurationException
   {
-    URL resource = TreborConfiguration.class.getResource(propertiesFileName);
-    String canonicalName = resource == null
-      ? propertiesFileName
-      : resource.toString().split(":")[1];
+    log.info("searching for properties file: " + propertiesFileName);
+    File propertiesFile = Util.findResourceFile(propertiesFileName);
     
-    File propertiesFile = new File(canonicalName);
-    
-    log.info("searching for properties file: " + propertiesFile);
-    if (propertiesFile.exists())
+    if (propertiesFile != null && propertiesFile.exists())
     {
-      log.info("  loading: " + propertiesFile);
+      log.info("  found: " + propertiesFile);
       addConfiguration(new PropertiesConfiguration(propertiesFile));
     }
     else
-      log.info("  not found: " + propertiesFile);
+      log.info("  not found: " + propertiesFileName);
   }
 }

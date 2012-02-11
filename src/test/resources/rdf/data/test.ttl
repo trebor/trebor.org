@@ -1,0 +1,39 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  owl: <http://www.w3.org/2002/07/owl#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- ontology --- #
+
+too:index           a             owl:FunctionalProperty;
+                    rdfs:domain   too:treeNode.
+                    
+                    
+too:hasTitle        a     owl:FunctionalProperty;
+                    rdfs:domain   too:treeNode.
+
+too:hasNodeChild    a             rdf:Property;
+                    rdfs:domain   too:treeNode;
+                    rdfs:range    too:treeNode.
+
+
+
+# --- home node --- #
+
+toi:test            a                   too:treeNode;
+                    too:index           "testRoot";
+                    too:hasTitle        "test root";
+                    too:hasNodeChild    _:child2;
+                    too:hasNodeChild    _:child1.
+                    
+
+_:child1            a                   too:treeNode;
+                    too:index           "child1";
+                    too:hasTitle        "child 1".
+                    
+_:child2            a                   too:treeNode;
+                    too:index           "child2";
+                    too:hasTitle        "child 2".
+                    

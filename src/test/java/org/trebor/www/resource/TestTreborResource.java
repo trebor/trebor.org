@@ -1,9 +1,10 @@
-package org.trebor.www.dto;
+package org.trebor.www.resource;
 
 import static org.junit.Assert.assertEquals;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.trebor.www.dto.MenuTreeNode;
 
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.test.framework.JerseyTest;
@@ -12,10 +13,10 @@ public class TestTreborResource extends JerseyTest
 {
   @SuppressWarnings("unused")
   private static final Logger log = Logger.getLogger(TestTreborResource.class);
-
-  public TestTreborResource()
-  {
-    super("org.trebor.www.resource");
+  
+  public TestTreborResource() 
+  {    
+    super("org.trebor.www.resource");    
   }
     
   @Test
@@ -32,11 +33,14 @@ public class TestTreborResource extends JerseyTest
     
     WebResource webResource = resource();
     for (String[] data: dataSet)
-    {      
+    {
+      log.debug("query start. ");
+      long start = System.currentTimeMillis();
       MenuTreeNode ftn1 = webResource.path("/menu/" + data[0]).get(MenuTreeNode.class);
       assertEquals("node: " + data[0], data[0], ftn1.getName());
       assertEquals("node: " + data[0], data[1], ftn1.getParent());
       assertEquals("node: " + data[0], data[2], ftn1.getChildren().size() + "");
+      log.debug("full query took: " + (System.currentTimeMillis() - start));
     }
   }
 }

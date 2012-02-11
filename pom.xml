@@ -26,17 +26,6 @@
       </properties>
     </profile>
     <profile>
-      <id>test</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <tomcat-server>local</tomcat-server>
-        <tomcat-url>http://localhost:8080/manager/text</tomcat-url>
-        <tomcat-service-name>/trebor-test</tomcat-service-name>
-      </properties>
-    </profile>
-    <profile>
       <id>remote</id>
       <activation>
         <activeByDefault>false</activeByDefault>
@@ -48,7 +37,6 @@
       </properties>
     </profile>
   </profiles>
-
 
   <repositories>
     <repository>
@@ -93,22 +81,17 @@
   </pluginRepositories>
 
   <dependencies>
+  
+    <!-- bliki markup -->
+    
     <dependency>
       <groupId>info.bliki.wiki</groupId>
       <artifactId>bliki-core</artifactId>
       <version>3.0.16</version>
     </dependency>
-    <dependency>
-      <groupId>org.openrdf.alibaba</groupId>
-      <artifactId>alibaba-repository-object</artifactId>
-      <version>${alibaba-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openrdf.sesame</groupId>
-      <artifactId>sesame-model</artifactId>
-      <version>${openrdf-version}</version>
-      <scope>compile</scope>
-    </dependency>
+    
+    <!-- openrdf -->
+
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
       <artifactId>sesame-repository-http</artifactId>
@@ -123,35 +106,19 @@
     </dependency>
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
-      <artifactId>sesame-queryparser-sparql</artifactId>
-      <version>${openrdf-version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openrdf.sesame</groupId>
       <artifactId>sesame-repository-dataset</artifactId>
       <version>${openrdf-version}</version>
     </dependency>
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
-      <artifactId>sesame-sail-memory</artifactId>
+      <artifactId>sesame-queryparser-sparql</artifactId>
       <version>${openrdf-version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.6.1</version>
+      <groupId>org.openrdf.sesame</groupId>
+      <artifactId>sesame-sail-memory</artifactId>
+      <version>${openrdf-version}</version>
     </dependency>
     <dependency>
       <groupId>org.openrdf.sesame</groupId>
@@ -163,6 +130,9 @@
       <artifactId>sesame-rio-rdfxml</artifactId>
       <version>${openrdf-version}</version>
     </dependency>
+
+    <!-- jersey -->
+
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-core</artifactId>
@@ -178,16 +148,13 @@
       <artifactId>jersey-json</artifactId>
       <version>${jersey.version}</version>
     </dependency>
+
+    <!-- misc utilites -->
+
     <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>${jersey.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey.jersey-test-framework</groupId>
-      <artifactId>jersey-test-framework-grizzly2</artifactId>
-      <version>${jersey.version}</version>
-      <scope>test</scope>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.16</version>
     </dependency>
     <dependency>
       <groupId>org.mod4j.org.apache.commons</groupId>
@@ -196,42 +163,57 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.openrdf.sesame</groupId>
-      <artifactId>sesame-queryresultio-binary</artifactId>
-      <version>${openrdf-version}</version>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.7</version>
+      <type>jar</type>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.tuckey</groupId>
+      <artifactId>urlrewritefilter</artifactId>
+      <version>3.2.0</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- not fully sure why provided works and test doesn't for this -->
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- testing -->
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey.jersey-test-framework</groupId>
+      <artifactId>jersey-test-framework-grizzly2</artifactId>
+      <version>${jersey.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${jersey.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey.test</groupId>
       <artifactId>functional-tests</artifactId>
       <version>1.10</version>
       <type>pom</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>info.aduna.commons</groupId>
-      <artifactId>aduna-commons-io</artifactId>
-      <version>2.10.0</version>
-      <type>pom</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.tuckey</groupId>
-    	<artifactId>urlrewritefilter</artifactId>
-    	<version>3.2.0</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
-    </dependency>
-    <dependency>
-    	<groupId>commons-configuration</groupId>
-    	<artifactId>commons-configuration</artifactId>
-    	<version>1.7</version>
-    	<type>jar</type>
-    	<scope>compile</scope>
+      <scope>test</scope>
     </dependency>
   </dependencies>
-
-
 
   <build>
     <defaultGoal>package</defaultGoal>
@@ -256,7 +238,7 @@
             <autoVersionSubmodules>true</autoVersionSubmodules>
           </configuration>
         </plugin>
-        
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>

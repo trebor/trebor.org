@@ -125,7 +125,9 @@ _:trebor_org        a                   too:treeNode;
                     too:hasTitle        "the trebor.org site";
                     too:hasNodeIcon     "horse";
                     too:hasNodeParent   "software";
-                    too:hasNodeChildren _:trebor_org_kids;
+                    too:hasNodeChild     _:head;
+                    too:hasNodeChild     _:body;
+                    too:hasNodeChild     _:tail;
                     too:hasNodeSummary
 
 """
@@ -139,13 +141,6 @@ the front and back end and permits flexibility in both the form of stored data,
 and the presentation of that data.
 """.
 
-
-_:trebor_org_kids   a                    rdfs:Container;
-                    rdf:_1               _:head;
-                    rdf:_2               _:body;
-                    rdf:_3	             _:tail.
-
-	
 _:head              a                   too:treeNode;
                     too:hasName         "trebor_ui";
                     too:hasTitle        "the front end";

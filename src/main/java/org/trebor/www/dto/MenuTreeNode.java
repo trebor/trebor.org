@@ -8,88 +8,56 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.openrdf.repository.object.annotations.iri;
 
 import org.apache.log4j.Logger;
 
-import static org.trebor.www.rdf.NameSpace.*;
-
-@iri(TREE_NODE)
 @XmlRootElement()
 @XmlAccessorType(XmlAccessType.FIELD)
-public class MenuTreeNode {
+public class MenuTreeNode 
+{
+  @SuppressWarnings("unused")
+  private static Logger log = Logger.getLogger(MenuTreeNode.class);
 
   private static final String UNDEFINED = "<UNDEFINED>";
 
-  @SuppressWarnings("unused")
-  private static final Logger logger = Logger.getLogger(MenuTreeNode.class);
-
-  @iri(HAS_NAME)
   @XmlElement(name="name")
   private String mName;
   
-  @iri(HAS_TITLE)
   @XmlElement(name="title")
   private String mTitle;
 
-  @iri(HAS_NODE_ICON)
   @XmlElement(name="iconName")
   private String mIconName;
   
-  @iri(HAS_IMAGE)
   @XmlElement(name="image", required=false)
   private String mImage;
 
-  @iri(HAS_IMAGE_DESCRIPTION)
   @XmlElement(name="imageDescription", required=false)
   private String mImageDescription;
-  
-  @iri(HAS_NODE_LINK)
-  @XmlElement(name="link", required=false)
-  private String mLink;
-  
-  @iri(HAS_NODE_SUMMARY)
+
   @XmlElement(name="summary", required=false)
   private String mSummary;
   
-  @iri(HAS_NODE_CHILDREN)
   @XmlElement(name="children", required=false)
   public List<MenuTreeNode> mChildren;
 
-  @iri(HAS_NODE_PARENT)
   @XmlElement(name="parentName", required=false)
   private String mParent;
 
+  private List<MenuTreeNode> mChild;
   
   public MenuTreeNode()
   {
-    this(UNDEFINED, UNDEFINED);
+    this(UNDEFINED, UNDEFINED, UNDEFINED, UNDEFINED);
   }
-
-  public MenuTreeNode(String name)
+  public MenuTreeNode(String name, String title, String iconName, String summary)
   {
-    this(name, UNDEFINED);
-  }
-  
-  public MenuTreeNode(String name, String imageName)
-  {
-    this(name, imageName, null);
-  }
-  
-  public MenuTreeNode(String name, String imageName, String link)
-  {
-    this(name, imageName, link, null);
-  }
-  
-  public MenuTreeNode(String name, String iconName, String link, String summary)
-  {
-    mChildren = null;
     mName = name;
+    mTitle = title;
     mIconName = iconName;
-    mLink = link;
     mSummary = summary;
   }
-  
+
   public MenuTreeNode add(MenuTreeNode node)
   {
     if (mChildren == null)
@@ -104,6 +72,7 @@ public class MenuTreeNode {
     return mName;
   }
   
+//  @instancePrivate
   public List<MenuTreeNode> getChildren()
   {
     return mChildren == null ? Collections.<MenuTreeNode>emptyList() : mChildren;
@@ -124,16 +93,6 @@ public class MenuTreeNode {
     return mIconName;
   }
 
-  public void setLink(String link)
-  {
-    mLink = link;
-  }
-
-  public String getLink()
-  {
-    return mLink;
-  }
-
   public void setSummary(String summary)
   {
     mSummary = summary;
@@ -146,11 +105,13 @@ public class MenuTreeNode {
 
   public String toString()
   {
-    return "ForceTreeNode [mImageName=" + mIconName + ", mName=" + mName +
-      ", mLink=" + mLink + ", mSummary=" + mSummary + ", mChildren=" +
-      mChildren + "]";
+    return "MenuTreeNode [mName=" + mName + ", mTitle=" + mTitle +
+      ", mIconName=" + mIconName + ", mImage=" + mImage +
+      ", mImageDescription=" + mImageDescription + ", mSummary=" + mSummary +
+      ", mChildren=" + mChildren + ", mParent=" + mParent + ", mChild=" +
+      mChild + "]";
   }
-  
+
   public MenuTreeNode copy()
   {
     MenuTreeNode copy = new MenuTreeNode();
@@ -159,13 +120,10 @@ public class MenuTreeNode {
     copy.setIconName(getIconName());
     copy.setImage(getImage());
     copy.setImageDescription(getImageDescription());
-    copy.setLink(getLink());
     copy.setSummary(getSummary());
     copy.setParent(getParent());
-    
     for (MenuTreeNode child: getChildren())
       copy.add(child.copy());
-    
     return copy;
   }
 

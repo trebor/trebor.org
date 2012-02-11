@@ -1,4 +1,4 @@
-package org.trebor.www.store;
+package org.trebor.www.util;
 
 import java.io.IOException;
 import java.util.List;

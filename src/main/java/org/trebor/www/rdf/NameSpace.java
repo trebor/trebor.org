@@ -76,4 +76,5 @@ public class NameSpace
   public static final String HAS_NODE_SUMMARY = TOO + "hasNodeSummary";
   public static final String HAS_NODE_CHILDREN = TOO + "hasNodeChildren";
   public static final String HAS_NODE_PARENT = TOO + "hasNodeParent";
+  public static final String HAS_NODE_CHILD = TOO + "hasNodeChild";
 }

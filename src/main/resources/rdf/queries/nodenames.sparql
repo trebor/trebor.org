@@ -1,0 +1,15 @@
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX toi:<http://trebor.org/instance/>
+PREFIX too:<http://trebor.org/ns#>
+PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT 
+  ?name
+WHERE
+{
+  ?node a too:treeNode.
+  ?node too:hasName "%s".
+  ?node too:hasNodeChild ?child.
+  ?child too:hasName ?name.
+}

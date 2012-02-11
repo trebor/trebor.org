@@ -4,10 +4,9 @@ import org.apache.log4j.Logger;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.RepositoryException;
-import org.openrdf.result.MultipleResultException;
-import org.openrdf.result.NoResultException;
 import org.trebor.www.dto.MenuTreeNode;
 import org.trebor.www.store.TreborStore;
+import org.trebor.www.util.MarkupRenderer;
 
 import com.sun.jersey.api.core.InjectParam;
 import com.sun.jersey.spi.resource.Singleton;
@@ -19,10 +18,25 @@ public class TreborService
   private static Logger log = Logger.getLogger(TreborService.class);
 
   @InjectParam
+  private MarkupRenderer mMarkupRenderer;
+
+  @InjectParam
   private static TreborStore mStore;
 
-  public MenuTreeNode getMenuNode(String name) throws MalformedQueryException, RepositoryException, NoResultException, MultipleResultException, QueryEvaluationException
+  public MenuTreeNode getMenuNode(String name) throws RepositoryException, MalformedQueryException, QueryEvaluationException
   {
-    return mStore.getTreeNode(name).copy();
+    MenuTreeNode node = mStore.getTreeNode(name);
+    renderMarkup(node);
+    return node;
+  }
+
+  private MenuTreeNode renderMarkup(MenuTreeNode node)
+  {
+    node.setTitle(mMarkupRenderer.render(node.getTitle()));
+    node.setSummary(mMarkupRenderer.render(node.getSummary()));
+    node.setImageDescription(mMarkupRenderer.render(node.getImageDescription()));
+    for (MenuTreeNode child: node.getChildren())
+        renderMarkup(child);
+    return node;
   }
 }
