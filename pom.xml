@@ -10,7 +10,7 @@
     <openrdf-version>2.6.3</openrdf-version>
     <alibaba-version>2.0-beta14</alibaba-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jersey.version>1.7</jersey.version>
+    <jersey.version>1.11</jersey.version>
   </properties>
 
   <profiles>

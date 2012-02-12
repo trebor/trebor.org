@@ -49,8 +49,10 @@ public class TreborRepository
   @PreDestroy
   public void cleanUp() throws RepositoryException
   {
-    getConnection().close();
-    getRepository().shutDown();
+    if (getConnection().isOpen())
+      getConnection().close();
+    // this has been disabled because of a 20 second timeout that slows test
+    // getRepository().shutDown();
   }
   
   private void setRepository(Repository repository) throws RepositoryException

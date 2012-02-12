@@ -5,6 +5,7 @@ import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.RepositoryException;
 import org.trebor.www.dto.MenuTreeNode;
+import org.trebor.www.dto.RdfNode;
 import org.trebor.www.store.TreborStore;
 import org.trebor.www.util.MarkupRenderer;
 
@@ -30,6 +31,11 @@ public class TreborService
     return node;
   }
 
+  public RdfNode getRdf(String uri) throws RepositoryException, MalformedQueryException, QueryEvaluationException
+  {
+    return mStore.getRdf(uri);
+  }
+  
   private MenuTreeNode renderMarkup(MenuTreeNode node)
   {
     node.setTitle(mMarkupRenderer.render(node.getTitle()));

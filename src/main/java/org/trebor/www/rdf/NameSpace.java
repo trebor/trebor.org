@@ -11,7 +11,7 @@ public class NameSpace
   public static final String RDFS = "http://www.w3.org/2000/01/rdf-schema#";
   public static final String XSD = "http://www.w3.org/2001/XMLSchema#";
   public static final String TOO = "http://trebor.org/ns#";
-  public static final String TOI = "http://treobr.org/instance/";
+  public static final String TOI = "http://trebor.org/instance/";
 
   public static final String PREFIX = 
     "PREFIX rdf:  <" + RDF + ">\n" +

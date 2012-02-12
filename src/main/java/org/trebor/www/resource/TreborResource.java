@@ -5,6 +5,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,8 +32,23 @@ public class TreborResource
   @Path("menu/{page}")
   public Response treeMenu(@Context HttpServletRequest hsr, @PathParam("page") String page) throws RepositoryException, MalformedQueryException, QueryEvaluationException 
   {
-    String address = hsr.getRemoteAddr() + (hsr.getRemoteAddr().equals(hsr.getRemoteHost()) ? "" : " (" + hsr.getRemoteHost() + ")");
-    log.debug(String.format("%s requested: %s", address, page));
+    log.debug(String.format("%s requested: %s", remoteAddress(hsr), page));
     return Response.ok(mTreborService.getMenuNode(page)).build();
+  }
+  
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("rdf")
+  public Response rdf(@QueryParam("q")final String uri) 
+      throws RepositoryException, MalformedQueryException, QueryEvaluationException 
+  {
+    return Response.ok(mTreborService.getRdf(uri)).build();
+  }
+  
+  private static String remoteAddress(HttpServletRequest hsr)
+  {
+    return hsr.getRemoteAddr() + (hsr.getRemoteAddr().equals(hsr.getRemoteHost()) 
+       ? ""
+       : " (" + hsr.getRemoteHost() + ")");
   }
 }

@@ -2,9 +2,13 @@ package org.trebor.www.resource;
 
 import static org.junit.Assert.assertEquals;
 
+
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.trebor.www.dto.MenuTreeNode;
+import org.trebor.www.dto.RdfNode;
+import org.trebor.www.dto.RdfValue;
 
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.test.framework.JerseyTest;
@@ -18,9 +22,10 @@ public class TestTreborResource extends JerseyTest
   {    
     super("org.trebor.www.resource");    
   }
-    
+
   @Test
-  public void testService()
+  @Ignore
+  public void testMenuTree()
   {
     String[][] dataSet =
     {
@@ -32,6 +37,7 @@ public class TestTreborResource extends JerseyTest
     };
     
     WebResource webResource = resource();
+    
     for (String[] data: dataSet)
     {
       log.debug("query start. ");
@@ -40,6 +46,39 @@ public class TestTreborResource extends JerseyTest
       assertEquals("node: " + data[0], data[0], ftn1.getName());
       assertEquals("node: " + data[0], data[1], ftn1.getParent());
       assertEquals("node: " + data[0], data[2], ftn1.getChildren().size() + "");
+      log.debug("full query took: " + (System.currentTimeMillis() - start));
+    }
+  }
+  
+  @Test
+  public void testRdf()
+  {
+    Object[][] dataSet =
+    {
+      {"tufte", 0, 0},
+      {"luminaries", 1, 10},
+      {"literature", 1, 9},
+      {"influences", 1, 8},
+      {"home", 0, 9},
+    };
+    
+    WebResource webResource = resource();
+    
+    for (Object[] data: dataSet)
+    {
+      log.debug("query start. ");
+      long start = System.currentTimeMillis();
+      RdfNode node = webResource.path("/rdf").queryParam("q", "toi:" + data[0]).get(RdfNode.class);
+      assertEquals(data[0] + " inbound count", data[1], node.getInbound().size());
+      assertEquals(data[0] + " outbound count", data[2], node.getOutbound().size());
+      log.debug("result: " + node.getNode().getShortName());
+      log.debug("  in: ");
+      for (RdfValue predicate: node.getInbound().keySet())
+        log.debug("    " + predicate.getShortName() + " - " + node.getInbound().get(predicate).getShortName());
+      log.debug("  out: ");
+      for (RdfValue predicate: node.getOutbound().keySet())
+        log.debug("    " + predicate.getShortName() + " - " + node.getOutbound().get(predicate).getShortName());
+        
       log.debug("full query took: " + (System.currentTimeMillis() - start));
     }
   }

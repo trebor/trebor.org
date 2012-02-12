@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.openrdf.model.Value;
 import org.openrdf.query.Binding;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.MalformedQueryException;
@@ -16,6 +17,9 @@ import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
 import org.trebor.www.dto.MenuTreeNode;
+import org.trebor.www.dto.RdfNode;
+import org.trebor.www.dto.RdfValue;
+import org.trebor.www.rdf.ResourceManager;
 import org.trebor.www.util.Util;
 
 import com.sun.jersey.api.core.InjectParam;
@@ -33,12 +37,17 @@ public class TreborStore
   // the queries used here
   
   private String     mNodesQuery;
+  private String     mDescribeQuery;
+
+  private ResourceManager mRm;
   
   @PostConstruct
   @SuppressWarnings("unused")
-  private void initialize() throws IOException 
+  void initialize() throws IOException, RepositoryException 
   {
     mNodesQuery = Util.readResourceAsString("/rdf/queries/nodes.sparql");
+    mDescribeQuery = Util.readResourceAsString("/rdf/queries/describe.sparql");
+    mRm = new ResourceManager(mRepository.getConnection());
   }
 
   public MenuTreeNode getTreeNode(String nodeName) throws RepositoryException, MalformedQueryException, QueryEvaluationException
@@ -102,5 +111,43 @@ public class TreborStore
     }   
     
     return nodes.get(nodeName);
+  }
+
+  public RdfNode getRdf(String uri) throws RepositoryException, MalformedQueryException, QueryEvaluationException
+  {
+    // query for nodes
+    
+    String queryString = String.format(mDescribeQuery, uri);
+    TupleQuery query = mRepository.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+    TupleQueryResult results = query.evaluate();
+
+    Value nodeValue = mRepository.getRepository().getValueFactory().createURI(uri);
+    
+    // create the node
+    
+    RdfNode node = new RdfNode(new RdfValue(nodeValue, mRm));
+    
+    // extract the connections
+    
+    while (results.hasNext())
+    {
+      BindingSet result = results.next();
+
+      // extract s p o
+    
+      Value subject = result.getBinding("subject").getValue();
+      Value predicate = result.getBinding("predicate").getValue();
+      Value object = result.getBinding("object").getValue();
+
+      log.debug("subject: " + subject.stringValue());
+      log.debug("predicate: " + predicate.stringValue());
+      log.debug("object: " + object.stringValue());
+      
+      // add them to this node
+      
+      node.add(new RdfValue(subject, mRm), new RdfValue(predicate, mRm), new RdfValue(object, mRm));
+    }
+    
+    return node;
   }
 }
