@@ -12,7 +12,6 @@ toi:influences      a                   too:treeNode;
                     too:hasNodeIcon     "influences";
                     too:hasNodeChild     toi:luminaries;
                     too:hasNodeChild     toi:literature;
-                    too:hasNodeParent   "home";
                     too:hasNodeSummary
 """
 as much as i'd like to think of myself as a fountain of new ideas, my ideas are 

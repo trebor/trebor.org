@@ -17,7 +17,6 @@ toi:literature      a                   too:treeNode;
 #                    too:hasNodeChild     _:everydaythings;
 
                     too:hasNodeIcon     "book";
-                    too:hasNodeParent   "influences";
                     too:hasNodeSummary
 
 """
@@ -29,7 +28,6 @@ _:everydaythings    a                   too:treeNode;
                     too:hasTitle        "[[wikipedia:The_Design_of_Everyday_Things|the design of everyday things]]";
                     too:hasNodeIcon     "everydaythings";
                     too:hasImage        "assets/images/Design-of-Everyday-Things.jpg";
-                    too:hasNodeParent   "literature";
                     too:hasNodeSummary
 
 """
@@ -41,7 +39,6 @@ _:elementsofstyle   a                   too:treeNode;
                     too:hasTitle        "[[wikipedia:The_elements_of_style|the elements of style]]";
                     too:hasNodeIcon     "elementsofstyle";
                     too:hasImage        "assets/images/Elements-of-Style.jpg";
-                    too:hasNodeParent   "literature";
                     too:hasNodeSummary
 
 """
@@ -57,7 +54,6 @@ _:crowdsandpower    a                   too:treeNode;
                     too:hasTitle        "[[wikipedia:Crowds_and_Power|crowds and power]]";
                     too:hasNodeIcon     "crowdsandpower";
                     too:hasImage        "assets/images/Crowds-and-Power.jpg";
-                    too:hasNodeParent   "literature";
                     too:hasNodeSummary
 
 """
@@ -72,7 +68,6 @@ _:understandingcomics a                 too:treeNode;
                     too:hasTitle        "[[wikipedia:Understanding_Comics|understanding comics]]";
                     too:hasNodeIcon     "understandingcomics";
                     too:hasImage        "assets/images/understanding-comics.jpg";
-                    too:hasNodeParent   "literature";
                     too:hasNodeSummary
 
 """

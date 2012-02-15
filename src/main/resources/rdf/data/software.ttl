@@ -15,7 +15,6 @@ toi:software        a                   too:treeNode;
                     too:hasNodeChild     _:swarm;
                     too:hasNodeChild     _:splink;
                     too:hasNodeChild     _:trebor_org;
-                    too:hasNodeParent   "home";
                     too:hasNodeSummary
 
 """
@@ -28,7 +27,6 @@ _:splink            a                   too:treeNode;
                     too:hasTitle        "[https://github.com/treboresque/Splink/wiki splink]";
                     too:hasNodeIcon     "splink";
                     too:hasImage        "assets/images/splink-screenshot.png";
-                    too:hasNodeParent   "software";
                     too:hasImageDescription
 """
 in this splink screen shot, genetic disorder data from
@@ -61,7 +59,6 @@ _:sarynpaint        a                   too:treeNode;
                     too:hasTitle        "[http://code.google.com/p/sarynpaint/ saryn paint]";
                     too:hasNodeIcon     "sarynpaint";
                     too:hasImage        "assets/images/sarynpaint-screenshot.png";
-                    too:hasNodeParent   "software";
                     too:hasImageDescription
 """
 in this screen shot, you can kind of see that the paint-brush color and shape
@@ -80,7 +77,6 @@ _:freesand          a                   too:treeNode;
                     too:hasName         "freesand";
                     too:hasTitle        "[http://code.google.com/p/freesand/ freesand]";
                     too:hasNodeIcon     "freesand";
-                    too:hasNodeParent   "software";
                     too:hasNodeSummary
 
 """
@@ -100,7 +96,6 @@ _:swarm             a                   too:treeNode;
                     too:hasTitle        "[http://orbswarm.com/ orb swarm]";
                     too:hasNodeIcon     "swarm";
                     too:hasImage        "assets/images/swarm-colors.jpg";
-                    too:hasNodeParent   "software";
                     too:hasImageDescription
 """
 orb swarm in black rock city in 2008. (c) 2008 nk, burningcam.com.
@@ -124,7 +119,6 @@ _:trebor_org        a                   too:treeNode;
                     too:hasName         "trebor";
                     too:hasTitle        "the trebor.org site";
                     too:hasNodeIcon     "horse";
-                    too:hasNodeParent   "software";
                     too:hasNodeChild     _:head;
                     too:hasNodeChild     _:body;
                     too:hasNodeChild     _:tail;
@@ -145,7 +139,6 @@ _:head              a                   too:treeNode;
                     too:hasName         "trebor_ui";
                     too:hasTitle        "the front end";
                     too:hasNodeIcon     "horse-head";
-                    too:hasNodeParent   "trebor";
                     too:hasNodeSummary
 
 """
@@ -163,7 +156,6 @@ _:body              a                   too:treeNode;
                     too:hasName         "trebor_service";
                     too:hasTitle        "the service";
                     too:hasNodeIcon     "horse-body";
-                    too:hasNodeParent   "trebor";
                     too:hasNodeSummary
 
 """
@@ -198,7 +190,6 @@ _:tail              a                   too:treeNode;
                     too:hasName         "trebor_store";
                     too:hasTitle        "the back end";
                     too:hasNodeIcon     "horse-ass";
-                    too:hasNodeParent   "trebor";
                     too:hasNodeSummary
 
 """

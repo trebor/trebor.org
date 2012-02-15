@@ -14,7 +14,6 @@ toi:work            a                   too:treeNode;
                   	too:hasNodeChild     toi:nasa;
                     too:hasNodeChild     _:xuggle;
                     too:hasNodeChild     _:connectsolutions;
-                    too:hasNodeParent   "home";
                     too:hasNodeSummary
 
 """
@@ -30,7 +29,6 @@ _:early_years       a                   too:treeNode;
                     too:hasNodeChild     _:cybermation;
                     too:hasNodeChild     _:workframe;
                     too:hasNodeChild     _:netsource;
-                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
@@ -45,7 +43,6 @@ _:cybermation       a                   too:treeNode;
                     too:hasName         "cybermation";
                     too:hasTitle        "cybermation, inc.";
                     too:hasNodeIcon     "cybermation";
-                    too:hasNodeParent   "early_years";
                     too:hasNodeSummary
 
 """
@@ -63,7 +60,6 @@ _:workframe         a                   too:treeNode;
                     too:hasName         "workframe";
                     too:hasTitle        "workframe, inc.";
                     too:hasNodeIcon     "workframe";
-                    too:hasNodeParent   "early_years";
                     too:hasNodeSummary
 
 """
@@ -86,7 +82,6 @@ _:netsource         a                   too:treeNode;
                     too:hasName         "netsource";
                     too:hasTitle        "netsource, inc.";
                     too:hasNodeIcon     "netsource";
-                    too:hasNodeParent   "early_years";
                     too:hasNodeSummary
 
 """
@@ -101,7 +96,6 @@ _:xuggle            a                   too:treeNode;
                     too:hasName         "xuggle";
                     too:hasTitle        "[http://xuggle.com/ xuggle, inc.]";
                     too:hasNodeIcon     "xuggle-logo";
-                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """
@@ -125,7 +119,6 @@ _:connectsolutions  a                   too:treeNode;
                     too:hasName         "connectsolutions";
                     too:hasTitle        "[http://connectsolutions.com/ connectsolutions, inc.]";
                     too:hasNodeIcon     "connectsolutions";
-                    too:hasNodeParent   "work";
                     too:hasNodeSummary
 
 """

@@ -10,7 +10,6 @@ toi:nasa            a                   too:treeNode;
                     too:hasName         "nasa";
                     too:hasTitle        "[http://www.nasa.gov/centers/ames nasa ames]";
                     too:hasNodeIcon     "nasa-color";
-                    too:hasNodeParent   "work";
                     too:hasNodeChild     _:coglab;
                     too:hasNodeChild     _:apex;
                   	too:hasNodeChild     _:plexil;
@@ -32,7 +31,6 @@ _:coglab            a                   too:treeNode;
                     too:hasName         "coglab";
                     too:hasTitle        "[http://human-factors.arc.nasa.gov/ihi/cognition/ cognition lab]";
                     too:hasNodeIcon     "hsi";
-                    too:hasNodeParent   "nasa";
                     too:hasNodeSummary
 
 """
@@ -53,7 +51,6 @@ _:apex              a                   too:treeNode;
                     too:hasName         "apex";
                     too:hasTitle        "[http://www.ai.sri.com/project/APEX apex]";
                     too:hasNodeIcon     "apex";
-                    too:hasNodeParent   "nasa";
                     too:hasNodeSummary
 
 """
@@ -76,7 +73,6 @@ _:plexil            a                   too:treeNode;
                     too:hasName         "plexil";
                     too:hasTitle        "[[wikipedia:PLEXIL|plexil]]";
                     too:hasNodeIcon     "plexil";
-                    too:hasNodeParent   "nasa";
                     too:hasNodeSummary
 
 """

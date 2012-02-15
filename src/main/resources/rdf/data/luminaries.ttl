@@ -14,7 +14,6 @@ toi:luminaries      a                   too:treeNode;
                     too:hasNodeChild     _:dawkins;
                     too:hasNodeChild     _:pinker;
                     too:hasNodeChild     _:tufte;
-	                  too:hasNodeParent   "influences";
                     too:hasNodeSummary
 """
 these are some of the people who have not only informed my thinking on one particular 
@@ -28,7 +27,6 @@ _:norman				    a                   too:treeNode;
                     too:hasName         "norman";
                     too:hasNodeIcon     "norman";
                     too:hasTitle        "[http://www.jnd.org/ donald norman]";
-                    too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
 
 """
@@ -46,7 +44,6 @@ _:dawkins				    a                   too:treeNode;
                     too:hasName         "dawkins";
                     too:hasNodeIcon     "dawkins";
                     too:hasTitle        "[http://richarddawkins.net/ richard dawkins]";
-                    too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
 
 """
@@ -65,7 +62,6 @@ _:pinker				    a                   too:treeNode;
                     too:hasName         "pinker";
                     too:hasNodeIcon     "pinker";
                     too:hasTitle         "[http://stevenpinker.com/biocv steven pinker]";
-                    too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
 
 """
@@ -87,7 +83,6 @@ _:tufte				    	a                   too:treeNode;
                     too:hasName         "tufte";
                     too:hasNodeIcon     "tufte";
                     too:hasTitle         "[http://www.edwardtufte.com/tufte/ edward tufte]";
-                    too:hasNodeParent   "luminaries";
                     too:hasNodeSummary
                     
 """
