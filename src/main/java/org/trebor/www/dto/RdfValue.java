@@ -29,6 +29,8 @@ public class RdfValue
   private List<RdfValue> mChildren;
   @XmlElement(name="type")
   private Types mType;
+  @XmlElement(name="link")
+  private Types mLink;
 
   enum Types
   {
@@ -123,5 +125,15 @@ public class RdfValue
   public void setType(Types type)
   {
     mType = type;
+  }
+
+  public Types getLink()
+  {
+    return mLink;
+  }
+
+  public void setLink(Types link)
+  {
+    mLink = link;
   }
 }

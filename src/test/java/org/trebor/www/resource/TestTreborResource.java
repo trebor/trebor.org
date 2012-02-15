@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.trebor.www.dto.MenuTreeNode;
-import org.trebor.www.dto.RdfNode;
 import org.trebor.www.dto.RdfValue;
 
 import com.sun.jersey.api.client.WebResource;
@@ -79,6 +78,7 @@ public class TestTreborResource extends JerseyTest
 //      for (RdfValue predicate: node.getOutbound().keySet())
 //        log.debug("    " + predicate.getShortName() + " - " + node.getOutbound().get(predicate).getShortName());
         
+      assertEquals("toi:" + data[0], node.getShortName());
       log.debug("full query took: " + (System.currentTimeMillis() - start));
     }
   }

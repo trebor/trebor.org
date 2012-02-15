@@ -17,7 +17,6 @@ import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
 import org.trebor.www.dto.MenuTreeNode;
-import org.trebor.www.dto.RdfNode;
 import org.trebor.www.dto.RdfValue;
 import org.trebor.www.rdf.ResourceManager;
 import org.trebor.www.util.Util;
