@@ -1,6 +1,21 @@
-.title
+.uri-icon
 {
-  margin: 0;
-  padding: 0;
-  background: none;
+  fill: #fc0;
+  stroke: #f22;
+  stroke-width: 0px;
+  cursor: pointer;
+}
+
+.blank-icon
+{
+  fill: white;
+  stroke: #888;
+  stroke-width: 8px;
+}
+
+.literal-icon
+{
+  fill: #888;
+  stroke: #f22;
+  stroke-width: 0px;
 }

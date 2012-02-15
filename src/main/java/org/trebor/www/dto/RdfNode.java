@@ -29,13 +29,17 @@ public class RdfNode
   @XmlElement(name="node")
   private RdfValue mNode;
   
-  @XmlElement(name="outbound")
+  @XmlElement(name="children")
   @XmlJavaTypeAdapter(RdfValueMapAdapter.class)
-  private Map<RdfValue, RdfValue> mOutbound;
-
-  @XmlElement(name="inbound")
-  @XmlJavaTypeAdapter(RdfValueMapAdapter.class)
-  private Map<RdfValue, RdfValue> mInbound;
+  private Map<RdfValue, RdfValue> mChildren;
+  
+//  @XmlElement(name="outbound")
+//  @XmlJavaTypeAdapter(RdfValueMapAdapter.class)
+//  private Map<RdfValue, RdfValue> mOutbound;
+//
+//  @XmlElement(name="inbound")
+//  @XmlJavaTypeAdapter(RdfValueMapAdapter.class)
+//  private Map<RdfValue, RdfValue> mInbound;
   
   public RdfNode(RdfValue node)
   {
@@ -45,17 +49,20 @@ public class RdfNode
   
   public RdfNode()
   {
-    mInbound = new HashMap<RdfValue, RdfValue>();
-    mOutbound = new HashMap<RdfValue, RdfValue>();
+    mChildren = new HashMap<RdfValue, RdfValue>();
+//    mInbound = new HashMap<RdfValue, RdfValue>();
+//    mOutbound = new HashMap<RdfValue, RdfValue>();
   }
  
   public void add(RdfValue subject, RdfValue predicate, RdfValue object)
   {
     if (subject.getFullName().equals(mNode.getFullName()))
-      getOutbound().put(predicate, object);
+//      getOutbound().put(predicate, object);
+      mChildren.put(predicate, object);
     
     else if (object.getFullName().equals(mNode.getFullName()))
-      getInbound().put(predicate, subject);
+//      getInbound().put(predicate, subject);
+      mChildren.put(predicate, object);
 
     else 
       throw new Error(
@@ -74,11 +81,13 @@ public class RdfNode
 
   public Map<RdfValue, RdfValue> getOutbound()
   {
-    return mOutbound;
+    return mChildren;
+//    return mOutbound;
   }
 
   public Map<RdfValue, RdfValue> getInbound()
   {
-    return mInbound;
+    return mChildren;
+//    return mInbound;
   }
 }

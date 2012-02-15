@@ -113,20 +113,22 @@ public class TreborStore
     return nodes.get(nodeName);
   }
 
-  public RdfNode getRdf(String uri) throws RepositoryException, MalformedQueryException, QueryEvaluationException
+  public RdfValue getRdf(String uri) throws RepositoryException, MalformedQueryException, QueryEvaluationException
   {
-    // query for nodes
-    
-    String queryString = String.format(mDescribeQuery, uri);
-    TupleQuery query = mRepository.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, queryString);
-    TupleQueryResult results = query.evaluate();
-
     Value nodeValue = mRepository.getRepository().getValueFactory().createURI(uri);
     
     // create the node
     
-    RdfNode node = new RdfNode(new RdfValue(nodeValue, mRm));
+    RdfValue node = new RdfValue(nodeValue, mRm);
     
+    log.debug("quering for: " + node.getFullName());
+    
+    // query for nodes
+    
+    String queryString = String.format(mDescribeQuery, "<" + node.getFullName() + ">");
+    TupleQuery query = mRepository.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+    TupleQueryResult results = query.evaluate();
+
     // extract the connections
     
     while (results.hasNext())
@@ -144,6 +146,7 @@ public class TreborStore
       log.debug("object: " + object.stringValue());
       
       // add them to this node
+      
       
       node.add(new RdfValue(subject, mRm), new RdfValue(predicate, mRm), new RdfValue(object, mRm));
     }
