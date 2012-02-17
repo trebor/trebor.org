@@ -31,6 +31,10 @@ public class RdfValue
   private Types mType;
   @XmlElement(name="link")
   private Types mLink;
+  @XmlElement(name="predicate")
+  private RdfValue mPredicate;
+  @XmlElement(name="issubject")
+  private boolean mIsSubject;
 
   enum Types
   {
@@ -52,15 +56,11 @@ public class RdfValue
 
   public void add(RdfValue subject, RdfValue predicate, RdfValue object)
   {
-    if (subject.getFullName().equals(getFullName()))
-      mChildren.add(object);
-    
-    else if (object.getFullName().equals(getFullName()))
-      mChildren.add(subject);
-
-    else 
-      throw new Error(
-        String.format("[%s %s %s] not connected to %s", subject.getShortName(), predicate.getShortName(), object.getShortName(), getShortName()));
+    boolean isSubject = subject.getFullName().equals(getFullName());
+    RdfValue child = isSubject ? object : subject;
+    child.setPredicate(predicate);
+    child.setIsSubject(isSubject);
+    mChildren.add(child);
   }
   
   public void setValue(Value value, ResourceManager rm)
@@ -135,5 +135,25 @@ public class RdfValue
   public void setLink(Types link)
   {
     mLink = link;
+  }
+
+  public void setPredicate(RdfValue predicate)
+  {
+    mPredicate = predicate;
+  }
+
+  public RdfValue getPredicate()
+  {
+    return mPredicate;
+  }
+
+  public boolean isSubject()
+  {
+    return mIsSubject;
+  }
+
+  public void setIsSubject(boolean isSubject)
+  {
+    mIsSubject = isSubject;
   }
 }

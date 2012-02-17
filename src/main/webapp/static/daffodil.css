@@ -19,3 +19,29 @@
   stroke: #f22;
   stroke-width: 0px;
 }
+
+.link
+{
+  stroke: #ffd;
+  stroke-width: 1em;
+}
+
+.predicateText
+{
+}
+
+.predicateArrow
+{
+  fill: lightgrey;
+}
+
+.nodeCircle
+{
+  fill: #ffd;
+}
+
+.circleText
+{
+  fill: black;
+  text-anchor: middle;
+}
