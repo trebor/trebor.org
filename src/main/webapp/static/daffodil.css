@@ -31,7 +31,17 @@
 
 .predicateText
 {
-  fill: #444;
+  fill: #888;
+}
+
+.linkText
+{
+  fill: #888;
+}
+
+.linkTextFocus
+{
+  fill: #000;
 }
 
 .predicateArrow
@@ -47,6 +57,12 @@
 
 .circleText
 {
-  fill: #222;
+  fill: #888;
+  text-anchor: middle;
+}
+
+.circleTextFocus
+{
+  fill: #000;
   text-anchor: middle;
 }

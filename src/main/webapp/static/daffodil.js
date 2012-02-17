@@ -46,6 +46,8 @@ d3.json(dataSource, function(json) {
     .enter()
     .append("g")
     .attr("cursor", "pointer")
+    .on("mouseover", focusLink)
+    .on("mouseout", defocusLink)
     .on("click", function (d) {clickPredicate(d.target.predicate);});
 
   // add predicate link path
@@ -61,7 +63,7 @@ d3.json(dataSource, function(json) {
 
   link
     .append("text")
-    .attr("class", "predicateText")
+    .attr("class", "linkText")
     .attr("dy", "0.25em")
     .attr("dx", "0.25em")
     .append("textPath")
@@ -175,18 +177,35 @@ d3.json(dataSource, function(json) {
 function focusNode(node)
 {
   vis
-    .selectAll(".node")
-    .filter(function (d) {return d != node;})
-    .attr("color", "red");
+    .selectAll(".circleText")
+    .filter(function (d) {return d == node;})
+    .attr("class", "circleTextFocus");
 }
 
 function defocusNode(node)
 {
   vis
-    .selectAll(".node")
-    .filter(function (d) {return d != node;})
-    .attr("color", "green");
+    .selectAll(".circleTextFocus")
+    .filter(function (d) {return d == node;})
+    .attr("class", "circleText");
 }
+
+function focusLink(link)
+{
+  vis
+    .selectAll(".linkText")
+    .filter(function (d) {return d == link;})
+    .attr("class", "linkTextFocus");
+}
+
+function defocusLink(link)
+{
+  vis
+    .selectAll(".linkTextFocus")
+    .filter(function (d) {return d == link;})
+    .attr("class", "linkText");
+}
+
 
 function clickPredicate(predicate)
 {
