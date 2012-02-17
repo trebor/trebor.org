@@ -1,9 +1,12 @@
+.node
+{
+}
+
 .uri-icon
 {
   fill: #fc0;
   stroke: #f22;
   stroke-width: 0px;
-  cursor: pointer;
 }
 
 .blank-icon
@@ -20,7 +23,7 @@
   stroke-width: 0px;
 }
 
-.link
+.linkPath
 {
   stroke: #eee;
   stroke-width: 1em;

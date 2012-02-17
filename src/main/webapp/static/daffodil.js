@@ -39,30 +39,37 @@ var vis = d3.select("#chart").append("svg")
 d3.json(dataSource, function(json) {
   var nodes = tree.nodes(json);
 
+  // add link "g" node
+
   var link = vis.selectAll("path.link")
     .data(tree.links(nodes))
     .enter()
-    .append("g")
-    .attr("class", "linkg");
+    .append("g");
+
+  // add predicate link path
 
  link
     .append("path")
     .attr("id", function(d) {return d.target.predicate.name + d.target.name;})
-    .attr("class", "link")
+    .attr("class", "linkPath")
     .attr("d", hackedDiagonal);
+
+  // add predicate text
 
   link
     .append("text")
     .attr("class", "predicateText")
     .attr("dy", "0.25em")
-    .attr("dx", "0em")
+    .attr("dx", "0.25em")
     .append("textPath")
     .attr("xlink:href", function(d) 
           {
             return "#" + d.target.predicate.name + d.target.name;
           })
-    .attr("startOffset", nodeCircleRadius + 22)
+    .attr("startOffset", nodeCircleRadius)
     .text(function(d) {return d.target.predicate.name;});
+
+  // add predicate direction arrow
 
   link
     .append("text")
@@ -75,7 +82,6 @@ d3.json(dataSource, function(json) {
               : -(nodeCircleRadius + arrowBackset);
 
          })
-
     .append("textPath")
     .attr("xlink:href", function(d) 
           {
@@ -84,6 +90,7 @@ d3.json(dataSource, function(json) {
     .attr("startOffset", "100%")
     .text(function(d) {return String.fromCharCode(0x25b6);});
 
+  // add the nodes
 
   var node = vis.selectAll("g.node")
     .data(nodes)
@@ -95,6 +102,13 @@ d3.json(dataSource, function(json) {
           })
     .on("mouseover", focusNode)
     .on("mouseout", defocusNode);
+
+  // add clicking for URIs
+
+  node
+   .filter(function (d) {return d.type == "URI";})
+    .attr("cursor", "pointer")
+    .on("click", clickNode);
 
    // add backing circle
 
@@ -132,8 +146,7 @@ d3.json(dataSource, function(json) {
     .filter(function (d) {return d.type == "URI";})
     .append("circle")
     .attr("class", "uri-icon")
-    .attr("r", iconSize)
-    .on("click", clickNode);
+    .attr("r", iconSize);
 
   // add BLANK icon
 
@@ -161,17 +174,7 @@ function focusNode(node)
   vis
     .selectAll(".node")
     .filter(function (d) {return d != node;})
-    .style("opacity", "0.2");
-
-  vis
-    .selectAll(".shortText")
-    .filter(function (d) {return d == node;})
-    .style("visibility", "hidden");
-
-  vis
-    .selectAll(".fullText")
-    .filter(function (d) {return d == node;})
-    .style("visibility", "visible");
+    .attr("color", "red");
 }
 
 function defocusNode(node)
@@ -179,17 +182,7 @@ function defocusNode(node)
   vis
     .selectAll(".node")
     .filter(function (d) {return d != node;})
-    .style("opacity", "1");
-
-  vis
-    .selectAll(".shortText")
-    .filter(function (d) {return d == node;})
-    .style("visibility", "visible");
-
-  vis
-    .selectAll(".fullText")
-    .filter(function (d) {return d == node;})
-    .style("visibility", "hidden");
+    .attr("color", "green");
 }
 
 function clickNode(node)
