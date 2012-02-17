@@ -4,6 +4,7 @@ var h = window.innerHeight - 22;
 var r = (Math.min(w, h) / 2) - 50;
 var iconSize = 12
 var nodeCircleRadius = 40;
+var arrowBackset = 18;
 
 var tree = d3.layout.tree()
     .size([360, r])
@@ -54,24 +55,33 @@ d3.json(dataSource, function(json) {
     .append("text")
     .attr("class", "predicateText")
     .attr("dy", "0.25em")
+    .attr("dx", "0em")
     .append("textPath")
     .attr("xlink:href", function(d) 
           {
             return "#" + d.target.predicate.name + d.target.name;
           })
-    .attr("startOffset", nodeCircleRadius + 18)
+    .attr("startOffset", nodeCircleRadius + 22)
     .text(function(d) {return d.target.predicate.name;});
 
   link
     .append("text")
     .attr("class", "predicateArrow")
-    .attr("dy", "0.41em")
+    .attr("dy", "0.38em")
+    .attr("dx", function(d) 
+          {
+            return d.target.type == "BLANK" 
+              ? -(iconSize + arrowBackset)
+              : -(nodeCircleRadius + arrowBackset);
+
+         })
+
     .append("textPath")
     .attr("xlink:href", function(d) 
           {
             return "#" + d.target.predicate.name + d.target.name;
           })
-    .attr("startOffset", nodeCircleRadius)
+    .attr("startOffset", "100%")
     .text(function(d) {return String.fromCharCode(0x25b6);});
 
 
@@ -86,7 +96,7 @@ d3.json(dataSource, function(json) {
     .on("mouseover", focusNode)
     .on("mouseout", defocusNode);
 
-  // add backing circle
+   // add backing circle
 
   node
     .filter(function (d) {return d.type != "BLANK";})

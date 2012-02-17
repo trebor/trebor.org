@@ -22,26 +22,28 @@
 
 .link
 {
-  stroke: #ffd;
+  stroke: #eee;
   stroke-width: 1em;
 }
 
 .predicateText
 {
+  fill: #444;
 }
 
 .predicateArrow
 {
+  text-anchor: start;
   fill: lightgrey;
 }
 
 .nodeCircle
 {
-  fill: #ffd;
+  fill: #eee;
 }
 
 .circleText
 {
-  fill: black;
+  fill: #222;
   text-anchor: middle;
 }
