@@ -44,7 +44,9 @@ d3.json(dataSource, function(json) {
   var link = vis.selectAll("path.link")
     .data(tree.links(nodes))
     .enter()
-    .append("g");
+    .append("g")
+    .attr("cursor", "pointer")
+    .on("click", function (d) {clickPredicate(d.target.predicate);});
 
   // add predicate link path
 
@@ -53,6 +55,7 @@ d3.json(dataSource, function(json) {
     .attr("id", function(d) {return d.target.predicate.name + d.target.name;})
     .attr("class", "linkPath")
     .attr("d", hackedDiagonal);
+
 
   // add predicate text
 
@@ -183,6 +186,12 @@ function defocusNode(node)
     .selectAll(".node")
     .filter(function (d) {return d != node;})
     .attr("color", "green");
+}
+
+function clickPredicate(predicate)
+{
+  var target="./daffodil.html?q=" + escape(predicate.fullname)
+  window.location = target;
 }
 
 function clickNode(node)
