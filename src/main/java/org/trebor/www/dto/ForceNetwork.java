@@ -1,7 +1,9 @@
 package org.trebor.www.dto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,16 +15,11 @@ import org.apache.log4j.Logger;
 
 @XmlRootElement()
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ForceNetwork {
-
+public class ForceNetwork 
+{
   @SuppressWarnings("unused")
   private static final Logger logger = Logger.getLogger(ForceNetwork.class);
 
-  private static class Range{
-    double min = Double.MAX_VALUE;
-    double max = Double.MIN_VALUE;
-  }
-  
   @XmlAccessorType(XmlAccessType.PROPERTY)
   public static class Link
   {
@@ -30,18 +27,19 @@ public class ForceNetwork {
     private int mTargetId;
     private int mWeight;
     private String mName;
+    private String mFullName;
 
     Link()
     {
     }
 
-    Link(Node source, Node target, int weight, String name, List<Node> nodes,
-      Range range)
+    Link(Node source, Node target, int weight, String name, String fullName, List<Node> nodes)
     {
       setSourceId(nodes.indexOf(source));
       setTargetId(nodes.indexOf(target));
       setWeight(weight);
       setName(name);
+      setFullName(fullName);
     }
 
     @XmlElement(name = "source")
@@ -69,6 +67,13 @@ public class ForceNetwork {
       return mName;
     }
 
+    @XmlElement(name = "fullname")
+    public String getFullName()
+    {
+      return mFullName;
+    }
+
+
     public void setSourceId(int sourceId)
     {
       mSourceId = sourceId;
@@ -88,6 +93,11 @@ public class ForceNetwork {
     {
       mName = name;
     }
+
+    public void setFullName(String fullName)
+    {
+      mFullName = fullName;
+    }
   }
   
   @XmlAccessorType(XmlAccessType.FIELD)
@@ -97,13 +107,16 @@ public class ForceNetwork {
     private int mGroup;
     @XmlElement(name="name")
     private String mName;
+    @XmlElement(name="fullname")
+    private String mFullName;
 
     Node()
     {
     }
 
-    Node(String name, int group) {
+    Node(String name, String fullName, int group) {
       setName(name);
+      setFullName(fullName);
       setGroup(group);
     }
 
@@ -122,6 +135,16 @@ public class ForceNetwork {
     public void setName(String name) {
       mName = name;
     }
+
+    public String getFullName()
+    {
+      return mFullName;
+    }
+
+    public void setFullName(String fullName)
+    {
+      mFullName = fullName;
+    }
   }
 
   @XmlElement(name="links")  
@@ -131,39 +154,42 @@ public class ForceNetwork {
   private final List<Node> mNodes;
 
   @XmlTransient
-  private final Range mRange;
+  private final Map<String, Node> mNodeMap;
   
   public ForceNetwork()
   {
     mLinks = new ArrayList<Link>();
     mNodes = new ArrayList<Node>();
-    mRange = new Range();
+    mNodeMap = new HashMap<String, Node>();
   }
   
-  public Node addNode(String name, int group)
+  public Node addNode(String name, String fullName, int group)
   {
-    Node node = new Node(name, group);
-    mNodes.add(node);
+    Node node = mNodeMap.get(fullName);
+      
+    if (node == null)
+    {
+      node = new Node(name, fullName, group);
+      mNodeMap.put(fullName, node);
+      mNodes.add(node);
+    }
+    
     return node;
   }
   
   public Link link(Node source, Node target, int weight)
   {
-    return link(source, target, weight, source.getName() + "->" + target.getName());
+    return link(source, target, weight, source.getName() + "->" + target.getName(), source.getFullName() + "->" + target.getFullName());
   }
 
-  public Link link(Node source, Node target, int weight, String name)
+  public Link link(Node source, Node target, int weight, String name, String fullName)
   {
-    if (weight > mRange.max)
-      mRange.max = weight;
-    if (weight < mRange.min)
-      mRange.min = weight;
 
-    Link link = new Link(source, target, weight, name, mNodes, mRange);
+    Link link = new Link(source, target, weight, name, fullName, mNodes);
     mLinks.add(link);
     return link;
   }
-  
+
   public List<Link> getLinks() {
     return mLinks;
   }

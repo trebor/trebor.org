@@ -4,7 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.trebor.www.rdf.ResourceManager.ResourceType.*;
 
 import org.apache.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
+import org.openrdf.model.BNode;
+import org.openrdf.model.Literal;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
+import org.openrdf.model.ValueFactory;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -63,16 +69,24 @@ public class TestResourceManager
         LITERAL),
       new Resource("\"foo\nbar\"", null, LITERAL),
     };
+  private Repository mRepository;
+  private RepositoryConnection mConnection;
+
+  @Before
+  @SuppressWarnings("unused")
+  public void initialize() throws RepositoryException
+  {
+    mRepository = new SailRepository(new MemoryStore());
+    mRepository.initialize();
+    mConnection = mRepository.getConnection();
+    mConnection.setNamespace("too", "http://trebor.org/ns#");
+    mConnection.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
+  }
 
   @Test
   public void testUri() throws RepositoryException
   {
-    Repository repo = getMockRepository();
-    RepositoryConnection con1 = repo.getConnection();
-    con1.setNamespace("too", "http://trebor.org/ns#");
-    con1.setNamespace("xsd", "http://www.w3.org/2001/XMLSchema#");
-    RepositoryConnection con2 = repo.getConnection();
-    ResourceManager resourceManager = new ResourceManager(con2);
+    ResourceManager resourceManager = new ResourceManager(mConnection);
 
     for (Resource resource : mResources)
     {
@@ -102,11 +116,31 @@ public class TestResourceManager
       }
     }
   }
-
-  public static Repository getMockRepository() throws RepositoryException
+  
+  @Test
+  public void testValueFactory() throws RepositoryException
   {
-    Repository repository = new SailRepository(new MemoryStore());
-    repository.initialize();
-    return repository;
+    ValueFactory vf = mRepository.getValueFactory();
+    Literal l1 = vf.createLiteral(55.55f);
+    log.debug(l1.toString());
+    log.debug(l1.stringValue());
+    Literal l2 = vf.createLiteral("hello");
+    log.debug(l2.toString());
+    log.debug(l2.stringValue());
+    BNode b1 = vf.createBNode();
+    log.debug(b1.toString());
+    log.debug(b1.stringValue());
+    URI u1 = vf.createURI("too:test");
+    log.debug(u1.toString());
+    log.debug(u1.stringValue());
+    ResourceManager rm = new ResourceManager(mConnection);
+
+    Value[] values = {l1, l2, b1, u1};
+    
+    for (Value value: values)
+    {
+      log.debug(rm.shrinkResource(value));
+      log.debug(rm.growResource(value));
+    }
   }
 }

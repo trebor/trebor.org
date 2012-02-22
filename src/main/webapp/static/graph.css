@@ -25,10 +25,10 @@
 
 .link 
 {
-  fill: none;
-  stroke: none;
+  fill: red;
+  stroke: red;
+  stroke-width: 1em;
 }
-
 
 .linkPath
 {
@@ -44,6 +44,7 @@
 .linkText
 {
   fill: #888;
+  stroke: none;
 }
 
 .linkTextFocus

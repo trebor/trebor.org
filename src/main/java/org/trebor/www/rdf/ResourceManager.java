@@ -8,8 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.openrdf.model.BNode;
+import org.openrdf.model.Literal;
 import org.openrdf.model.Namespace;
 import org.openrdf.model.URI;
+import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -35,21 +38,33 @@ public class ResourceManager
 
   public enum ResourceType
   {    
-    SHORT_URI("^" + SHORT_URI_RE + "$"),
-    LONG_URI("^" + LONG_URI_RE + "$"),
-    BLANK_NODE("^" + BLANK_NODE_RE + "$"),
-    LITERAL(LITERAL_RE);
+    SHORT_URI("^" + SHORT_URI_RE + "$", true),
+    LONG_URI("^" + LONG_URI_RE + "$", true),
+    BLANK_NODE("^" + BLANK_NODE_RE + "$", false),
+    LITERAL(LITERAL_RE, false);
     
     private final Pattern mPattern;
+    private final boolean mIsUri;
     
-    ResourceType(String regex)
+    ResourceType(String regex, boolean isUri)
     {
       mPattern = Pattern.compile(regex);
+      mIsUri = isUri;
     }
     
     public boolean isMatch(String resource)
     {
       return mPattern.matcher(resource).matches();
+    }
+
+    static ResourceType establishType(Value value)
+    {
+      if (value instanceof Literal)
+        return LITERAL;
+      else if (value instanceof BNode)
+        return BLANK_NODE;
+
+      return establishType(value.stringValue());
     }
     
     static ResourceType establishType(String resource)
@@ -66,6 +81,11 @@ public class ResourceManager
       Matcher matcher = mPattern.matcher(resource);
       matcher.matches();
       return matcher;
+    }
+
+    public boolean isUri()
+    {
+      return mIsUri;
     }
   }
 
@@ -90,6 +110,11 @@ public class ResourceManager
   public ResourceType establishType(String resource)
   {
     return ResourceType.establishType(resource);
+  }
+
+  public String shrinkResource(Value value)
+  {
+    return shrinkResource(value.toString());
   }
   
   public String shrinkResource(String longResource)
@@ -126,6 +151,11 @@ public class ResourceManager
     }
 
     return longResource;
+  }
+
+  public String growResource(Value value)
+  {
+    return growResource(value.toString());
   }
 
   public String growResource(String shortResource)

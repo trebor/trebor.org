@@ -19,7 +19,7 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
   public JAXBContextResolver() throws Exception
   {
     JSONConfiguration config =
-      JSONConfiguration.mapped().arrays("children").nonStrings("size").build();
+      JSONConfiguration.mapped().arrays("children").nonStrings("size", "source", "target").build();
     context = new JSONJAXBContext(config, types);
   } 
 

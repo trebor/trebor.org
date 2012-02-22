@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.RepositoryException;
+import org.trebor.www.dto.ForceNetwork;
 import org.trebor.www.dto.MenuTreeNode;
 import org.trebor.www.dto.RdfValue;
 import org.trebor.www.store.TreborStore;
@@ -34,6 +35,11 @@ public class TreborService
   public RdfValue getRdf(String uri) throws RepositoryException, MalformedQueryException, QueryEvaluationException
   {
     return mStore.getRdf(uri);
+  }
+  
+  public ForceNetwork getRdfGraph(String uri, int depth) throws RepositoryException, MalformedQueryException, QueryEvaluationException
+  {
+    return mStore.getRdfGraph(uri, depth);
   }
   
   private MenuTreeNode renderMarkup(MenuTreeNode node)
