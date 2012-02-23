@@ -158,8 +158,8 @@ public class TreborStore
 
       // create objects to add to force network
       
-      Node subjectNode = fn.addNode(mRm.shrinkResource(subject), mRm.growResource(subject), 1);
-      Node objectNode = fn.addNode(mRm.shrinkResource(object), mRm.growResource(object), 1);
+      Node subjectNode = fn.addNode(mRm.shrinkResource(subject), mRm.growResource(subject), mRm.establishType(subject).toString(), 1);
+      Node objectNode = fn.addNode(mRm.shrinkResource(object), mRm.growResource(object), mRm.establishType(object).toString(), 1);
       fn.link(subjectNode, objectNode, 1, mRm.shrinkResource(predicate), mRm.growResource(predicate));
 
       // visit children

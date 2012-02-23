@@ -109,14 +109,17 @@ public class ForceNetwork
     private String mName;
     @XmlElement(name="fullname")
     private String mFullName;
+    @XmlElement(name="type")
+    private String mType;
 
     Node()
     {
     }
 
-    Node(String name, String fullName, int group) {
+    Node(String name, String fullName, String type, int group) {
       setName(name);
       setFullName(fullName);
+      setType(type);
       setGroup(group);
     }
 
@@ -145,6 +148,16 @@ public class ForceNetwork
     {
       mFullName = fullName;
     }
+
+    public String getType()
+    {
+      return mType;
+    }
+
+    public void setType(String type)
+    {
+      mType = type;
+    }
   }
 
   @XmlElement(name="links")  
@@ -163,13 +176,13 @@ public class ForceNetwork
     mNodeMap = new HashMap<String, Node>();
   }
   
-  public Node addNode(String name, String fullName, int group)
+  public Node addNode(String name, String fullName, String type, int group)
   {
     Node node = mNodeMap.get(fullName);
       
     if (node == null)
     {
-      node = new Node(name, fullName, group);
+      node = new Node(name, fullName, type, group);
       mNodeMap.put(fullName, node);
       mNodes.add(node);
     }

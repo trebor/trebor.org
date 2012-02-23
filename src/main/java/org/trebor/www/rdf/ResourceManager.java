@@ -107,6 +107,11 @@ public class ResourceManager
     }
   }
 
+  public ResourceType establishType(Value value)
+  {
+    return establishType(value.toString());
+  }
+
   public ResourceType establishType(String resource)
   {
     return ResourceType.establishType(resource);
@@ -189,4 +194,5 @@ public class ResourceManager
 
     return shortResource;
   }
+
 }

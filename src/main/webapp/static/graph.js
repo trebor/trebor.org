@@ -21,7 +21,13 @@ var vis = d3.select("#chart").append("svg").attr("width", w).attr("height", h);
 
 // create the force network
 
-var force = d3.layout.force().charge(-100).linkDistance(linkDistance).size([w, h]);
+var force = d3.layout.force()
+  .charge(-2000)
+//  .linkStrength(0.2)
+//  .theta(1)
+  .friction(0.3)
+  .linkDistance(linkDistance)
+  .size([w, h]);
 
 // entry point for code
 
@@ -38,13 +44,16 @@ function setRootUri(newRootUri)
 
 function isRoot(node)
 {
-  return node.name == rootUri || node.fullname == rootUri;
+  return isNode(node, rootUri);
+}
+
+function isNode(node, uri)
+{
+  return node.name == uri || node.fullname == uri;
 }
 
 function configureGraph(json) 
 {
-
-
   force
     .stop()
     .nodes(json.nodes)
@@ -113,15 +122,18 @@ function configureGraph(json)
   // add icon cirlce
 
   newNodes
+    .filter(function(d) {return d.type == "URI";})
     .append("circle")
     .attr("class", "uri-icon")
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .attr("r", iconSize);
 
+
   // add text circle path
 
   newNodes
+    .filter(function(d) {return d.type != "BLANK_NODE";})
     .append("path")
     .attr("class", "nodeTextCircle")
     .attr("id", idKey)
@@ -132,6 +144,7 @@ function configureGraph(json)
   // add node cirlce text
 
   newNodes
+    .filter(function(d) {return d.type != "BLANK_NODE";})
     .append("text")
     .attr("class", "circleText")
     .attr("dy", "0")
@@ -171,10 +184,10 @@ function configureGraph(json)
 
   vis.selectAll("g.node")
     .filter(isRoot)
-    .each(function (d) {d.fixed = true;})
+   .each(function (d) {d.fixed = true;})
     .transition()
     .duration(transitionDuration)
-    .tween("customRootMove", function (d) 
+    .tween("customRootMove", function (d)
            {
              var op = oldNodePositions[d.fullname];
              var startX = op ? op[0] : w / 2;
@@ -187,6 +200,7 @@ function configureGraph(json)
                return t;
              };
            });
+
 
   // activate the tick!
 
@@ -229,7 +243,7 @@ function clickNode(node)
       oldNodePositions[d.fullname] = [d.x, d.y];
       console.log("oldNodePositions", oldNodePositions[d.fullname]);
     });
-  
+
   setRootUri(node.fullname);
 }
 
