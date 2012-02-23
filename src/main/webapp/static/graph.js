@@ -12,8 +12,8 @@ var transitionDuration = 3000;
 var fill = d3.scale.category20();
 var nodesTick;
 var linksTick;
-var rootX = w / 2;
-var rootY = h / 2;
+var oldNodePositions = new Array();
+var rootPos = [w / 2, h / 2];
 
 // create the visualization
 
@@ -176,10 +176,14 @@ function configureGraph(json)
     .duration(transitionDuration)
     .tween("customRootMove", function (d) 
            {
+             var op = oldNodePositions[d.fullname];
+             var startX = op ? op[0] : w / 2;
+             var startY = op ? op[1] : h / 2;
+
              return function(t) 
              {
-               d.px = rootX * (1 - t) + (w/2) * t;
-               d.py = rootY * (1 - t) + (h/2) * t;
+               d.px = startX * (1 - t) + (w/2) * t;
+               d.py = startY * (1 - t) + (h/2) * t;
                return t;
              };
            });
@@ -220,8 +224,12 @@ function clickPredicate(predicate)
 
 function clickNode(node)
 {
-  rootX = node.x;
-  rootY = node.y;
+  vis.selectAll("g.node")
+    .each(function (d) {
+      oldNodePositions[d.fullname] = [d.x, d.y];
+      console.log("oldNodePositions", oldNodePositions[d.fullname]);
+    });
+  
   setRootUri(node.fullname);
 }
 
