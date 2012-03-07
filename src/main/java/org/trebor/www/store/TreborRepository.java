@@ -43,7 +43,7 @@ public class TreborRepository
   {
     setRepository(mConfiguration.getBoolean(RDF_REMOTE)
       ? connectToHttpStore()
-      : initMemoryStore());
+      : createMemoryStore());
   }
 
   @PreDestroy
@@ -74,7 +74,7 @@ public class TreborRepository
     return repository;
   }
 
-  private Repository initMemoryStore() throws RepositoryException, IOException 
+  public static Repository createMemoryStore() throws RepositoryException, IOException 
   {
     log.debug("initializing memory store");
     
@@ -113,5 +113,10 @@ public class TreborRepository
   public Repository getRepository()
   {
     return mRepository;
+  }
+
+  public static void setConfiguration(TreborConfiguration configuration)
+  {
+    mConfiguration = configuration;
   }
 }

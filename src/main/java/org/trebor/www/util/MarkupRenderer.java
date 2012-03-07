@@ -17,6 +17,7 @@ public class MarkupRenderer extends WikiModel
   public static final String IMAGE_BASE = STATIC_BASE + "assets/images/";
   public static final String PAGE_BASE = "/fdl/";
   public static final String MAP_BASE = "/map/";
+  public static final String LOCAL_BASE = "/";
 
   private static final ITemplateFunction RESUME_TEMPLATE = new ITemplateFunction()
   {
@@ -63,6 +64,7 @@ public class MarkupRenderer extends WikiModel
       addInterwikiLink("youtube", "http://www.youtube.com/watch?v=${title}");
       addInterwikiLink("sitemap", MAP_BASE + "${title}");
       addInterwikiLink("static", STATIC_BASE + "${title}");
+      addInterwikiLink("local", LOCAL_BASE + "${title}");
       addTemplateFunction("resume", RESUME_TEMPLATE);
       addTemplateFunction("nowrap", NO_WRAP_TEMPLATE);
     }

@@ -14,6 +14,7 @@ toi:software        a                   too:treeNode;
                     too:hasNodeChild     _:freesand;
                     too:hasNodeChild     _:swarm;
                     too:hasNodeChild     _:splink;
+                    too:hasNodeChild     _:fukushima;
                     too:hasNodeChild     _:trebor_org;
                     too:hasNodeSummary
 
@@ -21,6 +22,27 @@ toi:software        a                   too:treeNode;
 the following are some of the software projects i've worked on for fun over the years.
 most of these projects are released under one open source license or another.
 """.
+
+_:fukushima         a                   too:treeNode;
+                    too:hasName         "fukushima";
+                    too:hasTitle        "[[static:fukushima.html|fukushima&nbsp;radiation&nbsp;map]]";
+                    too:hasNodeIcon     "fukushima";
+                    too:hasNodeSummary
+"""
+[http://blog.safecast.org/ safecast] provides raw
+[http://maps.safecast.org/downloads/ radiation data] and
+[http://blog.safecast.org/maps/ radiation maps] from the 
+[[wikipedia:Fukushima_Daiichi_nuclear_disaster|fukushima daiichi nuclear disaster]].
+to get a feel for how the millions of
+[[wikipedia:Geiger_counter|geiger counter]] readings were collected over time, 
+i averaged together all readings inside 1 kilometer squares within a given hour using 
+[http://hadoop.apache.org/mapreduce/ hadoop].
+i animated the resulting 100 thousand or so data points on a 
+[[static:fukushima.html|google map]].
+""".
+                    
+
+
 
 _:splink            a                   too:treeNode;
                     too:hasName         "splink";
@@ -167,12 +189,9 @@ service running under
 [http://tomcat.apache.org/ tomcat]
 hosted on
 [[wikipedia:Amazon_EC2|amazon ec2]].
-data is queried using a combination of
-[[wikipedia:SPARQL|sparql]]
-and
-[http://www.openrdf.org/alibaba.jsp alibaba].
+data is queried using [[wikipedia:SPARQL|sparql]].
 
-jersey and alibaba both use
+jersey uses
 [[wikipedia:Java_annotation|java annotation]]s
 to 
 [[wikipedia:Marshalling_(computer_science)|marshal]] 
