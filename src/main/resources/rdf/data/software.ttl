@@ -35,10 +35,12 @@ _:fukushima         a                   too:treeNode;
 [[wikipedia:Fukushima_Daiichi_nuclear_disaster|fukushima daiichi nuclear disaster]].
 to get a feel for how the millions of
 [[wikipedia:Geiger_counter|geiger counter]] readings were collected over time, 
-i averaged together all readings inside 1 kilometer squares within a given hour using 
-[http://hadoop.apache.org/mapreduce/ hadoop].
-i animated the resulting 100 thousand or so data points on a 
-[[static:fukushima.html|google map]].
+i used [http://hadoop.apache.org/mapreduce/ hadoop] 
+to average all readings inside 1 kilometer squares within a given hour.
+i animated the resulting 100 thousand or so data points onto 
+[[static:fukushima.html|this google map]] with 
+[http://mbostock.github.com/d3/ d3.js], and
+[http://github.com/gka/chroma.js/wiki/Chroma.js chroma.js] for color.
 """.
                     
 
