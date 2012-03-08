@@ -1,5 +1,8 @@
 package org.trebor.www.resource;
 
+import java.io.IOException;
+
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -17,6 +20,9 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.RepositoryException;
 import org.trebor.www.service.TreborService;
 
+import com.maxmind.geoip.Location;
+import com.maxmind.geoip.LookupService;
+import com.maxmind.geoip.regionName;
 import com.sun.jersey.api.core.InjectParam;
 
 @Path("/")
@@ -28,6 +34,15 @@ public class TreborResource
   @InjectParam
   private static TreborService mTreborService;
 
+  private static LookupService mGeoLookup;
+
+  @PostConstruct
+  public void initialize() throws IOException
+  {
+    mGeoLookup = new LookupService("/usr/share/GeoIP/GeoLiteCity.dat",
+      LookupService.GEOIP_MEMORY_CACHE );
+  }
+  
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("menu/{page}")
@@ -59,8 +74,13 @@ public class TreborResource
   
   private static String remoteAddress(HttpServletRequest hsr)
   {
-    return hsr.getRemoteAddr() + (hsr.getRemoteAddr().equals(hsr.getRemoteHost()) 
-       ? ""
-       : " (" + hsr.getRemoteHost() + ")");
+    Location location = mGeoLookup.getLocation(hsr.getRemoteHost());
+    String detail =
+      location == null
+        ? ""
+        : String.format(" %s, %s", location.city,
+          regionName.regionNameByCode(location.countryCode, location.region));
+
+    return String.format("[%s]%s", hsr.getRemoteAddr(), detail);
   }
 }

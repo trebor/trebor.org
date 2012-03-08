@@ -94,10 +94,6 @@ public class ResourceManager
     if (connection != null)
     {
       mNamespaces = connection.getNamespaces().asList();
-      for (Namespace ns: mNamespaces)
-      {
-        log.debug(String.format("ns: %s -> %s", ns.getPrefix(), ns.getName()));
-      }
       mValueFactory = connection.getValueFactory();
     }
     else
@@ -125,10 +121,7 @@ public class ResourceManager
   public String shrinkResource(String longResource)
   {
     if (mNamespaces == null)
-    {
-      log.debug("null namespace");
       return longResource;
-    }
     
     if (LONG_URI.isMatch(longResource))
     {
