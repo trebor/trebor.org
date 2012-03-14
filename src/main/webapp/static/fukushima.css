@@ -1,4 +1,4 @@
-html, body, #map {
+html, body, #map, #foobar {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -16,5 +16,24 @@ html, body, #map {
   font: 10px sans-serif;
 }
 
-.readings circle {
+.readings circle 
+{
+}
+
+#scale
+{
+  font: 12px sans-serif;
+  font-weight: bold;
+  text-shadow: none;
+  stroke-width: 1px;
+  padding: 5px 10px 50px 20px;
+}
+
+#timeline
+{
+  font: 14px sans-serif;
+  font-weight: bold;
+  text-shadow: none;
+  fill: #444;
+  shape-rendering: crispEdges;
 }
