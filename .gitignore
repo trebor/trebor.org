@@ -2,4 +2,4 @@ target
 Icon*
 *~.skp
 webapps
-src/main/webapp/static/fukushima-data
+src/main/webapp/static/data

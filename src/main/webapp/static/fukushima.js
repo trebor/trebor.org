@@ -47,7 +47,7 @@ animateData();
 
 function animateData()
 {
-  var name = "fukushima-data/frame-" + pad(frameIndex, 5) + ".json";
+  var name = "data/fukushima/frame-" + pad(frameIndex, 5) + ".json";
   d3.json(name, displayData);
   setTimeout("animateData()", frameDelay);
   if (++frameIndex > maxFrame)
@@ -152,10 +152,10 @@ function constructScale()
   // create scale div and add to map
 
   var scaleDiv = document.createElement('DIV');
+  scaleDiv.id = "scale";
   scaleDiv.style.width="3em";
   scaleDiv.style.height="0%";
-//   scaleDiv.style.padding="5px 10px 50px 20px";
-  scaleDiv.id = "scale";
+  scaleDiv.style.padding="20px 40px";
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(scaleDiv);
 
   // add label
