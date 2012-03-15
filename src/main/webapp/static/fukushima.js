@@ -17,6 +17,7 @@ var fadeDelay = 1500;
 var maxReading = 4.5;
 var minTime = 1303617600000;
 var maxTime = 1326985200000;
+var dateFormat = d3.time.format("%d %b %Y %H:00");
 
 // compute color space
 
@@ -245,14 +246,11 @@ function constructTimeline()
 
 }
 
-
 function updateTimeline(time)
 {
-  var format = d3.time.format("%d %b %Y %H:00");
-
   if (timelineRect)
     timelineRect.attr("width", ((time - minTime) / (maxTime - minTime) * 100) + "%");
 
   if (timelineText)
-    timelineText.text(format(new Date(time)));
+    timelineText.text(dateFormat(new Date(time)));
 }
