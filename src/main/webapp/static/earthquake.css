@@ -1,0 +1,34 @@
+html, body, #map, #foobar {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.readings, .readings svg {
+  position: absolute;
+}
+
+.readings svg {
+  width: 60px;
+  height: 20px;
+  padding-right: 100px;
+  font: 7px sans-serif;
+  font-weight: bold;
+  fill: #fff;
+}
+
+.readings circle 
+{
+  stroke-width: 1px;
+  stroke: #A00000;
+}
+
+#scale
+{
+  font: 12px sans-serif;
+  font-weight: bold;
+  text-shadow: none;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
