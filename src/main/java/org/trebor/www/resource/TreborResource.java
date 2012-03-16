@@ -72,6 +72,15 @@ public class TreborResource
     return Response.ok(mTreborService.getRdfGraph(uri, depth)).build();
   }
   
+  @GET
+  @Produces("text/csv")
+  @Path("quake")
+  public Response quake(@Context HttpServletRequest hsr,  @QueryParam("name") @DefaultValue("eqs7day-M2.5.txt")String name, @QueryParam("test") @DefaultValue("false")final boolean test) throws IOException  
+  {
+    log.debug(String.format("%s requested %s%s", remoteAddress(hsr), test ? "test " : "", name));
+    return Response.ok(mTreborService.getQuakeData(name, test)).build();
+  }
+  
   private static String remoteAddress(HttpServletRequest hsr)
   {
     Location location = mGeoLookup.getLocation(hsr.getRemoteHost());

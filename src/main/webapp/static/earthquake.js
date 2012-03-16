@@ -1,26 +1,33 @@
 // google map
 
+var mapStyle = 
+[ 
+  { featureType: "poi.park", elementType: "geometry", stylers: [ { gamma: 1 }, { lightness: 50 }, { saturation: -45 } ] },
+  { featureType: "water", elementType: "geometry", stylers: [ { saturation: -25 }, { lightness: 50 } ] },
+  { featureType: "road", stylers: [ { visibility: "on" }, { saturation: -70 }, { lightness: 40 } ] },
+  { featureType: "administrative", stylers: [ { saturation: -100 }, { lightness: 20 } ] },
+  { elementType: "labels", stylers: [ { lightness: 52 }, { saturation: -80 } ] } 
+];
+
 var map = new google.maps.Map(d3.select("#map").node(),
 {
   zoom: 2,
   center: new google.maps.LatLng(20.8255, -156.9199),
-  mapTypeId: google.maps.MapTypeId.TERRAIN
+  mapTypeId: google.maps.MapTypeId.ROADMAP,
+  styles: mapStyle,
 });
 
-// initialize when the tiles have loaded
+// globals
 
-//google.maps.event.addListener(map, "tilesloaded", initialize);
+var maxMagnitude = 10;
 
-// initialize now!
+// initialize data
 
 initialize();
 
-// other globals
+// have a look at the radius computation
 
-var minFrame = 1
-var maxFrame = 2513;
-var fadeDelay = 1500;
-var maxMagnitude = 10;
+//testRadiusComputation();
 
 // compute color space
 
@@ -34,14 +41,18 @@ var colorScale = new chroma.ColorScale({
 
 constructScale();
 
-// load data and chain to self to animate
-
 function initialize()
 {
-  var name = "data/earthquake/eqs7day-M2.5.txt";
-  //var name = "http://earthquake.usgs.gov/earthquakes/catalogs/eqs7day-M2.5.txt";
+//  d3.csv("/quake?test=false", displayData);
+  d3.csv("/quake?test=true&name=data1.csv", displayData);
+  setTimeout("change()", 5000);
+  console.log("inited");
+}
 
-  d3.csv(name, displayData);
+function change()
+{
+  d3.csv("/quake?test=true&name=data2.csv", displayData);
+  console.log("changed");
 }
 
 // put loaded data on the map
@@ -52,6 +63,8 @@ function displayData(data)
 
   if (!data)
     return;
+
+  console.log("size: ", data.length);
 
   // sort the smallest quakes to the top of the view
 
@@ -119,36 +132,47 @@ function displayData(data)
 
       // create svg
 
-      var marker = layer.selectAll("svg")
-        .data(data)
-        .each(transform) // update existing markers
-        .enter()
-        .append("svg:svg")
-        .each(transform);
+      var updates = layer.selectAll("svg")
+        .data(data, function(d) {return d.Eqid;})
+        .each(function(d) {console.log("update", d.Eqid);})
+        .each(transform); // update existing markers
 
+      var enters = updates.enter()
+        .append("svg:svg")
+        .each(function(d) {console.log("enter", d.Eqid);})
+        .each(transform);
 
       // add the one and only marker for this svg
 
-      marker
+      enters
         .append("svg:circle")
-        .attr("r", function(d) {return d.size - 1;})
+        .attr("r", 0)
         .attr("cx", function(d) {return d.size;})
         .attr("cy", function(d) {return d.size;})
-        .attr("opacity", function(d) {return d.age;})
-        .style("fill", "red");
+        .attr("opacity", 0.5)
+//        .attr("opacity", function(d) {return d.age;})
+        .style("fill", "red")
+        .transition()
+        .duration(function(d) {return 500 * d.Magnitude})
+        .attr("r", function(d) {return d.size - 1;});
 
 //         .style("fill", function (d) {return colorScale.getColor(d.Magnitude / maxMagnitude);});
 
       // at label to this marker
 
-//       marker
+//       enters
 //         .append("svg:text")
 //         .attr("x", "50%")
 //         .attr("y", "52%")
 //         .attr("text-anchor", "middle")
 //         .attr("dominant-baseline", "middle")
-//         .text(function(d) {return "" + d.date.getDate();});
-//        .text(function(d) {return "" + d.Magnitude;});
+//         .text(function(d) {return "" + d.Magnitude;});
+
+      // remove the exits
+
+      updates.exit()
+        .each(function(d) {console.log("exit", d.Eqid);})
+        .remove();
 
       // transform lat long to screen coordinates
 
@@ -183,9 +207,32 @@ function displayData(data)
 
 function computeMarkerRadius(magnitude)
 {
+  // compute the ideal area (10^magnitude)
+
   var area = Math.pow(10, magnitude);
+
+  // establish the radius which will produce that visual area
+
   var radius = Math.sqrt(area / Math.PI);
-  return 3 + radius / 20;
+
+  // scale down the radius (add error) so markes fit on screen
+  // note: error increased with magnitude
+
+  return 2.5 + radius / (1 - 1/(0.02 * (magnitude - maxMagnitude)));
+}
+
+function testRadiusComputation()
+{
+  console.log("-----------------");
+  var prev = null;
+  for (var i = 1; i < 11; ++i)
+  {
+    var rad = computeMarkerRadius(i);
+    var area = Math.PI * rad * rad;
+    var ratio = Math.round(area / (prev != null ? prev : area));
+    console.log("mag:", i, "rad:", rad, "area:", area, "ratio", ratio);
+    prev = area;
+  }
 }
 
 // construct the reading scale

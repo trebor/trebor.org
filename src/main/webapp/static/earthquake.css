@@ -13,9 +13,9 @@ html, body, #map, #foobar {
   width: 60px;
   height: 20px;
   padding-right: 100px;
-  font: 7px sans-serif;
+  font: 6px sans-serif;
   font-weight: bold;
-  fill: #fff;
+  fill: #000;
 }
 
 .readings circle 
