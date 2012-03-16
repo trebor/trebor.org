@@ -7,6 +7,14 @@ var map = new google.maps.Map(d3.select("#map").node(),
   mapTypeId: google.maps.MapTypeId.TERRAIN
 });
 
+// initialize when the tiles have loaded
+
+//google.maps.event.addListener(map, "tilesloaded", initialize);
+
+// initialize now!
+
+initialize();
+
 // other globals
 
 var minFrame = 1
@@ -30,7 +38,10 @@ constructScale();
 
 function initialize()
 {
-  d3.csv("data/earthquake/eqs7day-M2.5.txt", displayData);
+  var name = "data/earthquake/eqs7day-M2.5.txt";
+  //var name = "http://earthquake.usgs.gov/earthquakes/catalogs/eqs7day-M2.5.txt";
+
+  d3.csv(name, displayData);
 }
 
 // put loaded data on the map
@@ -93,9 +104,6 @@ function displayData(data)
     // create date format for parsing
     // example: Friday, March  9, 2012 14:29:10 UTC
 
-//    var quakeDateFormat = d3.time.format("%A, %B %e, %Y %H:%M:%S UTC");
-//    var millisecondsInAWeek = 1000 * 60 * 60 * 24 * 7;
-
     // create the div to put this all in
 
     var layer = d3.select(this.getPanes().overlayLayer)
@@ -115,14 +123,15 @@ function displayData(data)
         .data(data)
         .each(transform) // update existing markers
         .enter()
-        .append("svg:svg");
+        .append("svg:svg")
+        .each(transform);
 
 
       // add the one and only marker for this svg
 
       marker
         .append("svg:circle")
-        .attr("r", function(d) {return d.size - 2;})
+        .attr("r", function(d) {return d.size - 1;})
         .attr("cx", function(d) {return d.size;})
         .attr("cy", function(d) {return d.size;})
         .attr("opacity", function(d) {return d.age;})
@@ -176,7 +185,7 @@ function computeMarkerRadius(magnitude)
 {
   var area = Math.pow(10, magnitude);
   var radius = Math.sqrt(area / Math.PI);
-  return 6 + radius / 20;
+  return 3 + radius / 20;
 }
 
 // construct the reading scale
@@ -226,5 +235,3 @@ function constructScale()
       .text(valStr);
   }
 }
-
-initialize();
