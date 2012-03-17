@@ -5,11 +5,13 @@ html, body, #map, #foobar {
   padding: 0;
 }
 
-.readings, .readings svg {
+markers, .markers svg 
+{
   position: absolute;
 }
 
-.readings svg {
+.markers svg 
+{
   width: 60px;
   height: 20px;
   padding-right: 100px;
@@ -18,10 +20,13 @@ html, body, #map, #foobar {
   fill: #000;
 }
 
-.readings circle 
+.markers circle 
 {
   stroke-width: 1px;
+  fill: red;
   stroke: #A00000;
+/*   fill: green; */
+/*   stroke: #00A000; */
 }
 
 #scale

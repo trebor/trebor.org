@@ -17,18 +17,6 @@ var map = new google.maps.Map(d3.select("#map").node(),
   styles: mapStyle,
 });
 
-// globals
-
-var maxMagnitude = 10;
-
-// initialize data
-
-initialize();
-
-// have a look at the radius computation
-
-//testRadiusComputation();
-
 // compute color space
 
 var colorScale = new chroma.ColorScale({
@@ -37,35 +25,42 @@ var colorScale = new chroma.ColorScale({
     mode: 'rgb'
 });
 
+// other globals
+
+var overlay = null;
+var theData = null;
+
+// constants
+
+var MAX_MAGNITUDE = 10;
+var SUMMARY_WIDTH = 200;
+var SUMMARY_HEIGHT = 100;
+
 // construct the color scale
 
-constructScale();
+//constructScale();
+
+// initialize data
+
+initialize();
+
+// have a look at the radius computation
 
 function initialize()
 {
-//  d3.csv("/quake?test=false", displayData);
-  d3.csv("/quake?test=true&name=data1.csv", displayData);
-  setTimeout("change()", 5000);
-  console.log("inited");
+  d3.csv("/quake?test=true", setData);
+//  d3.csv("/quake?test=true&name=data1.csv", setData);
+  setTimeout("change()", 3000);
 }
 
 function change()
 {
-  d3.csv("/quake?test=true&name=data2.csv", displayData);
-  console.log("changed");
+  d3.csv("/quake?test=false", setData);
+//  d3.csv("/quake?test=true&name=data2.csv", setData);
 }
 
-// put loaded data on the map
-
-function displayData(data)
+function setData(data)
 {
-  // if there is no data, return
-
-  if (!data)
-    return;
-
-  console.log("size: ", data.length);
-
   // sort the smallest quakes to the top of the view
 
   data.sort(function (a, b)
@@ -106,9 +101,28 @@ function displayData(data)
     d.age = (d.date.getTime() - minDate.getTime()) / ageRange;
   }
 
-  // create overlay
+  // set the global data
 
-  var overlay = new google.maps.OverlayView();
+  theData = data;
+
+  // if overlya has not been initialize, do that
+
+  if (overlay == null)
+    initializeOverlay();
+
+  // otherwise redraw the overlay
+
+  else
+    overlay.draw();
+}
+
+// put loaded data on the map
+
+function initializeOverlay()
+{
+  // create the overlay
+
+  overlay = new google.maps.OverlayView();
 
   // Add the container when the overlay is added to the map.
 
@@ -119,9 +133,9 @@ function displayData(data)
 
     // create the div to put this all in
 
-    var layer = d3.select(this.getPanes().overlayLayer)
+    var layer = d3.select(this.getPanes().overlayMouseTarget)
       .append("div")
-      .attr("class", "readings");
+      .attr("class", "markers");
 
     // draw each marker as a separate SVG element
 
@@ -133,13 +147,15 @@ function displayData(data)
       // create svg
 
       var updates = layer.selectAll("svg")
-        .data(data, function(d) {return d.Eqid;})
-        .each(function(d) {console.log("update", d.Eqid);})
+        .data(theData, function(d) {return d.Eqid;})
+        .on("mouseover", mouseoverQuake)
+        .on("mouseout", mouseoutQuake)
         .each(transform); // update existing markers
 
       var enters = updates.enter()
         .append("svg:svg")
-        .each(function(d) {console.log("enter", d.Eqid);})
+        .on("mouseover", mouseoverQuake)
+        .on("mouseout", mouseoutQuake)
         .each(transform);
 
       // add the one and only marker for this svg
@@ -147,31 +163,44 @@ function displayData(data)
       enters
         .append("svg:circle")
         .attr("r", 0)
+//         .on("mouseover", mouseoverQuake)
+//         .on("mouseout", mouseoutQuake)
+        .style("visibility", "visible")
         .attr("cx", function(d) {return d.size;})
         .attr("cy", function(d) {return d.size;})
-        .attr("opacity", 0.5)
+        .attr("opacity", 0.6)
 //        .attr("opacity", function(d) {return d.age;})
-        .style("fill", "red")
+//      .style("fill", function (d) {return colorScale.getColor(d.Magnitude / MAX_MAGNITUDE);})
         .transition()
         .duration(function(d) {return 500 * d.Magnitude})
         .attr("r", function(d) {return d.size - 1;});
 
-//         .style("fill", function (d) {return colorScale.getColor(d.Magnitude / maxMagnitude);});
-
-      // at label to this marker
-
-//       enters
-//         .append("svg:text")
-//         .attr("x", "50%")
-//         .attr("y", "52%")
-//         .attr("text-anchor", "middle")
-//         .attr("dominant-baseline", "middle")
-//         .text(function(d) {return "" + d.Magnitude;});
+      // add summary text
+      
+      enters
+        .append("svg:foreignObject")
+        .attr("class", "summaryTextObject")
+        .attr("x", function(d) {return d.size;})
+        .attr("y", function(d) {return d.size;})
+        .style("visibility", "hidden")
+        .attr("width",  SUMMARY_WIDTH + "px")
+        .attr("height", SUMMARY_HEIGHT + "px")
+        .append("xhtml:body")
+        .style("visibility", "hidden")
+        .attr("class", "summaryText")
+        .html(constructSummaryHtml);
 
       // remove the exits
 
       updates.exit()
-        .each(function(d) {console.log("exit", d.Eqid);})
+        .transition()
+        .duration(function(d) {return 500 * d.Magnitude})
+        .remove();
+
+      updates.exit().selectAll("circle")
+        .transition()
+        .duration(function(d) {return 500 * d.Magnitude})
+        .attr("r", 0)
         .remove();
 
       // transform lat long to screen coordinates
@@ -181,26 +210,64 @@ function displayData(data)
         var size = d.size;
         d = new google.maps.LatLng(d.Lat, d.Lon);
         d = projection.fromLatLngToDivPixel(d);
-
         return d3.select(this)
+          .style("visibility", "hidden")
+//          .style("background", "blue")
           .style("left", d.x - size + "px")
           .style("top", d.y - size + "px")
-          .style("width", size * 2 + "px")
-          .style("height", size * 2 + "px");
+          .style("width", size + SUMMARY_WIDTH + "px")
+          .style("height", size + SUMMARY_HEIGHT + "px");
       }
     };
   };
 
-  // be sure to remove readings when overlay is removed
+  // be sure to remove markers when overlay is removed
 
   overlay.onRemove = function() 
   {
-    d3.select(".readings").remove();
+    d3.select(".markers").remove();
   };
 
   // add new layer
 
   overlay.setMap(map);
+}
+
+var QUAKE_BASE = "http://earthquake.usgs.gov/earthquakes/recenteqsus/Quakes/";
+var QUAKE_TAIL = ".php";
+
+// construct html to go into summary text
+
+function constructSummaryHtml(quake)
+{
+  var title = quake.Magnitude + " " + quake.Region;
+  var link = QUAKE_BASE + quake.Src + quake.Eqid + QUAKE_TAIL;
+  var newline = "<br />";
+
+  result = 
+    "<a href=\"" + link + "\">" + title + "</a>" + newline + 
+    quake.Datetime;
+
+  return result;
+}
+
+function mouseoverQuake(quake, index)
+{
+//   console.log("mouseoverQuake", quake);
+
+  d3.selectAll(".summaryText")
+    .filter(function (d) {return d.Eqid == quake.Eqid;})
+    .style("visibility", "visible");
+}
+
+function mouseoutQuake(quake, index)
+{
+  console.log("mouseoutQuake", quake);
+
+  d3
+    .selectAll(".summaryText")
+    .filter(function (d) {return d.Eqid == quake.Eqid;})
+    .style("visibility", "hidden");
 }
 
 // compute the radiuse from a magnitude 
@@ -218,7 +285,7 @@ function computeMarkerRadius(magnitude)
   // scale down the radius (add error) so markes fit on screen
   // note: error increased with magnitude
 
-  return 2.5 + radius / (1 - 1/(0.02 * (magnitude - maxMagnitude)));
+  return 2.5 + radius / (1 - 1/(0.02 * (magnitude - MAX_MAGNITUDE)));
 }
 
 function testRadiusComputation()
@@ -267,7 +334,7 @@ function constructScale()
   for (var i = 0; i < max; ++i)
   {
     var val = i / max;
-    var valStr = "" + Math.round(val * maxMagnitude * 10) / 10;
+    var valStr = "" + Math.round(val * MAX_MAGNITUDE * 10) / 10;
     if (valStr.length == 1)
       valStr += ".0";
 
