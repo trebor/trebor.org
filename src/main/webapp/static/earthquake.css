@@ -1,4 +1,5 @@
-html, body, #map, #foobar {
+html, body, #map
+{
   width: 100%;
   height: 100%;
   margin: 0;
@@ -18,13 +19,93 @@ markers, .markers svg
   font: 6px sans-serif;
   font-weight: bold;
   fill: #000;
+  cursor: pointer;
+}
+
+table, tr, td, span
+{
+  padding: 0px;
+  margin: 0px;
+  border: none;
+}
+
+#summary
+{
+  font: 12px sans-serif;
+  text-shadow: none;
+  font-weight: bold;
+  color: #666;
+
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 10px;
+
+  cursor: pointer;
+}
+
+#mag
+{
+  width: 5.2em;
+/*   background: orange; */
+}
+
+#magtext
+{
+  font-size: 46px;
+  color: #444;
+}
+
+#magtag
+{
+  font-size: 18px;
+  top: .3em;
+  width: 1em;
+  height: 3.5em;
+  fill: #666;
+}
+
+#date
+{
+/*   background: yellow; */
+  white-space: nowrap;
+  font-size: 20px;
+  text-align: center;
+}
+
+#time
+{
+/*   background: purple; */
+  font-size: 29px;
+  text-align: center;
+  vertical-align: top;
+}
+
+#region
+{
+/*   background: lightblue; */
+  font-size: 12px;
+  text-align: center;
+}
+
+.quakeDetail
+{
+  fill: blue;
+}
+
+.quakeDetailLine
+{
+  stroke: #888;
+  stroke-width: 1.5px;
+  fill: white;
 }
 
 .markers circle 
 {
   stroke-width: 1px;
-  fill: red;
-  stroke: #A00000;
+/*   fill: red; */
+/*   stroke: #A00000; */
 /*   fill: green; */
 /*   stroke: #00A000; */
 }
