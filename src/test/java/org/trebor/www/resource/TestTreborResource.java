@@ -86,8 +86,8 @@ public class TestTreborResource extends JerseyTest
   public void testEarthQuakeData()
   {
     String quakeData1 = resource().path("/quake").queryParam("name", "data1.csv").queryParam("test", "true").get(String.class);
-    assertEquals(187, quakeData1.length());
+    assertEquals(185, quakeData1.length());
     String quakeData2 = resource().path("/quake").queryParam("name", "data2.csv").queryParam("test", "true").get(String.class);
-    assertEquals(316, quakeData2.length());
+    assertEquals(312, quakeData2.length());
   }
 }

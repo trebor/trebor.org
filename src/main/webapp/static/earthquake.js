@@ -9,6 +9,9 @@ var quakeDateFormat = d3.time.format("%A, %B %e, %Y %H:%M:%S UTC");
 
 // constants
 
+var ANIMATION_FRAMES = 20;
+var ANIMATION_DURATION = 10 * 1000;
+var ANIMATION_DELAY = ANIMATION_DURATION / ANIMATION_FRAMES;
 var MAX_MAGNITUDE = 10;
 var SUMMARY_WIDTH = 250;
 var SUMMARY_HEIGHT = 100;
@@ -119,7 +122,7 @@ var dataSources = ["eqs1hour-M0", "eqs7day-M1"];
 //  var dataSources = ["eqs1hour-M0", "eqs7day-M1", "eqs7day-M2.5"];
 
   getAllQuakeData(dataSources);
-  setTimeout("initialize()", 5 * 1000);
+  setTimeout("initialize()", 60 * 1000);
 }
 
 function getAllQuakeData(sources, data)
@@ -191,24 +194,63 @@ function displayQuakeData(data)
   var now = new Date();
   var lastWeek = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
 
-  timeScale = d3.time.scale().domain([now, lastWeek]).range([0.2,1]);
+  timeScale = d3.time.scale().domain([now, lastWeek]).range([1, 0.2]);
 
   for (var i = 0; i < data.length; ++i)
     data[i].age = timeScale(data[i].date);
 
-  // set the global data
+  // if firts time, animate in the quakes
 
-  theData = data;
+  if (isFirstRender())
+  {
+    var animateTimeScale = d3.time.scale().domain([maxDate, minDate]).range([ANIMATION_FRAMES - 1, 0]);
+    animate(0, animateTimeScale, data);
+  }
 
-  // if overlya has not been initialize, do that
-
-  if (overlay == null)
-    initializeOverlay();
-
-  // otherwise redraw the overlay
+  // otherwise just update the data
 
   else
+    updateDisplayedData(data);
+}
+
+// animate in the data
+
+function animate(frame, animateTimeScale, data)
+{
+  if (frame >= ANIMATION_FRAMES)
+    return;
+    
+  var acceptDate = animateTimeScale.invert(frame);
+  updateDisplayedData(data.filter(
+      function (d)
+      {
+        return d.date.getTime() <= acceptDate.getTime();
+      }));
+    
+    // if overlya has not been initialize, do that
+    
+  setTimeout(function() {animate(frame + 1, animateTimeScale, data);}, ANIMATION_DELAY);
+}
+
+// update display
+
+function updateDisplayedData(data)
+{
+  theData = data;
+  if (isFirstRender())
+    initializeOverlay();
+    
+  // otherwise redraw the overlay
+    
+  else
     overlay.draw();
+}
+
+// test if this is the first rendering of the data
+
+function isFirstRender()
+{
+  return overlay == null;
 }
 
 // put loaded data on the map
