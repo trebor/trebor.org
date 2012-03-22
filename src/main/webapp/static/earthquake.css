@@ -2,8 +2,8 @@ html, body, #map
 {
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
 }
 
 markers, .markers svg 
@@ -24,69 +24,73 @@ markers, .markers svg
 
 table, tr, td, span
 {
-  padding: 0px;
-  margin: 0px;
-  border: none;
+  cellspacing: 0;
+  border-collapse: collapse;
 }
 
 #summary
 {
+/*   background: lightblue; */
   font: 12px sans-serif;
   text-shadow: none;
   font-weight: bold;
   color: #666;
 
-  table-layout: fixed;
   width: 100%;
   height: 100%;
-  margin: 0px;
-  padding: 10px;
-
+  border: 5px solid transparent;
   cursor: pointer;
 }
 
-#mag
+#magnitudeText
 {
-  width: 5.2em;
-/*   background: orange; */
-}
-
-#magtext
-{
-  font-size: 46px;
-  color: #444;
-}
-
-#magtag
-{
-  font-size: 18px;
-  top: .3em;
-  width: 1em;
-  height: 3.5em;
-  fill: #666;
+  font-size: 52px;
 }
 
 #date
 {
-/*   background: yellow; */
-  white-space: nowrap;
-  font-size: 20px;
-  text-align: center;
+  font-size: 18px;
+  text-align: right;
+  width: 55%;
 }
 
 #time
 {
-/*   background: purple; */
-  font-size: 29px;
-  text-align: center;
-  vertical-align: top;
+/*   background: lightgray; */
+  font-size: 26px;
+  text-align: right;
 }
 
 #region
 {
 /*   background: lightblue; */
-  font-size: 12px;
+  height: 2em;
+  padding-bottom: 5px;
+  font-size: 14px;
   text-align: center;
+  color: #666;
+}
+
+#summarySubtable
+{
+  border-collapse: separate;
+}
+
+.label
+{
+/*   background: lightgreen; */
+  vertical-align:text-top;
+  font-size: 8px;
+  text-align: right;
+  color: #888;
+}
+
+.value
+{
+/*   background: lightblue; */
+  font-size: 14px;
+  text-align: left;
+  color: #444;
 }
 
 .quakeDetail
@@ -101,20 +105,27 @@ table, tr, td, span
   fill: white;
 }
 
-.markers circle 
+.age
 {
-  stroke-width: 1px;
-/*   fill: red; */
-/*   stroke: #A00000; */
-/*   fill: green; */
-/*   stroke: #00A000; */
+  font-size: 12px;
+  fill: white;
 }
 
-#scale
+.magnitude
 {
-  font: 12px sans-serif;
-  font-weight: bold;
-  text-shadow: none;
-  stroke-width: 1px;
-  shape-rendering: crispEdges;
+  font-size: 12px;
+  fill: black;
+}
+
+.magnitude > circle
+{
+  fill: black;
+}
+
+.magnitude > line, .magnitude > path
+{
+  stroke-width: 2;
+  stroke: #000;
+  opacity: 0.5;
+  stroke-linecap: round;
 }
