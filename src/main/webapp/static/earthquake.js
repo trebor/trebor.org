@@ -21,7 +21,7 @@ var ANIMATION_DURATION = 10 * 1000;
 var ANIMATION_DELAY = ANIMATION_DURATION / ANIMATION_FRAMES;
 var MAX_MAGNITUDE = 10;
 var SUMMARY_WIDTH = 240;
-var SUMMARY_HEIGHT = 144;
+var SUMMARY_HEIGHT = 160;
 var WEDGE_WIDTH = 30;
 var DEFAULT_OPACITY = 0.55;
 var QUAKE_BASE = "http://earthquake.usgs.gov/earthquakes/recenteqsus/Quakes/";
@@ -31,10 +31,7 @@ var DAY_OF_A_WEEK_PROPORTION = 1 / (7);
 var EPSILON_PROPORTION = 1 / (7 * 24 * 60);
 var MILLISECONDS_INA_DAY = 24 * 60 * 60 * 1000;
 var MILLISECONDS_INA_WEEK = 7 * MILLISECONDS_INA_DAY;
-var MARKER_STROKE_WIDTH = 1;
-var MARKER_COLOR = "#63a";
-var MARKER_EDGE_COLOR = "#85c"; 
-var MARKER_HIGHLIGHT_EDGE_COLOR = "white"; 
+var MARKER_STROKE_WIDTH = 8;
 var MARKER_OFFSET = 40;
 var MAX_OPACITY = 0.8;
 var MIN_OPACITY = 0.1;
@@ -138,9 +135,9 @@ function initialize()
 
 //  var dataSources = ["eqs7day-M5"];
 //  var dataSources = ["eqs1hour-M0"];
-//  var dataSources = ["eqs1hour-M0", "eqs7day-M1"];
+    var dataSources = ["eqs1hour-M0", "eqs7day-M1"];
 //  var dataSources = ["eqs1hour-M0", "eqs7day-M1", "eqs7day-M2.5"];
-  var dataSources = ["eqs7day-M2.5"];
+//  var dataSources = ["eqs7day-M2.5"];
 
   getAllQuakeData(dataSources);
 
@@ -314,7 +311,6 @@ function initializeOverlay()
         .attr("class", "quakeBox")
         .style("width",  function(d) {return 2 * d.radius + "px";})
         .style("height", function(d) {return 2 * d.radius + "px";})
-//      .style("background", "blue")
         .style("visibility", "hidden")
         .on("mouseover", function(d) {mouseoverQuake(d, proParent);})
         .on("mouseout", function(d) {mouseoutQuake(d, proParent);})
@@ -324,7 +320,6 @@ function initializeOverlay()
 
       enters
         .append("svg:circle")
-        .style("visibility", "visible")
         .attr("cx", function(d) {return d.radius;})
         .attr("cy", function(d) {return d.radius;})
         .each(function(d) {styleMaker(d, this, false);});
@@ -361,10 +356,8 @@ function styleMaker(quake, marker, animate)
   var marker = d3.select(marker);
 
   marker
-    .attr("opacity", function(d) {return quake.opacity;})
-    .style("stroke-width", MARKER_STROKE_WIDTH)
-    .style("stroke", MARKER_EDGE_COLOR)
-    .style("fill", MARKER_COLOR);
+    .attr("class", "markerShape")
+    .attr("opacity", function(d) {return quake.opacity;});
 
   if (animate)
   {
@@ -410,21 +403,20 @@ function constructSummaryHtml(quake)
   var result = 
     table({id: "summary"},
           tRow({},
-               tCell({class: "label", rowspan: "2"}, "MAG") + 
-               tCell({rowspan: "2"}, 
-                     span({id: "magnitudeText", class: "value"}, quake.Magnitude)) + 
-               tCell({id: "date", class: "value"}, dateFormat(quake.date))
+               tCell({id: "magnitudeText"}, quake.Magnitude) +
+               tCell({},
+                     table({id: "timeTable"}, 
+                           tRow({},
+                                tCell({id: "date"}, dateFormat(quake.date))) + 
+                           tRow({}, 
+                                tCell({id: "time"}, timeFormat(quake.date) + span({class: "label"}, "UTC"))))
+                    )
               ) +
           tRow({},
-               tCell({id: "time", class: "value"}, timeFormat(quake.date)) +
-               tCell({class: "label"}, "UTC")
-              ) +
-          tRow({},
-               tCell({id: "region", colspan: "4"}, 
-                     capitaliseFirstLetter(quake.Region))) +
+               tCell({id: "region", colspan: 2}, capitaliseFirstLetter(quake.Region))) +
           tRow({}, 
-               tCell({colspan: "4"},
-                     table({id: "summarySubtable", width: "100%"},
+               tCell({colspan: 2},
+                     table({id: "summarySubtable"},
                            tRow({},
                                 tCell({class: "label"}, "ID") +
                                 tCell({class: "value"}, quake.Eqid) +
@@ -488,14 +480,12 @@ function mergeProperties(obj1,obj2)
 
 function mouseoverQuake(quake, map)
 {
-  highlightQuake(quake, true);
   addQuakeDtail(quake, map);
 }
 
 
 function mouseoutQuake(quake, map)
 {
-  highlightQuake(quake, false);
   removeQuakeDtail(quake, map);
 }
 
@@ -542,19 +532,6 @@ function removeQuakeDtail(quake, map)
   d3.select(".quakeDetail")
     .remove();
 }
-
-// highlight selected quake
-
-function highlightQuake(quake, enable)
-{
-  d3.selectAll("circle")
-    .filter(function (d) {return d == quake;})
-    .style("stroke", function() 
-      {
-        return enable ? MARKER_HIGHLIGHT_EDGE_COLOR : MARKER_EDGE_COLOR;
-      });
-}
-
 
 // return path for line to quake detail text
 
@@ -620,24 +597,29 @@ function constructKey()
 
   // create scale div and add to map
 
-  var scaleDiv = document.createElement('DIV');
-  scaleDiv.id = "scale";
-  scaleDiv.style.width="15em";
-  scaleDiv.style.height="35em";
-  scaleDiv.style.padding="20px";
-  scaleDiv.style.background = "red";
+  var keyDiv = document.createElement('DIV');
+  keyDiv.id = "keyDiv";
 
-  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(scaleDiv);
+  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(keyDiv);
+
+  // add inner div
+
+  var innerDiv = d3.select(keyDiv)
+    .append("div")
+    .attr("id", "keyInner");
+
+  // add header area
+
+  var header = innerDiv
+    .append("div")
+    .attr("id", "keyHeader")
+    .html(keyHeaderHtml);
 
   // add svg area to work in
 
-  var svg = d3.select(scaleDiv)
+  var svg = innerDiv
     .append("svg:svg")
-    .attr("class", "key")
-    .style("height", "100%")
-    .style("width", "100%")
-    .style("background", "white")
-    .style("text-align", "center");
+    .attr("id", "keySvg");
 
   // create the magnitude quakes
 
@@ -762,6 +744,27 @@ function constructKey()
     .attr("dominant-baseline", "middle")
     .text(function(d) {return d.daysBack;});
 }
+
+function keyHeaderHtml()
+{
+  var result = table(
+    {id: "keyHeaderTable"},
+    tRow({}, 
+         tCell({colspan: 2}, "Earthquakes")
+        ) +
+     tRow({}, 
+          tCell({class: "label"}, "FIRST") + 
+          tCell({}, "date")
+         ) +
+     tRow({}, 
+          tCell({class: "label"}, "LAST") + 
+          tCell({}, "date")
+         )
+  );
+
+  return result;
+}
+
 
 function capitaliseFirstLetter(string)
 {

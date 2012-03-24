@@ -4,6 +4,8 @@ html, body, #map
   height: 100%;
   margin: 0px;
   padding: 0px;
+  font: bold 15px sans-serif;
+  color: #666;
 }
 
 markers, .markers svg 
@@ -11,64 +13,77 @@ markers, .markers svg
   position: absolute;
 }
 
-.markers svg 
+.markerShape
 {
-  width: 60px;
-  height: 20px;
-  padding-right: 100px;
-  font: 6px sans-serif;
-  font-weight: bold;
-  fill: #000;
-  cursor: pointer;
+  fill:  #44c;
+  stroke: #3838b8;
+  visibility: visible;
+}
+
+.markerShape:hover
+{
+  stroke: white;
 }
 
 table, tr, td, span
 {
-  cellspacing: 0;
+  cellspacing: 0px;
+  cellpadding: 0px;
   border-collapse: collapse;
 }
 
 #summary
 {
 /*   background: lightblue; */
-  font: 12px sans-serif;
-  text-shadow: none;
-  font-weight: bold;
-  color: #666;
-
   width: 100%;
-  height: 100%;
-  border: 5px solid transparent;
+  border: 10px solid transparent;
   cursor: pointer;
+}
+
+#summarySubtable
+{
+  width: 100%;
 }
 
 #magnitudeText
 {
-  font-size: 52px;
+/*   background: orange; */
+  width: 1em;
+  font-size: 65px;
+  color:  #44c;
+  padding-left: 10px;
+}
+
+#timeTable
+{
+  width: 100%;
+  height: 100%;
 }
 
 #date
 {
-  font-size: 18px;
-  text-align: right;
-  width: 55%;
+/*   background: lightblue; */
+  font-size: 16px;
+  text-align: left;
+  vertical-align: bottom;
+  padding-left: 15px;
 }
 
 #time
 {
-/*   background: lightgray; */
-  font-size: 26px;
-  text-align: right;
+/*   background: lightgreen; */
+  font-size: 17px;
+  text-align: left;
+  padding-left: 15px;
+  vertical-align: top;
 }
 
 #region
 {
 /*   background: lightblue; */
-  height: 2em;
-  padding-bottom: 5px;
-  font-size: 14px;
+/*   height: 2em; */
+  padding-bottom: 10px;
   text-align: center;
-  color: #666;
 }
 
 #summarySubtable
@@ -88,7 +103,8 @@ table, tr, td, span
 .value
 {
 /*   background: lightblue; */
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: normal;
   text-align: left;
   color: #444;
 }
@@ -128,4 +144,44 @@ table, tr, td, span
   stroke: #000;
   opacity: 0.5;
   stroke-linecap: round;
+}
+
+#keyDiv
+{
+  width: 200px;
+  height: 350px;
+  padding: 20px;
+}
+
+#keyInner
+{
+  background: white;
+  border: 2px solid #888;
+  width: 100%;
+  height: 100%;
+}
+
+#keyHeader
+{
+/*   background: green; */
+  width: 100%;
+  height: 25%;
+}
+
+
+#keyHeaderTable
+{
+/*   background: orange; */
+/*   border: 2px solid red; */
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font: 20px sans-serif;
+}
+
+#keySvg
+{
+/*   background: lightblue; */
+  height: 75%;
+  width: 100%;
 }
