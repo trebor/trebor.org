@@ -2,13 +2,23 @@
 
 var overlay = null;
 var theData = null;
+var dataTesseract = null;
+var dataByMag = null;
+var dataByDate = null;
 var projection = null;
 var dateFormat = d3.time.format("%d %b %Y");
 var timeFormat = d3.time.format("%H:%M:%S");
 var quakeDateFormat = d3.time.format("%A, %B %e, %Y %H:%M:%S UTC");
-var now = new Date();
-var lastWeek = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+var now = getUtcNow();
+var lastWeek = new Date(now.getTime() - MILLISECONDS_INA_WEEK);
 var timeScale = null;
+var minDate = null;
+var maxDate = null;
+var limitEnabled = false;
+var limitMinDate = null;
+var limitMaxDate = null;
+var limitMinMag = null;
+var limitMaxMag = null;
 
 // constants
 
@@ -19,9 +29,9 @@ var CHECK_FOR_UPDATE_SECONDS = 60;
 var ANIMATION_FRAMES = 2 * 7;
 var ANIMATION_DURATION = 10 * 1000;
 var ANIMATION_DELAY = ANIMATION_DURATION / ANIMATION_FRAMES;
-var MAX_MAGNITUDE = 10;
+var MAX_MAGNITUDE = 9;
 var SUMMARY_WIDTH = 240;
-var SUMMARY_HEIGHT = 160;
+var SUMMARY_HEIGHT = 180;
 var WEDGE_WIDTH = 30;
 var DEFAULT_OPACITY = 0.55;
 var QUAKE_BASE = "http://earthquake.usgs.gov/earthquakes/recenteqsus/Quakes/";
@@ -29,12 +39,20 @@ var QUAKE_TAIL = ".php";
 var HOUR_OF_A_WEEK_PROPORTION = 1 / (7 * 24);
 var DAY_OF_A_WEEK_PROPORTION = 1 / (7);
 var EPSILON_PROPORTION = 1 / (7 * 24 * 60);
-var MILLISECONDS_INA_DAY = 24 * 60 * 60 * 1000;
+var MILLISECONDS_INA_SECOND = 1000;
+var MILLISECONDS_INA_MINUTE = 60 * MILLISECONDS_INA_SECOND;
+var MILLISECONDS_INA_HOUR = 60 * MILLISECONDS_INA_MINUTE;
+var MILLISECONDS_INA_DAY = 24 * MILLISECONDS_INA_HOUR;
 var MILLISECONDS_INA_WEEK = 7 * MILLISECONDS_INA_DAY;
 var MARKER_STROKE_WIDTH = 8;
 var MARKER_OFFSET = 40;
 var MAX_OPACITY = 0.8;
 var MIN_OPACITY = 0.1;
+var KEY_WIDTH = 200;
+var KEY_HEIGHT = 350;
+var KEY_PADDING = 20;
+var FADE_IN_DURATION = function (d) {return d.Magnitude * 300;};
+var FADE_OUT_DURATION = function (d) {return d.Magnitude * 300;};
 
 // google map style
 
@@ -124,20 +142,15 @@ function initialize()
 {
   // update time scale
 
-  now = new Date();
+  now = getUtcNow();
   lastWeek = new Date(now.getTime() - MILLISECONDS_INA_WEEK);
-  timeScale = d3.time.scale().domain([now, lastWeek]).range([MAX_OPACITY, MIN_OPACITY]);
-
-  // construct the key
-
-  if (isFirstRender())
-    constructKey();
+  timeScale = d3.time.scale.utc().domain([now, lastWeek]).range([MAX_OPACITY, MIN_OPACITY]);
 
 //  var dataSources = ["eqs7day-M5"];
 //  var dataSources = ["eqs1hour-M0"];
     var dataSources = ["eqs1hour-M0", "eqs7day-M1"];
 //  var dataSources = ["eqs1hour-M0", "eqs7day-M1", "eqs7day-M2.5"];
-//  var dataSources = ["eqs7day-M2.5"];
+//  var dataSources = ["eqs7day-M5"];
 
   getAllQuakeData(dataSources);
 
@@ -183,20 +196,6 @@ function displayQuakeData(data)
       quakeIds[d.Eqid] = true;
       return true;
     });
-
-  // sort the smallest quakes to the top of the view
-
-  data.sort(function (a, b)
-  {
-    if (a.Magnitude < b.Magnitude)
-      return 1;
-    if (a.Magnitude > b.Magnitude)
-      return -1;
-    return 0;
-  });
-
-  var minDate = null;
-  var maxDate = null;
 
   // establish size, date and date ranges
 
@@ -256,8 +255,19 @@ function animate(frame, animateTimeScale, data)
 function updateDisplayedData(data)
 {
   theData = data;
+
+  if (!dataTesseract)
+  {
+    dataTesseract = tesseract(data);
+    dataByMag = dataTesseract.dimension(function(d) {return d.Magnitude;});
+    dataByDate = dataTesseract.dimension(function(d) {return d.date;});
+  }
+
   if (isFirstRender())
+  {
     initializeOverlay();
+    constructKey();
+  }
     
   // otherwise redraw the overlay
     
@@ -300,7 +310,7 @@ function initializeOverlay()
       // create svg to put marker in
 
       var updates = layer.selectAll("svg.quakeBox")
-        .data(theData, function(d) {return d.Eqid;})
+        .data(dataByMag.top(Infinity), function(d) {return d.Eqid;})
 
       // update existing markers
 
@@ -322,13 +332,13 @@ function initializeOverlay()
         .append("svg:circle")
         .attr("cx", function(d) {return d.radius;})
         .attr("cy", function(d) {return d.radius;})
-        .each(function(d) {styleMaker(d, this, false);});
+        .each(function(d) {styleMaker(d, this, true);});
 
       // remove the exits
 
       updates.exit()
         .transition()
-        .duration(function(d) {return 500 * d.Magnitude})
+        .duration(FADE_OUT_DURATION)
         .remove();
 
       updates.exit().selectAll("circle")
@@ -364,7 +374,7 @@ function styleMaker(quake, marker, animate)
     marker
       .attr("r", 0)
       .transition()
-      .duration(function(d) {return 500 * quake.Magnitude})
+      .duration(FADE_IN_DURATION)
       .attr("r", function(d) {return quake.radius - MARKER_STROKE_WIDTH / 2;});
   }
   else
@@ -418,14 +428,14 @@ function constructSummaryHtml(quake)
                tCell({colspan: 2},
                      table({id: "summarySubtable"},
                            tRow({},
-                                tCell({class: "label"}, "ID") +
+                                tCell({class: "label"}, "id") +
                                 tCell({class: "value"}, quake.Eqid) +
-                                tCell({class: "label"}, "SOURCE") +
+                                tCell({class: "label"}, "sourc") +
                                 tCell({class: "value"}, quake.Src.toUpperCase())) +
                            tRow({},
-                                tCell({class: "label"}, "LAT") +
+                                tCell({class: "label"}, "lat") +
                                 tCell({class: "value"}, quake.Lat) +
-                                tCell({class: "label"}, "LON") +
+                                tCell({class: "label"}, "lon") +
                                 tCell({class: "value"}, quake.Lon)))))
          );
 
@@ -597,8 +607,13 @@ function constructKey()
 
   // create scale div and add to map
 
-  var keyDiv = document.createElement('DIV');
+  var keyDiv = document.createElement("div");
   keyDiv.id = "keyDiv";
+  keyDiv.style.width =  KEY_WIDTH + "px";
+  keyDiv.style.height = KEY_HEIGHT + "px";
+  keyDiv.style.padding = KEY_PADDING + "px";
+
+  // attach key to map
 
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(keyDiv);
 
@@ -610,16 +625,32 @@ function constructKey()
 
   // add header area
 
-  var header = innerDiv
+  var headerDiv = innerDiv
     .append("div")
     .attr("id", "keyHeader")
     .html(keyHeaderHtml);
 
-  // add svg area to work in
+  // add quake chart area
 
-  var svg = innerDiv
+  var chartDiv = innerDiv
+    .append("div")
+    .attr("id", "chartDiv");
+  
+  var chartSvg = chartDiv
     .append("svg:svg")
-    .attr("id", "keySvg");
+    .attr("id", "chartSvg");
+
+  createQuakeChart(chartSvg);
+
+  // add detail area
+
+  var detailDiv = innerDiv
+    .append("div")
+    .attr("id", "detailDiv");
+
+  var detailSvg = detailDiv
+    .append("svg:svg")
+    .attr("id", "detailSvg");
 
   // create the magnitude quakes
 
@@ -637,7 +668,7 @@ function constructKey()
 
   // add the magnitude quakes
 
-  var sizeMarkers = svg.selectAll("g.magnitude")
+  var sizeMarkers = detailSvg.selectAll("g.magnitude")
     .data(sizeQuakes)
     .enter()
     .append("svg:g")
@@ -650,12 +681,6 @@ function constructKey()
     .each(function(d) {styleMaker(d, this, false);})
     .attr("cx", "75%")
     .attr("cy", function (d) {return d.yPos + "%";});
-
-//   sizeMarkers
-//     .append("svg:circle")
-//     .attr("r", 1.5)
-//     .attr("cx", "75%")
-//     .attr("cy", function (d) {return d.yPos + "%";});
 
   sizeMarkers
     .append("svg:text")
@@ -713,8 +738,7 @@ function constructKey()
 
   // add rectangle to block out size marker
 
-  svg
-    .append("svg:rect")
+  detailSvg.append("svg:rect")
     .attr("x", "0%")
     .attr("y", headerPercent + "%")
     .attr("width", "50%")
@@ -723,7 +747,7 @@ function constructKey()
 
   // add the age quakes
 
-  var ageMarkers = svg.selectAll("g.age")
+  var ageMarkers = detailSvg.selectAll("g.age")
     .data(ageQuakes)
     .enter()
     .append("svg:g")
@@ -745,6 +769,103 @@ function constructKey()
     .text(function(d) {return d.daysBack;});
 }
 
+function createQuakeChart(svg)
+{
+  var tickTimeFormat = d3.time.format("%d %b");
+  var m = {top: 10, left: 20, bottom: 20, right: 10};
+  var w = (200 * 1.0) - m.left - m.right;
+  var h = (350 * 0.5) - m.top - m.bottom;
+  
+  var x = d3.time.scale.utc().domain([lastWeek, now]).range([0, w]);
+  var y = d3.scale.linear().domain([0, MAX_MAGNITUDE]).range([h, 0]);
+
+  // frame to attach axes too
+
+  var frame = svg
+    .append("g")
+    .attr("transform", "translate(" + m.left + "," + m.top + ")");
+
+  // x-axis
+
+  frame.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + h + ")")
+    .call(d3.svg.axis().scale(x).tickSubdivide(1)
+          .tickSize(5, 3, 0).ticks(d3.time.days, 2)
+          .tickFormat(tickTimeFormat).orient("bottom"));
+
+  // y-axis
+
+  frame.append("g")
+    .attr("class", "y axis")
+    .call(d3.svg.axis().scale(y).orient("left"));
+
+  // data circles
+  
+  var circle = svg.selectAll("circle")
+    .data(theData)
+    .enter()
+    .append("circle")
+    .attr("class", "chartQuakes")
+    .attr("transform", function(d) { return "translate(" + (x(d.date) + m.left) + "," + (y(d.Magnitude) + m.top) + ")"; })
+    .attr("r", 2);
+
+  // brush
+  
+  frame.append("g")
+    .attr("class", "brush")
+    .call(d3.svg.brush().x(x).y(y)
+          .on("brushstart", brushstart)
+          .on("brush", brush)
+          .on("brushend", brushend));
+  
+  // prush functions
+
+  function brushstart()
+  {
+    svg.classed("selecting", true);
+  }
+  
+  function brush() 
+  {
+    var e = d3.event.target.extent();
+    var minDate = e[0][0];
+    var maxDate = e[1][0];
+    var minMag = e[0][1];
+    var maxMag = e[1][1];
+
+    function select(d)
+    {
+      return minDate <= d.date && d.date <= maxDate
+        && minMag <= d.Magnitude && d.Magnitude <= maxMag;
+    };
+
+    circle.classed("unselected", function(d) {return !select(d);});
+  }
+  
+  function brushend() 
+  {
+    var e = d3.event.target.extent();
+
+    if (d3.event.target.empty())
+    {
+      circle.classed("unselected", false);
+      dataByMag.filter(null);
+      dataByDate.filter(null);
+      updateDisplayedData(theData);
+    }
+    else
+    {
+      dataByMag.filter([e[0][1],e[1][1]]);
+      dataByDate.filter([e[0][0],e[1][0]]);
+      updateDisplayedData(theData);
+    }
+
+
+    svg.classed("selecting", !d3.event.target.empty());
+  }
+}
+
 function keyHeaderHtml()
 {
   var result = table(
@@ -753,18 +874,60 @@ function keyHeaderHtml()
          tCell({colspan: 2}, "Earthquakes")
         ) +
      tRow({}, 
-          tCell({class: "label"}, "FIRST") + 
-          tCell({}, "date")
+          tCell({class: "label"}, "first") + 
+          tCell({class: "value"}, timeAgo(minDate))
          ) +
      tRow({}, 
-          tCell({class: "label"}, "LAST") + 
-          tCell({}, "date")
+          tCell({class: "label"}, "last") + 
+          tCell({class: "value"}, timeAgo(maxDate))
          )
   );
 
   return result;
 }
 
+function timeAgo(date)
+{
+  var now = getUtcNow();
+
+  var delta = now.getTime() - date.getTime();
+  var bigUnit = establishTimeUnit(delta);
+
+  var deltaRemainder = delta % bigUnit.divisor;
+  var smallUnit = establishTimeUnit(deltaRemainder);
+
+  return Math.floor(delta / bigUnit.divisor) + " " + bigUnit.short + " " + 
+    Math.floor(deltaRemainder / smallUnit.divisor) + " " + smallUnit.short;
+}
+
+function establishTimeUnit(milliseconds)
+{
+  var units = [
+    {threshold: MILLISECONDS_INA_MINUTE, divisor: MILLISECONDS_INA_SECOND, unit: "seconds", short: "sec"},
+    {threshold: MILLISECONDS_INA_HOUR, divisor: MILLISECONDS_INA_MINUTE, unit: "minutes", short: "min"},
+    {threshold: MILLISECONDS_INA_DAY, divisor: MILLISECONDS_INA_HOUR, unit: "hours", short: "hrs"},
+    {threshold: MILLISECONDS_INA_WEEK, divisor: MILLISECONDS_INA_DAY, unit: "days", short: "day"},
+  ];
+
+  for (var i in units)
+    if (milliseconds < units[i].threshold)
+      return units[i];
+
+  return units[units.length - 1];
+}
+
+
+function getUtcNow()
+{
+  var now = new Date();
+  return new Date(
+    now.getUTCFullYear(), now.
+    getUTCMonth(), 
+    now.getUTCDate(),  
+    now.getUTCHours(), 
+    now.getUTCMinutes(), 
+    now.getUTCSeconds());
+}
 
 function capitaliseFirstLetter(string)
 {
