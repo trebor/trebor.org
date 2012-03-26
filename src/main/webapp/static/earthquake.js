@@ -1,7 +1,6 @@
 // globals
 
 var overlay = null;
-var theData = null;
 var dataTesseract = null;
 var dataByMag = null;
 var dataByDate = null;
@@ -140,82 +139,99 @@ initialize();
 
 function initialize()
 {
-  // update time scale
+//  var dataSets = ["eqs7day-M5"];
+//  var dataSets = ["eqs1hour-M0"];
+    var dataSets = ["eqs1hour-M0", "eqs7day-M1"];
+
+  // initialize tesseract
+
+  dataTesseract = tesseract([]);
+
+  // load data sets
+
+  loadDataSets(dataSets);
+
+  // if enabled, periodically check for updates
+
+  if (CHECK_FOR_UPDATE)
+    setTimeout(function() {loadDataSets(dataSets);}, CHECK_FOR_UPDATE_SECONDS * MILLISECONDS_INA_SECOND);
+}
+
+function loadDataSets(dataSets)
+{
+  // get quake data, the helper function must be recursive because the data is loaded asynchronously
+
+  loadDataHelper(dataSets.slice());
+}
+
+function loadDataHelper(dataSets)
+{
+  // if no more data sets to load, register the data for display
+
+  if (dataSets.length == 0)
+  {
+    dataByMag = dataTesseract.dimension(function(d) {return d.Magnitude;});
+    dataByDate = dataTesseract.dimension(function(d) {return d.date;});
+    registerQuakeData();
+    return;
+  }
+
+  // load data set
+
+  d3.csv("/quake?test=" + USE_TEST_DATA + "&name=" + dataSets.pop() + ".txt", 
+         function(data)
+         {
+           // compute magnitude radius and date for each quake
+           
+           for (var i in data)
+           {
+             var d = data[i];
+             d.radius = computeMarkerRadius(d.Magnitude) + MARKER_STROKE_WIDTH / 2;
+             d.date = quakeDateFormat.parse(d.Datetime);
+             if (d.radius < 0)
+               console.log(d);
+           }
+           
+           // add fresh data to tesseract
+           
+           dataTesseract.add(data);
+
+           // recurse
+
+           loadDataHelper(dataSets);
+         });
+}
+
+function registerQuakeData()
+{
+  // remove dupes
+
+//   var quakeIds = {};
+//   data = data.filter(
+//     function (d)
+//     {
+//       var found = quakeIds[d.Eqid];
+//       if (found)
+//         return false;
+
+//       quakeIds[d.Eqid] = true;
+//       return true;
+//     });
+
+  // update global time info
 
   now = getUtcNow();
   lastWeek = new Date(now.getTime() - MILLISECONDS_INA_WEEK);
   timeScale = d3.time.scale.utc().domain([now, lastWeek]).range([MAX_OPACITY, MIN_OPACITY]);
 
-//  var dataSources = ["eqs7day-M5"];
-//  var dataSources = ["eqs1hour-M0"];
-    var dataSources = ["eqs1hour-M0", "eqs7day-M1"];
-//  var dataSources = ["eqs1hour-M0", "eqs7day-M1", "eqs7day-M2.5"];
-//  var dataSources = ["eqs7day-M5"];
-
-  getAllQuakeData(dataSources);
-
-  // if enabled, periodically check for updates
-
-  if (CHECK_FOR_UPDATE)
-    setTimeout("initialize()", CHECK_FOR_UPDATE_SECONDS * 1000);
-}
-
-function getAllQuakeData(sources, data)
-{
-  data = typeof data !== 'undefined' ? data : [];
-
-  // base case if we've got all the data, hand it off for processing
-
-  if (sources.length == 0)
-  {
-    displayQuakeData(data);
-    return;
-  }
-
-  // recurse
-
-  d3.csv("/quake?test=" + USE_TEST_DATA + "&name=" + sources.pop() + ".txt", 
-         function(d)
-         {
-           getAllQuakeData(sources, data.concat(d));
-         });
-}
-
-function displayQuakeData(data)
-{
-  // remove dupes
-
-  var quakeIds = {};
-  data = data.filter(
-    function (d)
-    {
-      var found = quakeIds[d.Eqid];
-      if (found)
-        return false;
-
-      quakeIds[d.Eqid] = true;
-      return true;
-    });
-
   // establish size, date and date ranges
 
-  for (var i = 0; i < data.length; ++i)
-  {
-    var d = data[i];
-    d.radius = computeMarkerRadius(d.Magnitude) + MARKER_STROKE_WIDTH / 2;
-    d.date = quakeDateFormat.parse(d.Datetime);
+  var dateData = dataByDate.top(Infinity);
+  minDate = dateData[0].date;
+  maxDate = dateData[dateData.length - 1].date;
 
-    if (!minDate || minDate.getTime() > d.date.getTime())
-      minDate = d.date;
-
-    if (!maxDate || maxDate.getTime() < d.date.getTime())
-      maxDate = d.date;
-  }
-
-  // establish opacity
-
-  for (var i = 0; i < data.length; ++i)
-    data[i].opacity = timeScale(data[i].date);
+  console.log("min", minDate);
+  console.log("max", maxDate);
 
   // if firts time, animate in the quakes
 
@@ -228,7 +244,7 @@ function displayQuakeData(data)
   // otherwise just update the data
   
  else
-    updateDisplayedData(data);
+    updateDisplayedData();
 }
 
 // animate in the data
@@ -239,11 +255,11 @@ function animate(frame, animateTimeScale, data)
     return;
     
   var acceptDate = animateTimeScale.invert(frame);
-  updateDisplayedData(data.filter(
-      function (d)
-      {
-        return d.date.getTime() <= acceptDate.getTime();
-      }));
+//   updateDisplayedData(data.filter(
+//       function (d)
+//       {
+//         return d.date.getTime() <= acceptDate.getTime();
+//       }));
     
     // if overlya has not been initialize, do that
     
@@ -252,17 +268,8 @@ function animate(frame, animateTimeScale, data)
 
 // update display
 
-function updateDisplayedData(data)
+function updateDisplayedData()
 {
-  theData = data;
-
-  if (!dataTesseract)
-  {
-    dataTesseract = tesseract(data);
-    dataByMag = dataTesseract.dimension(function(d) {return d.Magnitude;});
-    dataByDate = dataTesseract.dimension(function(d) {return d.date;});
-  }
-
   if (isFirstRender())
   {
     initializeOverlay();
@@ -367,7 +374,7 @@ function styleMaker(quake, marker, animate)
 
   marker
     .attr("class", "markerShape")
-    .attr("opacity", function(d) {return quake.opacity;});
+    .attr("opacity", function(d) {return timeScale(quake.date);});
 
   if (animate)
   {
@@ -803,7 +810,7 @@ function createQuakeChart(svg)
   // data circles
   
   var circle = svg.selectAll("circle")
-    .data(theData)
+    .data(dataByMag.top(Infinity))
     .enter()
     .append("circle")
     .attr("class", "chartQuakes")
@@ -852,13 +859,13 @@ function createQuakeChart(svg)
       circle.classed("unselected", false);
       dataByMag.filter(null);
       dataByDate.filter(null);
-      updateDisplayedData(theData);
+      updateDisplayedData();
     }
     else
     {
       dataByMag.filter([e[0][1],e[1][1]]);
       dataByDate.filter([e[0][0],e[1][0]]);
-      updateDisplayedData(theData);
+      updateDisplayedData();
     }
 
 
