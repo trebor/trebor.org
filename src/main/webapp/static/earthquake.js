@@ -1,27 +1,27 @@
 // globals
 
 var overlay = null;
-var dataTesseract = null;
-var dataByMag = null;
-var dataByDate = null;
+var quakeTesseract = null;
+var quakesByMag = null;
+var quakesByDate = null;
 var projection = null;
-var dateFormat = d3.time.format("%d %b %Y");
-var timeFormat = d3.time.format("%H:%M:%S");
-var quakeDateFormat = d3.time.format("%A, %B %e, %Y %H:%M:%S UTC");
-var now = getUtcNow();
-var lastWeek = new Date(now.getTime() - MILLISECONDS_INA_WEEK);
+var dateWindowMax = null;
+var dateWindowMin = null;
+var observedDateMin = null;
+var observedMaxDate = null;
 var timeScale = null;
-var minDate = null;
-var maxDate = null;
-var limitEnabled = false;
-var limitMinDate = null;
-var limitMaxDate = null;
-var limitMinMag = null;
-var limitMaxMag = null;
 
 // constants
 
+//  var DATA_SETS = ["eqs7day-M5"];
+//  var DATA_SETS = ["eqs1hour-M0"];
+var DATA_SETS = ["eqs1hour-M0", "eqs7day-M1"];
+//var DATA_SETS = ["data1", "data2"];
 var USE_TEST_DATA = false;
+
+var DATE_FORMAT = d3.time.format("%d %b %Y");
+var TIME_FORMAT = d3.time.format("%H:%M:%S");
+var QUAKE_DATE_FORMAT = d3.time.format("%A, %B %e, %Y %H:%M:%S UTC");
 var CHECK_FOR_UPDATE = true;
 var ANIMATE_INITIAL_LOAD = false;
 var CHECK_FOR_UPDATE_SECONDS = 60;
@@ -131,25 +131,17 @@ var markerColorScale = jbMarkerColorScale;
 //var markerEdgeColorScale = usgsMarkerEdgeColorScale;
 var markerEdgeColorScale = jbMarkerEdgeColorScale;
 
-// initialize data
+// initialize the system, this is the main entry point for bulk of the code
 
-initialize();
+loadDataSets(DATA_SETS);
 
-// have a look at the radius computation
+// load all data sets combine them and present them on the display
 
-function initialize()
+function loadDataSets(dataSets)
 {
-//  var dataSets = ["eqs7day-M5"];
-//  var dataSets = ["eqs1hour-M0"];
-    var dataSets = ["eqs1hour-M0", "eqs7day-M1"];
+  // get quake data, the helper function must be recursive because the data is loaded asynchronously
 
-  // initialize tesseract
-
-  dataTesseract = tesseract([]);
-
-  // load data sets
-
-  loadDataSets(dataSets);
+  loadDataHelper(dataSets.slice(), []);
 
   // if enabled, periodically check for updates
 
@@ -157,22 +149,15 @@ function initialize()
     setTimeout(function() {loadDataSets(dataSets);}, CHECK_FOR_UPDATE_SECONDS * MILLISECONDS_INA_SECOND);
 }
 
-function loadDataSets(dataSets)
-{
-  // get quake data, the helper function must be recursive because the data is loaded asynchronously
+// recursivly loads and combindes data, when all data is loaded register it for display
 
-  loadDataHelper(dataSets.slice());
-}
-
-function loadDataHelper(dataSets)
+function loadDataHelper(dataSets, dataAccumulation)
 {
   // if no more data sets to load, register the data for display
 
   if (dataSets.length == 0)
   {
-    dataByMag = dataTesseract.dimension(function(d) {return d.Magnitude;});
-    dataByDate = dataTesseract.dimension(function(d) {return d.date;});
-    registerQuakeData();
+    registerQuakeData(dataAccumulation);
     return;
   }
 
@@ -181,63 +166,58 @@ function loadDataHelper(dataSets)
   d3.csv("/quake?test=" + USE_TEST_DATA + "&name=" + dataSets.pop() + ".txt", 
          function(data)
          {
-           // compute magnitude radius and date for each quake
-           
-           for (var i in data)
-           {
-             var d = data[i];
-             d.radius = computeMarkerRadius(d.Magnitude) + MARKER_STROKE_WIDTH / 2;
-             d.date = quakeDateFormat.parse(d.Datetime);
-             if (d.radius < 0)
-               console.log(d);
-           }
-           
-           // add fresh data to tesseract
-           
-           dataTesseract.add(data);
-
-           // recurse
-
-           loadDataHelper(dataSets);
+           loadDataHelper(dataSets, dataAccumulation.concat(data));
          });
 }
 
-function registerQuakeData()
+function registerQuakeData(data)
 {
-  // remove dupes
+  // remove duplicate quakes
 
-//   var quakeIds = {};
-//   data = data.filter(
-//     function (d)
-//     {
-//       var found = quakeIds[d.Eqid];
-//       if (found)
-//         return false;
+  var quakeIds = {};
+  data = data.filter(
+    function (d)
+    {
+      var found = quakeIds[d.Eqid];
+      if (found)
+        return false;
 
-//       quakeIds[d.Eqid] = true;
-//       return true;
-//     });
+      quakeIds[d.Eqid] = true;
+      return true;
+    });
 
-  // update global time info
+  // pre compute radius and date
+  
+  for (var i in data)
+  {
+    var d = data[i];
+    d.radius = computeMarkerRadius(d.Magnitude) + MARKER_STROKE_WIDTH / 2;
+    d.date = QUAKE_DATE_FORMAT.parse(d.Datetime);
+  }
 
-  now = getUtcNow();
-  lastWeek = new Date(now.getTime() - MILLISECONDS_INA_WEEK);
-  timeScale = d3.time.scale.utc().domain([now, lastWeek]).range([MAX_OPACITY, MIN_OPACITY]);
+  // initialize tesseract
+
+  quakeTesseract = tesseract(data);
+  quakesByMag = quakeTesseract.dimension(function(d) {return d.Magnitude;});
+  quakesByDate = quakeTesseract.dimension(function(d) {return d.date;});
 
   // establish size, date and date ranges
 
-  var dateData = dataByDate.top(Infinity);
-  minDate = dateData[0].date;
-  maxDate = dateData[dateData.length - 1].date;
+  var dateData = quakesByDate.top(Infinity);
+  observedDateMin = dateData[0].date;
+  observedMaxDate = dateData[dateData.length - 1].date;
 
-  console.log("min", minDate);
-  console.log("max", maxDate);
+  // estalish date window
 
-  // if firts time, animate in the quakes
+  dateWindowMax = getUtcNow();
+  dateWindowMin = USE_TEST_DATA ? observedDateMin : new Date(dateWindowMax.getTime() - MILLISECONDS_INA_WEEK);
+  timeScale = d3.time.scale.utc().domain([dateWindowMax, dateWindowMin]).range([MAX_OPACITY, MIN_OPACITY]);
+
+  // if first time, animate in the quakes
 
   if (ANIMATE_INITIAL_LOAD && isFirstRender())
   {
-    var animateTimeScale = d3.time.scale().domain([maxDate, minDate]).range([ANIMATION_FRAMES - 1, 0]);
+    var animateTimeScale = d3.time.scale().domain([observedMaxDate, observedDateMin]).range([ANIMATION_FRAMES - 1, 0]);
     animate(0, animateTimeScale, data);
   }
 
@@ -317,7 +297,7 @@ function initializeOverlay()
       // create svg to put marker in
 
       var updates = layer.selectAll("svg.quakeBox")
-        .data(dataByMag.top(Infinity), function(d) {return d.Eqid;})
+        .data(quakesByMag.top(Infinity), function(d) {return d.Eqid;})
 
       // update existing markers
 
@@ -424,9 +404,9 @@ function constructSummaryHtml(quake)
                tCell({},
                      table({id: "timeTable"}, 
                            tRow({},
-                                tCell({id: "date"}, dateFormat(quake.date))) + 
+                                tCell({id: "date"}, DATE_FORMAT(quake.date))) + 
                            tRow({}, 
-                                tCell({id: "time"}, timeFormat(quake.date) + span({class: "label"}, "UTC"))))
+                                tCell({id: "time"}, TIME_FORMAT(quake.date) + span({class: "label"}, "UTC"))))
                     )
               ) +
           tRow({},
@@ -649,60 +629,60 @@ function constructKey()
 
   createQuakeChart(chartSvg);
 
-  // add detail area
+//   // add detail area
 
-  var detailDiv = innerDiv
-    .append("div")
-    .attr("id", "detailDiv");
+//   var detailDiv = innerDiv
+//     .append("div")
+//     .attr("id", "detailDiv");
 
-  var detailSvg = detailDiv
-    .append("svg:svg")
-    .attr("id", "detailSvg");
+//   var detailSvg = detailDiv
+//     .append("svg:svg")
+//     .attr("id", "detailSvg");
 
-  // create the magnitude quakes
+//   // create the magnitude quakes
 
-  var sizeQuakes = [];
-  for (var magnitude = 0; magnitude <= examples; ++magnitude)
-  {
-    var quake = new Object();
-    var date = new Date(now.getTime() - stockAge * MILLISECONDS_INA_DAY);
-    quake.opacity = timeScale(date);
-    quake.Magnitude = baseMagnitude + magnitude;
-    quake.radius = computeMarkerRadius(quake.Magnitude);
-    quake.yPos = headerPercent + examplePercentStep * magnitude;
-    sizeQuakes.push(quake);
-  }
+//   var sizeQuakes = [];
+//   for (var magnitude = 0; magnitude <= examples; ++magnitude)
+//   {
+//     var quake = new Object();
+//     var date = new Date(dateWindowMax.getTime() - stockAge * MILLISECONDS_INA_DAY);
+//     quake.opacity = timeScale(date);
+//     quake.Magnitude = baseMagnitude + magnitude;
+//     quake.radius = computeMarkerRadius(quake.Magnitude);
+//     quake.yPos = headerPercent + examplePercentStep * magnitude;
+//     sizeQuakes.push(quake);
+//   }
 
-  // add the magnitude quakes
+//   // add the magnitude quakes
 
-  var sizeMarkers = detailSvg.selectAll("g.magnitude")
-    .data(sizeQuakes)
-    .enter()
-    .append("svg:g")
-    .attr("class", "magnitude");
+//   var sizeMarkers = detailSvg.selectAll("g.magnitude")
+//     .data(sizeQuakes)
+//     .enter()
+//     .append("svg:g")
+//     .attr("class", "magnitude");
 
-  sizeMarkers
-//     .filter(function (d) {return d.Magnitude <= 4;})
-    .append("svg:circle")
-    .attr("r", 0)
-    .each(function(d) {styleMaker(d, this, false);})
-    .attr("cx", "75%")
-    .attr("cy", function (d) {return d.yPos + "%";});
+//   sizeMarkers
+// //     .filter(function (d) {return d.Magnitude <= 4;})
+//     .append("svg:circle")
+//     .attr("r", 0)
+//     .each(function(d) {styleMaker(d, this, false);})
+//     .attr("cx", "75%")
+//     .attr("cy", function (d) {return d.yPos + "%";});
 
-  sizeMarkers
-    .append("svg:text")
-    .attr("x", "55%")
-    .attr("y", function (d) {return d.yPos + "%";})
-    .style("text-anchor", "middle")
-    .attr("dominant-baseline", "middle")
-    .text(function(d) {return d.Magnitude;});
+//   sizeMarkers
+//     .append("svg:text")
+//     .attr("x", "55%")
+//     .attr("y", function (d) {return d.yPos + "%";})
+//     .style("text-anchor", "middle")
+//     .attr("dominant-baseline", "middle")
+//     .text(function(d) {return d.Magnitude;});
 
-  sizeMarkers
-    .append("svg:line")
-    .attr("x1", "60%")
-    .attr("y1", function (d) {return d.yPos + "%";})
-    .attr("x2", "75%")
-    .attr("y2", function (d) {return d.yPos + "%";});
+//   sizeMarkers
+//     .append("svg:line")
+//     .attr("x1", "60%")
+//     .attr("y1", function (d) {return d.yPos + "%";})
+//     .attr("x2", "75%")
+//     .attr("y2", function (d) {return d.yPos + "%";});
 
 //   var magicNumber = 6.65;
 //   sizeMarkers
@@ -728,62 +708,62 @@ function constructKey()
 //             return "m 0 0 v " + -r + "A " + r + " " + r + " 0 0 1 " + x2  + " " + y2 + " z";
 //           });
 
-  // create the age quakes
+//   // create the age quakes
 
-  var ageQuakes = [];
-  for (var daysBack = 0; daysBack <= examples; ++daysBack)
-  {
-    var quake = new Object();
-    var date = new Date(now.getTime() - daysBack * MILLISECONDS_INA_DAY);
-    quake.daysBack = daysBack;
-    quake.opacity = timeScale(date);
-    quake.Magnitude = stockMagnitude;
-    quake.radius = computeMarkerRadius(quake.Magnitude);
-    quake.yPos = headerPercent + examplePercentStep * quake.daysBack;
-    ageQuakes.push(quake);
-  }
+//   var ageQuakes = [];
+//   for (var daysBack = 0; daysBack <= examples; ++daysBack)
+//   {
+//     var quake = new Object();
+//     var date = new Date(dateWindowMax.getTime() - daysBack * MILLISECONDS_INA_DAY);
+//     quake.daysBack = daysBack;
+//     quake.opacity = timeScale(date);
+//     quake.Magnitude = stockMagnitude;
+//     quake.radius = computeMarkerRadius(quake.Magnitude);
+//     quake.yPos = headerPercent + examplePercentStep * quake.daysBack;
+//     ageQuakes.push(quake);
+//   }
 
-  // add rectangle to block out size marker
+//   // add rectangle to block out size marker
 
-  detailSvg.append("svg:rect")
-    .attr("x", "0%")
-    .attr("y", headerPercent + "%")
-    .attr("width", "50%")
-    .attr("height", (100 - headerPercent) + "%")
-    .style("fill", "white");
+//   detailSvg.append("svg:rect")
+//     .attr("x", "0%")
+//     .attr("y", headerPercent + "%")
+//     .attr("width", "50%")
+//     .attr("height", (100 - headerPercent) + "%")
+//     .style("fill", "white");
 
-  // add the age quakes
+//   // add the age quakes
 
-  var ageMarkers = detailSvg.selectAll("g.age")
-    .data(ageQuakes)
-    .enter()
-    .append("svg:g")
-    .attr("class", "age");
+//   var ageMarkers = detailSvg.selectAll("g.age")
+//     .data(ageQuakes)
+//     .enter()
+//     .append("svg:g")
+//     .attr("class", "age");
 
-  ageMarkers
-    .append("svg:circle")
-    .attr("r", 0)
-    .each(function(d) {styleMaker(d, this, false);})
-    .attr("cx", "25%")
-    .attr("cy", function(d) {return d.yPos + "%";});
+//   ageMarkers
+//     .append("svg:circle")
+//     .attr("r", 0)
+//     .each(function(d) {styleMaker(d, this, false);})
+//     .attr("cx", "25%")
+//     .attr("cy", function(d) {return d.yPos + "%";});
 
-  ageMarkers
-    .append("svg:text")
-    .attr("x", "25%")
-    .attr("y", function(d) {return d.yPos + "%";})
-    .style("text-anchor", "middle")
-    .attr("dominant-baseline", "middle")
-    .text(function(d) {return d.daysBack;});
+//   ageMarkers
+//     .append("svg:text")
+//     .attr("x", "25%")
+//     .attr("y", function(d) {return d.yPos + "%";})
+//     .style("text-anchor", "middle")
+//     .attr("dominant-baseline", "middle")
+//     .text(function(d) {return d.daysBack;});
 }
 
 function createQuakeChart(svg)
 {
   var tickTimeFormat = d3.time.format("%d %b");
   var m = {top: 10, left: 20, bottom: 20, right: 10};
-  var w = (200 * 1.0) - m.left - m.right;
-  var h = (350 * 0.5) - m.top - m.bottom;
+  var w = (KEY_WIDTH * 1.0) - m.left - m.right;
+  var h = (KEY_HEIGHT * 0.75) - m.top - m.bottom;
   
-  var x = d3.time.scale.utc().domain([lastWeek, now]).range([0, w]);
+  var x = d3.time.scale.utc().domain([dateWindowMin, dateWindowMax]).range([0, w]);
   var y = d3.scale.linear().domain([0, MAX_MAGNITUDE]).range([h, 0]);
 
   // frame to attach axes too
@@ -797,8 +777,10 @@ function createQuakeChart(svg)
   frame.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + h + ")")
-    .call(d3.svg.axis().scale(x).tickSubdivide(1)
-          .tickSize(5, 3, 0).ticks(d3.time.days, 2)
+    .call(d3.svg.axis().scale(x)
+          .tickSubdivide(1)
+          .tickSize(5, 5, 0)
+          .ticks(d3.time.days, 2)
           .tickFormat(tickTimeFormat).orient("bottom"));
 
   // y-axis
@@ -810,7 +792,7 @@ function createQuakeChart(svg)
   // data circles
   
   var circle = svg.selectAll("circle")
-    .data(dataByMag.top(Infinity))
+    .data(quakesByMag.top(Infinity))
     .enter()
     .append("circle")
     .attr("class", "chartQuakes")
@@ -857,14 +839,14 @@ function createQuakeChart(svg)
     if (d3.event.target.empty())
     {
       circle.classed("unselected", false);
-      dataByMag.filter(null);
-      dataByDate.filter(null);
+      quakesByMag.filter(null);
+      quakesByDate.filter(null);
       updateDisplayedData();
     }
     else
     {
-      dataByMag.filter([e[0][1],e[1][1]]);
-      dataByDate.filter([e[0][0],e[1][0]]);
+      quakesByMag.filter([e[0][1],e[1][1]]);
+      quakesByDate.filter([e[0][0],e[1][0]]);
       updateDisplayedData();
     }
 
@@ -882,11 +864,11 @@ function keyHeaderHtml()
         ) +
      tRow({}, 
           tCell({class: "label"}, "first") + 
-          tCell({class: "value"}, timeAgo(minDate))
+          tCell({class: "value"}, timeAgo(observedDateMin))
          ) +
      tRow({}, 
           tCell({class: "label"}, "last") + 
-          tCell({class: "value"}, timeAgo(maxDate))
+          tCell({class: "value"}, timeAgo(observedMaxDate))
          )
   );
 
