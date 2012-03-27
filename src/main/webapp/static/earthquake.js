@@ -10,6 +10,8 @@ var dateWindowMin = null;
 var observedDateMin = null;
 var observedMaxDate = null;
 var timeScale = null;
+var dateLimitScale = null;
+var magLimitScale = null;
 
 // constants
 
@@ -25,7 +27,7 @@ var ZONE_FORMAT = d3.time.format("%Z");
 var QUAKE_DATE_FORMAT = d3.time.format.utc("%A, %B %e, %Y %H:%M:%S UTC");
 var CHECK_FOR_UPDATE = true;
 var ANIMATE_INITIAL_LOAD = false;
-var CHECK_FOR_UPDATE_SECONDS = 60;
+var CHECK_FOR_UPDATE_SECONDS = 10;
 var ANIMATION_FRAMES = 2 * 7;
 var ANIMATION_DURATION = 10 * 1000;
 var ANIMATION_DELAY = ANIMATION_DURATION / ANIMATION_FRAMES;
@@ -201,12 +203,17 @@ function registerQuakeData(data)
   quakeTesseract = tesseract(data);
   quakesByMag = quakeTesseract.dimension(function(d) {return d.Magnitude;});
   quakesByDate = quakeTesseract.dimension(function(d) {return d.date;});
+  if (magLimitScale) quakesByMag.filter(magLimitScale.domain());
+  if (dateLimitScale) quakesByDate.filter(dateLimitScale.domain());
 
   // establish size, date and date ranges
 
   var dateData = quakesByDate.top(Infinity);
-  observedDateMin = dateData[0].date;
-  observedMaxDate = dateData[dateData.length - 1].date;
+  if (dateData.length > 0)
+  {
+    observedDateMin = dateData[0].date;
+    observedMaxDate = dateData[dateData.length - 1].date;
+  }
 
   // estalish date window
 
@@ -813,7 +820,7 @@ function createQuakeChart(svg)
     .append("circle")
     .attr("class", "chartQuakes")
     .attr("transform", function(d) { return "translate(" + (x(d.date) + m.left) + "," + (y(d.Magnitude) + m.top) + ")"; })
-    .attr("r", 2);
+    .attr("r", 3);
 
   // brush
   
@@ -856,17 +863,21 @@ function createQuakeChart(svg)
     if (d3.event.target.empty())
     {
       circle.classed("unselected", false);
+
+      magLimitScale = null;
+      dateLimitScale = null;
       quakesByMag.filter(null);
       quakesByDate.filter(null);
       updateDisplayedData();
     }
     else
     {
-      quakesByMag.filter([e[0][1],e[1][1]]);
-      quakesByDate.filter([e[0][0],e[1][0]]);
+      magLimitScale = d3.scale.linear().domain([e[0][1],e[1][1]]);
+      dateLimitScale = d3.time.scale().domain([e[0][0],e[1][0]]);
+      quakesByMag.filter(magLimitScale.domain());
+      quakesByDate.filter(dateLimitScale.domain());
       updateDisplayedData();
     }
-
 
     svg.classed("selecting", !d3.event.target.empty());
   }
