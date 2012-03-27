@@ -36,13 +36,16 @@ table, tr, td, span
 {
 /*   background: lightblue; */
   width: 100%;
+  height: 100%;
   border: 10px solid transparent;
   cursor: pointer;
 }
 
 #summarySubtable
 {
+/*   background: yellow; */
   width: 100%;
+  height: 100%;
 }
 
 #magnitudeText
@@ -63,7 +66,7 @@ table, tr, td, span
 #date
 {
 /*   background: lightblue; */
-  font-size: 16px;
+  font-size: 17px;
   text-align: left;
   vertical-align: bottom;
   padding-left: 15px;
@@ -78,10 +81,17 @@ table, tr, td, span
   vertical-align: top;
 }
 
+#zone
+{
+/*   background: pink; */
+  vertical-align:text-top;
+}
+
+
 #region
 {
 /*   background: lightblue; */
-  height: 50%;
+  height: 2.1em;
   padding-bottom: 10px;
   text-align: center;
 }
@@ -94,18 +104,20 @@ table, tr, td, span
 .label
 {
 /*   background: lightgreen; */
+/*   text-transform:capitalize; */
   text-transform:uppercase;
-  vertical-align:text-top;
-  font-size: 8px;
+/*   vertical-align:text-top; */
+/*   font-size: 8px; */
+  font-size: 12px;
   text-align: right;
-  color: #888;
+  color: #aaa;
 }
 
 .value
 {
 /*   background: lightblue; */
   font-size: 12px;
-  font-weight: normal;
+/*   font-weight: normal; */
   text-align: left;
   color: #444;
 }

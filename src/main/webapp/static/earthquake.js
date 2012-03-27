@@ -21,7 +21,8 @@ var USE_TEST_DATA = false;
 
 var DATE_FORMAT = d3.time.format("%d %b %Y");
 var TIME_FORMAT = d3.time.format("%H:%M:%S");
-var QUAKE_DATE_FORMAT = d3.time.format("%A, %B %e, %Y %H:%M:%S UTC");
+var ZONE_FORMAT = d3.time.format("%Z");
+var QUAKE_DATE_FORMAT = d3.time.format.utc("%A, %B %e, %Y %H:%M:%S UTC");
 var CHECK_FOR_UPDATE = true;
 var ANIMATE_INITIAL_LOAD = false;
 var CHECK_FOR_UPDATE_SECONDS = 60;
@@ -49,7 +50,7 @@ var MAX_OPACITY = 0.8;
 var MIN_OPACITY = 0.1;
 var KEY_WIDTH = 200;
 var KEY_HEIGHT = 350;
-var KEY_PADDING = 20;
+var KEY_PADDING = 10;
 var FADE_IN_DURATION = function (d) {return d.Magnitude * 300;};
 var FADE_OUT_DURATION = function (d) {return d.Magnitude * 300;};
 
@@ -209,7 +210,7 @@ function registerQuakeData(data)
 
   // estalish date window
 
-  dateWindowMax = getUtcNow();
+  dateWindowMax = new Date();
   dateWindowMin = USE_TEST_DATA ? observedDateMin : new Date(dateWindowMax.getTime() - MILLISECONDS_INA_WEEK);
   timeScale = d3.time.scale.utc().domain([dateWindowMax, dateWindowMin]).range([MAX_OPACITY, MIN_OPACITY]);
 
@@ -333,6 +334,19 @@ function initializeOverlay()
         .duration(function(d) {return 500 * d.Magnitude})
         .attr("r", 0)
         .remove();
+
+
+      // sort quakes
+
+      d3.selectAll(".quakeBox")
+        .sort(function (a, b)
+          {
+            if (a.Magnitude > b.Magnitude)
+              return -1;
+            if (a.Magnitude < b.Magnitude)
+              return 1;
+            return 0;
+          });
     };
   };
 
@@ -406,7 +420,9 @@ function constructSummaryHtml(quake)
                            tRow({},
                                 tCell({id: "date"}, DATE_FORMAT(quake.date))) + 
                            tRow({}, 
-                                tCell({id: "time"}, TIME_FORMAT(quake.date) + span({class: "label"}, "UTC"))))
+                                tCell({id: "time"}, 
+                                      TIME_FORMAT(quake.date) + span({id: "zone", class: "label"}, ZONE_FORMAT(quake.date))
+                                     )))
                     )
               ) +
           tRow({},
@@ -417,7 +433,7 @@ function constructSummaryHtml(quake)
                            tRow({},
                                 tCell({class: "label"}, "id") +
                                 tCell({class: "value"}, quake.Eqid) +
-                                tCell({class: "label"}, "sourc") +
+                                tCell({class: "label"}, "source") +
                                 tCell({class: "value"}, quake.Src.toUpperCase())) +
                            tRow({},
                                 tCell({class: "label"}, "lat") +
@@ -801,7 +817,8 @@ function createQuakeChart(svg)
 
   // brush
   
-  frame.append("g")
+  svg.append("g")
+    .attr("transform", function(d) { return "translate(" + m.left + "," + m.top + ")"; })
     .attr("class", "brush")
     .call(d3.svg.brush().x(x).y(y)
           .on("brushstart", brushstart)
@@ -877,7 +894,7 @@ function keyHeaderHtml()
 
 function timeAgo(date)
 {
-  var now = getUtcNow();
+  var now = new Date();
 
   var delta = now.getTime() - date.getTime();
   var bigUnit = establishTimeUnit(delta);
@@ -906,16 +923,16 @@ function establishTimeUnit(milliseconds)
 }
 
 
-function getUtcNow()
+function convertToUtc(date)
 {
-  var now = new Date();
+  date = typeof date !== 'undefined' ? date : new Date();
   return new Date(
-    now.getUTCFullYear(), now.
-    getUTCMonth(), 
-    now.getUTCDate(),  
-    now.getUTCHours(), 
-    now.getUTCMinutes(), 
-    now.getUTCSeconds());
+    date.getUTCFullYear(), 
+    date.getUTCMonth(), 
+    date.getUTCDate(),  
+    date.getUTCHours(), 
+    date.getUTCMinutes(), 
+    date.getUTCSeconds());
 }
 
 function capitaliseFirstLetter(string)
