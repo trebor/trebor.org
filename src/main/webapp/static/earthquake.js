@@ -1,6 +1,51 @@
+// constants
+
+var HOUR_OF_A_WEEK_PROPORTION = 1 / (7 * 24);
+var DAY_OF_A_WEEK_PROPORTION = 1 / (7);
+var EPSILON_PROPORTION = 1 / (7 * 24 * 60);
+var MILLISECONDS_INA_SECOND = 1000;
+var MILLISECONDS_INA_MINUTE = 60 * MILLISECONDS_INA_SECOND;
+var MILLISECONDS_INA_HOUR = 60 * MILLISECONDS_INA_MINUTE;
+var MILLISECONDS_INA_DAY = 24 * MILLISECONDS_INA_HOUR;
+var MILLISECONDS_INA_WEEK = 7 * MILLISECONDS_INA_DAY;
+
+var HOUR_DATA_SETS = ["eqs1hour-M0"];
+var DAY_DATA_SETS = ["eqs1day-M0"];
+var WEEK_DATA_SETS = ["eqs7day-M1", "eqs1day-M0"];
+var TEST_DATA_SETS = ["data1", "data2"];
+var USE_TEST_DATA = false;
+var DATE_FORMAT = d3.time.format("%d %b %Y");
+var TIME_FORMAT = d3.time.format("%H:%M:%S");
+var ZONE_FORMAT = d3.time.format("%Z");
+var QUAKE_DATE_FORMAT = d3.time.format.utc("%A, %B %e, %Y %H:%M:%S UTC");
+var ANIMATE_INITIAL_LOAD = false;
+var CHECK_FOR_UPDATE = true;
+var CHECK_FOR_UPDATE_MILLISECONDS = 30 * MILLISECONDS_INA_SECOND;
+var ANIMATION_FRAMES = 2 * 7;
+var ANIMATION_DURATION = 10 * 1000;
+var ANIMATION_DELAY = ANIMATION_DURATION / ANIMATION_FRAMES;
+var MAX_MAGNITUDE = 9;
+var SUMMARY_WIDTH = 240;
+var SUMMARY_HEIGHT = 180;
+var WEDGE_WIDTH = 30;
+var DEFAULT_OPACITY = 0.55;
+var QUAKE_BASE = "http://earthquake.usgs.gov/earthquakes/recenteqsus/Quakes/";
+var QUAKE_TAIL = ".php";
+var MARKER_STROKE_WIDTH = 8;
+var MARKER_OFFSET = 40;
+var MAX_OPACITY = 0.8;
+var MIN_OPACITY = 0.1;
+var KEY_WIDTH = 200;
+var KEY_HEIGHT = 350;
+var KEY_PADDING = 10;
+var CHART_QUAKE_ROLLIN_MILLISECONDS = 2000;
+var FADE_IN_DURATION = function (d) {return d.Magnitude * 1000;};
+var FADE_OUT_DURATION = function (d) {return d.Magnitude * 1000;};
+
 // globals
 
 var overlay = null;
+var quakeData = null;
 var quakeTesseract = null;
 var quakesByMag = null;
 var quakesByDate = null;
@@ -12,49 +57,12 @@ var observedMaxDate = null;
 var timeScale = null;
 var dateLimitScale = null;
 var magLimitScale = null;
-
-// constants
-
-//  var DATA_SETS = ["eqs7day-M5"];
-//  var DATA_SETS = ["eqs1hour-M0"];
-var DATA_SETS = ["eqs1hour-M0", "eqs7day-M1"];
-//var DATA_SETS = ["data1", "data2"];
-var USE_TEST_DATA = false;
-
-var DATE_FORMAT = d3.time.format("%d %b %Y");
-var TIME_FORMAT = d3.time.format("%H:%M:%S");
-var ZONE_FORMAT = d3.time.format("%Z");
-var QUAKE_DATE_FORMAT = d3.time.format.utc("%A, %B %e, %Y %H:%M:%S UTC");
-var CHECK_FOR_UPDATE = true;
-var ANIMATE_INITIAL_LOAD = false;
-var CHECK_FOR_UPDATE_SECONDS = 10;
-var ANIMATION_FRAMES = 2 * 7;
-var ANIMATION_DURATION = 10 * 1000;
-var ANIMATION_DELAY = ANIMATION_DURATION / ANIMATION_FRAMES;
-var MAX_MAGNITUDE = 9;
-var SUMMARY_WIDTH = 240;
-var SUMMARY_HEIGHT = 180;
-var WEDGE_WIDTH = 30;
-var DEFAULT_OPACITY = 0.55;
-var QUAKE_BASE = "http://earthquake.usgs.gov/earthquakes/recenteqsus/Quakes/";
-var QUAKE_TAIL = ".php";
-var HOUR_OF_A_WEEK_PROPORTION = 1 / (7 * 24);
-var DAY_OF_A_WEEK_PROPORTION = 1 / (7);
-var EPSILON_PROPORTION = 1 / (7 * 24 * 60);
-var MILLISECONDS_INA_SECOND = 1000;
-var MILLISECONDS_INA_MINUTE = 60 * MILLISECONDS_INA_SECOND;
-var MILLISECONDS_INA_HOUR = 60 * MILLISECONDS_INA_MINUTE;
-var MILLISECONDS_INA_DAY = 24 * MILLISECONDS_INA_HOUR;
-var MILLISECONDS_INA_WEEK = 7 * MILLISECONDS_INA_DAY;
-var MARKER_STROKE_WIDTH = 8;
-var MARKER_OFFSET = 40;
-var MAX_OPACITY = 0.8;
-var MIN_OPACITY = 0.1;
-var KEY_WIDTH = 200;
-var KEY_HEIGHT = 350;
-var KEY_PADDING = 10;
-var FADE_IN_DURATION = function (d) {return d.Magnitude * 300;};
-var FADE_OUT_DURATION = function (d) {return d.Magnitude * 300;};
+var dateWindowExtent = MILLISECONDS_INA_WEEK;
+var dataSets = WEEK_DATA_SETS;
+var quakeChartTimeScale = null;
+var quakeChartMagScale = null;
+var updateQuakeChart = null;
+var timeScaleChanged = true;
 
 // google map style
 
@@ -136,23 +144,41 @@ var markerEdgeColorScale = jbMarkerEdgeColorScale;
 
 // initialize the system, this is the main entry point for bulk of the code
 
-loadDataSets(DATA_SETS);
+initialize();
+
+// initialize the sytems
+
+function initialize()
+{
+  loadDataSets();
+
+  // reload chainging function which calls itself to keep hope alive
+
+  var reloadChainFunction = function()
+  {
+    setTimeout(reloadChainFunction, CHECK_FOR_UPDATE_MILLISECONDS);
+
+    // structure this way so that the value can be changed
+
+    if (CHECK_FOR_UPDATE)
+      loadDataSets();
+  }
+
+  // fire off the chain function
+
+  reloadChainFunction();
+}
 
 // load all data sets combine them and present them on the display
 
-function loadDataSets(dataSets)
+function loadDataSets()
 {
-  // get quake data, the helper function must be recursive because the data is loaded asynchronously
+  // the helper function must be recursive because the data is loaded asynchronously
 
-  loadDataHelper(dataSets.slice(), []);
-
-  // if enabled, periodically check for updates
-
-  if (CHECK_FOR_UPDATE)
-    setTimeout(function() {loadDataSets(dataSets);}, CHECK_FOR_UPDATE_SECONDS * MILLISECONDS_INA_SECOND);
+  loadDataHelper((USE_TEST_DATA ? TEST_DATA_SETS : dataSets).slice(), []);
 }
 
-// recursivly loads and combindes data, when all data is loaded register it for display
+// recursivly loads and combindes data, when all data is loaded, display that data
 
 function loadDataHelper(dataSets, dataAccumulation)
 {
@@ -201,10 +227,9 @@ function registerQuakeData(data)
   // initialize tesseract
 
   quakeTesseract = tesseract(data);
+  quakeData = data;
   quakesByMag = quakeTesseract.dimension(function(d) {return d.Magnitude;});
   quakesByDate = quakeTesseract.dimension(function(d) {return d.date;});
-  if (magLimitScale) quakesByMag.filter(magLimitScale.domain());
-  if (dateLimitScale) quakesByDate.filter(dateLimitScale.domain());
 
   // establish size, date and date ranges
 
@@ -218,20 +243,25 @@ function registerQuakeData(data)
   // estalish date window
 
   dateWindowMax = new Date();
-  dateWindowMin = USE_TEST_DATA ? observedDateMin : new Date(dateWindowMax.getTime() - MILLISECONDS_INA_WEEK);
-  timeScale = d3.time.scale.utc().domain([dateWindowMax, dateWindowMin]).range([MAX_OPACITY, MIN_OPACITY]);
+  dateWindowMin = USE_TEST_DATA ? observedDateMin : new Date(dateWindowMax.getTime() - dateWindowExtent);
+  timeScale = d3.time.scale.utc().domain([dateWindowMin, dateWindowMax]).range([MIN_OPACITY, MAX_OPACITY]);
 
-  // if first time, animate in the quakes
+  // apply any filters to data
 
-  if (ANIMATE_INITIAL_LOAD && isFirstRender())
-  {
-    var animateTimeScale = d3.time.scale().domain([observedMaxDate, observedDateMin]).range([ANIMATION_FRAMES - 1, 0]);
-    animate(0, animateTimeScale, data);
-  }
+  quakesByMag.filter(magLimitScale ? magLimitScale.domain() : null);
+  quakesByDate.filter(dateLimitScale ? dateLimitScale.domain() : timeScale.domain());
 
-  // otherwise just update the data
+//   // if first time, animate in the quakes
+
+//   if (ANIMATE_INITIAL_LOAD && isFirstRender())
+//   {
+//     var animateTimeScale = d3.time.scale().domain([observedMaxDate, observedDateMin]).range([ANIMATION_FRAMES - 1, 0]);
+//     animate(0, animateTimeScale, data);
+//   }
+
+//   // otherwise just update the data
   
- else
+//  else
     updateDisplayedData();
 }
 
@@ -266,8 +296,12 @@ function updateDisplayedData()
     
   // otherwise redraw the overlay
     
-  else
+  else if (overlay.draw)
     overlay.draw();
+
+  // update the key chart
+
+  updateQuakeChart();
 }
 
 // test if this is the first rendering of the data
@@ -452,6 +486,8 @@ function constructSummaryHtml(quake)
   return result;
 }
 
+function input(attributes, text) {return html("input", attributes, text);}
+function form(attributes, text) {return html("form", attributes, text);}
 function table(attributes, text) {return html("table", attributes, text);}
 function tRow(attributes, text) {return html("tr", attributes, text);}
 function tCell(attributes, text) {return html("td", attributes, text);}
@@ -623,9 +659,12 @@ function constructKey()
   keyDiv.style.height = KEY_HEIGHT + "px";
   keyDiv.style.padding = KEY_PADDING + "px";
 
-  // attach key to map
+  // attach key to map (removing old one first)
 
-  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(keyDiv);
+  var topRight = map.controls[google.maps.ControlPosition.RIGHT_TOP];
+  if (topRight.length > 0)
+    topRight.pop();
+  topRight.push(keyDiv);
 
   // add inner div
 
@@ -781,13 +820,15 @@ function constructKey()
 
 function createQuakeChart(svg)
 {
-  var tickTimeFormat = d3.time.format("%d %b");
-  var m = {top: 10, left: 20, bottom: 20, right: 10};
+  var m = {top: 10, left: 20, bottom: 25, right: 10};
   var w = (KEY_WIDTH * 1.0) - m.left - m.right;
   var h = (KEY_HEIGHT * 0.75) - m.top - m.bottom;
-  
-  var x = d3.time.scale.utc().domain([dateWindowMin, dateWindowMax]).range([0, w]);
-  var y = d3.scale.linear().domain([0, MAX_MAGNITUDE]).range([h, 0]);
+
+
+  // initialize the scales
+
+  quakeChartTimeScale = d3.time.scale.utc().range([0, w]);
+  quakeChartMagScale = d3.scale.linear().range([h, 0]);
 
   // frame to attach axes too
 
@@ -795,52 +836,191 @@ function createQuakeChart(svg)
     .append("g")
     .attr("transform", "translate(" + m.left + "," + m.top + ")");
 
-  // x-axis
+  // create x-axis
 
-  frame.append("g")
+  var xAxis = frame.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + h + ")")
-    .call(d3.svg.axis().scale(x)
-          .tickSubdivide(1)
-          .tickSize(5, 5, 0)
-          .ticks(d3.time.days, 2)
-          .tickFormat(tickTimeFormat).orient("bottom"));
+    .attr("transform", "translate(0," + h + ")");
 
-  // y-axis
+  // create y-axis
 
-  frame.append("g")
-    .attr("class", "y axis")
-    .call(d3.svg.axis().scale(y).orient("left"));
+  var yAxis = frame.append("g")
+    .attr("class", "y axis");
 
-  // data circles
+  var chartMarkers;
+
+  // the function used to update this chart, defined here so it has access to 
+  // chart variables but can be called globally 
+
+  updateQuakeChart = function()
+  {
+    // set the domain of the chat scales
+
+    quakeChartTimeScale.domain(timeScale.domain());
+    quakeChartMagScale.domain([0, MAX_MAGNITUDE]);
+
+    // set the x-axis scale
+
+    var xAxisScale = null;
+    var xAxisTickFormat = null;
+    var xAxisTickNumber;
+    switch(dataSets)
+    {
+    case HOUR_DATA_SETS:
+      xAxisScale = d3.time.minutes;
+      xAxisTickFormat = d3.time.format("%H:%M");
+      xAxisTickNumber = 10;
+      break;
+    case DAY_DATA_SETS:
+      xAxisScale = d3.time.hours;
+      xAxisTickFormat = d3.time.format("%H:00");
+      xAxisTickNumber = 8;
+      break;
+    case WEEK_DATA_SETS:
+      xAxisScale = d3.time.days;
+      xAxisTickFormat = d3.time.format("%d %b");
+      xAxisTickNumber = 2;
+      break;
+    }
+
+    xAxis
+      .transition()
+      .duration(CHART_QUAKE_ROLLIN_MILLISECONDS)
+      .call(d3.svg.axis().scale(quakeChartTimeScale)
+            .tickSubdivide(1)
+            .tickSize(6, 3, 0)
+            .ticks(xAxisScale, xAxisTickNumber)
+            .tickFormat(xAxisTickFormat)
+            .orient("bottom"));
+    
+    // set the y-axis scale
+    
+    yAxis.call(d3.svg.axis().scale(quakeChartMagScale).orient("left"));
+    
+    // establish the cirlce updates
+    
+    chartMarkers = svg.selectAll("circle")
+      .data(quakeData.filter(
+        function (d) 
+        {
+          return d.date >= dateWindowMin && d.date < dateWindowMax;
+        }), function(d) {return d.Eqid;});
+    
+    // add the new circles
+
+    var updateMarkers = chartMarkers
+      .enter()
+      .append("circle")
+      .attr("opacity", 0)
+      .attr("class", "chartQuakes")
+      .attr("r", 3);
+
+    // if timescale changed, roll in new points from left edge
+
+    if (timeScaleChanged)
+    {
+      // place markers flush left of the chart
+
+      updateMarkers.attr("transform", function(d)
+              {
+                return "translate(" + m.left + "," + (quakeChartMagScale(d.Magnitude) + m.top) + ")"; 
+              });
+
+      // remove the exits
+      
+      chartMarkers.exit()
+        .transition()
+        .duration(CHART_QUAKE_ROLLIN_MILLISECONDS)
+        .attr("opacity", 0)
+        .attr("transform", function(d)
+              { return "translate(" + m.left + "," + 
+                (quakeChartMagScale(d.Magnitude) + m.top) + ")"; 
+              })
+        .remove();
+
+      // (re)position all quakes
+      
+      chartMarkers
+        .transition()
+        .duration(CHART_QUAKE_ROLLIN_MILLISECONDS)
+        .attr("opacity", 1)
+        .attr("transform", function(d)
+              { return "translate(" + (quakeChartTimeScale(d.date) + m.left) + "," + 
+                (quakeChartMagScale(d.Magnitude) + m.top) + ")"; 
+              });
+    }
+    
+    // otherwise just fade them in where they belong
+    
+    else
+    {
+      // place markers at final destination
+
+      updateMarkers
+        .attr("transform", function(d)
+              {
+                return "translate(" + (quakeChartTimeScale(d.date) + m.left) + "," + (quakeChartMagScale(d.Magnitude) + m.top) + ")";
+              });
+
+      // remove the exits
+      
+      chartMarkers.exit()
+        .transition()
+        .duration(CHART_QUAKE_ROLLIN_MILLISECONDS)
+        .attr("opacity", 0)
+        .remove();
+
+      // (re)position all quakes
+      
+      chartMarkers
+        .attr("transform", function(d)
+              { return "translate(" + (quakeChartTimeScale(d.date) + m.left) + "," + 
+                (quakeChartMagScale(d.Magnitude) + m.top) + ")"; 
+              })
+        .transition()
+        .duration(CHART_QUAKE_ROLLIN_MILLISECONDS)
+        .attr("opacity", 1);
+    }
+
+    if (timeScaleChanged)
+    {
+      chartMarkers.classed("unselected", false);
+      svg.classed("selecting", false);
+      magLimitScale = null;
+      dateLimitScale = null;
+      quakesByMag.filter(null);
+      quakesByDate.filter(timeScale);
+
+      svg.selectAll("g.brush").remove();
+      svg.append("g")
+        .attr("class", "brush")
+        .attr("transform", function(d) { return "translate(" + m.left + "," + m.top + ")"; })
+        .call(d3.svg.brush().x(quakeChartTimeScale).y(quakeChartMagScale)
+              .on("brushstart", brushstart)
+              .on("brush", brush)
+              .on("brushend", brushend));
+
+      timeScaleChanged = false;
+    }
+
+  }
+
+  // be sure update chart data after we create the chart
+
+  updateQuakeChart();
   
-  var circle = svg.selectAll("circle")
-    .data(quakesByMag.top(Infinity))
-    .enter()
-    .append("circle")
-    .attr("class", "chartQuakes")
-    .attr("transform", function(d) { return "translate(" + (x(d.date) + m.left) + "," + (y(d.Magnitude) + m.top) + ")"; })
-    .attr("r", 3);
-
-  // brush
-  
-  svg.append("g")
-    .attr("transform", function(d) { return "translate(" + m.left + "," + m.top + ")"; })
-    .attr("class", "brush")
-    .call(d3.svg.brush().x(x).y(y)
-          .on("brushstart", brushstart)
-          .on("brush", brush)
-          .on("brushend", brushend));
-  
-  // prush functions
+  // brush functions
 
   function brushstart()
   {
+    console.log("brushstart");
     svg.classed("selecting", true);
   }
   
   function brush() 
   {
+    console.log("brush");
+
     var e = d3.event.target.extent();
     var minDate = e[0][0];
     var maxDate = e[1][0];
@@ -853,7 +1033,7 @@ function createQuakeChart(svg)
         && minMag <= d.Magnitude && d.Magnitude <= maxMag;
     };
 
-    circle.classed("unselected", function(d) {return !select(d);});
+    chartMarkers.classed("unselected", function(d) {return !select(d);});
   }
   
   function brushend() 
@@ -862,12 +1042,12 @@ function createQuakeChart(svg)
 
     if (d3.event.target.empty())
     {
-      circle.classed("unselected", false);
+      chartMarkers.classed("unselected", false);
 
       magLimitScale = null;
       dateLimitScale = null;
       quakesByMag.filter(null);
-      quakesByDate.filter(null);
+      quakesByDate.filter(timeScale);
       updateDisplayedData();
     }
     else
@@ -885,23 +1065,91 @@ function createQuakeChart(svg)
 
 function keyHeaderHtml()
 {
+  var hourAttributes = {type:"radio", onclick: "setHourPeriod()", name: "period", value: "hour"};
+  var dayAttributes = {type:"radio", onclick: "setDayPeriod()", name: "period", value: "day"};
+  var weekAttributes = {type:"radio", onclick: "setWeekPeriod()", name: "period", value: "week"};
+
+  // use dataSets as proxy for which time mode is selected
+
+  switch(dataSets)
+  {
+    case HOUR_DATA_SETS:
+      hourAttributes.checked = true;
+      break;
+    case DAY_DATA_SETS:
+      dayAttributes.checked = true;
+      break;
+    case WEEK_DATA_SETS:
+      weekAttributes.checked = true;
+      break;
+  }
+
+  // construct the header table
+
   var result = table(
     {id: "keyHeaderTable"},
     tRow({}, 
          tCell({colspan: 2}, "Earthquakes")
         ) +
-     tRow({}, 
-          tCell({class: "label"}, "first") + 
-          tCell({class: "value"}, timeAgo(observedDateMin))
-         ) +
-     tRow({}, 
-          tCell({class: "label"}, "last") + 
-          tCell({class: "value"}, timeAgo(observedMaxDate))
-         )
+    tRow({}, 
+         tCell({colspan: 2}, 
+               form({}, 
+                    input(hourAttributes, "hour") +
+                    input(dayAttributes, "day") +
+                    input(weekAttributes, "week")
+                   )
+              )
+        )
+
+// <form>
+// <input type="radio" name="sex" value="male" /> Male<br />
+// <input type="radio" name="sex" value="female" /> Female
+// </form> 
+
+
+//      tRow({}, 
+//           tCell({class: "label"}, "first") + 
+//           tCell({class: "value"}, timeAgo(observedDateMin))
+//          ) +
+//      tRow({}, 
+//           tCell({class: "label"}, "last") + 
+//           tCell({class: "value"}, timeAgo(observedMaxDate))
+//          )
   );
 
   return result;
 }
+
+// set the time period to the last hour
+
+function setHourPeriod()
+{
+  dateWindowExtent = MILLISECONDS_INA_HOUR;
+  dataSets = HOUR_DATA_SETS;
+  timeScaleChanged = true;
+  loadDataSets();
+}
+
+// set the time period to the last day
+
+function setDayPeriod()
+{
+  dateWindowExtent = MILLISECONDS_INA_DAY;
+  dataSets = DAY_DATA_SETS;
+  timeScaleChanged = true;
+  loadDataSets();
+}
+
+// set the time period to the last week
+
+function setWeekPeriod()
+{
+  dateWindowExtent = MILLISECONDS_INA_WEEK;
+  dataSets = WEEK_DATA_SETS;
+  timeScaleChanged = true;
+  loadDataSets();
+}
+
 
 function timeAgo(date)
 {
@@ -932,7 +1180,6 @@ function establishTimeUnit(milliseconds)
 
   return units[units.length - 1];
 }
-
 
 function convertToUtc(date)
 {
