@@ -35,7 +35,7 @@ var MARKER_STROKE_WIDTH = 8;
 var MARKER_OFFSET = 40;
 var MAX_OPACITY = 0.8;
 var MIN_OPACITY = 0.1;
-var KEY_WIDTH = 200;
+var KEY_WIDTH = 250;
 var KEY_HEIGHT = 350;
 var KEY_PADDING = 10;
 var CHART_QUAKE_ROLLIN_MILLISECONDS = 2000;
@@ -52,15 +52,15 @@ var quakesByDate = null;
 var projection = null;
 var dateWindowMax = null;
 var dateWindowMin = null;
-var observedDateMin = null;
+var observedMinMag = null;
+var observedMaxMax = null;
+var observedMinDate = null;
 var observedMaxDate = null;
 var timeScale = null;
 var dateLimitScale = null;
 var magLimitScale = null;
 var dateWindowExtent = MILLISECONDS_INA_WEEK;
 var dataSets = WEEK_DATA_SETS;
-var quakeChartTimeScale = null;
-var quakeChartMagScale = null;
 var updateQuakeChart = null;
 var timeScaleChanged = true;
 
@@ -233,17 +233,30 @@ function registerQuakeData(data)
 
   // establish size, date and date ranges
 
+  var magData = quakesByMag.top(Infinity);
+  if (magData.length > 0)
+  {
+    observedMaxMag = magData[0].Magnitude;
+    observedMinMag = magData[magData.length - 1].Magnitude;
+  }
+
   var dateData = quakesByDate.top(Infinity);
   if (dateData.length > 0)
   {
-    observedDateMin = dateData[0].date;
-    observedMaxDate = dateData[dateData.length - 1].date;
+    observedMaxDate = dateData[0].date;
+    observedMinDate = dateData[dateData.length - 1].date;
   }
+
+  console.log("min mag", observedMinMag);
+  console.log("max mag", observedMaxMag);
+
+  console.log("min date", observedMinDate);
+  console.log("max date", observedMaxDate);
 
   // estalish date window
 
   dateWindowMax = new Date();
-  dateWindowMin = USE_TEST_DATA ? observedDateMin : new Date(dateWindowMax.getTime() - dateWindowExtent);
+  dateWindowMin = USE_TEST_DATA ? observedMinDate : new Date(dateWindowMax.getTime() - dateWindowExtent);
   timeScale = d3.time.scale.utc().domain([dateWindowMin, dateWindowMax]).range([MIN_OPACITY, MAX_OPACITY]);
 
   // apply any filters to data
@@ -255,7 +268,7 @@ function registerQuakeData(data)
 
 //   if (ANIMATE_INITIAL_LOAD && isFirstRender())
 //   {
-//     var animateTimeScale = d3.time.scale().domain([observedMaxDate, observedDateMin]).range([ANIMATION_FRAMES - 1, 0]);
+//     var animateTimeScale = d3.time.scale().domain([observedMaxDate, observedMinDate]).range([ANIMATION_FRAMES - 1, 0]);
 //     animate(0, animateTimeScale, data);
 //   }
 
@@ -820,15 +833,15 @@ function constructKey()
 
 function createQuakeChart(svg)
 {
-  var m = {top: 10, left: 20, bottom: 25, right: 10};
+  var m = {top: 10, left: 30, bottom: 25, right: 10};
   var w = (KEY_WIDTH * 1.0) - m.left - m.right;
   var h = (KEY_HEIGHT * 0.75) - m.top - m.bottom;
 
 
   // initialize the scales
 
-  quakeChartTimeScale = d3.time.scale.utc().range([0, w]);
-  quakeChartMagScale = d3.scale.linear().range([h, 0]);
+  var quakeChartTimeScale = d3.time.scale.utc().range([0, w]);
+  var quakeChartMagScale = d3.scale.linear().range([h, 0]);
 
   // frame to attach axes too
 
@@ -857,7 +870,7 @@ function createQuakeChart(svg)
     // set the domain of the chat scales
 
     quakeChartTimeScale.domain(timeScale.domain());
-    quakeChartMagScale.domain([0, MAX_MAGNITUDE]);
+    quakeChartMagScale.domain([0, observedMaxMag]).nice();
 
     // set the x-axis scale
 
@@ -867,35 +880,48 @@ function createQuakeChart(svg)
     switch(dataSets)
     {
     case HOUR_DATA_SETS:
-      xAxisScale = d3.time.minutes;
+      xAxisInterval = d3.time.minutes;
       xAxisTickFormat = d3.time.format("%H:%M");
       xAxisTickNumber = 10;
       break;
     case DAY_DATA_SETS:
-      xAxisScale = d3.time.hours;
+      xAxisInterval = d3.time.hours;
       xAxisTickFormat = d3.time.format("%H:00");
       xAxisTickNumber = 8;
       break;
     case WEEK_DATA_SETS:
-      xAxisScale = d3.time.days;
+      xAxisInterval = d3.time.days;
       xAxisTickFormat = d3.time.format("%d %b");
       xAxisTickNumber = 2;
       break;
     }
 
-    xAxis
-      .transition()
-      .duration(CHART_QUAKE_ROLLIN_MILLISECONDS)
-      .call(d3.svg.axis().scale(quakeChartTimeScale)
-            .tickSubdivide(1)
-            .tickSize(6, 3, 0)
-            .ticks(xAxisScale, xAxisTickNumber)
-            .tickFormat(xAxisTickFormat)
-            .orient("bottom"));
-    
-    // set the y-axis scale
-    
-    yAxis.call(d3.svg.axis().scale(quakeChartMagScale).orient("left"));
+    var xAxisScale = d3.svg.axis().scale(quakeChartTimeScale)
+      .tickSubdivide(1)
+      .tickSize(6, 3, 0)
+      .ticks(xAxisInterval, xAxisTickNumber)
+      .tickFormat(xAxisTickFormat)
+      .orient("bottom");
+
+    var yAxisScale = d3.svg.axis().scale(quakeChartMagScale).orient("left");
+
+    if (timeScaleChanged)
+    {
+      xAxis 
+        .transition()
+        .duration(CHART_QUAKE_ROLLIN_MILLISECONDS)
+        .call(xAxisScale);
+
+      yAxis
+        .transition()
+        .duration(CHART_QUAKE_ROLLIN_MILLISECONDS)
+        .call(yAxisScale);
+    }
+    else
+    {
+      xAxis.call(xAxisScale);
+      yAxis.call(yAxisScale);
+    }
     
     // establish the cirlce updates
     
@@ -1109,7 +1135,7 @@ function keyHeaderHtml()
 
 //      tRow({}, 
 //           tCell({class: "label"}, "first") + 
-//           tCell({class: "value"}, timeAgo(observedDateMin))
+//           tCell({class: "value"}, timeAgo(observedMinDate))
 //          ) +
 //      tRow({}, 
 //           tCell({class: "label"}, "last") + 
