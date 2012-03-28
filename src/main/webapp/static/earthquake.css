@@ -186,28 +186,26 @@ table, tr, td, span
   border-collapse: collapse;
 }
 
-.titleBlock
+#titleTable
+{
+/*   background: lightblue; */
+  margin-left:auto; 
+  margin-right:auto;
+  text-align: center;
+}
+
+#keyTitle
 {
 /*   background: orange; */
-  width: 5%;
-}
-
-#keyTitle1
-{
-  padding-top: 20px;
   text-align: right;
   font-size: 20px;
+  padding-top: 20px;
   vertical-align: bottom;
-}
-
-#keyTitle2
-{
-  text-align: right;
-  vertical-align: top;
 }
 
 #spanSelectors
 {
+/*   background: yellow; */
   vertical-align: top;
   font-size: 12px;
   text-align: right;

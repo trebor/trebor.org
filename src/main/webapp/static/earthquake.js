@@ -1129,17 +1129,15 @@ function keyHeaderHtml()
   var result = 
     table({id: "keyHeaderTable"},
           tRow({}, 
-               tCell({class: "titleBlock"}, "") +
-             tCell({id: "keyTitle1"}, "Earthquakes" + space + unitName)  +
-               tCell({class: "titleBlock"}, "")
-              ) +
-          tRow({id: "spanSelectors"}, 
-             tCell({class: "titleBlock"}, "") +
-               tCell({}, selectors) +
-               tCell({class: "titleBlock"}, "")
+               tCell({},
+                     table({id: "titleTable"},
+                           tRow({}, tCell({id: "keyTitle"}, "Earthquakes" + space + unitName)) +
+                           tRow({id: "spanSelectors"}, tCell({}, selectors))
+                          )
+                    )
               ) +
           tRow({}, 
-               tCell({id: "selectHint", colspan: 3}, "Quake Chart (drag to select)") 
+               tCell({id: "selectHint"}, "Quake Chart (drag to select)") 
               )
   );
 
