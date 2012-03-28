@@ -551,12 +551,28 @@ function mergeProperties(obj1,obj2)
 function mouseoverQuake(quake, map)
 {
   addQuakeDtail(quake, map);
+
+  // highlight matching quake
+
+  d3
+    .selectAll(".chartQuakes")
+    .filter(function (d) {return d == quake;})
+    .each(function (d) {console.log("d", d);})
+    .attr("class", "mapMouseOver");
 }
 
 
 function mouseoutQuake(quake, map)
 {
   removeQuakeDtail(quake, map);
+
+  // un-highlight matching quake
+
+  d3
+    .selectAll(".mapMouseOver")
+    .filter(function (d) {return d == quake;})
+    .each(function (d) {console.log("d", d);})
+    .attr("class", "chartQuakes");
 }
 
 function addQuakeDtail(quake, map)

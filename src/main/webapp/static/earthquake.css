@@ -280,6 +280,12 @@ table, tr, td, span
   fill: #44c;
 }
 
+.mapMouseOver
+{
+  fill-opacity: 1;
+  fill: #f00;
+}
+
 .unselected
 {
   fill: #aaa;
