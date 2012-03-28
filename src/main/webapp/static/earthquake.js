@@ -9,18 +9,19 @@ var MILLISECONDS_INA_HOUR = 60 * MILLISECONDS_INA_MINUTE;
 var MILLISECONDS_INA_DAY = 24 * MILLISECONDS_INA_HOUR;
 var MILLISECONDS_INA_WEEK = 7 * MILLISECONDS_INA_DAY;
 
+var ANIMATE_INITIAL_LOAD = false;
+var USE_TEST_DATA = false;
+var CHECK_FOR_UPDATE = false;
+var CHECK_FOR_UPDATE_MILLISECONDS = 10 * MILLISECONDS_INA_SECOND;
+
 var HOUR_DATA_SETS = ["eqs1hour-M0"];
 var DAY_DATA_SETS = ["eqs1day-M0"];
 var WEEK_DATA_SETS = ["eqs7day-M1", "eqs1day-M0"];
 var TEST_DATA_SETS = ["data1", "data2"];
-var USE_TEST_DATA = false;
 var DATE_FORMAT = d3.time.format("%d %b %Y");
 var TIME_FORMAT = d3.time.format("%H:%M:%S");
 var ZONE_FORMAT = d3.time.format("%Z");
 var QUAKE_DATE_FORMAT = d3.time.format.utc("%A, %B %e, %Y %H:%M:%S UTC");
-var ANIMATE_INITIAL_LOAD = false;
-var CHECK_FOR_UPDATE = true;
-var CHECK_FOR_UPDATE_MILLISECONDS = 30 * MILLISECONDS_INA_SECOND;
 var ANIMATION_FRAMES = 2 * 7;
 var ANIMATION_DURATION = 10 * 1000;
 var ANIMATION_DELAY = ANIMATION_DURATION / ANIMATION_FRAMES;
@@ -39,8 +40,8 @@ var KEY_WIDTH = 250;
 var KEY_HEIGHT = 350;
 var KEY_PADDING = 10;
 var CHART_QUAKE_ROLLIN_MILLISECONDS = 2000;
-var FADE_IN_DURATION = function (d) {return d.Magnitude * 1000;};
-var FADE_OUT_DURATION = function (d) {return d.Magnitude * 1000;};
+var FADE_IN_DURATION = function (d) {return d.Magnitude * 500;};
+var FADE_OUT_DURATION = function (d) {return d.Magnitude * 100;};
 
 // globals
 
@@ -170,19 +171,18 @@ function initialize()
 }
 
 // load all data sets combine them and present them on the display
+// the helper function must be recursive because the data is loaded asynchronously
 
 function loadDataSets()
 {
-  // the helper function must be recursive because the data is loaded asynchronously
-
   loadDataHelper((USE_TEST_DATA ? TEST_DATA_SETS : dataSets).slice(), []);
 }
 
-// recursivly loads and combindes data, when all data is loaded, display that data
+// recursivly load and combinde data, when all data is loaded, display that data
 
 function loadDataHelper(dataSets, dataAccumulation)
 {
-  // if no more data sets to load, register the data for display
+  // if there are no more data sets to load, register the data for display
 
   if (dataSets.length == 0)
   {
@@ -191,8 +191,8 @@ function loadDataHelper(dataSets, dataAccumulation)
   }
 
   // load data set
-
-  d3.csv("/quake?test=" + USE_TEST_DATA + "&name=" + dataSets.pop() + ".txt", 
+  var dataSetName = dataSets.pop();
+  d3.csv("/quake?test=" + USE_TEST_DATA + "&name=" + dataSetName + ".txt", 
          function(data)
          {
            loadDataHelper(dataSets, dataAccumulation.concat(data));
@@ -247,11 +247,11 @@ function registerQuakeData(data)
     observedMinDate = dateData[dateData.length - 1].date;
   }
 
-  console.log("min mag", observedMinMag);
-  console.log("max mag", observedMaxMag);
+//   console.log("min mag", observedMinMag);
+//   console.log("max mag", observedMaxMag);
 
-  console.log("min date", observedMinDate);
-  console.log("max date", observedMaxDate);
+//   console.log("min date", observedMinDate);
+//   console.log("max date", observedMaxDate);
 
   // estalish date window
 
@@ -351,8 +351,9 @@ function initializeOverlay()
 
       // create svg to put marker in
 
+      var dd = quakesByMag.top(Infinity);
       var updates = layer.selectAll("svg.quakeBox")
-        .data(quakesByMag.top(Infinity), function(d) {return d.Eqid;})
+        .data(dd, function(d) {return d.Eqid;})
 
       // update existing markers
 
@@ -376,19 +377,19 @@ function initializeOverlay()
         .attr("cy", function(d) {return d.radius;})
         .each(function(d) {styleMaker(d, this, true);});
 
+      // fade out circles
+
+      updates.exit().selectAll("circle")
+        .transition()
+        .duration(FADE_OUT_DURATION)
+        .attr("r", 0);
+
       // remove the exits
 
       updates.exit()
         .transition()
         .duration(FADE_OUT_DURATION)
         .remove();
-
-      updates.exit().selectAll("circle")
-        .transition()
-        .duration(function(d) {return 500 * d.Magnitude})
-        .attr("r", 0)
-        .remove();
-
 
       // sort quakes
 
@@ -670,7 +671,7 @@ function constructKey()
   keyDiv.id = "keyDiv";
   keyDiv.style.width =  KEY_WIDTH + "px";
   keyDiv.style.height = KEY_HEIGHT + "px";
-  keyDiv.style.padding = KEY_PADDING + "px";
+  keyDiv.style.padding = "0px " + KEY_PADDING + "px";
 
   // attach key to map (removing old one first)
 
@@ -689,8 +690,7 @@ function constructKey()
 
   var headerDiv = innerDiv
     .append("div")
-    .attr("id", "keyHeader")
-    .html(keyHeaderHtml);
+    .attr("id", "keyHeader");
 
   // add quake chart area
 
@@ -702,7 +702,7 @@ function constructKey()
     .append("svg:svg")
     .attr("id", "chartSvg");
 
-  createQuakeChart(chartSvg);
+  createQuakeChart(chartSvg, headerDiv);
 
 //   // add detail area
 
@@ -831,11 +831,11 @@ function constructKey()
 //     .text(function(d) {return d.daysBack;});
 }
 
-function createQuakeChart(svg)
+function createQuakeChart(svg, headerDiv)
 {
-  var m = {top: 10, left: 30, bottom: 25, right: 10};
+  var m = {top: 5, left: 30, bottom: 25, right: 10};
   var w = (KEY_WIDTH * 1.0) - m.left - m.right;
-  var h = (KEY_HEIGHT * 0.75) - m.top - m.bottom;
+  var h = (KEY_HEIGHT * 0.70) - m.top - m.bottom;
 
 
   // initialize the scales
@@ -867,6 +867,11 @@ function createQuakeChart(svg)
 
   updateQuakeChart = function()
   {
+    // update the header html
+
+    headerDiv
+      .html(keyHeaderHtml);
+
     // set the domain of the chat scales
 
     quakeChartTimeScale.domain(timeScale.domain());
@@ -1039,14 +1044,11 @@ function createQuakeChart(svg)
 
   function brushstart()
   {
-    console.log("brushstart");
     svg.classed("selecting", true);
   }
   
   function brush() 
   {
-    console.log("brush");
-
     var e = d3.event.target.extent();
     var minDate = e[0][0];
     var maxDate = e[1][0];
@@ -1091,64 +1093,62 @@ function createQuakeChart(svg)
 
 function keyHeaderHtml()
 {
-  var hourAttributes = {type:"radio", onclick: "setHourPeriod()", name: "period", value: "hour"};
-  var dayAttributes = {type:"radio", onclick: "setDayPeriod()", name: "period", value: "day"};
-  var weekAttributes = {type:"radio", onclick: "setWeekPeriod()", name: "period", value: "week"};
+  var space = "&nbsp;";
+  var selectHour = span({class: "spanSelector", onclick: "setHourSpan()"}, "Hour");
+  var selectDay = span({class: "spanSelector", onclick: "setDaySpan()"},  "Day");
+  var selectWeek = span({class: "spanSelector", onclick: "setWeekSpan()"}, "Week");
 
   // use dataSets as proxy for which time mode is selected
 
+  var unitName = null;
+  var space1 = space;
+  var space2 = space;
   switch(dataSets)
   {
-    case HOUR_DATA_SETS:
-      hourAttributes.checked = true;
-      break;
-    case DAY_DATA_SETS:
-      dayAttributes.checked = true;
-      break;
-    case WEEK_DATA_SETS:
-      weekAttributes.checked = true;
-      break;
+  case HOUR_DATA_SETS:
+    unitName = "this Hour";
+    selectHour = span({class: "spanSelected"}, "");
+    space1 = "";
+    break;
+  case DAY_DATA_SETS:
+    unitName = "this Day";
+    selectDay = span({class: "spanSelected"}, "");
+    space2 = "";
+    break;
+  case WEEK_DATA_SETS:
+    unitName = "this Week";
+    selectWeek = span({class: "spanSelected"}, "");
+    space2 = "";
+    break;
   }
+
+  var selectors = selectHour + space1 + selectDay + space2 + selectWeek;
 
   // construct the header table
 
-  var result = table(
-    {id: "keyHeaderTable"},
-    tRow({}, 
-         tCell({colspan: 2}, "Earthquakes")
-        ) +
-    tRow({}, 
-         tCell({colspan: 2}, 
-               form({}, 
-                    input(hourAttributes, "hour") +
-                    input(dayAttributes, "day") +
-                    input(weekAttributes, "week")
-                   )
+  var result = 
+    table({id: "keyHeaderTable"},
+          tRow({}, 
+               tCell({class: "titleBlock"}, "") +
+             tCell({id: "keyTitle1"}, "Earthquakes" + space + unitName)  +
+               tCell({class: "titleBlock"}, "")
+              ) +
+          tRow({id: "spanSelectors"}, 
+             tCell({class: "titleBlock"}, "") +
+               tCell({}, selectors) +
+               tCell({class: "titleBlock"}, "")
+              ) +
+          tRow({}, 
+               tCell({id: "selectHint", colspan: 3}, "Quake Chart (drag to select)") 
               )
-        )
-
-// <form>
-// <input type="radio" name="sex" value="male" /> Male<br />
-// <input type="radio" name="sex" value="female" /> Female
-// </form> 
-
-
-//      tRow({}, 
-//           tCell({class: "label"}, "first") + 
-//           tCell({class: "value"}, timeAgo(observedMinDate))
-//          ) +
-//      tRow({}, 
-//           tCell({class: "label"}, "last") + 
-//           tCell({class: "value"}, timeAgo(observedMaxDate))
-//          )
   );
 
   return result;
 }
 
-// set the time period to the last hour
+// set the time span to the last hour
 
-function setHourPeriod()
+function setHourSpan()
 {
   dateWindowExtent = MILLISECONDS_INA_HOUR;
   dataSets = HOUR_DATA_SETS;
@@ -1156,9 +1156,9 @@ function setHourPeriod()
   loadDataSets();
 }
 
-// set the time period to the last day
+// set the time span to the last day
 
-function setDayPeriod()
+function setDaySpan()
 {
   dateWindowExtent = MILLISECONDS_INA_DAY;
   dataSets = DAY_DATA_SETS;
@@ -1166,9 +1166,9 @@ function setDayPeriod()
   loadDataSets();
 }
 
-// set the time period to the last week
+// set the time span to the last week
 
-function setWeekPeriod()
+function setWeekSpan()
 {
   dateWindowExtent = MILLISECONDS_INA_WEEK;
   dataSets = WEEK_DATA_SETS;

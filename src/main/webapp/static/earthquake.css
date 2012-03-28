@@ -171,7 +171,7 @@ table, tr, td, span
 {
 /*   background: lightgreen; */
   width: 100%;
-  height: 25%;
+  height: 30%;
 }
 
 
@@ -180,13 +180,65 @@ table, tr, td, span
 /*   background: orange; */
   width: 100%;
   height: 100%;
+
+  cellspacing: 0px;
+  cellpadding: 0px;
+  border-collapse: collapse;
+}
+
+.titleBlock
+{
+/*   background: orange; */
+  width: 5%;
+}
+
+#keyTitle1
+{
+  padding-top: 20px;
+  text-align: right;
+  font-size: 20px;
+  vertical-align: bottom;
+}
+
+#keyTitle2
+{
+  text-align: right;
+  vertical-align: top;
+}
+
+#spanSelectors
+{
+  vertical-align: top;
+  font-size: 12px;
+  text-align: right;
+}
+
+.spanSelector
+{
+  text-decoration: underline;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.spanSelector:hover
+{
+  color: #666;
+}
+
+#selectHint
+{
+/*   background: orange; */
+  height: 100%;
+  font-size: 12px;
   text-align: center;
+  color: #aaa;
+  vertical-align: bottom;
 }
 
 #chartDiv
 {
 /*   background: lightblue; */
-  height: 75%;
+  height: 70%;
   width: 100%;
 }
 
