@@ -796,10 +796,11 @@ function createSignature(sigDiv)
 
 function createKeyDetail(detailSvg)
 {
-  var stockMagnitude = 5.1;
+  var stockMagnitude = 5;
   var examples = 7;
   var keyPadding = 15;
   var examplePercentStep = (100 - 2 * keyPadding) / (examples - 1);
+  var countdownTimerRadius = 18;
 
   // create the age quakes
 
@@ -862,20 +863,20 @@ function createKeyDetail(detailSvg)
   detailSvg
     .append("svg:foreignObject")
     .style("visibility", "visible")
-    .attr("id", "dataUpdate")
-    .attr("class", "detailTitle")
     .attr("width",  "100%")
     .attr("height", "15%")
     .attr("x", "0%")
     .attr("y", "47%")
     .append("xhtml:body")
+    .attr("id", "dataUpdate")
+    .attr("class", "detailTitle")
     .style("text-anchor", "middle")
-    .html("Update Data")
+    .html("Update")
     .on("click", updateData);
 
   // last label and time
 
-  var timeXPos = 60;
+  var timeXPos = 70;
 
   detailSvg
     .append("text")
@@ -911,12 +912,10 @@ function createKeyDetail(detailSvg)
 
   // countdown arc
 
-  var COUNTDOWN_TIMER_RADIUS = 22;
-
   var countDown = detailSvg
     .append("svg:path")
     .attr("id", "updateCountDown")
-    .attr("transform", "translate(" + (KEY_WIDTH - (2 * COUNTDOWN_TIMER_RADIUS + KEY_PADDING)) + ", 110)");
+    .attr("transform", "translate(" + (KEY_WIDTH - (3 * countdownTimerRadius + KEY_PADDING)) + ", 110)");
 
   // arc for countdown
 
@@ -924,17 +923,17 @@ function createKeyDetail(detailSvg)
     .startAngle(0)
     .endAngle  (Math.PI * 2)
     .innerRadius(0)
-    .outerRadius(COUNTDOWN_TIMER_RADIUS);
+    .outerRadius(countdownTimerRadius);
 
   // hint to select quakes
 
   detailSvg
     .append("text")
-    .attr("class", "detailTitle")
+    .attr("class", "detailLabel")
     .attr("x", "50%")
-    .attr("y", "11em")
+    .attr("y", "12.9em")
     .style("text-anchor", "middle")
-    .text("Quakes (drag to select)");
+    .text("Drag to select quakes.");
 
 
   return function() 
