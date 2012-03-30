@@ -931,7 +931,7 @@ function createKeyDetail(detailSvg)
     .append("text")
     .attr("class", "detailLabel")
     .attr("x", "50%")
-    .attr("y", "12.9em")
+    .attr("y", "12.8em")
     .style("text-anchor", "middle")
     .text("Drag to select quakes.");
 
