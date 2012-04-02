@@ -26,7 +26,7 @@ public class TestRdfData
     assertTrue(config != null);
     TreborRepository.setConfiguration(config);
     Repository repo = TreborRepository.createMemoryStore();
-    assertEquals(279, repo.getConnection().size());
+    assertEquals(285, repo.getConnection().size());
     RdfUtil.exportRepository(repo, new File("target/trebor-rdf.xml"), RDFFormat.RDFXML);
   }
 }

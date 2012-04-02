@@ -365,16 +365,18 @@ function initializeOverlay()
       // create svg to put marker in
 
       var dd = quakesByMag.top(Infinity);
+      console.log("dd.length", dd.length);
       var updates = layer.selectAll("svg.quakeBox")
         .data(dd, function(d) {return d.Eqid;})
         .each(function(d) {projectOntoMap(this, d, projection, -d.radius, -d.radius);});
 
       var enters = updates.enter()
         .append("svg:svg")
+        .each(function(d) {console.log("add svg: ", d.Eqid);})
         .attr("class", "quakeBox")
         .style("width",  function(d) {return 2 * d.radius + "px";})
         .style("height", function(d) {return 2 * d.radius + "px";})
-        .style("visibility", "hidden")
+//        .style("visibility", "hidden")
         .on("mouseover", function(d) {mouseoverQuake(d, proParent);})
         .on("mouseout", function(d) {mouseoutQuake(d, proParent);})
         .each(function(d) {projectOntoMap(this, d, projection, -d.radius, -d.radius);});
@@ -383,9 +385,11 @@ function initializeOverlay()
 
       enters
         .append("svg:circle")
+        .each(function(d) {console.log("add circle: ", d.Eqid);})
         .attr("class", "markerShape")
         .attr("cx", function(d) {return d.radius;})
         .attr("cy", function(d) {return d.radius;})
+        .style("visibility", "visible")
         .attr("r", 0)
         .transition()
         .duration(FADE_IN_DURATION)
@@ -573,7 +577,7 @@ function mergeProperties(obj1,obj2)
 
 function mouseoverQuake(quake, map)
 {
-  addQuakeDtail(quake, map);
+  showQuakeDetail(quake, map);
 
   // highlight matching quake
 
@@ -583,10 +587,9 @@ function mouseoverQuake(quake, map)
     .attr("class", "mapMouseOver");
 }
 
-
 function mouseoutQuake(quake, map)
 {
-  removeQuakeDtail(quake, map);
+  hideQuakeDetail(quake, map);
 
   // un-highlight matching quake
 
@@ -596,30 +599,28 @@ function mouseoutQuake(quake, map)
     .attr("class", "chartQuakes");
 }
 
-function addQuakeDtail(quake, map)
+function showQuakeDetail(quake, map)
 {
   // create quake detail window
 
   var quakeDetail = d3.select(".markers")
-    .append("svg:svg")
+    .insert("svg:svg")
     .attr("class", "quakeDetail")
+    .attr("pointer-events", "none")
     .each(function(d) {projectOntoMap(this, quake, map.getProjection(), 0, 0);})
     .style("width", SUMMARY_WIDTH  + MARKER_OFFSET * 2 + "px")
-    .style("height",SUMMARY_HEIGHT + MARKER_OFFSET * 2 + "px")
-    .on("mouseover", function(d) {mouseoverQuake(quake, map);})
-    .on("mouseout", function(d) {mouseoutQuake(quake, map);})
-  //    .style("background", "green");
-    .style("visibility", "hidden");
+    .style("height",SUMMARY_HEIGHT + MARKER_OFFSET * 2 + "px");
 
   // add line
   
   quakeDetail
     .append("svg:path")
     .attr("class", "quakeDetailLine")
+    .attr("display", "inline")
     .style("visibility", "visible")
     .attr("d", function() {return quakeDetailLine(quake);});
 
-//   // add html
+  // add html
 
   quakeDetail
     .append("svg:foreignObject")
@@ -634,7 +635,7 @@ function addQuakeDtail(quake, map)
     .html(function() {return constructSummaryHtml(quake);});
 }
 
-function removeQuakeDtail(quake, map)
+function hideQuakeDetail(quake, map)
 {
   d3.select(".quakeDetail")
     .remove();
@@ -771,9 +772,10 @@ function constructKey()
 function createSignature(sigDiv)
 {
   var space = "&nbsp;";
-  var tar = "http://www.trebor.org/static/assets/icons/tat.png";
-  var icon = "http://www.trebor.org/static/assets/icons/favicon.ico";
-  var url = "http://www.trebor.org";
+  var treborIcon = "/static/assets/icons/favicon.ico";
+  var quakeIcon = "/static/assets/icons/quakesmall.png";
+  var treborUrl = "/";
+  var quakeUrl = "/fdl/earthquake";
   var name = "Robert Harris";
   var date = "March 2012";
 
@@ -781,7 +783,8 @@ function createSignature(sigDiv)
     table({id: "sigTable"}, 
           tRow({id: "sigRow"},
                tCell({id: "sigName"}, name) +
-               tCell({id: "sigIcon"}, htmlA({}, htmlImg({}, icon, "trebor.org"), url)) +
+               tCell({id: "sigIcon"}, htmlA({title: "brought to you by trebor.org"}, htmlImg({}, treborIcon, "trebor.org"), treborUrl)) +
+               tCell({id: "sigIcon"}, htmlA({title: "map back story"}, htmlImg({}, quakeIcon, "earthquake" + space + "detail"), quakeUrl)) +
                tCell({id: "sigDate"}, date)
               )
          );
@@ -888,7 +891,7 @@ function createKeyDetail(detailSvg)
 
   var lastTime = detailSvg
     .append("text")
-    .attr("class", "detailValue")
+    .attr("class", "detailLabel")
     .attr("x", timeXPos + 5)
     .attr("y", "9.2em")
     .style("text-anchor", "start");
@@ -905,7 +908,7 @@ function createKeyDetail(detailSvg)
 
   var nextTime = detailSvg
     .append("text")
-    .attr("class", "detailValue")
+    .attr("class", "detailLabel")
     .attr("x", timeXPos + 5)
     .attr("y", "10.2em")
     .style("text-anchor", "start");
@@ -929,11 +932,11 @@ function createKeyDetail(detailSvg)
 
   detailSvg
     .append("text")
-    .attr("class", "detailLabel")
+    .attr("class", "detailTitle")
     .attr("x", "50%")
-    .attr("y", "12.8em")
+    .attr("y", "11em")
     .style("text-anchor", "middle")
-    .text("Drag to select quakes.");
+    .text("Quake Chart");
 
 
   return function() 
@@ -1188,6 +1191,7 @@ function createQuakeChart(svg)
       svg.selectAll("g.brush").remove();
       svg.append("g")
         .attr("class", "brush")
+        .attr("title", "drag to select, click to clear")
         .attr("transform", function(d) { return "translate(" + m.left + "," + m.top + ")"; })
         .call(d3.svg.brush().x(quakeChartTimeScale).y(quakeChartMagScale)
               .on("brushstart", brushstart)

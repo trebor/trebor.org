@@ -23,6 +23,7 @@ markers, .markers svg
 
 .markerShape:hover
 {
+/*   fill: red; */
   stroke: white;
 }
 
@@ -124,7 +125,6 @@ table, tr, td, span
 
 .quakeDetail
 {
-  fill: blue;
 }
 
 .quakeDetailLine
@@ -233,7 +233,10 @@ table, tr, td, span
 
 #sigIcon
 {
+/*   background: yellow; */
+  width: 15%;
   padding-top: 3px;
+  text-align: center;
 }
 
 #sigName

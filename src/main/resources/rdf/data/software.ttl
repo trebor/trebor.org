@@ -14,8 +14,9 @@ toi:software        a                   too:treeNode;
                     too:hasNodeChild     _:freesand;
                     too:hasNodeChild     _:swarm;
                     too:hasNodeChild     _:splink;
-                    too:hasNodeChild     _:fukushima;
                     too:hasNodeChild     _:trebor_org;
+                    too:hasNodeChild     _:fukushima;
+                    too:hasNodeChild     _:earthquake;
                     too:hasNodeSummary
 
 """
@@ -43,8 +44,23 @@ i animated the resulting 100 thousand or so data points onto
 [http://github.com/gka/chroma.js/wiki/Chroma.js chroma.js] for color.
 """.
                     
-
-
+_:earthquake        a                   too:treeNode;
+                    too:hasName         "earthquake";
+                    too:hasTitle        "[[static:earthquake.html|live&nbsp;earthquake&nbsp;map]]";
+                    too:hasNodeIcon     "quake";
+                    too:hasNodeSummary
+"""
+as a san francisco resident, i often want good earthquake information.  the
+[http://earthquake.usgs.gov/earthquakes/recenteqscanv/ usgs map] is not quite to my liking.
+my [[static:earthquake.html|earthquake&nbsp;map]] combines up-to-date 
+[http://earthquake.usgs.gov/earthquakes/catalogs/index.php usgs earthquake data] and a
+[http://developers.google.com/maps/ google map] using
+[http://mbostock.github.com/d3/ d3.js] and
+[http://square.github.com/crossfilter/ crossfilter].
+the relative area of each earthquake marker approximates the energy described 
+by it's magnitude.  hour, day, and week time scales can be chosen, and a subset of 
+earthquakes can be selected for viewing.
+""".
 
 _:splink            a                   too:treeNode;
                     too:hasName         "splink";
