@@ -365,32 +365,28 @@ function initializeOverlay()
       // create svg to put marker in
 
       var dd = quakesByMag.top(Infinity);
-      console.log("dd.length", dd.length);
       var updates = layer.selectAll("svg.quakeBox")
         .data(dd, function(d) {return d.Eqid;})
         .each(function(d) {projectOntoMap(this, d, projection, -d.radius, -d.radius);});
 
       var enters = updates.enter()
         .append("svg:svg")
-        .each(function(d) {console.log("add svg: ", d.Eqid);})
         .attr("class", "quakeBox")
         .style("width",  function(d) {return 2 * d.radius + "px";})
         .style("height", function(d) {return 2 * d.radius + "px";})
-//        .style("visibility", "hidden")
-        .on("mouseover", function(d) {mouseoverQuake(d, proParent);})
-        .on("mouseout", function(d) {mouseoutQuake(d, proParent);})
         .each(function(d) {projectOntoMap(this, d, projection, -d.radius, -d.radius);});
 
       // add the one and only marker for this svg
 
       enters
         .append("svg:circle")
-        .each(function(d) {console.log("add circle: ", d.Eqid);})
         .attr("class", "markerShape")
         .attr("cx", function(d) {return d.radius;})
         .attr("cy", function(d) {return d.radius;})
         .style("visibility", "visible")
         .attr("r", 0)
+        .on("mouseover", function(d) {mouseoverQuake(d, proParent);})
+        .on("mouseout", function(d) {mouseoutQuake(d, proParent);})
         .transition()
         .duration(FADE_IN_DURATION)
         .attr("r", function(d) {return d.radius - MARKER_STROKE_WIDTH / 2;});
@@ -445,29 +441,6 @@ function initializeOverlay()
   {
     if (typeof overlay.draw !== 'undefined')
       overlay.draw();
-  }
-}
-
-function styleMaker(quake, marker, animate)
-{
-  var marker = d3.select(marker);
-
-  marker
-    .attr("class", "markerShape")
-    .attr("opacity", function(d) {return timeScale(quake.date);});
-
-  if (animate)
-  {
-    marker
-      .attr("r", 0)
-      .transition()
-      .duration(FADE_IN_DURATION)
-      .attr("r", function(d) {return quake.radius - MARKER_STROKE_WIDTH / 2;});
-  }
-  else
-  {
-    marker
-      .attr("r", function(d) {return quake.radius - MARKER_STROKE_WIDTH / 2;});
   }
 }
 
@@ -578,25 +551,23 @@ function mergeProperties(obj1,obj2)
 function mouseoverQuake(quake, map)
 {
   showQuakeDetail(quake, map);
-
-  // highlight matching quake
-
-  d3
-    .selectAll(".chartQuakes")
-    .filter(function (d) {return d == quake;})
-    .attr("class", "mapMouseOver");
+  highlightQuake(quake, true);
 }
 
 function mouseoutQuake(quake, map)
 {
   hideQuakeDetail(quake, map);
+  highlightQuake(quake, false);
+}
 
-  // un-highlight matching quake
+function highlightQuake(quake, enable)
+{
+  // highlight quake in chart
 
   d3
-    .selectAll(".mapMouseOver")
+    .selectAll(".chartQuakes")
     .filter(function (d) {return d == quake;})
-    .attr("class", "chartQuakes");
+    .classed("mapMouseOver", enable);
 }
 
 function showQuakeDetail(quake, map)
@@ -617,14 +588,12 @@ function showQuakeDetail(quake, map)
     .append("svg:path")
     .attr("class", "quakeDetailLine")
     .attr("display", "inline")
-    .style("visibility", "visible")
     .attr("d", function() {return quakeDetailLine(quake);});
 
   // add html
 
   quakeDetail
     .append("svg:foreignObject")
-    .style("visibility", "visible")
     .attr("class", "summaryTextObject")
     .attr("width",  SUMMARY_WIDTH + "px")
     .attr("height", SUMMARY_HEIGHT + "px")
@@ -655,7 +624,6 @@ function quakeDetailLine(quake)
     " v " + -(SUMMARY_HEIGHT - 2 * WEDGE_WIDTH) + 
     " z";
 
-//  console.log("path", path);
   return path;
 }
 
