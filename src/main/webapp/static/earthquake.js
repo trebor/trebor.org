@@ -771,7 +771,8 @@ function createKeyDetail(detailSvg)
   var examples = 7;
   var keyPadding = 15;
   var examplePercentStep = (100 - 2 * keyPadding) / (examples - 1);
-  var countdownTimerRadius = 18;
+  var countdownTimerInnerRadius = 8;
+  var countdownTimerOuterRadius = 18;
 
   // create the age quakes
 
@@ -812,7 +813,6 @@ function createKeyDetail(detailSvg)
     .attr("x", (keyPadding + (examples - 1) * examplePercentStep + examplePercentStep * 0.5) + "%")
     .attr("y", "2.3em")
     .style("text-anchor", "end")
-    .attr("dominant-baseline", "right")
     .text("Now");
 
   var ageMarkers = detailSvg.selectAll("g.age")
@@ -881,20 +881,30 @@ function createKeyDetail(detailSvg)
     .attr("y", "10.2em")
     .style("text-anchor", "start");
 
-  // countdown arc
+
+  var countDownSeconds = detailSvg
+    .append("text")
+    .attr("id", "countDownSeconds")
+    .attr("transform", "translate(" + (KEY_WIDTH - (3 * countdownTimerOuterRadius + KEY_PADDING)) + ", 113)")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("dominant-baseline", "center")
+    .style("text-anchor", "middle");
+
+  // path for countdown arc
 
   var countDown = detailSvg
     .append("svg:path")
     .attr("id", "updateCountDown")
-    .attr("transform", "translate(" + (KEY_WIDTH - (3 * countdownTimerRadius + KEY_PADDING)) + ", 110)");
+    .attr("transform", "translate(" + (KEY_WIDTH - (3 * countdownTimerOuterRadius + KEY_PADDING)) + ", 110)");
 
-  // arc for countdown
+  // actual arc for countdown
 
   var arc = d3.svg.arc()
     .startAngle(0)
     .endAngle  (Math.PI * 2)
-    .innerRadius(0)
-    .outerRadius(countdownTimerRadius);
+    .innerRadius(countdownTimerInnerRadius)
+    .outerRadius(countdownTimerOuterRadius);
 
   // hint to select quakes
 
@@ -916,6 +926,8 @@ function createKeyDetail(detailSvg)
       var now = new Date();
       var duration = nextDataRefreshTime.getTime() - now.getTime();
 
+      // animate countdown arc
+
       countDown
         .attr("d", arc)
         .transition()
@@ -930,6 +942,24 @@ function createKeyDetail(detailSvg)
                      };
                    }
                   );
+
+      // animate countdown seconds
+
+      countDownSeconds
+        .transition()
+        .duration(duration)
+        .ease("linear")
+        .tween("text", function() 
+               {
+                 return function(t) 
+                 {
+                   var seconds = Math.max(
+                     Math.floor((nextDataRefreshTime.getTime() - (new Date).getTime()) / MILLISECONDS_INA_SECOND),
+                     0);
+                   this.textContent = seconds;
+                 };
+               });
+
 
       lastTime.text(TIME_FORMAT(lastDataRefreshTime));
       nextTime.text(TIME_FORMAT(nextDataRefreshTime));
