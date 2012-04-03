@@ -16,8 +16,8 @@ markers, .markers svg
 .markerShape
 {
   fill:  #44c;
-  stroke: #3838b8;
-  visibility: visible;
+  stroke-width: 1px;
+   stroke: #3838b8;
   cursor: pointer;
 }
 
@@ -377,4 +377,3 @@ table, tr, td, span
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
-

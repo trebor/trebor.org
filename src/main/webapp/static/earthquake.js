@@ -32,7 +32,7 @@ var WEDGE_WIDTH = 30;
 var DEFAULT_OPACITY = 0.55;
 var QUAKE_BASE = "http://earthquake.usgs.gov/earthquakes/recenteqsus/Quakes/";
 var QUAKE_TAIL = ".php";
-var MARKER_STROKE_WIDTH = 8;
+var MARKER_STROKE_WIDTH = 1;
 var MARKER_OFFSET = 40;
 var MAX_OPACITY = 0.8;
 var MIN_OPACITY = 0.2;
@@ -372,8 +372,11 @@ function initializeOverlay()
       var enters = updates.enter()
         .append("svg:svg")
         .attr("class", "quakeBox")
-        .style("width",  function(d) {return 2 * d.radius + "px";})
-        .style("height", function(d) {return 2 * d.radius + "px";})
+        .attr("pointer-events", "none")
+//         .style("background", "white")
+//         .style("border", "2px solid #888")
+        .style("width",  function(d) {return 2 * d.radius + 1 + "px";})
+        .style("height", function(d) {return 2 * d.radius + 1 + "px";})
         .each(function(d) {projectOntoMap(this, d, projection, -d.radius, -d.radius);});
 
       // add the one and only marker for this svg
@@ -381,9 +384,9 @@ function initializeOverlay()
       enters
         .append("svg:circle")
         .attr("class", "markerShape")
+        .attr("pointer-events", "all")
         .attr("cx", function(d) {return d.radius;})
         .attr("cy", function(d) {return d.radius;})
-        .style("visibility", "visible")
         .attr("r", 0)
         .on("mouseover", function(d) {mouseoverQuake(d, proParent);})
         .on("mouseout", function(d) {mouseoutQuake(d, proParent);})
@@ -410,16 +413,14 @@ function initializeOverlay()
         .duration(FADE_OUT_DURATION)
         .remove();
 
-      // sort quakes
+      // sort quakes (largest and oldest on the bottom)
 
       d3.selectAll(".quakeBox")
         .sort(function (a, b)
           {
-            if (a.Magnitude > b.Magnitude)
-              return -1;
-            if (a.Magnitude < b.Magnitude)
-              return 1;
-            return 0;
+            return (a.Magnitude == b.Magnitude)
+              ? b.date.getTime() - a.date.getTime()
+              : b.Magnitude - a.Magnitude;
           });
     };
   };
@@ -881,6 +882,7 @@ function createKeyDetail(detailSvg)
     .attr("y", "10.2em")
     .style("text-anchor", "start");
 
+  // text for count down timer
 
   var countDownSeconds = detailSvg
     .append("text")
