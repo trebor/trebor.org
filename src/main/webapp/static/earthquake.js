@@ -71,7 +71,8 @@ var updateDisplayInternal = null;
 
 // google map style
 
-var mapStyle = 
+
+var mapStyle1 = 
 [ 
   { featureType: "poi.park", elementType: "geometry", stylers: [ { gamma: 1 }, { lightness: 50 }, { saturation: -45 } ] },
   { featureType: "water", elementType: "geometry", stylers: [ { saturation: -25 }, { lightness: 50 } ] },
@@ -80,6 +81,12 @@ var mapStyle =
   { elementType: "labels", stylers: [ { lightness: 52 }, { saturation: -80 } ] } 
 ];
 
+var mapStyle2 =
+[ 
+  { stylers: [ { saturation: -20 }, { lightness: 30 }, { gamma: 1.23 } ] },
+  { featureType: "administrative", stylers: [ { saturation: -100 }, { gamma: 0.81 } ] }
+ ]
+
 // google map
 
 var map = new google.maps.Map(d3.select("#map").node(),
@@ -87,7 +94,7 @@ var map = new google.maps.Map(d3.select("#map").node(),
   zoom: 2,
   center: new google.maps.LatLng(20.8255, -156.9199),
   mapTypeId: google.maps.MapTypeId.ROADMAP,
-  styles: mapStyle,
+  styles: mapStyle2,
 });
 
 // usgs colors
@@ -954,13 +961,10 @@ function createKeyDetail(detailSvg)
                {
                  return function(t) 
                  {
-                   var seconds = Math.max(
-                     Math.floor((nextDataRefreshTime.getTime() - (new Date).getTime()) / MILLISECONDS_INA_SECOND),
-                     0);
-                   this.textContent = seconds;
+                   var seconds = Math.floor((nextDataRefreshTime.getTime() - (new Date).getTime()) / MILLISECONDS_INA_SECOND);
+                   this.textContent = seconds < 0 ? "" : seconds;
                  };
                });
-
 
       lastTime.text(TIME_FORMAT(lastDataRefreshTime));
       nextTime.text(TIME_FORMAT(nextDataRefreshTime));

@@ -344,8 +344,8 @@ table, tr, td, span
 
 .chartQuakes
 {
-  fill-opacity: 0.50;
-  fill: #44c;
+  fill-opacity: 0.35;
+  fill:  #22d;
 }
 
 #updateCountDown
