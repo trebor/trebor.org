@@ -373,8 +373,6 @@ function initializeOverlay()
         .append("svg:svg")
         .attr("class", "quakeBox")
         .attr("pointer-events", "none")
-//         .style("background", "white")
-//         .style("border", "2px solid #888")
         .style("width",  function(d) {return 2 * d.radius + 1 + "px";})
         .style("height", function(d) {return 2 * d.radius + 1 + "px";})
         .each(function(d) {projectOntoMap(this, d, projection, -d.radius, -d.radius);});
@@ -752,8 +750,8 @@ function createSignature(sigDiv)
     table({id: "sigTable"}, 
           tRow({id: "sigRow"},
                tCell({id: "sigName"}, name) +
-               tCell({id: "sigIcon"}, htmlA({title: "brought to you by trebor.org"}, htmlImg({}, treborIcon, "trebor.org"), treborUrl)) +
-               tCell({id: "sigIcon"}, htmlA({title: "map back story"}, htmlImg({}, quakeIcon, "earthquake" + space + "detail"), quakeUrl)) +
+               tCell({id: "sigIcon"}, htmlA({title: "visit trebor.org"}, htmlImg({}, treborIcon, "trebor.org"), treborUrl)) +
+               tCell({id: "sigIcon"}, htmlA({title: "about map"}, htmlImg({}, quakeIcon, "earthquake" + space + "detail"), quakeUrl)) +
                tCell({id: "sigDate"}, date)
               )
          );
@@ -768,7 +766,7 @@ function createSignature(sigDiv)
 
 function createKeyDetail(detailSvg)
 {
-  var stockMagnitude = 5;
+  var stockMagnitude = 3.5;
   var examples = 7;
   var keyPadding = 15;
   var examplePercentStep = (100 - 2 * keyPadding) / (examples - 1);
@@ -844,6 +842,7 @@ function createKeyDetail(detailSvg)
     .attr("class", "detailTitle")
     .style("text-anchor", "middle")
     .html("Update")
+    .attr("title", "click to update now")
     .on("click", updateData);
 
   // last label and time

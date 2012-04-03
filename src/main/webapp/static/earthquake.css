@@ -15,15 +15,15 @@ markers, .markers svg
 
 .markerShape
 {
-  fill:  #44c;
+  fill:  #22d;
   stroke-width: 1px;
-   stroke: #3838b8;
+  stroke: #3838b8;
   cursor: pointer;
 }
 
 .markerShape:hover
 {
-/*   fill: red; */
+  fill:  #d22;
   stroke: white;
 }
 
