@@ -44,6 +44,10 @@ var CHART_QUAKE_ROLLIN_MILLISECONDS = 2000;
 var FADE_IN_DURATION = function (d) {return d.Magnitude * 500;};
 var FADE_OUT_DURATION = function (d) {return d.Magnitude * 100;};
 
+var HOUR_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_HOUR, dataSets: HOUR_DATA_SETS, name: "Hour"};
+var  DAY_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_DAY , dataSets:  DAY_DATA_SETS, name: "Day" };
+var WEEK_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_WEEK, dataSets: WEEK_DATA_SETS, name: "Week"};
+
 // globals
 
 var quakeData = [];
@@ -68,6 +72,9 @@ var loadingData = 0;
 var lastDataRefreshTime = null;
 var nextDataRefreshTime = null;
 var updateDisplayInternal = null;
+var currentTimeScale = WEEK_TIMESCALE;
+
+
 
 // google map style
 
@@ -204,7 +211,7 @@ function updateData()
 
   // load some mother fuckin' data
 
-  updateDataHelper((USE_TEST_DATA ? TEST_DATA_SETS : dataSets).slice(), []);
+  updateDataHelper((USE_TEST_DATA ? TEST_DATA_SETS : currentTimeScale.dataSets).slice(), []);
 }
 
 // recursivly load and combinde data, when all data is loaded, display that data
@@ -289,7 +296,7 @@ function registerQuakeData(data)
   // estalish date window
 
   dateWindowMax = new Date();
-  dateWindowMin = USE_TEST_DATA ? observedMinDate : new Date(dateWindowMax.getTime() - dateWindowExtent);
+  dateWindowMin = USE_TEST_DATA ? observedMinDate : new Date(dateWindowMax.getTime() - currentTimeScale.dateWindowExtent);
   timeScale = d3.time.scale.utc().domain([dateWindowMin, dateWindowMax]).range([MIN_OPACITY, MAX_OPACITY]);
 
   // apply any filters to data
@@ -973,23 +980,7 @@ function createKeyDetail(detailSvg)
     // if time scale has changed, update start age label
     
     if (timeScaleChanged)
-    {
-      var unitName = null;
-      switch(dataSets)
-      {
-      case HOUR_DATA_SETS:
-        unitName = "1 Hour";
-        break;
-      case DAY_DATA_SETS:
-        unitName = "1 Day";
-        break;
-      case WEEK_DATA_SETS:
-        unitName = "1 Week";
-        break;
-      }
-      
-      startAge.text(unitName);
-    }
+      startAge.text("1 " + currentTimeScale.name);
   };
 }
 
@@ -1053,19 +1044,19 @@ function createQuakeChart(svg)
     var xAxisScale = null;
     var xAxisTickFormat = null;
     var xAxisTickNumber;
-    switch(dataSets)
+    switch(currentTimeScale)
     {
-    case HOUR_DATA_SETS:
+    case HOUR_TIMESCALE:
       xAxisInterval = d3.time.minutes;
       xAxisTickFormat = d3.time.format("%H:%M");
       xAxisTickNumber = 10;
       break;
-    case DAY_DATA_SETS:
+    case DAY_TIMESCALE:
       xAxisInterval = d3.time.hours;
       xAxisTickFormat = d3.time.format("%H:00");
       xAxisTickNumber = 8;
       break;
-    case WEEK_DATA_SETS:
+    case WEEK_TIMESCALE:
       xAxisInterval = d3.time.days;
       xAxisTickFormat = d3.time.format("%d %b");
       xAxisTickNumber = 2;
@@ -1266,33 +1257,27 @@ function createQuakeChart(svg)
 function keyHeaderHtml()
 {
   var space = "&nbsp;";
-  var selectHour = span({class: "spanSelector", onclick: "setHourSpan()"}, "Hour");
-  var selectDay = span({class: "spanSelector", onclick: "setDaySpan()"},  "Day");
-  var selectWeek = span({class: "spanSelector", onclick: "setWeekSpan()"}, "Week");
+  var selectHour = span({class: "spanSelector", onclick: "setTimeScale(HOUR_TIMESCALE)"}, "Hour");
+  var selectDay = span({class: "spanSelector", onclick: "setTimeScale(DAY_TIMESCALE)"},  "Day");
+  var selectWeek = span({class: "spanSelector", onclick: "setTimeScale(WEEK_TIMESCALE)"}, "Week");
 
   // use dataSets as proxy for which time mode is selected
 
-  var unitName = null;
-  var space1 = space;
-  var space2 = space;
-  switch(dataSets)
+  var unitName = "this " + currentTimeScale.name;
+  switch(currentTimeScale)
   {
-  case HOUR_DATA_SETS:
-    unitName = "this Hour";
+  case HOUR_TIMESCALE:
     selectHour = span({class: "spanSelected"}, "Hour");
-    space1 = "";
     break;
-  case DAY_DATA_SETS:
-    unitName = "this Day";
+  case DAY_TIMESCALE:
     selectDay = span({class: "spanSelected"}, "Day");
-    space2 = "";
     break;
-  case WEEK_DATA_SETS:
-    unitName = "this Week";
+  case WEEK_TIMESCALE:
     selectWeek = span({class: "spanSelected"}, "Week");
-    space2 = "";
     break;
   }
+
+
 
   var selectors = selectHour + space + selectDay + space + selectWeek;
 
@@ -1315,34 +1300,12 @@ function keyHeaderHtml()
 
 // set the time span to the last hour
 
-function setHourSpan()
+function setTimeScale(timeScale)
 {
-  dateWindowExtent = MILLISECONDS_INA_HOUR;
-  dataSets = HOUR_DATA_SETS;
+  currentTimeScale = timeScale;
   timeScaleChanged = true;
   updateData();
 }
-
-// set the time span to the last day
-
-function setDaySpan()
-{
-  dateWindowExtent = MILLISECONDS_INA_DAY;
-  dataSets = DAY_DATA_SETS;
-  timeScaleChanged = true;
-  updateData();
-}
-
-// set the time span to the last week
-
-function setWeekSpan()
-{
-  dateWindowExtent = MILLISECONDS_INA_WEEK;
-  dataSets = WEEK_DATA_SETS;
-  timeScaleChanged = true;
-  updateData();
-}
-
 
 function timeDifferenceText(date1, date2)
 {
