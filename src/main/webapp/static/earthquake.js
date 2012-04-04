@@ -25,28 +25,58 @@ var QUAKE_DATE_FORMAT = d3.time.format.utc("%A, %B %e, %Y %H:%M:%S UTC");
 var ANIMATION_FRAMES = 2 * 7;
 var ANIMATION_DURATION = 10 * 1000;
 var ANIMATION_DELAY = ANIMATION_DURATION / ANIMATION_FRAMES;
-var MAX_MAGNITUDE = 9;
+var MAX_MAGNITUDE = 10;
 var SUMMARY_WIDTH = 240;
 var SUMMARY_HEIGHT = 180;
 var WEDGE_WIDTH = 30;
 var DEFAULT_OPACITY = 0.55;
 var QUAKE_BASE = "http://earthquake.usgs.gov/earthquakes/recenteqsus/Quakes/";
 var QUAKE_TAIL = ".php";
+var QUAKE_HIGHLIGHT_EXPAND = 2;
+var QUAKE_HIGHLIGHT_DURATIN = 500;
 var MARKER_STROKE_WIDTH = 1;
 var MARKER_OFFSET = 40;
 var MAX_OPACITY = 0.8;
 var MIN_OPACITY = 0.2;
 var KEY_WIDTH = 250;
-var KEY_HEIGHT = 450;
+var KEY_HEIGHT = 330;
 var KEY_PADDING = 10;
-var CHART_HEIGHT_PROPORTION = 0.44; // must match value in #chartDiv.height
+var CHART_HEIGHT_PROPORTION = 0.65; // must match value in #chartDiv.height
 var CHART_QUAKE_ROLLIN_MILLISECONDS = 2000;
 var FADE_IN_DURATION = function (d) {return d.Magnitude * 500;};
 var FADE_OUT_DURATION = function (d) {return d.Magnitude * 100;};
+var QUAKE_OPACITY = function(d) {return 0.7;};
+//var QUAKE_OPACITY = function(d) {return timeScale(d.date);};
+var QUAKE_FILL = function(d) {return currentTimeScale.colors.getColor(currentTimeScale.dateToColorScale(d.date));};
+var QUAKE_FILL_HIGHLIGHT = function(d) {return "green";};
+var QUAKE_RADIUS = function(d) {return d.radius;};
+// usgs colors
 
-var HOUR_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_HOUR, dataSets: HOUR_DATA_SETS, name: "Hour"};
-var  DAY_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_DAY , dataSets:  DAY_DATA_SETS, name: "Day" };
-var WEEK_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_WEEK, dataSets: WEEK_DATA_SETS, name: "Week"};
+var usgsMarkerColorScale = new chroma.ColorScale(
+  {
+    colors: ['red','red','blue','blue','yellow', 'yellow'],
+    positions: 
+    [
+      0,HOUR_OF_A_WEEK_PROPORTION,
+      HOUR_OF_A_WEEK_PROPORTION,DAY_OF_A_WEEK_PROPORTION,
+      DAY_OF_A_WEEK_PROPORTION,1
+    ],
+    mode: 'rgb'
+  });
+
+var treborMarkerColorScale = new chroma.ColorScale({
+  colors: ['red', '#8800ff', 'blue', 'grey'],
+  positions: [0,HOUR_OF_A_WEEK_PROPORTION,DAY_OF_A_WEEK_PROPORTION,1],
+  mode: 'rgb'
+});
+
+var now = new Date();
+var colorTimeScale = d3.time.scale.utc().domain([new Date(now.getTime()-MILLISECONDS_INA_WEEK), now]).range([1, 0]);
+var MARKER_COLOR_SCALE = treborMarkerColorScale;
+
+var HOUR_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_HOUR, dataSets: HOUR_DATA_SETS, name: "Hour", colors: MARKER_COLOR_SCALE, dateToColorScale: colorTimeScale};
+var  DAY_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_DAY , dataSets:  DAY_DATA_SETS, name: "Day" , colors: MARKER_COLOR_SCALE, dateToColorScale: colorTimeScale};
+var WEEK_TIMESCALE = {dateWindowExtent: MILLISECONDS_INA_WEEK, dataSets: WEEK_DATA_SETS, name: "Week", colors: MARKER_COLOR_SCALE, dateToColorScale: colorTimeScale};
 
 // globals
 
@@ -64,8 +94,6 @@ var observedMaxDate = null;
 var timeScale = null;
 var dateLimitScale = null;
 var magLimitScale = null;
-var dateWindowExtent = MILLISECONDS_INA_WEEK;
-var dataSets = WEEK_DATA_SETS;
 var timeScaleChanged = true;
 var dataChanged = true;
 var loadingData = 0;
@@ -73,8 +101,6 @@ var lastDataRefreshTime = null;
 var nextDataRefreshTime = null;
 var updateDisplayInternal = null;
 var currentTimeScale = WEEK_TIMESCALE;
-
-
 
 // google map style
 
@@ -103,63 +129,6 @@ var map = new google.maps.Map(d3.select("#map").node(),
   mapTypeId: google.maps.MapTypeId.ROADMAP,
   styles: mapStyle2,
 });
-
-// usgs colors
-
-var usgsMarkerColorScale = new chroma.ColorScale(
-  {
-    colors: ['red','#f00','#00f','#00f','#ff0', '#ff0'],
-    positions: [0,HOUR_OF_A_WEEK_PROPORTION-EPSILON_PROPORTION,HOUR_OF_A_WEEK_PROPORTION,DAY_OF_A_WEEK_PROPORTION,DAY_OF_A_WEEK_PROPORTION+EPSILON_PROPORTION, 1],
-    mode: 'rgb'
-  });
-
-// marker edge color scale (based on age)
-
-var usgsMarkerEdgeColorScale = new chroma.ColorScale(
-  {
-    colors: ['#a00','#a00','#00a','#00a','#aa0', '#aa0'],
-    positions: [0,HOUR_OF_A_WEEK_PROPORTION-EPSILON_PROPORTION,HOUR_OF_A_WEEK_PROPORTION,DAY_OF_A_WEEK_PROPORTION,DAY_OF_A_WEEK_PROPORTION+EPSILON_PROPORTION, 1],
-    mode: 'rgb'
-  });
-
-var treborMarkerColorScale = new chroma.ColorScale({
-  colors: ['#ff0', '#f00','#888'],
-  positions: [0,HOUR_OF_A_WEEK_PROPORTION,1],
-  mode: 'rgb'
-});
-
-// marker edge color scale (based on age)
-
-var treborMarkerEdgeColorScale = new chroma.ColorScale({
-  colors: ['#aa0','#a00', '#666'],
-  positions: [0,HOUR_OF_A_WEEK_PROPORTION,1],
-  mode: 'rgb'
-});
-
-var jbMarkerColorScale = new chroma.ColorScale({
-  colors: ['#00f', '#aaa'],
-//  positions: [0,HOUR_OF_A_WEEK_PROPORTION,1],
-  mode: 'rgb'
-});
-
-// marker edge color scale (based on age)
-
-var jbMarkerEdgeColorScale = new chroma.ColorScale({
-  colors: ['#00f', '#aaa'],
-//  positions: [0,HOUR_OF_A_WEEK_PROPORTION,1],
-  mode: 'rgb'
-});
-
-// marker color scale (based on age)
-
-//var markerColorScale = usgsMarkerColorScale;
-//var markerColorScale = treborMarkerColorScale;
-var markerColorScale = jbMarkerColorScale;
-
-// marker edge color scale (based on age)
-
-//var markerEdgeColorScale = usgsMarkerEdgeColorScale;
-var markerEdgeColorScale = jbMarkerEdgeColorScale;
 
 // initialize the system, this is the main entry point for bulk of the code
 
@@ -387,8 +356,8 @@ function initializeOverlay()
         .append("svg:svg")
         .attr("class", "quakeBox")
         .attr("pointer-events", "none")
-        .style("width",  function(d) {return 2 * d.radius + 1 + "px";})
-        .style("height", function(d) {return 2 * d.radius + 1 + "px";})
+        .style("width",  function(d) {return 2 * d.radius + 2 * (1 + QUAKE_HIGHLIGHT_EXPAND) + "px";})
+        .style("height", function(d) {return 2 * d.radius + 2 * (1 + QUAKE_HIGHLIGHT_EXPAND) + "px";})
         .each(function(d) {projectOntoMap(this, d, projection, -d.radius, -d.radius);});
 
       // add the one and only marker for this svg
@@ -397,26 +366,28 @@ function initializeOverlay()
         .append("svg:circle")
         .attr("class", "markerShape")
         .attr("pointer-events", "all")
-        .attr("cx", function(d) {return d.radius;})
-        .attr("cy", function(d) {return d.radius;})
+        .attr("cx", function(d) {return d.radius + 1 + QUAKE_HIGHLIGHT_EXPAND;})
+        .attr("cy", function(d) {return d.radius + 1 + QUAKE_HIGHLIGHT_EXPAND;})
+        .style("fill", QUAKE_FILL)
         .attr("r", 0)
         .on("mouseover", function(d) {mouseoverQuake(d, proParent);})
         .on("mouseout", function(d) {mouseoutQuake(d, proParent);})
         .transition()
         .duration(FADE_IN_DURATION)
-        .attr("r", function(d) {return d.radius - MARKER_STROKE_WIDTH / 2;});
+        .attr("r", QUAKE_RADIUS);
 
       // all get the opacity set
 
-      updates.selectAll("circle")
-        .attr("opacity", function(d) {return timeScale(d.date);});
+     updates.selectAll("circle")
+       .attr("opacity", QUAKE_OPACITY);
 
       // fade out circles
 
       updates.exit().selectAll("circle")
         .transition()
         .duration(FADE_OUT_DURATION)
-        .attr("r", 0);
+        .attr("r", 0)
+        .remove();
 
       // remove the exits
 
@@ -431,7 +402,7 @@ function initializeOverlay()
         .sort(function (a, b)
           {
             return (a.Magnitude == b.Magnitude)
-              ? b.date.getTime() - a.date.getTime()
+              ? a.date.getTime() - b.date.getTime()
               : b.Magnitude - a.Magnitude;
           });
     };
@@ -575,12 +546,51 @@ function mouseoutQuake(quake, map)
 
 function highlightQuake(quake, enable)
 {
+  var quakeMarker = d3
+    .selectAll(".markerShape")
+    .filter(function (d) {return d == quake;})
+    .classed("markerShapeHighlight", enable);
+  
+  // phase one: expand quake if it is a highlight marker, and chain to phase 2
+  
+  var phase1 = function(target, marker, radius)
+  {
+    d3.selectAll(target)
+      .filter(function (d) {return d == quake;})
+      .transition()
+      .ease("bounce")
+      .duration(QUAKE_HIGHLIGHT_DURATIN)
+      .attr("r", radius + QUAKE_HIGHLIGHT_EXPAND)
+      .attr("opacity", .9)
+      .each("end", function() {phase2(target, marker, radius);});
+  }
+  
+  // phase two: return to original size and chain got phase one
+  
+  var phase2 = function(target, marker, radius)
+  {
+    marker
+      .transition()
+      .ease("linear")
+      .duration(QUAKE_HIGHLIGHT_DURATIN)
+      .attr("r", radius)
+      .attr("opacity", QUAKE_OPACITY)
+      .each("end", function(){phase1(target, marker, radius);});
+  }
+
+  // start off with phase one
+
+  phase1(".markerShapeHighlight", quakeMarker, QUAKE_RADIUS(quake));
+
   // highlight quake in chart
 
-  d3
+  var chartMarker = d3
     .selectAll(".chartQuakes")
     .filter(function (d) {return d == quake;})
+//    .attr("r", function() {return enable ? 10 : 3;});
     .classed("mapMouseOver", enable);
+
+  phase1(".mapMouseOver", chartMarker, 3);
 }
 
 function showQuakeDetail(quake, map)
@@ -588,10 +598,10 @@ function showQuakeDetail(quake, map)
   // create quake detail window
 
   var quakeDetail = d3.select(".markers")
-    .insert("svg:svg")
+    .append("svg:svg")
     .attr("class", "quakeDetail")
     .attr("pointer-events", "none")
-    .each(function(d) {projectOntoMap(this, quake, map.getProjection(), 0, 0);})
+    .each(function(d) {projectOntoMap(this, quake, map.getProjection(), QUAKE_HIGHLIGHT_EXPAND, QUAKE_HIGHLIGHT_EXPAND);})
     .style("width", SUMMARY_WIDTH  + MARKER_OFFSET * 2 + "px")
     .style("height",SUMMARY_HEIGHT + MARKER_OFFSET * 2 + "px");
 
@@ -706,13 +716,13 @@ function constructKey()
 
   // add detail area
 
-  var detailDiv = innerDiv
-    .append("div")
-    .attr("id", "detailDiv");
+//   var detailDiv = innerDiv
+//     .append("div")
+//     .attr("id", "detailDiv");
 
-  var detailSvg = detailDiv
-    .append("svg:svg")
-    .attr("id", "detailSvg");
+//   var detailSvg = detailDiv
+//     .append("svg:svg")
+//     .attr("id", "detailSvg");
 
   // add quake chart area
 
@@ -732,8 +742,8 @@ function constructKey()
 
   // jam content into the sections, and collect up update functions
 
-  var updateHeader = function() {if (timeScaleChanged) headerDiv.html(keyHeaderHtml);};
-  var updateKeyDetail = createKeyDetail(detailSvg);
+  var updateHeader = function() {if (timeScaleChanged || dataChanged) headerDiv.html(keyHeaderHtml);};
+//  var updateKeyDetail = createKeyDetail(detailSvg);
   var updateQuakeChart = createQuakeChart(chartSvg);
   var updateSig = createSignature(sigDiv);
 
@@ -742,7 +752,7 @@ function constructKey()
   return function()
   {
     updateHeader();
-    updateKeyDetail();
+//    updateKeyDetail();
     updateQuakeChart();
     updateSig();
   };
@@ -758,7 +768,7 @@ function createSignature(sigDiv)
   var treborUrl = "/";
   var quakeUrl = "/fdl/earthquake";
   var name = "Robert Harris";
-  var date = "March 2012";
+  var date = "April 2012";
 
   var html = 
     table({id: "sigTable"}, 
@@ -774,135 +784,118 @@ function createSignature(sigDiv)
   return function() {};
 }
 
-
-
 // create key detail
 
 function createKeyDetail(detailSvg)
 {
   var stockMagnitude = 3.5;
-  var examples = 7;
+  var examples = 16;
   var keyPadding = 15;
   var examplePercentStep = (100 - 2 * keyPadding) / (examples - 1);
   var countdownTimerInnerRadius = 8;
-  var countdownTimerOuterRadius = 18;
+  var countdownTimerOuterRadius = 14;
 
-  // create the age quakes
+//   // add the age quakes
 
-  var ageScale = d3.time.scale.utc().domain(timeScale.domain()).range([0, examples - 1]);
-  var ageQuakes = [];
+//   detailSvg
+//     .append("text")
+//     .attr("class", "detailTitle")
+//     .attr("x", "50%")
+//     .attr("y", "1.2em")
+//     .style("text-anchor", "middle")
+//     .text("Quake Age");
 
-  for (var example = 0; example < examples; ++example)
-  {
-    var quake = new Object();
-    quake.date = ageScale.invert(example);
-    quake.example = example;
-    quake.Magnitude = stockMagnitude;
-    quake.radius = computeMarkerRadius(quake.Magnitude);
-    quake.offset = keyPadding + examplePercentStep * example;
-    ageQuakes.push(quake);
-  }
+//   var startAge = detailSvg
+//     .append("text")
+//     .attr("class", "detailLabel")
+//     .attr("x", keyPadding - examplePercentStep * 0.5 + "%")
+//     .attr("y", "2.4em")
+//     .style("text-anchor", "start");
 
-  // add the age quakes
-
-  detailSvg
-    .append("text")
-    .attr("class", "detailTitle")
-    .attr("x", "50%")
-    .attr("y", "1.2em")
-    .style("text-anchor", "middle")
-    .text("Quake Age");
-
-  var startAge = detailSvg
-    .append("text")
-    .attr("class", "detailLabel")
-    .attr("x", keyPadding - examplePercentStep * 0.5 + "%")
-    .attr("y", "2.4em")
-    .style("text-anchor", "start");
-
-  detailSvg
-    .append("text")
-    .attr("class", "detailLabel")
-    .attr("x", (keyPadding + (examples - 1) * examplePercentStep + examplePercentStep * 0.5) + "%")
-    .attr("y", "2.3em")
-    .style("text-anchor", "end")
-    .text("Now");
-
-  var ageMarkers = detailSvg.selectAll("g.age")
-    .data(ageQuakes)
-    .enter()
-    .append("svg:g")
-    .attr("class", "age");
-
-  ageMarkers
-    .append("svg:circle")
-    .attr("class", "markerShape")
-    .attr("cx", function(d) {return d.offset + "%";})
-    .attr("cy", "3.2em")
-    .attr("opacity", function(d) {return timeScale(d.date);})
-    .attr("r", function(d) {return d.radius - MARKER_STROKE_WIDTH / 2;});
+//   detailSvg
+//     .append("text")
+//     .attr("class", "detailLabel")
+//     .attr("x", (keyPadding + (examples - 1) * examplePercentStep + examplePercentStep * 0.5) + "%")
+//     .attr("y", "2.3em")
+//     .style("text-anchor", "end")
+//     .text("Now");
 
   // add update data
 
+
+  var updateHtml = function()
+  {
+    var result =
+      table({height: "100%", width: "100%"},
+            tRow({}, 
+                 tCell({class: "detailLabel"}, "Data requested at") +
+                 tCell({class: "detailValue"}, TIME_FORMAT(lastDataRefreshTime))
+                )
+           );
+
+    return result;
+  };
+
   detailSvg
     .append("svg:foreignObject")
-    .style("visibility", "visible")
     .attr("width",  "100%")
-    .attr("height", "15%")
+    .attr("height", "100%")
     .attr("x", "0%")
-    .attr("y", "47%")
+    .attr("y", "0%")
     .append("xhtml:body")
     .attr("id", "dataUpdate")
     .attr("class", "detailTitle")
-    .style("text-anchor", "middle")
-    .html("Update")
+    .style("text-anchor", "start")
+    .html(updateHtml)
     .attr("title", "click to update now")
     .on("click", updateData);
 
-  // last label and time
+//   // last label and time
 
-  var timeXPos = 70;
+//   var timeXPos = 70;
 
-  detailSvg
-    .append("text")
-    .attr("class", "detailLabel")
-    .attr("x", timeXPos)
-    .attr("y", "9.2em")
-    .style("text-anchor", "end")
-    .text("Last");
+//   detailSvg
+//     .append("text")
+//     .attr("class", "detailLabel")
+//     .attr("x", timeXPos)
+//     .attr("y", "9.2em")
+//     .style("text-anchor", "end")
+//     .text("Last");
 
-  var lastTime = detailSvg
-    .append("text")
-    .attr("class", "detailLabel")
-    .attr("x", timeXPos + 5)
-    .attr("y", "9.2em")
-    .style("text-anchor", "start");
+//   var lastTime = detailSvg
+//     .append("text")
+//     .attr("class", "detailLabel")
+//     .attr("x", timeXPos + 5)
+//     .attr("y", "9.2em")
+//     .style("text-anchor", "start");
 
-  // next label and time
+//   // next label and time
 
-  detailSvg
-    .append("text")
-    .attr("class", "detailLabel")
-    .attr("x", timeXPos)
-    .attr("y", "10.2em")
-    .style("text-anchor", "end")
-    .text("Next");
+//   detailSvg
+//     .append("text")
+//     .attr("class", "detailLabel")
+//     .attr("x", timeXPos)
+//     .attr("y", "10.2em")
+//     .style("text-anchor", "end")
+//     .text("Next");
 
-  var nextTime = detailSvg
-    .append("text")
-    .attr("class", "detailLabel")
-    .attr("x", timeXPos + 5)
-    .attr("y", "10.2em")
-    .style("text-anchor", "start");
+//   var nextTime = detailSvg
+//     .append("text")
+//     .attr("class", "detailLabel")
+//     .attr("x", timeXPos + 5)
+//     .attr("y", "10.2em")
+//     .style("text-anchor", "start");
 
-  // text for count down timer
+//   // text for count down timer
 
+  var yPos = 20;
+  var xPos = KEY_WIDTH - (3 * countdownTimerOuterRadius + KEY_PADDING);
   var countDownSeconds = detailSvg
     .append("text")
     .attr("id", "countDownSeconds")
-    .attr("transform", "translate(" + (KEY_WIDTH - (3 * countdownTimerOuterRadius + KEY_PADDING)) + ", 113)")
+    .attr("transform", "translate(" + xPos + ", " + yPos + ")")
     .attr("x", 0)
-    .attr("y", 0)
+    .attr("y", 3)
     .attr("dominant-baseline", "center")
     .style("text-anchor", "middle");
 
@@ -911,7 +904,8 @@ function createKeyDetail(detailSvg)
   var countDown = detailSvg
     .append("svg:path")
     .attr("id", "updateCountDown")
-    .attr("transform", "translate(" + (KEY_WIDTH - (3 * countdownTimerOuterRadius + KEY_PADDING)) + ", 110)");
+    .attr("transform", "translate(" + xPos + ", " + yPos + ")");
+
 
   // actual arc for countdown
 
@@ -921,15 +915,15 @@ function createKeyDetail(detailSvg)
     .innerRadius(countdownTimerInnerRadius)
     .outerRadius(countdownTimerOuterRadius);
 
-  // hint to select quakes
+//   // hint to select quakes
 
-  detailSvg
-    .append("text")
-    .attr("class", "detailTitle")
-    .attr("x", "50%")
-    .attr("y", "11em")
-    .style("text-anchor", "middle")
-    .text("Quake Chart");
+//   detailSvg
+//     .append("text")
+//     .attr("class", "detailTitle")
+//     .attr("x", "50%")
+//     .attr("y", "11em")
+//     .style("text-anchor", "middle")
+//     .text("Quake Chart");
 
 
   return function() 
@@ -973,14 +967,52 @@ function createKeyDetail(detailSvg)
                  };
                });
 
-      lastTime.text(TIME_FORMAT(lastDataRefreshTime));
-      nextTime.text(TIME_FORMAT(nextDataRefreshTime));
+//      lastTime.text(TIME_FORMAT(lastDataRefreshTime));
+//      nextTime.text(TIME_FORMAT(nextDataRefreshTime));
     }
 
-    // if time scale has changed, update start age label
+//     // if time scale has changed, update start age label
     
-    if (timeScaleChanged)
-      startAge.text("1 " + currentTimeScale.name);
+//     if (timeScaleChanged)
+//     {
+//       startAge.text("1 " + currentTimeScale.name);
+
+//       // create the age quakes
+      
+//       var ageScale = d3.time.scale.utc().domain(timeScale.domain()).range([0, examples - 1]);
+//       var ageQuakes = [];
+      
+//       for (var example = 0; example < examples; ++example)
+//       {
+//         var quake = new Object();
+//         quake.date = ageScale.invert(example);
+//         quake.example = example;
+//         quake.Magnitude = stockMagnitude;
+//         quake.radius = computeMarkerRadius(quake.Magnitude);
+//         quake.offset = keyPadding + examplePercentStep * example;
+//         ageQuakes.push(quake);
+//       }
+     
+//       // remove old ones
+ 
+//       detailSvg.selectAll("g.age")
+//         .remove();
+
+//       // add new ones
+
+//       detailSvg.selectAll("g.age")
+//         .data(ageQuakes)
+//         .enter()
+//         .append("svg:g")
+//         .attr("class", "age")
+//         .append("svg:circle")
+//         .attr("class", "markerShape")
+//         .attr("cx", function(d) {return d.offset + "%";})
+//         .attr("cy", "3.2em")
+//         .style("fill", QUAKE_FILL)
+//         .attr("opacity", QUAKE_OPACITY)
+//         .attr("r", QUAKE_RADIUS);
+//     }
   };
 }
 
@@ -1058,7 +1090,7 @@ function createQuakeChart(svg)
       break;
     case WEEK_TIMESCALE:
       xAxisInterval = d3.time.days;
-      xAxisTickFormat = d3.time.format("%d %b");
+      xAxisTickFormat = d3.time.format("%e %b");
       xAxisTickNumber = 2;
       break;
     }
@@ -1104,7 +1136,8 @@ function createQuakeChart(svg)
     var updateMarkers = chartMarkers
       .enter()
       .append("circle")
-      .attr("opacity", 0)
+      .attr("opacity", 1)
+      .style("fill", QUAKE_FILL)
       .attr("class", "chartQuakes")
       .attr("r", 3);
 
@@ -1257,11 +1290,11 @@ function createQuakeChart(svg)
 function keyHeaderHtml()
 {
   var space = "&nbsp;";
-  var selectHour = span({class: "spanSelector", onclick: "setTimeScale(HOUR_TIMESCALE)"}, "Hour");
-  var selectDay = span({class: "spanSelector", onclick: "setTimeScale(DAY_TIMESCALE)"},  "Day");
-  var selectWeek = span({class: "spanSelector", onclick: "setTimeScale(WEEK_TIMESCALE)"}, "Week");
+  var selectHour = span({class: "spanSelector", title: "click to view hour", onclick: "setTimeScale(HOUR_TIMESCALE)"}, "Hour");
+  var selectDay  = span({class: "spanSelector", title: "click to view day" , onclick: "setTimeScale(DAY_TIMESCALE)" },  "Day");
+  var selectWeek = span({class: "spanSelector", title: "click to view week", onclick: "setTimeScale(WEEK_TIMESCALE)"}, "Week");
 
-  // use dataSets as proxy for which time mode is selected
+  // configure based on timescale
 
   var unitName = "this " + currentTimeScale.name;
   switch(currentTimeScale)
@@ -1277,9 +1310,8 @@ function keyHeaderHtml()
     break;
   }
 
-
-
   var selectors = selectHour + space + selectDay + space + selectWeek;
+  var reloadPeriod = "polls every " + Math.round(REMOTE_DATA_UPDATE_MILLISECONDS / MILLISECONDS_INA_SECOND) + " seconds";
 
   // construct the header table
 
@@ -1288,8 +1320,13 @@ function keyHeaderHtml()
           tRow({}, 
                tCell({},
                      table({id: "titleTable"},
-                           tRow({}, tCell({id: "keyTitle"}, "Earthquakes" + space + unitName)) +
-                           tRow({id: "spanSelectors"}, tCell({}, selectors))
+                           tRow({}, 
+                                tCell({id: "keyTitle", colSpan: 3}, "Earthquakes" + space + unitName)) +
+                           tRow({id: "spanSelectors"}, 
+                                tCell({id: "updateLabel", title: reloadPeriod}, "Updated") + 
+                                tCell({id: "updateTime", title: "click to poll for fresh data"}, 
+                                      span({onclick: "updateData()"}, TIME_FORMAT(lastDataRefreshTime))) + 
+                                tCell({}, selectors))
                           )
                     )
               )
