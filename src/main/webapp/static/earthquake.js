@@ -714,16 +714,6 @@ function constructKey()
     .append("div")
     .attr("id", "keyHeader");
 
-  // add detail area
-
-//   var detailDiv = innerDiv
-//     .append("div")
-//     .attr("id", "detailDiv");
-
-//   var detailSvg = detailDiv
-//     .append("svg:svg")
-//     .attr("id", "detailSvg");
-
   // add quake chart area
 
   var chartDiv = innerDiv
@@ -743,7 +733,6 @@ function constructKey()
   // jam content into the sections, and collect up update functions
 
   var updateHeader = function() {if (timeScaleChanged || dataChanged) headerDiv.html(keyHeaderHtml);};
-//  var updateKeyDetail = createKeyDetail(detailSvg);
   var updateQuakeChart = createQuakeChart(chartSvg);
   var updateSig = createSignature(sigDiv);
 
@@ -752,7 +741,6 @@ function constructKey()
   return function()
   {
     updateHeader();
-//    updateKeyDetail();
     updateQuakeChart();
     updateSig();
   };
@@ -782,238 +770,6 @@ function createSignature(sigDiv)
   
   sigDiv.html(html);
   return function() {};
-}
-
-// create key detail
-
-function createKeyDetail(detailSvg)
-{
-  var stockMagnitude = 3.5;
-  var examples = 16;
-  var keyPadding = 15;
-  var examplePercentStep = (100 - 2 * keyPadding) / (examples - 1);
-  var countdownTimerInnerRadius = 8;
-  var countdownTimerOuterRadius = 14;
-
-//   // add the age quakes
-
-//   detailSvg
-//     .append("text")
-//     .attr("class", "detailTitle")
-//     .attr("x", "50%")
-//     .attr("y", "1.2em")
-//     .style("text-anchor", "middle")
-//     .text("Quake Age");
-
-//   var startAge = detailSvg
-//     .append("text")
-//     .attr("class", "detailLabel")
-//     .attr("x", keyPadding - examplePercentStep * 0.5 + "%")
-//     .attr("y", "2.4em")
-//     .style("text-anchor", "start");
-
-//   detailSvg
-//     .append("text")
-//     .attr("class", "detailLabel")
-//     .attr("x", (keyPadding + (examples - 1) * examplePercentStep + examplePercentStep * 0.5) + "%")
-//     .attr("y", "2.3em")
-//     .style("text-anchor", "end")
-//     .text("Now");
-
-  // add update data
-
-
-  var updateHtml = function()
-  {
-    var result =
-      table({height: "100%", width: "100%"},
-            tRow({}, 
-                 tCell({class: "detailLabel"}, "Data requested at") +
-                 tCell({class: "detailValue"}, TIME_FORMAT(lastDataRefreshTime))
-                )
-           );
-
-    return result;
-  };
-
-  detailSvg
-    .append("svg:foreignObject")
-    .attr("width",  "100%")
-    .attr("height", "100%")
-    .attr("x", "0%")
-    .attr("y", "0%")
-    .append("xhtml:body")
-    .attr("id", "dataUpdate")
-    .attr("class", "detailTitle")
-    .style("text-anchor", "start")
-    .html(updateHtml)
-    .attr("title", "click to update now")
-    .on("click", updateData);
-
-//   // last label and time
-
-//   var timeXPos = 70;
-
-//   detailSvg
-//     .append("text")
-//     .attr("class", "detailLabel")
-//     .attr("x", timeXPos)
-//     .attr("y", "9.2em")
-//     .style("text-anchor", "end")
-//     .text("Last");
-
-//   var lastTime = detailSvg
-//     .append("text")
-//     .attr("class", "detailLabel")
-//     .attr("x", timeXPos + 5)
-//     .attr("y", "9.2em")
-//     .style("text-anchor", "start");
-
-//   // next label and time
-
-//   detailSvg
-//     .append("text")
-//     .attr("class", "detailLabel")
-//     .attr("x", timeXPos)
-//     .attr("y", "10.2em")
-//     .style("text-anchor", "end")
-//     .text("Next");
-
-//   var nextTime = detailSvg
-//     .append("text")
-//     .attr("class", "detailLabel")
-//     .attr("x", timeXPos + 5)
-//     .attr("y", "10.2em")
-//     .style("text-anchor", "start");
-
-//   // text for count down timer
-
-  var yPos = 20;
-  var xPos = KEY_WIDTH - (3 * countdownTimerOuterRadius + KEY_PADDING);
-  var countDownSeconds = detailSvg
-    .append("text")
-    .attr("id", "countDownSeconds")
-    .attr("transform", "translate(" + xPos + ", " + yPos + ")")
-    .attr("x", 0)
-    .attr("y", 3)
-    .attr("dominant-baseline", "center")
-    .style("text-anchor", "middle");
-
-  // path for countdown arc
-
-  var countDown = detailSvg
-    .append("svg:path")
-    .attr("id", "updateCountDown")
-    .attr("transform", "translate(" + xPos + ", " + yPos + ")");
-
-
-  // actual arc for countdown
-
-  var arc = d3.svg.arc()
-    .startAngle(0)
-    .endAngle  (Math.PI * 2)
-    .innerRadius(countdownTimerInnerRadius)
-    .outerRadius(countdownTimerOuterRadius);
-
-//   // hint to select quakes
-
-//   detailSvg
-//     .append("text")
-//     .attr("class", "detailTitle")
-//     .attr("x", "50%")
-//     .attr("y", "11em")
-//     .style("text-anchor", "middle")
-//     .text("Quake Chart");
-
-
-  return function() 
-  {
-    // if data has changed, create a fresh update scale
-
-    if (dataChanged)
-    {
-      var now = new Date();
-      var duration = nextDataRefreshTime.getTime() - now.getTime();
-
-      // animate countdown arc
-
-      countDown
-        .attr("d", arc)
-        .transition()
-        .ease("linear")
-        .duration(duration)
-        .attrTween("d", function arcTween(a) 
-                   {
-                     return function(t) 
-                     {
-                       arc.startAngle(t * Math.PI * 2);
-                       return arc();
-                     };
-                   }
-                  );
-
-      // animate countdown seconds
-
-      countDownSeconds
-        .transition()
-        .duration(duration)
-        .ease("linear")
-        .tween("text", function() 
-               {
-                 return function(t) 
-                 {
-                   var seconds = Math.floor((nextDataRefreshTime.getTime() - (new Date).getTime()) / MILLISECONDS_INA_SECOND);
-                   this.textContent = seconds < 0 ? "" : seconds;
-                 };
-               });
-
-//      lastTime.text(TIME_FORMAT(lastDataRefreshTime));
-//      nextTime.text(TIME_FORMAT(nextDataRefreshTime));
-    }
-
-//     // if time scale has changed, update start age label
-    
-//     if (timeScaleChanged)
-//     {
-//       startAge.text("1 " + currentTimeScale.name);
-
-//       // create the age quakes
-      
-//       var ageScale = d3.time.scale.utc().domain(timeScale.domain()).range([0, examples - 1]);
-//       var ageQuakes = [];
-      
-//       for (var example = 0; example < examples; ++example)
-//       {
-//         var quake = new Object();
-//         quake.date = ageScale.invert(example);
-//         quake.example = example;
-//         quake.Magnitude = stockMagnitude;
-//         quake.radius = computeMarkerRadius(quake.Magnitude);
-//         quake.offset = keyPadding + examplePercentStep * example;
-//         ageQuakes.push(quake);
-//       }
-     
-//       // remove old ones
- 
-//       detailSvg.selectAll("g.age")
-//         .remove();
-
-//       // add new ones
-
-//       detailSvg.selectAll("g.age")
-//         .data(ageQuakes)
-//         .enter()
-//         .append("svg:g")
-//         .attr("class", "age")
-//         .append("svg:circle")
-//         .attr("class", "markerShape")
-//         .attr("cx", function(d) {return d.offset + "%";})
-//         .attr("cy", "3.2em")
-//         .style("fill", QUAKE_FILL)
-//         .attr("opacity", QUAKE_OPACITY)
-//         .attr("r", QUAKE_RADIUS);
-//     }
-  };
 }
 
 function createQuakeChart(svg)

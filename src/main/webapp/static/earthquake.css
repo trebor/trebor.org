@@ -151,19 +151,6 @@ table, tr, td, span
   text-align: center;
 }
 
-.detailLabel
-{
-  background: lightpink;
-/*   font-size: 14px; */
-/*   color: #aaa; */
-}
-
-.detailValue
-{
-/*   font-size: 12px; */
-  color: #aaa;
-}
-
 .magnitude
 {
   font-size: 12px;
@@ -196,13 +183,6 @@ table, tr, td, span
 /*   background: lightgreen; */
   width: 100%;
   height: 25%;
-}
-
-#detailDiv
-{
-  background: lightblue;
-  width: 100%;
-  height: 20%;
 }
 
 #chartDiv
@@ -348,14 +328,6 @@ table, tr, td, span
 {
 /*   background: yellow; */
   font: 10px sans-serif;
-  height: 100%;
-  width: 100%;
-}
-
-#detailSvg
-{
-/*   background: red; */
-  padding-left: 20px;
   height: 100%;
   width: 100%;
 }
