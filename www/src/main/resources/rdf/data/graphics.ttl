@@ -1,0 +1,88 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- graphic design --- #
+
+toi:graphics        a                   too:treeNode;
+                    too:hasName         "graphics";
+                    too:hasTitle        "graphic design";
+                    too:hasNodeIcon     "vitruvian";
+                    too:hasNodeChild     _:trebor_logo;
+                    too:hasNodeChild     _:freesand_logo;
+                    too:hasNodeChild     _:coolneon_logo;
+                    too:hasNodeChild     _:social_revolution_logo;
+                    too:hasNodeChild     _:xuggle_logo;
+                    too:hasNodeSummary
+
+"""
+i am by no means a professional graphic designer, but i enjoy visual work, especially logo design.
+""".
+                    
+_:trebor_logo       a                   too:treeNode;
+                    too:hasName         "trebor_logo";
+                    too:hasTitle        "the tat sign";
+                    too:hasNodeIcon     "tat";
+                    too:hasNodeSummary
+
+"""
+i created the \"tat&nbsp;sign\" as a sort of personal 
+[[wikipedia:Glyph|glyph]].
+you will see a lot of it around here.
+""".
+
+_:freesand_logo     a                   too:treeNode;
+                    too:hasName         "freesand_logo";
+                    too:hasTitle        "[[freesand]] logo";
+                    too:hasNodeIcon     "freesand";
+                    too:hasNodeSummary
+
+"""
+despite its simple composition, i was pleased with the logo for the [[freesand]]
+project.  it was based on an anonymous sand dune image i found online, which is 
+now lost to me.
+""".
+
+_:coolneon_logo     a                   too:treeNode;
+                    too:hasName         "coolneon_logo";
+                    too:hasTitle        "coolneon logo";
+                    too:hasNodeIcon     "coolneon";
+                    too:hasNodeSummary
+
+"""
+i created the logo for [http://www.coolneon.com/ coolneon].
+it is intended to show that their core product, el-wire, is cool to the touch, 
+and was inspired by [[wikipedia:Mudra|mudra]].
+""".
+
+
+_:social_revolution_logo a              too:treeNode;
+                    too:hasName         "social_revolution_logo";
+                    too:hasTitle        "{{nowrap:social revolution logo}}";
+                    too:hasNodeIcon     "social-revolution";
+                    too:hasNodeSummary
+
+"""
+i created a [[wikipedia:Head_tube|head-tube]] medallion for
+[http://www.coolneon.com/ coolneon]'s
+\"social revolution\" tricycle project.  it seats up to three people, side by side,
+with two wheels up front and one in the back for steering.
+""".
+
+
+_:xuggle_logo       a                   too:treeNode;
+                    too:hasName         "xuggle_logo";
+                    too:hasTitle        "xuggle logo";
+                    too:hasNodeIcon     "xuggle-logo";
+                    too:hasNodeSummary
+
+"""
+i created this logo for
+[http://xuggle.com xuggle],
+a company i co-founded.
+the name was a play on the word \"juggle\" and i based the logo on the path balls travel in a
+[[wikipedia:Cascade_(juggling)|cascade]]
+pattern.
+""".

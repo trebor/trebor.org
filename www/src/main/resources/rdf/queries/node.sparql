@@ -1,0 +1,35 @@
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX toi:<http://trebor.org/instance/>
+PREFIX too:<http://trebor.org/ns#>
+PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT
+  ?name
+  ?parent
+  ?imageDescription
+  ?image
+  ?title
+  ?icon
+  ?summary
+WHERE
+{
+  bind("%s" as ?name)
+
+  ?node     a                   too:treeNode; 
+            too:hasName         ?name;
+            too:hasTitle        ?title;
+            too:hasNodeIcon     ?icon;
+            too:hasNodeSummary  ?summary.
+
+  optional
+  {
+    ?node   too:hasImage            ?image;
+            too:hasImageDescription ?imageDescription.
+  }
+
+  optional
+  {
+    ?node   too:hasNodeParent   ?parent.
+  }
+}

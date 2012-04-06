@@ -1,0 +1,17 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- peers --- #
+
+toi:peers           a                   too:treeNode;
+                    too:hasName         "peers";
+                    too:hasTitle        "my peers";
+                    too:hasNodeIcon     "unknown";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".

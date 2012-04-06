@@ -1,0 +1,80 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- literature --- #
+
+toi:literature      a                   too:treeNode;
+                    too:hasName         "literature";
+                    too:hasTitle        "the literature";
+                    too:hasNodeChild     _:elementsofstyle;
+                    too:hasNodeChild     _:crowdsandpower;
+                   	too:hasNodeChild     _:understandingcomics;
+
+#                    too:hasNodeChild     _:recursiveuniverse;
+#                    too:hasNodeChild     _:everydaythings;
+
+                    too:hasNodeIcon     "book";
+                    too:hasNodeSummary
+
+"""
+these are some of the books that have had a lasting effect on how i think about the world.
+""".
+
+_:everydaythings    a                   too:treeNode;
+                    too:hasName         "everydaythings";
+                    too:hasTitle        "[[wikipedia:The_Design_of_Everyday_Things|the design of everyday things]]";
+                    too:hasNodeIcon     "everydaythings";
+                    too:hasImage        "assets/images/Design-of-Everyday-Things.jpg";
+                    too:hasNodeSummary
+
+"""
+lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+""".
+
+_:elementsofstyle   a                   too:treeNode;
+                    too:hasName         "elementsofstyle";
+                    too:hasTitle        "[[wikipedia:The_elements_of_style|the elements of style]]";
+                    too:hasNodeIcon     "elementsofstyle";
+                    too:hasImage        "assets/images/Elements-of-Style.jpg";
+                    too:hasNodeSummary
+
+"""
+this book, which is [http://www.bartleby.com/141/ freely available],
+taught me how to write. it contains simple demonstrations of how to transform 
+bad sentences into good.
+"[http://www.bartleby.com/141/strunk5.html#13 omit needless words]."
+has become a core part of my aesthetic.
+""".
+
+_:crowdsandpower    a                   too:treeNode;
+                    too:hasName         "crowdsandpower";
+                    too:hasTitle        "[[wikipedia:Crowds_and_Power|crowds and power]]";
+                    too:hasNodeIcon     "crowdsandpower";
+                    too:hasImage        "assets/images/Crowds-and-Power.jpg";
+                    too:hasNodeSummary
+
+"""
+[[wikipedia:Elias_Canetti|canetti]] wrote this book in two parts, the first
+describes types of crowds and how to control them, and the second classifies power 
+systems and how they relate to crowds.  he details the spiraling negative effects of 
+absolute power on the minds of [[wikipedia:Despotism|despots]].
+""".
+
+_:understandingcomics a                 too:treeNode;
+                    too:hasName         "understandingcomics";
+                    too:hasTitle        "[[wikipedia:Understanding_Comics|understanding comics]]";
+                    too:hasNodeIcon     "understandingcomics";
+                    too:hasImage        "assets/images/understanding-comics.jpg";
+                    too:hasNodeSummary
+
+"""
+[[wikipedia:Scott_McCloud|mccloud]] exposes techniques used in comics that exploit 
+features of human cognition.   this book helped to solidify my understanding of visual 
+[http://courses.washington.edu/hypertxt/cgi-bin/book/wordsimages/wordsimages.html abstraction].
+i found his concept of
+[http://mediawiki.middlebury.edu/wiki/MIDDMedia/Closure_in_comics closure]
+both fascinating, and applicable outside of a comics context.
+""".

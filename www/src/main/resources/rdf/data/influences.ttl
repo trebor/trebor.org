@@ -1,0 +1,24 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- influences --- #
+
+toi:influences      a                   too:treeNode;
+                    too:hasName         "influences";
+                    too:hasTitle        "influences";
+                    too:hasNodeIcon     "influences";
+                    too:hasNodeChild     toi:luminaries;
+                    too:hasNodeChild     toi:literature;
+                    too:hasNodeSummary
+"""
+as much as i'd like to think of myself as a fountain of new ideas, my ideas are 
+a rehash of the work of better minds.  what follows is a woefully incomplete list of 
+sources from which i draw.
+""".
+
+
+
+                    

@@ -1,0 +1,63 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- general --- #
+
+# root noun
+
+too:thing           rdf:type        rdfs:Class.
+
+# root property
+
+too:property       rdf:type           rdf:property;
+                  rdfs:domain         too:thing;
+                  rdfs:range          too:thing.
+
+# --- agents --- #
+
+# an actor in a system  (composite)
+
+too:agent         rdfs:subClassOf   too:thing.
+
+# an indiviual person (composite)
+
+too:person         rdfs:subClassOf   too:agent.
+
+# --- dates --- #
+
+too:dateTime       rdfs:subClassOf    xsd:dateTime.
+
+too:hasDateTime    rdfs:subPropertyOf too:property;
+                   rdfs:domain        too:thing;
+                   rdfs:range         too:dateTime.
+
+# --- intendification --- #
+
+# a sybolic name assocciated with something (literal)
+
+too:name        rdfs:subClassOf     too:thing.
+
+too:hasName     rdf:subPropertyOf   too:property;
+                rdfs:domain         too:thing;
+                rdfs:range          too:name.
+
+# an identifier that is guaranteed unique (literal)
+
+too:uniqueId    rdfs:subClassOf     too:thing.
+
+too:hasUniqueId rdf:subPropertyOf   too:property;
+                rdfs:domain         too:thing;
+                rdfs:range          too:uniqueId.
+
+# classification, period seperated elements to denote subclassifiction,
+# without white space "animal.fish.guppy" (literal)
+
+too:classification    rdfs:subClassOf too:thing.
+
+too:hasClassification rdf:subPropertyOf too:property;
+                      rdfs:domain       too:thing;
+                      rdfs:range        too:thing.
+

@@ -1,0 +1,244 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- software projects --- #
+
+toi:software        a                   too:treeNode;
+                    too:hasName         "software";
+                    too:hasTitle        "software projects";
+                    too:hasNodeIcon     "disk";
+                    too:hasNodeChild     _:sarynpaint;
+                    too:hasNodeChild     _:freesand;
+                    too:hasNodeChild     _:swarm;
+                    too:hasNodeChild     _:splink;
+                    too:hasNodeChild     _:trebor_org;
+                    too:hasNodeChild     _:fukushima;
+                    too:hasNodeChild     _:earthquake;
+                    too:hasNodeSummary
+
+"""
+the following are some of the software projects i've worked on for fun over the years.
+most of these projects are released under one open source license or another.
+""".
+
+_:fukushima         a                   too:treeNode;
+                    too:hasName         "fukushima";
+                    too:hasTitle        "[[static:fukushima.html|fukushima&nbsp;radiation&nbsp;map]]";
+                    too:hasNodeIcon     "fukushima";
+                    too:hasNodeSummary
+"""
+[http://blog.safecast.org/ safecast] provides raw
+[http://maps.safecast.org/downloads/ radiation data] and
+[http://blog.safecast.org/maps/ radiation maps] from the 
+[[wikipedia:Fukushima_Daiichi_nuclear_disaster|fukushima daiichi nuclear disaster]].
+to get a feel for how the millions of
+[[wikipedia:Geiger_counter|geiger counter]] readings were collected over time, 
+i used [http://hadoop.apache.org/mapreduce/ hadoop] 
+to average all readings inside 1 kilometer squares within a given hour.
+i animated the resulting 100 thousand or so data points onto 
+[[static:fukushima.html|this google map]] with 
+[http://mbostock.github.com/d3/ d3.js], and
+[http://github.com/gka/chroma.js/wiki/Chroma.js chroma.js] for color.
+""".
+                    
+_:earthquake        a                   too:treeNode;
+                    too:hasName         "earthquake";
+                    too:hasTitle        "[[static:earthquake.html|live&nbsp;earthquake&nbsp;map]]";
+                    too:hasNodeIcon     "quake";
+                    too:hasNodeSummary
+"""
+as a san francisco resident, i often want good earthquake information.  the
+[http://earthquake.usgs.gov/earthquakes/recenteqscanv/ usgs map] is not quite to my liking.
+my [[static:earthquake.html|earthquake&nbsp;map]] combines up-to-date 
+[http://earthquake.usgs.gov/earthquakes/catalogs/index.php usgs earthquake data] and a
+[http://developers.google.com/maps/ google map] using
+[http://mbostock.github.com/d3/ d3.js] and
+[http://square.github.com/crossfilter/ crossfilter].
+the relative area of each earthquake marker approximates the energy described 
+by it's magnitude.  hour, day, and week time scales can be chosen, and a subset of 
+earthquakes can be selected for viewing.
+""".
+
+_:splink            a                   too:treeNode;
+                    too:hasName         "splink";
+                    too:hasTitle        "[https://github.com/treboresque/Splink/wiki splink]";
+                    too:hasNodeIcon     "splink";
+                    too:hasImage        "assets/images/splink-screenshot.png";
+                    too:hasImageDescription
+"""
+in this splink screen shot, genetic disorder data from
+[http://www.ncbi.nlm.nih.gov/omim omim],
+which has been transformed into
+[[wikipedia:Resource_Description_Framework|rdf]]
+by 
+[http://www.5un5.com/ dr. sunshine weiss],
+demonstrates use for
+[[wikipedia:Differential_diagnosis|differential diagnosis]].
+""";
+                    
+                    too:hasNodeSummary
+
+"""
+splink is a pure java
+[[wikipedia:Graphical_user_interface|gui]]
+for querying
+[[wikipedia:Resource_Description_Framework|rdf]]
+repositories using
+[[wikipedia:SPARQL|sparql]].
+it uses the
+[[http://www.openrdf.org/|openrdf]]
+libraries to communicate with repositories.
+""".
+
+
+_:sarynpaint        a                   too:treeNode;
+                    too:hasName         "sarynpaint";
+                    too:hasTitle        "[http://code.google.com/p/sarynpaint/ saryn paint]";
+                    too:hasNodeIcon     "sarynpaint";
+                    too:hasImage        "assets/images/sarynpaint-screenshot.png";
+                    too:hasImageDescription
+"""
+in this screen shot, you can kind of see that the paint-brush color and shape
+can be changed by mousing over the regions at either side of screen.
+""";
+                    too:hasNodeSummary
+
+"""
+saryn paint is a pure java paint program for very young children.
+i wrote it for my friend saryn who, at the time, could move the mouse, but was unable to click.
+later she recorded the audio cues used in the program.
+""".
+
+
+_:freesand          a                   too:treeNode;
+                    too:hasName         "freesand";
+                    too:hasTitle        "[http://code.google.com/p/freesand/ freesand]";
+                    too:hasNodeIcon     "freesand";
+                    too:hasNodeSummary
+
+"""
+freesand is a pure java implementation of a cellular automata simulation inspired by
+[[wikipedia:Falling-sand_game|falling sand games]].  you can download the
+[http://code.google.com/p/freesand/downloads/detail?name=freesand.dmg disk image] 
+for mac, or the
+[http://code.google.com/p/freesand/downloads/detail?name=freesand.jar jar] 
+for any os.  be careful, it can be a bit of a time sink.
+""".
+
+
+
+
+_:swarm             a                   too:treeNode;
+                    too:hasName         "swarm";
+                    too:hasTitle        "[http://orbswarm.com/ orb swarm]";
+                    too:hasNodeIcon     "swarm";
+                    too:hasImage        "assets/images/swarm-colors.jpg";
+                    too:hasImageDescription
+"""
+orb swarm in black rock city in 2008. (c) 2008 nk, burningcam.com.
+""";
+                    
+                    too:hasNodeSummary
+
+"""
+i contributed to the orb swarm
+[http://wiki.orbswarm.com/index.php?title=In_The_Media robotic-art] 
+project. i worked towards an effort to advance orbs from remote to
+autonomous control.  we never quite got there, but here
+are some results from 
+[http://wiki.orbswarm.com/index.php?title=AutomonyImages field tests].
+specifically i built an orb simulator and a choreography editor,
+which i hope to re-purpose to other projects.
+""".
+
+
+_:trebor_org        a                   too:treeNode;
+                    too:hasName         "trebor";
+                    too:hasTitle        "the trebor.org site";
+                    too:hasNodeIcon     "horse";
+                    too:hasNodeChild     _:head;
+                    too:hasNodeChild     _:body;
+                    too:hasNodeChild     _:tail;
+                    too:hasNodeSummary
+
+"""
+this site, as symbolized by a pretty pony, is composed of three parts:
+*the front end: the user interface
+*the service: software that moves data between the front and the back
+*the back end: the site data, like text and links
+you can expand the pony for technical specifics, but conceptually this approach 
+[http://wikipedia.org/wiki/Decoupled#Software_Development decouples]
+the front and back end and permits flexibility in both the form of stored data, 
+and the presentation of that data.
+""".
+
+_:head              a                   too:treeNode;
+                    too:hasName         "trebor_ui";
+                    too:hasTitle        "the front end";
+                    too:hasNodeIcon     "horse-head";
+                    too:hasNodeSummary
+
+"""
+the dynamic portions of this site are driven by
+[http://mbostock.github.com/d3/ d3.js]
+which uses
+[[wikipedia:HTML5|html5]]'s
+[[wikipedia:Scalable_Vector_Graphics|svg]]
+functionality to efficiently render graphics.
+this approach permits page elements to be styled with traditional
+[[wikipedia:CSS|css]].
+""".
+
+_:body              a                   too:treeNode;
+                    too:hasName         "trebor_service";
+                    too:hasTitle        "the service";
+                    too:hasNodeIcon     "horse-body";
+                    too:hasNodeSummary
+
+"""
+data requests from the front end are handled by a
+[http://jersey.java.net/ jersey]
+based
+[[wikipedia:REST|restful]]
+service running under
+[http://tomcat.apache.org/ tomcat]
+hosted on
+[[wikipedia:Amazon_EC2|amazon ec2]].
+data is queried using [[wikipedia:SPARQL|sparql]].
+
+jersey uses
+[[wikipedia:Java_annotation|java annotation]]s
+to 
+[[wikipedia:Marshalling_(computer_science)|marshal]] 
+data, and thus this service contains very little custom code.
+
+the text elements of the stored data contain
+[[wikipedia:Wiki_markup|wiki markup]], 
+and are converted to
+[[wikipedia:HTML|html]]
+by 
+[http://code.google.com/p/gwtwiki/ gwtwiki].
+""".
+
+_:tail              a                   too:treeNode;
+                    too:hasName         "trebor_store";
+                    too:hasTitle        "the back end";
+                    too:hasNodeIcon     "horse-ass";
+                    too:hasNodeSummary
+
+"""
+the data for this site is stored as
+[[wikipedia:Resource_Description_Framework|rdf]]
+in an
+[http://www.openrdf.org/ openrdf]
+[[wikipedia:Sesame_(framework)|sesame]]
+[[wikipedia:Triplestore|triple store]].
+this data can be rendered in an number of ways,
+for example the [[sitemap:home|site map]]
+is a different view of the exact same data which drives the site.
+
+i like to think my web site has a nice ass.
+""".

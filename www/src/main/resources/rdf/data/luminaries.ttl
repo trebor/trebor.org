@@ -1,0 +1,94 @@
+@prefix  rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix  xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix  too: <http://trebor.org/ns#>.
+@prefix  toi: <http://trebor.org/instance/>.
+
+# --- luminaries --- #
+
+toi:luminaries      a                   too:treeNode;
+                    too:hasName         "luminaries";
+                    too:hasTitle        "the luminaries";
+                    too:hasNodeIcon     "spotlight";
+                    too:hasNodeChild     _:norman;
+                    too:hasNodeChild     _:dawkins;
+                    too:hasNodeChild     _:pinker;
+                    too:hasNodeChild     _:tufte;
+                    too:hasNodeSummary
+"""
+these are some of the people who have not only informed my thinking on one particular 
+subject or another, but have inspired me to question 'current thinking' in general.
+many of the ideas espoused by these thinkers have been accepted and absorbed into 
+our understanding of how the world works.  it can be easy to forget that their work
+was once novel or controversial.
+""".
+
+_:norman				    a                   too:treeNode;
+                    too:hasName         "norman";
+                    too:hasNodeIcon     "norman";
+                    too:hasTitle        "[http://www.jnd.org/ donald norman]";
+                    too:hasNodeSummary
+
+"""
+early on i read
+[[wikipedia:The_Design_of_Everyday_Things|the design of everyday things]]
+in which norman described aspects of good design, and where i learned the word
+[[wikipedia:Affordance|affordance]].
+he also talked about why many products might be systematically poorly designed.
+in a more recent
+[[youtube:RlQEoJaLQRA|ted design talk]]
+he underscores the utility of beauty, and importance of factoring emotion into design.
+""".
+
+_:dawkins				    a                   too:treeNode;
+                    too:hasName         "dawkins";
+                    too:hasNodeIcon     "dawkins";
+                    too:hasTitle        "[http://richarddawkins.net/ richard dawkins]";
+                    too:hasNodeSummary
+
+"""
+[[wikipedia:The_Selfish_Gene|the selfish gene]]
+was a seminal book on evolution, from which we get the word
+[[wikipedia:Meme|meme]].
+it left me with an end-to-end understanding of the rise of life on earth.
+dawkins is also an outspoken
+[[wikipedia:Atheist|atheist]],
+and proponent of
+[[wikipedia:Rationalism|rationalism]].
+he speaks clearly against magical thinking in all forms.
+""".
+
+_:pinker				    a                   too:treeNode;
+                    too:hasName         "pinker";
+                    too:hasNodeIcon     "pinker";
+                    too:hasTitle         "[http://stevenpinker.com/biocv steven pinker]";
+                    too:hasNodeSummary
+
+"""
+i started with
+[[wikipedia:The_Language_Instinct|the language instinct]],
+which posits that humans are born with an innate capacity to develop grammatical language.
+pinker often discusses interactions between language and behavior;
+for example he gave an
+[http://comment.rsablogs.org.uk/videos/ rsa animate]
+talk on
+[[youtube:3-son3EJTrU|indirect speech]].
+i'm currently reading
+[[wikipedia:The_Better_Angels_of_Our_Nature|the better angels of our nature]]
+which, despite its gruesome descriptions of violence present and past, 
+leaves me optimistic about the future.
+""".
+
+_:tufte				    	a                   too:treeNode;
+                    too:hasName         "tufte";
+                    too:hasNodeIcon     "tufte";
+                    too:hasTitle         "[http://www.edwardtufte.com/tufte/ edward tufte]";
+                    too:hasNodeSummary
+                    
+"""
+tufte's
+[http://www.edwardtufte.com/tufte/courses one day course]
+had a huge impact on my understanding of visual design.  he provides
+a systematic approach for evaluating and improving visual representations.
+if you work with pixels, check out tufte.
+""".
