@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openrdf.model.URI;
@@ -22,17 +23,7 @@ public class Install
   public static final String META_CONTEXT = "http://trebor.org/contexts/meta";
   public static final String LOG_CONTEXT = "http://trebor.org/contexts/log";
 
-  private static final String TREBOR_CONENT_DIR = "/rdf/data";
-  private static final String TURTLE_EXTENTION = ".ttl";
-
-  private static final FilenameFilter turtleFilter = new FilenameFilter()
-  {
-    public boolean accept(File dir, String name)
-    {
-      return name.endsWith(TURTLE_EXTENTION);
-    }
-  };
-  
+  public static final String TREBOR_CONENT_DIR = "/rdf/data";
 
   public static void main(String[] args) throws RepositoryException, RDFParseException, IOException
   {
@@ -54,12 +45,7 @@ public class Install
     
     // load new data into context
 
-    File content = Util.findResourceFile(TREBOR_CONENT_DIR);
-    for (File file:  content.listFiles(turtleFilter))
-    {
-      log.info("adding content: " + file.getName() + " " + new Date(file.lastModified()));
-      connection.add(file, null, RDFFormat.TURTLE, contentContext);
-    }
+    loadAll(connection, Util.findResourceFile(TREBOR_CONENT_DIR), contentContext, RDFFormat.TURTLE);
   }
   
   public static RepositoryConnection establishRepositoryConnection(String host, String name) throws RepositoryException
@@ -69,5 +55,29 @@ public class Install
     Repository repository = new HTTPRepository(url);
     repository.initialize();
     return repository.getConnection();
+  }
+  
+  public static File[] loadAll(RepositoryConnection connection, File directory, URI context, final RDFFormat format) throws RDFParseException, RepositoryException, IOException
+  {
+    File[] files = directory.listFiles(new FilenameFilter()
+    {
+      List<String> extentions = format.getFileExtensions();
+      
+      public boolean accept(File dir, String name)
+      {
+        for (String extention: extentions)
+          if (name.endsWith(extention))
+            return true;
+        return false;
+      }
+    });
+
+    for (File file: files)
+    {
+      log.info("adding content: " + file.getName() + " " + new Date(file.lastModified()));
+      connection.add(file, null, format, context);
+    }
+    
+    return files;
   }
 }
