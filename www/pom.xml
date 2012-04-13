@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>trebor.org</groupId>
   <artifactId>trebor</artifactId>
+  <version>1.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
 
   <properties>
     <openrdf-version>2.6.3</openrdf-version>
@@ -221,7 +221,7 @@
     <dependency>
       <groupId>trebor.org</groupId>
       <artifactId>rdf-util</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>1.0</version>
     </dependency>
   </dependencies>
 
@@ -264,5 +264,4 @@
       </plugins>
     </pluginManagement>
   </build>
-
 </project>

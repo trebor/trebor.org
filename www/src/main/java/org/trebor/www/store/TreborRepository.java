@@ -16,8 +16,8 @@ import org.openrdf.repository.config.RepositoryConfigException;
 import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
-import org.trebor.rdf.MockRepositoryFactory;
-import org.trebor.rdf.RdfUtil;
+import org.trebor.util.rdf.MockRepositoryFactory;
+import org.trebor.util.rdf.RdfUtil;
 import org.trebor.www.util.TreborConfiguration;
 import org.trebor.www.util.Util;
 

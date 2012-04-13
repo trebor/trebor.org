@@ -20,11 +20,11 @@ import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
+import org.trebor.util.rdf.ResourceManager;
 import org.trebor.www.dto.ForceNetwork;
 import org.trebor.www.dto.ForceNetwork.Node;
 import org.trebor.www.dto.MenuTreeNode;
 import org.trebor.www.dto.RdfValue;
-import org.trebor.rdf.ResourceManager;
 import org.trebor.www.util.Util;
 
 import com.sun.jersey.api.core.InjectParam;

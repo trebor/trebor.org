@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import org.openrdf.model.BNode;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
-import org.trebor.rdf.ResourceManager;
-import org.trebor.rdf.ResourceManager.ResourceType;
+import org.trebor.util.rdf.ResourceManager;
+import org.trebor.util.rdf.ResourceManager.ResourceType;
 
 import static org.trebor.www.dto.RdfValue.Types.*;
 
