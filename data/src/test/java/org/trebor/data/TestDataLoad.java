@@ -13,8 +13,8 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
-import org.trebor.data.Updater;
 import org.trebor.util.rdf.MockRepositoryFactory;
+import org.trebor.util.rdf.RdfUtil;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -28,7 +28,7 @@ public class TestDataLoad
   {
     RepositoryConnection connection = MockRepositoryFactory.getMockRepository().getConnection();
     URI contentContext = connection.getValueFactory().createURI(CONTENT_CONTEXT);
-    Updater.loadAll(connection, Util.findResourceFile(TREBOR_CONENT_DIR), contentContext, RDFFormat.TURTLE);
+    RdfUtil.loadAll(connection, Util.findResourceFile(TREBOR_CONENT_DIR), contentContext, RDFFormat.TURTLE);
     
     RepositoryResult<Statement> statements = connection.getStatements(null, null, null, true);
     int count = 0;

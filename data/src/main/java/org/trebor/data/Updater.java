@@ -3,24 +3,29 @@ package org.trebor.data;
 import static org.trebor.www.RdfNames.*;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
+import org.openrdf.query.BindingSet;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQueryResult;
-import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.http.HTTPRepository;
+import org.openrdf.repository.RepositoryResult;
+import org.openrdf.repository.config.RepositoryConfigException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 import org.trebor.util.rdf.MockRepositoryFactory;
+import org.trebor.util.rdf.RdfUtil;
 import org.trebor.www.RdfNames;
 
 public class Updater
@@ -29,9 +34,21 @@ public class Updater
   
   public static final String TREBOR_CONENT_DIR = "/rdf/data";
 
-  private RepositoryConnection mConnection;
+  // predicates which do NOT indicate that node content has changes
+  
+  @SuppressWarnings("serial")
+  public static final Set<String> IGNORED_PREDICATES = new HashSet<String>()
+  {
+    {
+      add(HAS_NODE_CHILD);
+    }
+  };
 
-  public static void main(String[] args) throws RepositoryException, RDFParseException, IOException, MalformedQueryException, QueryEvaluationException
+  private RepositoryConnection mConnection;
+  private URI mContentContext;
+  private MetaManager mMetaManager;
+
+  public static void main(String[] args)
   {
     if (args.length < 2)
     {
@@ -39,82 +56,134 @@ public class Updater
       System.exit(1);
     }
     
-    new Updater(args[0], args[1]);
-  }
-
-  public Updater(String host, String name) throws RepositoryException, RDFParseException, MalformedQueryException, QueryEvaluationException, IOException
-  {
-    // connect to repository
+    String host = args[0];
+    String repoName = args[1];
     
-    mConnection = establishRepositoryConnection(host, name);
-
-    // clear out the context
     
-    URI contentContext = mConnection.getValueFactory().createURI(CONTENT_CONTEXT);
-    log.info("clearing context: " + contentContext);
-    mConnection.clear(contentContext);
-    
-    // load new data into context
-
-    loadAll(mConnection, Util.findResourceFile(TREBOR_CONENT_DIR), contentContext, RDFFormat.TURTLE);
-  }
-  
-  public static RepositoryConnection establishRepositoryConnection(String host, String name) throws RepositoryException
-  {
-    String url = String.format("http://%s/openrdf-sesame/repositories/%s", host, name);
-    log.info("connecting to remote store: " + url);
-    Repository repository = new HTTPRepository(url);
-    repository.initialize();
-    return repository.getConnection();
-  }
-
-  public static File[] findFiles(File directory, final RDFFormat format)
-  {
-    return directory.listFiles(new FilenameFilter()
+    try
     {
-      List<String> extentions = format.getFileExtensions();
+      Updater updater =
+        new Updater(RdfUtil.establishRepositoryConnection(host, repoName),
+          CONTENT_CONTEXT, META_CONTEXT);
       
-      public boolean accept(File dir, String name)
-      {
-        for (String extention: extentions)
-          if (name.endsWith(extention))
-            return true;
-        return false;
-      }
-    });
-  }
-  
-  
-  public static File[] loadAll(RepositoryConnection connection, File directory, URI context, final RDFFormat format) throws RDFParseException, RepositoryException, IOException, MalformedQueryException, QueryEvaluationException
-  {
-    File[] files = findFiles(directory, format);
-    for (File file: files)
-    {
-//      log.info("adding content: " + file.getName() + " " + new Date(file.lastModified()));
-      connection.add(file, null, format, context);
+      updater.update(Util.findResourceFile(TREBOR_CONENT_DIR), RDFFormat.TURTLE);
     }
-    return files;
+    catch (RepositoryException e)
+    {
+      log.error(String.format("Unable to connect to host %s, reposiotry %s", host, repoName), e);
+    }
+    catch (RepositoryConfigException e)
+    {
+      log.error(String.format("Unable to configure host %s, reposiotry %s", host, repoName), e);
+    }
+    catch (Exception e)
+    {
+      log.error(String.format("Unable to update host %s, reposiotry %s", host, repoName), e);
+    }
+  }
+
+  public Updater(RepositoryConnection connection, String contentContext, String metaContext) throws RepositoryException, RepositoryConfigException
+  {
+    mConnection = connection;
+    mContentContext = mConnection.getValueFactory().createURI(contentContext);
+    mMetaManager = new MetaManager(mConnection, contentContext, metaContext);
   }
   
-  public static void load(RepositoryConnection connection, File file, URI context, RDFFormat format) throws RepositoryException, RDFParseException, IOException, MalformedQueryException, QueryEvaluationException
+  public void update(File directory, RDFFormat format) throws RepositoryException, RDFParseException, MalformedQueryException, QueryEvaluationException, IOException
   {
+    RepositoryConnection accumulator = MockRepositoryFactory.getMockRepository().getConnection();
+    File[] files = RdfUtil.findFiles(directory, format);
+
+    Map<String, Date> updates = new HashMap<String, Date>();
+    
+    for (File file: files)
+      updates.putAll(update(accumulator, file, RDFFormat.TURTLE));
+
+    // clear all the old content, and add all the new content
+    
+    mConnection.clear(mContentContext);
+    mConnection.add(accumulator.getStatements(null, null, null, true), mContentContext);
+    
+    // perform all the meta data updates
+    
+    for (String name: updates.keySet())
+      mMetaManager.setUpdatedTime(name, updates.get(name));
+  }
+  
+  public Map<String, Date> update(RepositoryConnection accumulator, File file, RDFFormat format) throws RepositoryException, RDFParseException, IOException, MalformedQueryException, QueryEvaluationException
+  {
+    Map<String, Date> updates = new HashMap<String, Date>();
+    
     // establish last modified date of file
     
     Date lastModified = new Date(file.lastModified());
-    log.debug("modifiied: " + lastModified);
+    log.debug("    file: " + file);
+    log.debug("modified: " + lastModified);
     
-    // create a mock repo to work in
+    // create a mock repository to work in
     
     RepositoryConnection tmp = MockRepositoryFactory.getMockRepository().getConnection();
-    tmp.add(file, null, format, context);
+    tmp.add(file, null, format, mContentContext);
     
     // extract all the tree nodes
     
-    String arg1 = RdfNames.PREFIX + "SELECT * WHERE {?node a too:treeNode;}";
-    TupleQueryResult nodes = tmp.prepareTupleQuery(QueryLanguage.SPARQL, arg1).evaluate();
+    String nodeQuery = RdfNames.PREFIX + "SELECT ?node ?name WHERE {?node a too:treeNode. ?node too:hasName ?name}";
+    TupleQueryResult nodes = tmp.prepareTupleQuery(QueryLanguage.SPARQL, nodeQuery).evaluate();
     while (nodes.hasNext())
     {
-      log.debug(nodes.next().getValue("node"));
+      BindingSet result = nodes.next();
+      URI node = ((URI)result.getValue("node"));
+      String name = result.getValue("name").stringValue();
+      log.debug("node: " + node);
+      log.debug("name: " + name);
+      
+      // if the node has changed, set the update time
+      
+      if (hasNodeChanged(node, tmp, mConnection))
+        updates.put(name, lastModified);
     }
+    
+    // accumulate the new content
+    
+    accumulator.add(tmp.getStatements(null, null, null, true));
+
+    // return the updates for these statements
+    
+    return updates;
+  }
+
+  private boolean hasNodeChanged(URI node, RepositoryConnection newRepo,
+    RepositoryConnection oldRepo) throws RepositoryException
+  {
+
+    RepositoryResult<Statement> newStatements =
+      newRepo.getStatements(node, null, null, true);
+    while (newStatements.hasNext())
+    {
+      Statement newStatement = newStatements.next();
+
+      // if this is an ignored predicate, continue without checking
+
+      if (IGNORED_PREDICATES.contains(newStatement.getPredicate()
+        .stringValue()))
+        continue;
+
+      // test if this exact statement is present in the old repository
+
+      RepositoryResult<Statement> oldStatemets =
+        oldRepo.getStatements(newStatement.getSubject(),
+          newStatement.getPredicate(), newStatement.getObject(), true,
+          mContentContext);
+      
+      // if there is no such a statement present in the old repository, then the
+      // data has changed
+      
+      if (!oldStatemets.hasNext())
+        return true;
+    }
+    
+    // the data has not changed
+    
+    return false;
   }
 }

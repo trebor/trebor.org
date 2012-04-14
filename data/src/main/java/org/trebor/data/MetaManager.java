@@ -29,13 +29,7 @@ public class MetaManager
   private ObjectConnection mObjectConnection;
   private ValueFactory mVf;
 
-  public MetaManager(String host, String name) throws RepositoryException,
-    RepositoryConfigException
-  {
-    this(Updater.establishRepositoryConnection(host, name));
-  }
-
-  public MetaManager(RepositoryConnection connection)
+  public MetaManager(RepositoryConnection connection, String contentContextStr, String metaContextStr)
     throws RepositoryException, RepositoryConfigException
   {
     // create object repository
@@ -47,8 +41,8 @@ public class MetaManager
 
     // specify contexts
 
-    URI contentContext = mVf.createURI(CONTENT_CONTEXT);
-    URI metaContext = mVf.createURI(META_CONTEXT);
+    URI contentContext = mVf.createURI(contentContextStr);
+    URI metaContext = mVf.createURI(metaContextStr);
     mObjectConnection.setReadContexts(metaContext, contentContext);
     mObjectConnection.setAddContexts(metaContext);
   }
@@ -121,6 +115,7 @@ public class MetaManager
   {
     try
     {
+      log.debug(String.format("%s: created %s", nodeName, created));
       MetaData meta = new MetaData(findNodeInstance(nodeName), created);
       mObjectConnection.addObject(meta);
       return meta;
