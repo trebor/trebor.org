@@ -2,6 +2,7 @@ package org.trebor.www.dto;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -44,6 +45,15 @@ public class MenuTreeNode
   @XmlElement(name="parentName", required=false)
   private String mParent;
 
+  @XmlElement(name="hitCount")
+  private int mHitCount;
+  
+  @XmlElement(name="created")
+  private Date mCreated;
+  
+  @XmlElement(name="updated")
+  private Date mUpdated;
+  
   private List<MenuTreeNode> mChild;
   
   public MenuTreeNode()
@@ -103,15 +113,6 @@ public class MenuTreeNode
     return mSummary;
   }
 
-  public String toString()
-  {
-    return "MenuTreeNode [mName=" + mName + ", mTitle=" + mTitle +
-      ", mIconName=" + mIconName + ", mImage=" + mImage +
-      ", mImageDescription=" + mImageDescription + ", mSummary=" + mSummary +
-      ", mChildren=" + mChildren + ", mParent=" + mParent + ", mChild=" +
-      mChild + "]";
-  }
-
   public MenuTreeNode copy()
   {
     MenuTreeNode copy = new MenuTreeNode();
@@ -122,6 +123,9 @@ public class MenuTreeNode
     copy.setImageDescription(getImageDescription());
     copy.setSummary(getSummary());
     copy.setParent(getParent());
+    copy.setHitCount(getHitCount());
+    copy.setCreated(getCreated());
+    copy.setUpdated(getUpdated());
     for (MenuTreeNode child: getChildren())
       copy.add(child.copy());
     return copy;
@@ -161,9 +165,32 @@ public class MenuTreeNode
   {
     mParent = parent;
   }
-
   public String getParent()
   {
     return mParent;
+  }
+  public int getHitCount()
+  {
+    return mHitCount;
+  }
+  public void setHitCount(int hitCount)
+  {
+    mHitCount = hitCount;
+  }
+  public Date getCreated()
+  {
+    return mCreated;
+  }
+  public void setCreated(Date created)
+  {
+    mCreated = created;
+  }
+  public Date getUpdated()
+  {
+    return mUpdated;
+  }
+  public void setUpdated(Date updated)
+  {
+    mUpdated = updated;
   }
 }

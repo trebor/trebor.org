@@ -47,14 +47,20 @@ public class MetaManager
     mObjectConnection.setAddContexts(metaContext);
   }
 
-  public void setUpdatedTime(String nodeName, Date updated)
+  public MetaData setUpdatedTime(String nodeName, Date updated)
   {
-    establishMetaInstance(nodeName, updated).setUpdated(updated);
+    MetaData md = establishMetaInstance(nodeName, updated);
+    if (null != md)
+      md.setUpdated(updated);
+    return md;
   }
 
-  public void registerHit(String nodeName, Date created)
+  public MetaData registerHit(String nodeName, Date created)
   {
-    establishMetaInstance(nodeName, created).registerHit();
+    MetaData md = establishMetaInstance(nodeName, created);
+    if (null != md)
+      md.registerHit();
+    return md;
   }
 
   public Node findNodeInstance(String nodeName)
@@ -65,11 +71,16 @@ public class MetaManager
       query.setObject("name", nodeName);
       return (Node)query.evaluate().singleResult();
     }
+    catch (NoResultException e)
+    {
+      // no error, just node not found
+    }
     catch (Exception e)
     {
       log.error(e);
+      throw new Error(String.format("Error finding \"%s\" node.", nodeName));
     }
-
+    
     return null;
   }
 
@@ -86,8 +97,10 @@ public class MetaManager
 
     // otherwise create the instance and try to find it again
 
-    createMetaInstance(nodeName, created);
-    return findMetaInstance(nodeName);
+    if (null != createMetaInstance(nodeName, created))
+      return findMetaInstance(nodeName);
+    
+    return null;
   }
 
   public MetaData findMetaInstance(String nodeName)
@@ -106,6 +119,7 @@ public class MetaManager
     catch (Exception e)
     {
       log.error(e);
+      throw new Error(String.format("Error finding meta data for \"%s\" node.", nodeName));
     }
 
     return null;
@@ -115,16 +129,24 @@ public class MetaManager
   {
     try
     {
-      log.debug(String.format("%s: created %s", nodeName, created));
-      MetaData meta = new MetaData(findNodeInstance(nodeName), created);
-      mObjectConnection.addObject(meta);
-      return meta;
+      Node node = findNodeInstance(nodeName);
+      
+      // if there is a node, construct meta data
+      
+      if (null != node)
+      {
+        log.debug(String.format("creating meta data for \"%s\" node %s", nodeName, created));
+        MetaData meta = new MetaData(node, created);
+        mObjectConnection.addObject(meta);
+        return meta;
+      }
     }
     catch (RepositoryException e)
     {
       log.error(e);
+      throw new Error(String.format("Error creating meta data for \"%s\" node.", nodeName));
     }
-
+    
     return null;
   }
 }

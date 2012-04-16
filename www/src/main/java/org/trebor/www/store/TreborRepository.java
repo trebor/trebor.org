@@ -1,14 +1,17 @@
 package org.trebor.www.store;
 
 import static org.trebor.www.util.TreborConfiguration.*;
+import static org.trebor.www.RdfNames.CONTENT_CONTEXT;
+import static org.trebor.www.RdfNames.META_CONTEXT;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -16,8 +19,8 @@ import org.openrdf.repository.config.RepositoryConfigException;
 import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.trebor.data.Updater;
 import org.trebor.util.rdf.MockRepositoryFactory;
-import org.trebor.util.rdf.RdfUtil;
 import org.trebor.www.util.TreborConfiguration;
 import org.trebor.www.util.Util;
 
@@ -36,10 +39,10 @@ public class TreborRepository
   private Repository mRepository;
 
   private RepositoryConnection mConnection;
-
+  
   @PostConstruct
   @SuppressWarnings("unused")
-  private void initialize() throws RepositoryConfigException, RepositoryException, IOException
+  private void initialize() throws RepositoryConfigException, RepositoryException, IOException, RDFParseException, MalformedQueryException, QueryEvaluationException
   {
     setRepository(mConfiguration.getBoolean(RDF_REMOTE)
       ? connectToHttpStore()
@@ -55,7 +58,7 @@ public class TreborRepository
     // getRepository().shutDown();
   }
   
-  private void setRepository(Repository repository) throws RepositoryException
+  private void setRepository(Repository repository) throws RepositoryException, RepositoryConfigException
   {
     mRepository = repository;
     mConnection = getRepository().getConnection();
@@ -74,34 +77,15 @@ public class TreborRepository
     return repository;
   }
 
-  public static Repository createMemoryStore() throws RepositoryException, IOException 
+  public static Repository createMemoryStore() throws RepositoryException, IOException, RepositoryConfigException, RDFParseException, MalformedQueryException, QueryEvaluationException 
   {
     log.debug("initializing memory store");
     
      // establish an in memory repository
 
     Repository repository = MockRepositoryFactory.getMockRepository();
-
-    // initialize data store
-
-    for (String inputFile : mConfiguration.getStringArray(RDF_DATAFILES))
-    {
-      File file = Util.findResourceFile(inputFile);
-      if (file == null)
-      {
-         log.error("unable to locate: " + file);
-         continue;
-      }
-      try
-      {
-        RdfUtil.importFile(repository, file, RDFFormat.TURTLE);
-      }
-      catch (RDFParseException e)
-      {
-        log.error("while parsing " + file, e);
-      }
-    }
-    
+    Updater updater = new Updater(repository.getConnection(), CONTENT_CONTEXT, META_CONTEXT);
+    updater.update(Util.findResourceFile("/rdf/content"), RDFFormat.TURTLE);
     return repository;
   }
 

@@ -10,18 +10,18 @@ toi:graphics        a                   too:treeNode;
                     too:hasName         "graphics";
                     too:hasTitle        "graphic design";
                     too:hasNodeIcon     "vitruvian";
-                    too:hasNodeChild     _:trebor_logo;
-                    too:hasNodeChild     _:freesand_logo;
-                    too:hasNodeChild     _:coolneon_logo;
-                    too:hasNodeChild     _:social_revolution_logo;
-                    too:hasNodeChild     _:xuggle_logo;
+                    too:hasNodeChild     toi:trebor_logo;
+                    too:hasNodeChild     toi:freesand_logo;
+                    too:hasNodeChild     toi:coolneon_logo;
+                    too:hasNodeChild     toi:social_revolution_logo;
+                    too:hasNodeChild     toi:xuggle_logo;
                     too:hasNodeSummary
 
 """
 i am by no means a professional graphic designer, but i enjoy visual work, especially logo design.
 """.
                     
-_:trebor_logo       a                   too:treeNode;
+toi:trebor_logo       a                   too:treeNode;
                     too:hasName         "trebor_logo";
                     too:hasTitle        "the tat sign";
                     too:hasNodeIcon     "tat";
@@ -33,7 +33,7 @@ i created the \"tat&nbsp;sign\" as a sort of personal
 you will see a lot of it around here.
 """.
 
-_:freesand_logo     a                   too:treeNode;
+toi:freesand_logo     a                   too:treeNode;
                     too:hasName         "freesand_logo";
                     too:hasTitle        "[[freesand]] logo";
                     too:hasNodeIcon     "freesand";
@@ -45,7 +45,7 @@ project.  it was based on an anonymous sand dune image i found online, which is
 now lost to me.
 """.
 
-_:coolneon_logo     a                   too:treeNode;
+toi:coolneon_logo     a                   too:treeNode;
                     too:hasName         "coolneon_logo";
                     too:hasTitle        "coolneon logo";
                     too:hasNodeIcon     "coolneon";
@@ -58,7 +58,7 @@ and was inspired by [[wikipedia:Mudra|mudra]].
 """.
 
 
-_:social_revolution_logo a              too:treeNode;
+toi:social_revolution_logo a              too:treeNode;
                     too:hasName         "social_revolution_logo";
                     too:hasTitle        "{{nowrap:social revolution logo}}";
                     too:hasNodeIcon     "social-revolution";
@@ -72,7 +72,7 @@ with two wheels up front and one in the back for steering.
 """.
 
 
-_:xuggle_logo       a                   too:treeNode;
+toi:xuggle_logo       a                   too:treeNode;
                     too:hasName         "xuggle_logo";
                     too:hasTitle        "xuggle logo";
                     too:hasNodeIcon     "xuggle-logo";

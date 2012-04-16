@@ -10,10 +10,10 @@ toi:luminaries      a                   too:treeNode;
                     too:hasName         "luminaries";
                     too:hasTitle        "the luminaries";
                     too:hasNodeIcon     "spotlight";
-                    too:hasNodeChild     _:norman;
-                    too:hasNodeChild     _:dawkins;
-                    too:hasNodeChild     _:pinker;
-                    too:hasNodeChild     _:tufte;
+                    too:hasNodeChild     toi:norman;
+                    too:hasNodeChild     toi:dawkins;
+                    too:hasNodeChild     toi:pinker;
+                    too:hasNodeChild     toi:tufte;
                     too:hasNodeSummary
 """
 these are some of the people who have not only informed my thinking on one particular 
@@ -23,7 +23,7 @@ our understanding of how the world works.  it can be easy to forget that their w
 was once novel or controversial.
 """.
 
-_:norman				    a                   too:treeNode;
+toi:norman				    a                   too:treeNode;
                     too:hasName         "norman";
                     too:hasNodeIcon     "norman";
                     too:hasTitle        "[http://www.jnd.org/ donald norman]";
@@ -40,7 +40,7 @@ in a more recent
 he underscores the utility of beauty, and importance of factoring emotion into design.
 """.
 
-_:dawkins				    a                   too:treeNode;
+toi:dawkins				    a                   too:treeNode;
                     too:hasName         "dawkins";
                     too:hasNodeIcon     "dawkins";
                     too:hasTitle        "[http://richarddawkins.net/ richard dawkins]";
@@ -58,7 +58,7 @@ and proponent of
 he speaks clearly against magical thinking in all forms.
 """.
 
-_:pinker				    a                   too:treeNode;
+toi:pinker				    a                   too:treeNode;
                     too:hasName         "pinker";
                     too:hasNodeIcon     "pinker";
                     too:hasTitle         "[http://stevenpinker.com/biocv steven pinker]";
@@ -79,7 +79,7 @@ which, despite its gruesome descriptions of violence present and past,
 leaves me optimistic about the future.
 """.
 
-_:tufte				    	a                   too:treeNode;
+toi:tufte				    	a                   too:treeNode;
                     too:hasName         "tufte";
                     too:hasNodeIcon     "tufte";
                     too:hasTitle         "[http://www.edwardtufte.com/tufte/ edward tufte]";

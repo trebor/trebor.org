@@ -67,7 +67,6 @@ public class RdfNames
   
   public static final String META_NODE         = TOO + "metaNode";
   public static final String HAS_NODE          = TOO + "hasNode";
-  public static final String HAS_META_DATA     = TOO + "hasMetaData";
   public static final String HAS_CREATED_DATE  = TOO + "hasCreatedDate";
   public static final String HAS_UPDATED_DATE  = TOO + "hasUpdatedDate";
   public static final String HAS_HIT_COUNT     = TOO + "hasHitCount";

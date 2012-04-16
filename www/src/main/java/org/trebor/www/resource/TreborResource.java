@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 import org.openrdf.query.MalformedQueryException;
@@ -79,6 +80,15 @@ public class TreborResource
   {
     log.debug(String.format("%s requested %s%s", remoteAddress(hsr), test ? "test " : "", name));
     return Response.ok(mTreborService.getQuakeData(name, test)).build();
+  }
+  
+  @GET
+//  @Produces(MediaType.TEXT_PLAIN)
+  @Path("hit/{nodeName}")
+  public Response hit(@Context HttpServletRequest hsr,  @PathParam("nodeName") String nodeName)
+  {
+    boolean registerHit = mTreborService.registerHit(nodeName);
+    return Response.status(registerHit ? Status.OK : Status.BAD_REQUEST).build();
   }
   
   private static String remoteAddress(HttpServletRequest hsr)

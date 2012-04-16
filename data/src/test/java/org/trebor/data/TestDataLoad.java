@@ -18,7 +18,7 @@ import org.trebor.util.rdf.RdfUtil;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.trebor.data.Updater.*;
+import static org.trebor.data.Install.TREBOR_CONTENT_DIR;
 import static org.trebor.www.RdfNames.*;
 
 public class TestDataLoad
@@ -28,7 +28,7 @@ public class TestDataLoad
   {
     RepositoryConnection connection = MockRepositoryFactory.getMockRepository().getConnection();
     URI contentContext = connection.getValueFactory().createURI(CONTENT_CONTEXT);
-    RdfUtil.loadAll(connection, Util.findResourceFile(TREBOR_CONENT_DIR), contentContext, RDFFormat.TURTLE);
+    RdfUtil.loadAll(connection, Util.findResourceFile(TREBOR_CONTENT_DIR), contentContext, RDFFormat.TURTLE);
     
     RepositoryResult<Statement> statements = connection.getStatements(null, null, null, true);
     int count = 0;

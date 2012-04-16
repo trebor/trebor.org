@@ -10,10 +10,10 @@ toi:work            a                   too:treeNode;
                     too:hasName         "work";
                     too:hasTitle        "professional work";
                     too:hasNodeIcon     "anvil";
-                    too:hasNodeChild     _:early_years;
+                    too:hasNodeChild     toi:early_years;
                   	too:hasNodeChild     toi:nasa;
-                    too:hasNodeChild     _:xuggle;
-                    too:hasNodeChild     _:connectsolutions;
+                    too:hasNodeChild     toi:xuggle;
+                    too:hasNodeChild     toi:connectsolutions;
                     too:hasNodeSummary
 
 """
@@ -22,13 +22,13 @@ i am a software engineer by profession.  my
 or you can explore further here.
 """.
 
-_:early_years       a                   too:treeNode;
+toi:early_years       a                   too:treeNode;
                     too:hasName         "early_years";
                     too:hasTitle        "the early years";
                     too:hasNodeIcon     "baby";
-                    too:hasNodeChild     _:cybermation;
-                    too:hasNodeChild     _:workframe;
-                    too:hasNodeChild     _:netsource;
+                    too:hasNodeChild     toi:cybermation;
+                    too:hasNodeChild     toi:workframe;
+                    too:hasNodeChild     toi:netsource;
                     too:hasNodeSummary
 
 """
@@ -39,7 +39,7 @@ expand here to see some of my earlier work experiences.
 """.
 
 
-_:cybermation       a                   too:treeNode;
+toi:cybermation       a                   too:treeNode;
                     too:hasName         "cybermation";
                     too:hasTitle        "cybermation, inc.";
                     too:hasNodeIcon     "cybermation";
@@ -56,7 +56,7 @@ and drive hardware to render those signs in paper, vinyl, plastic and steel.
 """.
 
 
-_:workframe         a                   too:treeNode;
+toi:workframe         a                   too:treeNode;
                     too:hasName         "workframe";
                     too:hasTitle        "workframe, inc.";
                     too:hasNodeIcon     "workframe";
@@ -78,7 +78,7 @@ e-mail system.
 }}
 """.
 
-_:netsource         a                   too:treeNode;
+toi:netsource         a                   too:treeNode;
                     too:hasName         "netsource";
                     too:hasTitle        "netsource, inc.";
                     too:hasNodeIcon     "netsource";
@@ -92,7 +92,7 @@ i developed real-time, fault tolerant telephony systems for international
 }}
 """.
 
-_:xuggle            a                   too:treeNode;
+toi:xuggle            a                   too:treeNode;
                     too:hasName         "xuggle";
                     too:hasTitle        "[http://xuggle.com/ xuggle, inc.]";
                     too:hasNodeIcon     "xuggle-logo";
@@ -115,7 +115,7 @@ xuggle was acquired by [[connectsolutions|connectsolutions]] in march of 2010.
 }}
 """.
 
-_:connectsolutions  a                   too:treeNode;
+toi:connectsolutions  a                   too:treeNode;
                     too:hasName         "connectsolutions";
                     too:hasTitle        "[http://connectsolutions.com/ connectsolutions, inc.]";
                     too:hasNodeIcon     "connectsolutions";

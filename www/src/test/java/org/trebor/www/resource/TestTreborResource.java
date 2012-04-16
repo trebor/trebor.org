@@ -3,11 +3,11 @@ package org.trebor.www.resource;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.trebor.www.dto.MenuTreeNode;
 import org.trebor.www.dto.RdfValue;
 
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 
@@ -22,7 +22,6 @@ public class TestTreborResource extends JerseyTest
   }
 
   @Test
-  @Ignore
   public void testMenuTree()
   {
     String[][] dataSet =
@@ -67,16 +66,6 @@ public class TestTreborResource extends JerseyTest
       log.debug("query start. ");
       long start = System.currentTimeMillis();
       RdfValue node = webResource.path("/rdf").queryParam("q", "toi:" + data[0]).get(RdfValue.class);
-//      assertEquals(data[0] + " inbound count", data[1], node.getInbound().size());
-//      assertEquals(data[0] + " outbound count", data[2], node.getOutbound().size());
-//      log.debug("result: " + node.getNode().getShortName());
-//      log.debug("  in: ");
-//      for (RdfValue predicate: node.getInbound().keySet())
-//        log.debug("    " + predicate.getShortName() + " - " + node.getInbound().get(predicate).getShortName());
-//      log.debug("  out: ");
-//      for (RdfValue predicate: node.getOutbound().keySet())
-//        log.debug("    " + predicate.getShortName() + " - " + node.getOutbound().get(predicate).getShortName());
-        
       assertEquals("toi:" + data[0], node.getShortName());
       log.debug("full query took: " + (System.currentTimeMillis() - start));
     }
@@ -89,5 +78,22 @@ public class TestTreborResource extends JerseyTest
     assertEquals(185, quakeData1.length());
     String quakeData2 = resource().path("/quake").queryParam("name", "data2.txt").queryParam("test", "true").get(String.class);
     assertEquals(312, quakeData2.length());
+  }
+  
+  @Test(expected=UniformInterfaceException.class)
+  public void testHitCounterWrongNode()
+  {
+    resource().path("/hit/notanode").get(String.class);
+  }
+  
+  @Test()
+  public void testHitCounter()
+  {
+    MenuTreeNode home1 = resource().path("/menu/home").get(MenuTreeNode.class);
+    assertEquals(0, home1.getHitCount());
+    resource().path("/hit/home").get(String.class);
+    resource().path("/hit/home").get(String.class);
+    MenuTreeNode home2 = resource().path("/menu/home").get(MenuTreeNode.class);
+    assertEquals(2, home2.getHitCount());
   }
 }

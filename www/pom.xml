@@ -223,6 +223,11 @@
       <artifactId>rdf-util</artifactId>
       <version>1.0</version>
     </dependency>
+    <dependency>
+      <groupId>trebor.org</groupId>
+      <artifactId>trebor.org-data</artifactId>
+      <version>1.0</version>
+    </dependency>
   </dependencies>
 
   <build>

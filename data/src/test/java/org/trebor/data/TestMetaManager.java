@@ -2,7 +2,7 @@ package org.trebor.data;
 
 import static org.junit.Assert.*;
 import static org.trebor.www.RdfNames.*;
-import static org.trebor.data.Updater.TREBOR_CONENT_DIR;
+import static org.trebor.data.Install.TREBOR_CONTENT_DIR;
 
 import java.io.IOException;
 import java.util.Date;
@@ -44,7 +44,7 @@ public class TestMetaManager
     mVf = mConnection.getValueFactory();
     assertEquals(0, mConnection.size());
     URI contentContext = mConnection.getValueFactory().createURI(CONTENT_CONTEXT);
-    RdfUtil.loadAll(mConnection, Util.findResourceFile(TREBOR_CONENT_DIR), contentContext, RDFFormat.TURTLE);
+    RdfUtil.loadAll(mConnection, Util.findResourceFile(TREBOR_CONTENT_DIR), contentContext, RDFFormat.TURTLE);
     assertEquals(253, mConnection.size());
     mMeta = new MetaManager(mConnection, CONTENT_CONTEXT, META_CONTEXT);
   }
@@ -79,6 +79,7 @@ public class TestMetaManager
   {
     Date created = new Date();
     MetaData md = mMeta.establishMetaInstance("home", created);
+    assertNotNull(md);
     
     testContext(META_CONTEXT, 5, false);
     testContext(CONTENT_CONTEXT, 253, false);

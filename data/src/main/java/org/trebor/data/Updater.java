@@ -32,8 +32,6 @@ public class Updater
 {
   private static Logger log = Logger.getLogger(Updater.class);
   
-  public static final String TREBOR_CONENT_DIR = "/rdf/data";
-
   // predicates which do NOT indicate that node content has changes
   
   @SuppressWarnings("serial")
@@ -47,40 +45,6 @@ public class Updater
   private RepositoryConnection mConnection;
   private URI mContentContext;
   private MetaManager mMetaManager;
-
-  public static void main(String[] args)
-  {
-    if (args.length < 2)
-    {
-      log.error("Expected <Host> <Repository-Name> arguments");
-      System.exit(1);
-    }
-    
-    String host = args[0];
-    String repoName = args[1];
-    
-    
-    try
-    {
-      Updater updater =
-        new Updater(RdfUtil.establishRepositoryConnection(host, repoName),
-          CONTENT_CONTEXT, META_CONTEXT);
-      
-      updater.update(Util.findResourceFile(TREBOR_CONENT_DIR), RDFFormat.TURTLE);
-    }
-    catch (RepositoryException e)
-    {
-      log.error(String.format("Unable to connect to host %s, reposiotry %s", host, repoName), e);
-    }
-    catch (RepositoryConfigException e)
-    {
-      log.error(String.format("Unable to configure host %s, reposiotry %s", host, repoName), e);
-    }
-    catch (Exception e)
-    {
-      log.error(String.format("Unable to update host %s, reposiotry %s", host, repoName), e);
-    }
-  }
 
   public Updater(RepositoryConnection connection, String contentContext, String metaContext) throws RepositoryException, RepositoryConfigException
   {

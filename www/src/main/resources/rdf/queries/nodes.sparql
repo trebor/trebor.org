@@ -12,12 +12,11 @@ SELECT
   ?image
   ?summary
   ?imageDescription
+  ?hits
+  ?created
+  ?updated
 WHERE
 {
-  # establish the name of the target node
-
-  bind("%s" as ?targetName)
-
   # establish the target node and all it's children
   # using property paths
 
@@ -30,6 +29,12 @@ WHERE
         too:hasTitle        ?title;
         too:hasNodeIcon     ?icon;
         too:hasNodeSummary  ?summary.
+
+  ?meta a                   too:metaNode;
+        too:hasNode         ?node;
+        too:hasHitCount     ?hits;
+        too:hasCreatedDate  ?created;
+        too:hasUpdatedDate  ?updated.
 
   # non-root nodes have parents
 

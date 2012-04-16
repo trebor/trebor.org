@@ -13,7 +13,7 @@ public class Install
 {
   private static Logger log = Logger.getLogger(Install.class);
   
-  public static final String TREBOR_CONENT_DIR = "/rdf/data";
+  public static final String TREBOR_CONTENT_DIR = "/rdf/data";
 
   public static void main(String[] args)
   {
@@ -32,7 +32,7 @@ public class Install
         new Updater(RdfUtil.establishRepositoryConnection(host, repoName),
           CONTENT_CONTEXT, META_CONTEXT);
       
-      updater.update(Util.findResourceFile(TREBOR_CONENT_DIR), RDFFormat.TURTLE);
+      updater.update(Util.findResourceFile(TREBOR_CONTENT_DIR), RDFFormat.TURTLE);
     }
     catch (RepositoryException e)
     {
@@ -47,5 +47,4 @@ public class Install
       log.error(String.format("Unable to update host %s, reposiotry %s", host, repoName), e);
     }
   }
-
 }

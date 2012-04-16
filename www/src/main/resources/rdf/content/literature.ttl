@@ -9,12 +9,12 @@
 toi:literature      a                   too:treeNode;
                     too:hasName         "literature";
                     too:hasTitle        "the literature";
-                    too:hasNodeChild     _:elementsofstyle;
-                    too:hasNodeChild     _:crowdsandpower;
-                   	too:hasNodeChild     _:understandingcomics;
+                    too:hasNodeChild     toi:elementsofstyle;
+                    too:hasNodeChild     toi:crowdsandpower;
+                   	too:hasNodeChild     toi:understandingcomics;
 
-#                    too:hasNodeChild     _:recursiveuniverse;
-#                    too:hasNodeChild     _:everydaythings;
+#                    too:hasNodeChild     toi:recursiveuniverse;
+#                    too:hasNodeChild     toi:everydaythings;
 
                     too:hasNodeIcon     "book";
                     too:hasNodeSummary
@@ -23,7 +23,7 @@ toi:literature      a                   too:treeNode;
 these are some of the books that have had a lasting effect on how i think about the world.
 """.
 
-_:everydaythings    a                   too:treeNode;
+toi:everydaythings  a                   too:treeNode;
                     too:hasName         "everydaythings";
                     too:hasTitle        "[[wikipedia:The_Design_of_Everyday_Things|the design of everyday things]]";
                     too:hasNodeIcon     "everydaythings";
@@ -34,7 +34,7 @@ _:everydaythings    a                   too:treeNode;
 lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 """.
 
-_:elementsofstyle   a                   too:treeNode;
+toi:elementsofstyle   a                 too:treeNode;
                     too:hasName         "elementsofstyle";
                     too:hasTitle        "[[wikipedia:The_elements_of_style|the elements of style]]";
                     too:hasNodeIcon     "elementsofstyle";
@@ -49,7 +49,7 @@ bad sentences into good.
 has become a core part of my aesthetic.
 """.
 
-_:crowdsandpower    a                   too:treeNode;
+toi:crowdsandpower    a                 too:treeNode;
                     too:hasName         "crowdsandpower";
                     too:hasTitle        "[[wikipedia:Crowds_and_Power|crowds and power]]";
                     too:hasNodeIcon     "crowdsandpower";
@@ -63,7 +63,7 @@ systems and how they relate to crowds.  he details the spiraling negative effect
 absolute power on the minds of [[wikipedia:Despotism|despots]].
 """.
 
-_:understandingcomics a                 too:treeNode;
+toi:understandingcomics a               too:treeNode;
                     too:hasName         "understandingcomics";
                     too:hasTitle        "[[wikipedia:Understanding_Comics|understanding comics]]";
                     too:hasNodeIcon     "understandingcomics";

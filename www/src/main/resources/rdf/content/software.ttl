@@ -10,13 +10,13 @@ toi:software        a                   too:treeNode;
                     too:hasName         "software";
                     too:hasTitle        "software projects";
                     too:hasNodeIcon     "disk";
-                    too:hasNodeChild     _:sarynpaint;
-                    too:hasNodeChild     _:freesand;
-                    too:hasNodeChild     _:swarm;
-                    too:hasNodeChild     _:splink;
-                    too:hasNodeChild     _:trebor_org;
-                    too:hasNodeChild     _:fukushima;
-                    too:hasNodeChild     _:earthquake;
+                    too:hasNodeChild     toi:sarynpaint;
+                    too:hasNodeChild     toi:freesand;
+                    too:hasNodeChild     toi:swarm;
+                    too:hasNodeChild     toi:splink;
+                    too:hasNodeChild     toi:trebor_org;
+                    too:hasNodeChild     toi:fukushima;
+                    too:hasNodeChild     toi:earthquake;
                     too:hasNodeSummary
 
 """
@@ -24,7 +24,7 @@ the following are some of the software projects i've worked on for fun over the 
 most of these projects are released under one open source license or another.
 """.
 
-_:fukushima         a                   too:treeNode;
+toi:fukushima         a                   too:treeNode;
                     too:hasName         "fukushima";
                     too:hasTitle        "[[static:fukushima.html|fukushima&nbsp;radiation&nbsp;map]]";
                     too:hasNodeIcon     "fukushima";
@@ -44,7 +44,7 @@ i animated the resulting 100 thousand or so data points onto
 [http://github.com/gka/chroma.js/wiki/Chroma.js chroma.js] for color.
 """.
                     
-_:earthquake        a                   too:treeNode;
+toi:earthquake        a                   too:treeNode;
                     too:hasName         "earthquake";
                     too:hasTitle        "[[static:earthquake.html|live&nbsp;earthquake&nbsp;map]]";
                     too:hasNodeIcon     "quake";
@@ -62,7 +62,7 @@ by it's magnitude.  hour, day, and week time scales can be chosen, and a subset 
 earthquakes can be selected for viewing.
 """.
 
-_:splink            a                   too:treeNode;
+toi:splink            a                   too:treeNode;
                     too:hasName         "splink";
                     too:hasTitle        "[https://github.com/treboresque/Splink/wiki splink]";
                     too:hasNodeIcon     "splink";
@@ -94,7 +94,7 @@ libraries to communicate with repositories.
 """.
 
 
-_:sarynpaint        a                   too:treeNode;
+toi:sarynpaint        a                   too:treeNode;
                     too:hasName         "sarynpaint";
                     too:hasTitle        "[http://code.google.com/p/sarynpaint/ saryn paint]";
                     too:hasNodeIcon     "sarynpaint";
@@ -113,7 +113,7 @@ later she recorded the audio cues used in the program.
 """.
 
 
-_:freesand          a                   too:treeNode;
+toi:freesand          a                   too:treeNode;
                     too:hasName         "freesand";
                     too:hasTitle        "[http://code.google.com/p/freesand/ freesand]";
                     too:hasNodeIcon     "freesand";
@@ -131,7 +131,7 @@ for any os.  be careful, it can be a bit of a time sink.
 
 
 
-_:swarm             a                   too:treeNode;
+toi:swarm             a                   too:treeNode;
                     too:hasName         "swarm";
                     too:hasTitle        "[http://orbswarm.com/ orb swarm]";
                     too:hasNodeIcon     "swarm";
@@ -155,13 +155,13 @@ which i hope to re-purpose to other projects.
 """.
 
 
-_:trebor_org        a                   too:treeNode;
+toi:trebor_org        a                   too:treeNode;
                     too:hasName         "trebor";
                     too:hasTitle        "the trebor.org site";
                     too:hasNodeIcon     "horse";
-                    too:hasNodeChild     _:head;
-                    too:hasNodeChild     _:body;
-                    too:hasNodeChild     _:tail;
+                    too:hasNodeChild     toi:head;
+                    too:hasNodeChild     toi:body;
+                    too:hasNodeChild     toi:tail;
                     too:hasNodeSummary
 
 """
@@ -175,7 +175,7 @@ the front and back end and permits flexibility in both the form of stored data,
 and the presentation of that data.
 """.
 
-_:head              a                   too:treeNode;
+toi:head              a                   too:treeNode;
                     too:hasName         "trebor_ui";
                     too:hasTitle        "the front end";
                     too:hasNodeIcon     "horse-head";
@@ -192,7 +192,7 @@ this approach permits page elements to be styled with traditional
 [[wikipedia:CSS|css]].
 """.
 
-_:body              a                   too:treeNode;
+toi:body              a                   too:treeNode;
                     too:hasName         "trebor_service";
                     too:hasTitle        "the service";
                     too:hasNodeIcon     "horse-body";
@@ -223,7 +223,7 @@ by
 [http://code.google.com/p/gwtwiki/ gwtwiki].
 """.
 
-_:tail              a                   too:treeNode;
+toi:tail              a                   too:treeNode;
                     too:hasName         "trebor_store";
                     too:hasTitle        "the back end";
                     too:hasNodeIcon     "horse-ass";

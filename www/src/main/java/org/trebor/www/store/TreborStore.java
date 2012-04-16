@@ -1,8 +1,12 @@
 package org.trebor.www.store;
 
+import static org.trebor.www.RdfNames.CONTENT_CONTEXT;
+import static org.trebor.www.RdfNames.META_CONTEXT;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +14,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.openrdf.model.Literal;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.query.Binding;
@@ -20,6 +25,8 @@ import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
+import org.trebor.data.MetaManager;
 import org.trebor.util.rdf.ResourceManager;
 import org.trebor.www.dto.ForceNetwork;
 import org.trebor.www.dto.ForceNetwork.Node;
@@ -39,6 +46,10 @@ public class TreborStore
   @InjectParam
   private TreborRepository mRepository;
 
+  // manager of meta data
+
+  private MetaManager mMetaManager;
+  
   // the queries used here
   
   private String     mNodesQuery;
@@ -48,11 +59,12 @@ public class TreborStore
   
   @PostConstruct
   @SuppressWarnings("unused")
-  void initialize() throws IOException, RepositoryException 
+  void initialize() throws IOException, RepositoryException, RepositoryConfigException 
   {
     mNodesQuery = Util.readResourceAsString("/rdf/queries/nodes.sparql");
     mDescribeQuery = Util.readResourceAsString("/rdf/queries/describe.sparql");
     mRm = new ResourceManager(mRepository.getConnection());
+    mMetaManager = new MetaManager(mRepository.getConnection(), CONTENT_CONTEXT, META_CONTEXT);
   }
 
   public MenuTreeNode getTreeNode(String nodeName) throws RepositoryException, MalformedQueryException, QueryEvaluationException
@@ -63,8 +75,8 @@ public class TreborStore
     
     // query for nodes
     
-    String queryString = String.format(mNodesQuery, nodeName);
-    TupleQuery query = mRepository.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+    TupleQuery query = mRepository.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, mNodesQuery);
+    query.setBinding("targetName", mRepository.getConnection().getValueFactory().createLiteral(nodeName));
     TupleQueryResult results = query.evaluate();
     
     // extract nodes
@@ -85,6 +97,10 @@ public class TreborStore
       node.setTitle(result.getBinding("title").getValue().stringValue());
       node.setSummary(result.getBinding("summary").getValue().stringValue());
       node.setIconName(result.getBinding("icon").getValue().stringValue());
+      log.debug("hits: " + result.getBinding("hits"));
+      node.setHitCount(((Literal)result.getBinding("hits").getValue()).integerValue().intValue());
+      node.setCreated(((Literal)result.getBinding("created").getValue()).calendarValue().toGregorianCalendar().getTime());
+      node.setUpdated(((Literal)result.getBinding("updated").getValue()).calendarValue().toGregorianCalendar().getTime());
     
       // optional image field
 
@@ -210,10 +226,14 @@ public class TreborStore
 
       // add them to this node
       
-      
       node.add(new RdfValue(subject, mRm), new RdfValue(predicate, mRm), new RdfValue(object, mRm));
     }
     
     return node;
+  }
+  
+  public boolean registerHit(String nodeName)
+  {
+    return null != mMetaManager.registerHit(nodeName, new Date());
   }
 }

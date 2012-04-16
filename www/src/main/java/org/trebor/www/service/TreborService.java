@@ -32,11 +32,12 @@ public class TreborService
 
   @InjectParam
   private static TreborStore mStore;
-
+  
   public MenuTreeNode getMenuNode(String name) throws RepositoryException, MalformedQueryException, QueryEvaluationException
   {
     MenuTreeNode node = mStore.getTreeNode(name);
-    renderMarkup(node);
+    if (null != node)
+      renderMarkup(node);
     return node;
   }
 
@@ -74,5 +75,10 @@ public class TreborService
     OutputStream output = new ByteArrayOutputStream();
     IOUtils.copy(conn.getInputStream(), output);
     return output.toString();
+  }
+
+  public boolean registerHit(String nodeName)
+  {
+    return mStore.registerHit(nodeName);
   }
 }

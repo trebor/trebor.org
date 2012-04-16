@@ -3,7 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>trebor.org</groupId>
   <artifactId>trebor.org-data</artifactId>
-  <version>1-SNAPSHOT</version>
+  <version>1.0</version>
+  <packaging>jar</packaging>
 
   <!-- build properties -->
 
@@ -171,6 +172,11 @@
       <groupId>trebor.org</groupId>
       <artifactId>trebor.org-commons</artifactId>
       <version>1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>trebor.org</groupId>
+      <artifactId>trebor.org-data</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
   

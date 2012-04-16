@@ -10,9 +10,9 @@ toi:nasa            a                   too:treeNode;
                     too:hasName         "nasa";
                     too:hasTitle        "[http://www.nasa.gov/centers/ames nasa ames]";
                     too:hasNodeIcon     "nasa-color";
-                    too:hasNodeChild     _:coglab;
-                    too:hasNodeChild     _:apex;
-                  	too:hasNodeChild     _:plexil;
+                    too:hasNodeChild     toi:coglab;
+                    too:hasNodeChild     toi:apex;
+                  	too:hasNodeChild     toi:plexil;
                     too:hasNodeSummary
 
 """
@@ -27,7 +27,7 @@ expand this node to see details about my work at ames.
 |c++,java,lisp,pascal}}
 """.
 
-_:coglab            a                   too:treeNode;
+toi:coglab            a                   too:treeNode;
                     too:hasName         "coglab";
                     too:hasTitle        "[http://human-factors.arc.nasa.gov/ihi/cognition/ cognition lab]";
                     too:hasNodeIcon     "hsi";
@@ -47,7 +47,7 @@ applications.
 }}
 """.
 
-_:apex              a                   too:treeNode;
+toi:apex              a                   too:treeNode;
                     too:hasName         "apex";
                     too:hasTitle        "[http://www.ai.sri.com/project/APEX apex]";
                     too:hasNodeIcon     "apex";
@@ -69,7 +69,7 @@ and [[youtube:c3PGbWWHwVw|video]].
 |lisp, java}}
 """.
 
-_:plexil            a                   too:treeNode;
+toi:plexil            a                   too:treeNode;
                     too:hasName         "plexil";
                     too:hasTitle        "[[wikipedia:PLEXIL|plexil]]";
                     too:hasNodeIcon     "plexil";
