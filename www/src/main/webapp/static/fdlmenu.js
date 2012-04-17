@@ -258,7 +258,7 @@ function nodeHtml(node)
   var up    = htmlA({}, "up", fdlBase + parentName);
   var title = node.title ? "<big>" + node.title + "</big>" : "";
   var summary = node.summary ? node.summary : "";
-  var footer = htmlP({id: "updated"}, node.hitCount + " " + typeof(node.updated));
+  var footer = htmlP({id: "updated"}, node.hitCount + " " + new Date(parseInt(node.updated)));
   var menu  = 
     htmlP({id: "nodeMenu"},
           (root.name != "home"                     ? home  : "") +
@@ -295,6 +295,10 @@ function mouseoverNode(node, index)
 {
   var targetClass = $(d3.event.target).attr("class");
 
+  // register that this node has been seen
+
+  registerHit(node);
+
   // make visible the summary and node icon
 
   vis
@@ -311,7 +315,7 @@ function mouseoverNode(node, index)
     .attr("y", assignSummaryPositionY)
     .attr("height", getTextHeight);
 
-  // found out the other nodes and edges
+  // fade out the other nodes and edges
 
   fadeToOpacity(node, ".nodeIcon", nodeIconFadeTo);
   fadeToOpacity(node, ".link", linkFadeTo);
@@ -555,6 +559,21 @@ function expandChildren(node)
 {
   node.children = node._children;
   node._children = null;
+}
+
+// register that a node has been hit
+
+function registerHit(node)
+{
+  if (node.hit == undefined)
+  {
+    $.get("/hit/" + node.name, {},
+          function(count)
+          {
+            node.hitCount = count;
+          });
+    node.hit = true;
+  }
 }
 
 // toggle children open or closed

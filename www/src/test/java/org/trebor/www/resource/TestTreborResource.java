@@ -89,11 +89,9 @@ public class TestTreborResource extends JerseyTest
   @Test()
   public void testHitCounter()
   {
-    MenuTreeNode home1 = resource().path("/menu/home").get(MenuTreeNode.class);
-    assertEquals(0, home1.getHitCount());
-    resource().path("/hit/home").get(String.class);
-    resource().path("/hit/home").get(String.class);
-    MenuTreeNode home2 = resource().path("/menu/home").get(MenuTreeNode.class);
-    assertEquals(2, home2.getHitCount());
+    assertEquals(0, resource().path("/menu/home").get(MenuTreeNode.class).getHitCount());
+    assertEquals("1", resource().path("/hit/home").get(String.class));
+    assertEquals("2", resource().path("/hit/home").get(String.class));
+    assertEquals(2, resource().path("/menu/home").get(MenuTreeNode.class).getHitCount());
   }
 }

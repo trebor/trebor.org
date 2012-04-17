@@ -77,7 +77,7 @@ public class TreborService
     return output.toString();
   }
 
-  public boolean registerHit(String nodeName)
+  public int registerHit(String nodeName)
   {
     return mStore.registerHit(nodeName);
   }

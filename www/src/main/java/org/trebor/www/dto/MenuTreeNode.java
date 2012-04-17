@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.log4j.Logger;
 
@@ -47,14 +48,12 @@ public class MenuTreeNode
 
   @XmlElement(name="hitCount")
   private int mHitCount;
-  
-  @XmlElement(name="created")
+
+  @XmlTransient
   private Date mCreated;
   
-  @XmlElement(name="updated")
+  @XmlTransient
   private Date mUpdated;
-  
-  private List<MenuTreeNode> mChild;
   
   public MenuTreeNode()
   {
@@ -82,7 +81,6 @@ public class MenuTreeNode
     return mName;
   }
   
-//  @instancePrivate
   public List<MenuTreeNode> getChildren()
   {
     return mChildren == null ? Collections.<MenuTreeNode>emptyList() : mChildren;
@@ -177,6 +175,13 @@ public class MenuTreeNode
   {
     mHitCount = hitCount;
   }
+  
+  @XmlElement(name="created")
+  public long getCreatedXml()
+  {
+    return mCreated.getTime();
+  }
+
   public Date getCreated()
   {
     return mCreated;
@@ -185,6 +190,13 @@ public class MenuTreeNode
   {
     mCreated = created;
   }
+  
+  @XmlElement(name="updated")
+  public long getUpdatedXml()
+  {
+    return mUpdated.getTime();
+  }
+  
   public Date getUpdated()
   {
     return mUpdated;

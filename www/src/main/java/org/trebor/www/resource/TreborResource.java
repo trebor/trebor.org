@@ -83,12 +83,12 @@ public class TreborResource
   }
   
   @GET
-//  @Produces(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.TEXT_PLAIN)
   @Path("hit/{nodeName}")
   public Response hit(@Context HttpServletRequest hsr,  @PathParam("nodeName") String nodeName)
   {
-    boolean registerHit = mTreborService.registerHit(nodeName);
-    return Response.status(registerHit ? Status.OK : Status.BAD_REQUEST).build();
+    Integer count = mTreborService.registerHit(nodeName);
+    return (count != -1 ? Response.ok(count.toString()) : Response.status(Status.BAD_REQUEST)).build();
   }
   
   private static String remoteAddress(HttpServletRequest hsr)

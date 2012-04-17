@@ -26,6 +26,7 @@ import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.config.RepositoryConfigException;
+import org.trebor.data.MetaData;
 import org.trebor.data.MetaManager;
 import org.trebor.util.rdf.ResourceManager;
 import org.trebor.www.dto.ForceNetwork;
@@ -232,8 +233,9 @@ public class TreborStore
     return node;
   }
   
-  public boolean registerHit(String nodeName)
+  public int registerHit(String nodeName)
   {
-    return null != mMetaManager.registerHit(nodeName, new Date());
+    MetaData meta = mMetaManager.registerHit(nodeName, new Date());
+    return null != meta ? meta.getHitCount() : -1;
   }
 }
