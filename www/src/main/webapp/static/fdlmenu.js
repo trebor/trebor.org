@@ -252,26 +252,27 @@ function assignSummaryPositionY(d)
 function nodeHtml(node)
 {
   var parentName = node.parentName;
-  var home  = "<a href=\"" + fdlBase + "home\">home</a>";
-  var focus = "<a href=\"" + fdlBase + node.name + "\">focus</a>";
-  var site  = "<a href=\"" + mapBase + "home\">site-map</a>";
-  var up    = "<a href=\"" + fdlBase + parentName + "\">up</a>";
+  var home  = htmlA({}, "home", fdlBase + "home");
+  var focus = htmlA({}, "focus", fdlBase + node.name);
+  var site  = htmlA({}, "site-map", mapBase + "home");
+  var up    = htmlA({}, "up", fdlBase + parentName);
   var title = node.title ? "<big>" + node.title + "</big>" : "";
   var summary = node.summary ? node.summary : "";
+  var footer = htmlP({id: "updated"}, node.hitCount + " " + typeof(node.updated));
   var menu  = 
-    "<p class=\"nodeMenu\" align=\"right\">" +
-    (root.name != "home"                     ? home  : "") +
-    (node.name == root.name && parentName    ? up    : "") +
-    (node.name != root.name                  ? focus : "") +
-    (true                                    ? site  : "") +
-    "</p>";
-  var table = 
-    "<table class=\"summaryBanner\">" +
-    "<tr><td>" + title + "</td><td> " +  menu + "</td></tr>" +
-    "<tr><td colspan=\"2\">" + summary + "</td></tr>" +
-   "</table>";
+    htmlP({id: "nodeMenu"},
+          (root.name != "home"                     ? home  : "") +
+          (node.name == root.name && parentName    ? up    : "") +
+          (node.name != root.name                  ? focus : "") +
+          (true                                    ? site  : ""));
 
-  return table;
+  var result = 
+    table({class: "summaryBanner"},
+          tRow({}, tCell({}, title) + tCell({}, menu)) +
+          tRow({}, tCell({colspan: "2"}, summary)) +
+          tRow({}, tCell({colspan: "2"}, footer)));
+
+  return result;
 }
 
 function mouseoverActionIcon(icon)

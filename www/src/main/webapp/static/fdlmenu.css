@@ -11,7 +11,8 @@
 
 p
 {
-  margin: .8em 0em .8em 0em;
+  margin: .2em;
+  margin: .6em 0em .6em 0em;
   padding: 0;
 }
 
@@ -29,7 +30,19 @@ td
   padding: 0;
 }
 
-.nodeMenu > a
+#updated
+{
+  color: #aaa;
+  text-align: right;
+  font-size: xx-small;
+}
+
+#nodeMenu
+{
+  text-align: right;
+}
+
+#nodeMenu > a
 {
   font-size: smaller;
   padding: 0 .4em 0 .4em;
@@ -39,7 +52,7 @@ td
   margin: 0;
 }
 
-.nodeMenu > a:hover
+#nodeMenu > a:hover
 {
   color: #222;
   background: #AAA;
@@ -51,7 +64,7 @@ td
   cursor: move;
   background: none;
   padding: 0em .8em 0em .8em;
-  margin: 0;
+  margin: 0em;
 }
 
 .summaryTextObject
