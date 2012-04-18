@@ -30,6 +30,13 @@ td
   padding: 0;
 }
 
+#views
+{
+  color: #aaa;
+  text-align: left;
+  font-size: xx-small;
+}
+
 #updated
 {
   color: #aaa;

@@ -4,12 +4,11 @@ var iconType = ".png";
 var iconSize = 20;
 var w = window.innerWidth - 8;
 var h = window.innerHeight - 22;
+var maxWidth = 20;
+var minWidth = 1;
 
 var cluster = d3.layout.cluster()
     .size([h, w - 450]);
-
-var diagonal = d3.svg.diagonal()
-    .projection(function(d) { return [d.y, d.x]; });
 
 var vis = d3.select("#chart")
     .append("svg")
@@ -21,17 +20,49 @@ d3.json(dataSource, function(json)
 {
   var nodes = cluster.nodes(json);
 
-  var link = vis.selectAll("path.link")
+  // establish min and max hit counts
+
+  var minHit = Number.MAX_VALUE;
+  var maxHit = Number.MIN_VALUE;
+  for (var i in nodes)
+  {
+    var node = nodes[i];
+    node.hitCount = parseInt(node.hitCount);
+    minHit = Math.min(node.hitCount, minHit);
+    maxHit = Math.max(node.hitCount, maxHit);
+  }
+
+  // establish scale to map between hit count and width
+
+  var widthScale = d3.scale.linear().domain([minHit, maxHit]).range([minWidth, maxWidth]);
+
+  var diagonal1 = d3.svg.diagonal()
+    .source(function(d) {return {x: d.source.x + widthScale(d.source.hitCount), y: d.source.y};})
+    .target(function(d) {return {x: d.target.x + widthScale(d.target.hitCount), y: d.target.y};})
+    .projection(function(d) { return [d.y, d.x]; });
+
+  var diagonal2 = d3.svg.diagonal()
+    .source(function(d) {return {x: d.target.x - widthScale(d.target.hitCount), y: d.target.y};})
+    .target(function(d) {return {x: d.source.x - widthScale(d.source.hitCount), y: d.source.y};})
+    .projection(function(d) { return [d.y, d.x]; });
+
+  var link = vis.selectAll("path.connect")
     .data(cluster.links(nodes))
-    .enter().append("path")
-    .attr("class", "link")
-    .attr("d", diagonal);
+    .enter();
+
+  link.append("path")
+    .attr("class", "connect")
+    .attr("d", function (d) {return diagonal1(d) + diagonal2(d).replace("M", "L") + "z";});
 
   var node = vis.selectAll("g.node")
     .data(nodes)
     .enter().append("g")
     .attr("class", "node")
     .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+
+  node.append("svg:circle")
+    .attr("class", "connectEnd")
+    .attr("r", function (d) {return widthScale(d.hitCount);});
 
   node.append("svg:image")
     .attr("class", "nodeIcon")
@@ -48,7 +79,7 @@ d3.json(dataSource, function(json)
     .attr("y", "0")
     .attr("width", "20em")
     .attr("height", "1.5em")
-    .attr("x", function(d) { return d.children ? "-21em" : "1em";})
+    .attr("x", function(d) { return d.children ? "-21.3em" : "1em";})
     .attr("y", "-.65em")
     .append("xhtml:body")
     .attr("class", "title")

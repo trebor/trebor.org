@@ -258,7 +258,8 @@ function nodeHtml(node)
   var up    = htmlA({}, "up", fdlBase + parentName);
   var title = node.title ? "<big>" + node.title + "</big>" : "";
   var summary = node.summary ? node.summary : "";
-  var footer = htmlP({id: "updated"}, node.hitCount + " " + new Date(parseInt(node.updated)));
+  var views = htmlP({id: "views"}, node.hitCount + " views");
+  var updated = htmlP({id: "updated"}, new Date(parseInt(node.updated)).toDateString().toLowerCase());
   var menu  = 
     htmlP({id: "nodeMenu"},
           (root.name != "home"                     ? home  : "") +
@@ -270,7 +271,7 @@ function nodeHtml(node)
     table({class: "summaryBanner"},
           tRow({}, tCell({}, title) + tCell({}, menu)) +
           tRow({}, tCell({colspan: "2"}, summary)) +
-          tRow({}, tCell({colspan: "2"}, footer)));
+          tRow({}, tCell({}, views) + tCell({}, updated)));
 
   return result;
 }

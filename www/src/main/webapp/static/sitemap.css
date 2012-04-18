@@ -1,3 +1,15 @@
+.connect
+{
+  fill: #d8d8d8;
+  stroke: white;
+  stroke-width: 0.4;
+}
+
+.connectEnd
+{
+  fill: #d8d8d8;
+}
+
 .title
 {
   margin: 0;
