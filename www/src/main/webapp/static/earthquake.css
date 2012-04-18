@@ -300,7 +300,7 @@ table, tr, td, span
 {
   text-decoration: underline;
   cursor: pointer;
-  color: #aaa;
+  color: #666;
 }
 
 .spanSelector:hover
@@ -317,9 +317,11 @@ table, tr, td, span
 {
 /*   background: orange; */
   height: 100%;
-  font-size: 12px;
+  font-size: 10px;
+  font-weight: normal;
   text-align: center;
   color: #aaa;
+  padding-top: 15px;
   vertical-align: bottom;
 }
 

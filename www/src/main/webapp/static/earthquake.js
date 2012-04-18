@@ -1082,7 +1082,8 @@ function keyHeaderHtml()
                                 tCell({id: "updateLabel", title: reloadPeriod}, "Updated") + 
                                 tCell({id: "updateTime", title: "click to poll for fresh data"}, 
                                       span({onclick: "updateData()"}, TIME_FORMAT(lastDataRefreshTime))) + 
-                                tCell({}, selectors))
+                                tCell({}, selectors)) +
+                           tRow({}, tCell({id: "selectHint", colSpan: 3}, "drag to select"))
                           )
                     )
               )
