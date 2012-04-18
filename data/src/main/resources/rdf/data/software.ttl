@@ -10,13 +10,13 @@ toi:software        a                   too:treeNode;
                     too:hasName         "software";
                     too:hasTitle        "software projects";
                     too:hasNodeIcon     "disk";
-                    too:hasNodeChild     toi:sarynpaint;
-                    too:hasNodeChild     toi:freesand;
-                    too:hasNodeChild     toi:swarm;
-                    too:hasNodeChild     toi:splink;
                     too:hasNodeChild     toi:trebor_org;
-                    too:hasNodeChild     toi:fukushima;
                     too:hasNodeChild     toi:earthquake;
+                    too:hasNodeChild     toi:fukushima;
+                    too:hasNodeChild     toi:splink;
+                    too:hasNodeChild     toi:freesand;
+                    too:hasNodeChild     toi:sarynpaint;
+                    too:hasNodeChild     toi:swarm;
                     too:hasNodeSummary
 
 """
@@ -46,7 +46,7 @@ i animated the resulting 100 thousand or so data points onto
                     
 toi:earthquake        a                   too:treeNode;
                     too:hasName         "earthquake";
-                    too:hasTitle        "[[static:earthquake.html|live&nbsp;earthquake&nbsp;map]]";
+                    too:hasTitle        "[[static:earthquake.html|live&nbsp;earthquakes]]";
                     too:hasNodeIcon     "quake";
                     too:hasNodeSummary
 """
