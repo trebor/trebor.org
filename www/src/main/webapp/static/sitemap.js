@@ -24,12 +24,23 @@ d3.json(dataSource, function(json)
 
   var minHit = Number.MAX_VALUE;
   var maxHit = Number.MIN_VALUE;
+  var totHit = 0;
   for (var i in nodes)
   {
     var node = nodes[i];
     node.hitCount = parseInt(node.hitCount);
+    totHit += node.hitCount;
     minHit = Math.min(node.hitCount, minHit);
     maxHit = Math.max(node.hitCount, maxHit);
+  }
+
+  // compute traffic proportion by node
+
+  for (var i in nodes)
+  {
+    var node = nodes[i];
+    node.trafficProportion = Math.round(100 * node.hitCount / totHit) / 100;
+    node.trafficPercent = Math.floor(node.trafficProportion * 100);
   }
 
   // establish scale to map between hit count and width
@@ -58,6 +69,8 @@ d3.json(dataSource, function(json)
     .data(nodes)
     .enter().append("g")
     .attr("class", "node")
+    .on("mouseover", mouseoverIcon)
+    .on("mouseout", mouseoutIcon)
     .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
 
   node.append("svg:circle")
@@ -86,11 +99,51 @@ d3.json(dataSource, function(json)
     .attr("align", function (d) {return d.children ? "right" : "left";})
     .style("text-align", function (d) {return d.children ? "right" : "left";})
     .html(nodeName);
+
+  node.append("foreignObject")
+    .attr("class", "trafficObject")
+    .attr("x", "0")
+    .attr("y", "0")
+    .attr("width", "8em")
+    .attr("height", "1.5em")
+    .attr("opacity", 0)
+    .attr("x", function(d) { return !d.children ? "-9.3em" : "1em";})
+    .attr("y", "-.65em")
+    .append("xhtml:body")
+    .attr("class", "traffic")
+    .attr("align", function (d) {return !d.children ? "right" : "left";})
+    .style("text-align", function (d) {return !d.children ? "right" : "left";})
+    .html(nodeTraffic);
 });
+
+function mouseoverIcon(node)
+{
+  console.log("over");
+  d3.selectAll(".trafficObject")
+    .filter(function (d) {return d == node;})
+    .transition()
+    .attr("opacity", 1);
+}
+
+function mouseoutIcon(node)
+{
+  d3.selectAll(".trafficObject")
+    .filter(function (d) {return d == node;})
+    .transition()
+    .attr("opacity", 0);
+
+}
+
 
 function nodeName(node)
 {
   return "<a href=\"" + getNodeUrl(node) + "\">" + strip(node.title) + "</a>";
+}
+
+function nodeTraffic(node)
+{
+  var viewTag = node.hitCount == 1 ? " view " : " views ";
+  return node.hitCount + viewTag + node.trafficPercent + "%";
 }
 
 function getNodeUrl(node)
