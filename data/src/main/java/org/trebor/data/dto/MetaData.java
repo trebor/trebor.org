@@ -1,21 +1,18 @@
-package org.trebor.data;
+package org.trebor.data.dto;
 
-import static org.trebor.www.RdfNames.*;
-
+import static org.trebor.commons.RdfNames.*;
+import static org.trebor.util.rdf.RdfUtil.dateToXmlGregorianCalendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.openrdf.annotations.Iri;
-//import org.openrdf.annotations.Sparql;
 
 @Iri(META_NODE)
 public class MetaData
 {
+  @SuppressWarnings("unused")
   private static Logger log = Logger.getLogger(MetaData.class);
 
   @Iri(HAS_HIT_COUNT)
@@ -29,8 +26,8 @@ public class MetaData
   
   public MetaData(Node node, Date created)
   {
-    mCreated = convertDateTogXmlGregorianCalendar(created);
-    mUpdated = convertDateTogXmlGregorianCalendar(created);
+    mCreated = dateToXmlGregorianCalendar(created);
+    mUpdated = dateToXmlGregorianCalendar(created);
     mHitCount = 0;
     mNode = node;
   }
@@ -63,7 +60,7 @@ public class MetaData
   }
   public void setUpdated(Date updated)
   {
-    mUpdated = convertDateTogXmlGregorianCalendar(updated);
+    mUpdated = dateToXmlGregorianCalendar(updated);
   }
   
   public Node getNode()
@@ -75,20 +72,4 @@ public class MetaData
   {
     mNode = node;
   }
-  
-  private static XMLGregorianCalendar convertDateTogXmlGregorianCalendar(Date date)
-  {
-    try
-    {
-      GregorianCalendar gc = new GregorianCalendar();
-      gc.setTime(date);
-      return DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
-    }
-    catch (DatatypeConfigurationException e)
-    {
-      log.error("date/calendar problem", e);
-    }
-    
-    return null;
-  }
-}
+}  

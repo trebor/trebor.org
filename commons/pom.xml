@@ -3,11 +3,18 @@
   <groupId>trebor.org</groupId>
   <artifactId>trebor.org-commons</artifactId>
   <version>1-SNAPSHOT</version>
+
+  <properties>
+    <jersey.version>1.9</jersey.version>
+  </properties>
+
   <dependencies>
+
     <dependency>
       <groupId>trebor.org</groupId>
       <artifactId>rdf-util</artifactId>
       <version>1.0</version>
     </dependency>
+    
   </dependencies>
 </project>

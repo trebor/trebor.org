@@ -1,2 +1,3 @@
-org.trebor.data.MetaData
-org.trebor.data.Node
+org.trebor.data.dto.LogEvent
+org.trebor.data.dto.MetaData
+org.trebor.data.dto.Node

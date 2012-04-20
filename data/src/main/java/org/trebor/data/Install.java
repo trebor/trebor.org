@@ -1,12 +1,13 @@
 package org.trebor.data;
 
-import static org.trebor.www.RdfNames.CONTENT_CONTEXT;
-import static org.trebor.www.RdfNames.META_CONTEXT;
+import static org.trebor.commons.RdfNames.CONTENT_CONTEXT;
+import static org.trebor.commons.RdfNames.META_CONTEXT;
 
 import org.apache.log4j.Logger;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.config.RepositoryConfigException;
 import org.openrdf.rio.RDFFormat;
+import org.trebor.commons.Util;
 import org.trebor.util.rdf.RdfUtil;
 
 public class Install

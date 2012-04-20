@@ -1,9 +1,7 @@
 package org.trebor.data;
 
-import static org.trebor.www.RdfNames.*;
+import static org.trebor.commons.RdfNames.*;
 import static org.junit.Assert.*;
-import static org.trebor.www.RdfNames.CONTENT_CONTEXT;
-import static org.trebor.www.RdfNames.META_CONTEXT;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +22,7 @@ import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.config.RepositoryConfigException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.trebor.commons.Util;
 import org.trebor.util.rdf.MockRepositoryFactory;
 import org.trebor.util.rdf.RdfUtil;
 

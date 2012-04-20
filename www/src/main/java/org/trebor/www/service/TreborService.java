@@ -6,6 +6,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.log4j.Logger;
 import org.openrdf.query.MalformedQueryException;
@@ -16,7 +19,9 @@ import org.trebor.www.dto.MenuTreeNode;
 import org.trebor.www.dto.RdfValue;
 import org.trebor.www.store.TreborStore;
 import org.trebor.www.util.MarkupRenderer;
-import org.trebor.www.util.Util;
+import org.trebor.commons.Util;
+import org.trebor.data.LogManager;
+import org.trebor.data.dto.LogEvent;
 
 import com.sun.jersey.api.core.InjectParam;
 import com.sun.jersey.spi.resource.Singleton;
@@ -80,5 +85,10 @@ public class TreborService
   public int registerHit(String nodeName)
   {
     return mStore.registerHit(nodeName);
+  }
+  
+  public LogEvent log(HttpServletRequest hsr) throws RepositoryException
+  {
+    return mStore.log(hsr);
   }
 }

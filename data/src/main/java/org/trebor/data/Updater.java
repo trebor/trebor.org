@@ -1,6 +1,6 @@
 package org.trebor.data;
 
-import static org.trebor.www.RdfNames.*;
+import static org.trebor.commons.RdfNames.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +24,9 @@ import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.config.RepositoryConfigException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.trebor.commons.RdfNames;
 import org.trebor.util.rdf.MockRepositoryFactory;
 import org.trebor.util.rdf.RdfUtil;
-import org.trebor.www.RdfNames;
 
 public class Updater
 {

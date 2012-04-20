@@ -1,6 +1,6 @@
 package org.trebor.data;
 
-import static org.trebor.www.RdfNames.*;
+import static org.trebor.commons.RdfNames.*;
 
 import java.util.Date;
 
@@ -14,6 +14,8 @@ import org.openrdf.repository.object.ObjectConnection;
 import org.openrdf.repository.object.ObjectQuery;
 import org.openrdf.repository.object.config.ObjectRepositoryFactory;
 import org.openrdf.result.NoResultException;
+import org.trebor.data.dto.MetaData;
+import org.trebor.data.dto.Node;
 
 public class MetaManager
 {

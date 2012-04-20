@@ -1,8 +1,8 @@
 package org.trebor.www.store;
 
+import static org.trebor.commons.RdfNames.CONTENT_CONTEXT;
+import static org.trebor.commons.RdfNames.META_CONTEXT;
 import static org.trebor.www.util.TreborConfiguration.*;
-import static org.trebor.www.RdfNames.CONTENT_CONTEXT;
-import static org.trebor.www.RdfNames.META_CONTEXT;
 
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ import org.openrdf.rio.RDFParseException;
 import org.trebor.data.Updater;
 import org.trebor.util.rdf.MockRepositoryFactory;
 import org.trebor.www.util.TreborConfiguration;
-import org.trebor.www.util.Util;
+import org.trebor.commons.Util;
 
 import com.sun.jersey.api.core.InjectParam;
 import com.sun.jersey.spi.resource.Singleton;

@@ -1,4 +1,4 @@
-package org.trebor.www.util;
+package org.trebor.commons;
 
 import java.io.BufferedInputStream;
 import java.io.File;

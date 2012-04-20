@@ -7,6 +7,7 @@ import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
+import org.trebor.commons.Util;
 
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -16,8 +17,7 @@ public class TreborConfiguration extends CompositeConfiguration
   @SuppressWarnings("unused")
   private static final Logger log = Logger.getLogger(TreborConfiguration.class);
 
-  private static final String EXTERNAL_PROPERTIES = "/opt/trebor.org/trebor.properties";
-  private static final String INTERNAL_PROPERTIES = "/trebor.properties";
+ // known configuration names
   
   public static final String RDF_REMOTE = "rdf.remote";
   public static final String RDF_REPOSITORY = "rdf.repository";
@@ -25,7 +25,8 @@ public class TreborConfiguration extends CompositeConfiguration
   public static final String RDF_PORT = "rdf.port";
   public static final String RDF_DATAFILES = "rdf.datafiles";
   
-  public static final String DEFAULT_DATA_FILES = "/rdf/ontology/www.ttl, /rdf/ontology/trebor.ttl, /rdf/data/home.ttl, /rdf/data/influences.ttl, /rdf/data/luminaries.ttl, /rdf/data/literature.ttl, /rdf/data/peers.ttl, /rdf/data/graphics.ttl, /rdf/data/software.ttl, /rdf/data/work.ttl, /rdf/data/nasa.ttl";
+  private static final String EXTERNAL_PROPERTIES = "/opt/trebor.org/trebor.properties";
+  private static final String INTERNAL_PROPERTIES = "/trebor.properties";
   
   public TreborConfiguration() throws ConfigurationException
   {
@@ -35,8 +36,7 @@ public class TreborConfiguration extends CompositeConfiguration
     setProperty(RDF_HOST, "localhost");
     setProperty(RDF_PORT, 8080);
     setProperty(RDF_REPOSITORY, "trebor.org");
-    setProperty(RDF_DATAFILES, DEFAULT_DATA_FILES);
-
+    
     // if external properties exist, add them in
     
     appendProperties(INTERNAL_PROPERTIES);

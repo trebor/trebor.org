@@ -13,13 +13,14 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.trebor.commons.Util;
 import org.trebor.util.rdf.MockRepositoryFactory;
 import org.trebor.util.rdf.RdfUtil;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.trebor.commons.RdfNames.*;
 import static org.trebor.data.Install.TREBOR_CONTENT_DIR;
-import static org.trebor.www.RdfNames.*;
 
 public class TestDataLoad
 {

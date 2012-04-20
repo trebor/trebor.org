@@ -1,7 +1,8 @@
 package org.trebor.www.store;
 
-import static org.trebor.www.RdfNames.CONTENT_CONTEXT;
-import static org.trebor.www.RdfNames.META_CONTEXT;
+import static org.trebor.commons.RdfNames.CONTENT_CONTEXT;
+import static org.trebor.commons.RdfNames.META_CONTEXT;
+import static org.trebor.commons.RdfNames.LOG_CONTEXT;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.openrdf.model.Literal;
@@ -26,15 +28,18 @@ import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.config.RepositoryConfigException;
-import org.trebor.data.MetaData;
+import org.trebor.data.LogManager;
 import org.trebor.data.MetaManager;
+import org.trebor.data.dto.LogEvent;
+import org.trebor.data.dto.MetaData;
 import org.trebor.util.rdf.ResourceManager;
 import org.trebor.www.dto.ForceNetwork;
 import org.trebor.www.dto.ForceNetwork.Node;
 import org.trebor.www.dto.MenuTreeNode;
 import org.trebor.www.dto.RdfValue;
-import org.trebor.www.util.Util;
+import org.trebor.commons.Util;
 
+import com.maxmind.geoip.LookupService;
 import com.sun.jersey.api.core.InjectParam;
 import com.sun.jersey.spi.resource.Singleton;
 
@@ -51,13 +56,17 @@ public class TreborStore
 
   private MetaManager mMetaManager;
   
+  // manager of event logging
+
+  private LogManager mLogManager;
+
   // the queries used here
   
   private String     mNodesQuery;
   private String     mDescribeQuery;
 
   private ResourceManager mRm;
-  
+
   @PostConstruct
   @SuppressWarnings("unused")
   void initialize() throws IOException, RepositoryException, RepositoryConfigException 
@@ -66,6 +75,9 @@ public class TreborStore
     mDescribeQuery = Util.readResourceAsString("/rdf/queries/describe.sparql");
     mRm = new ResourceManager(mRepository.getConnection());
     mMetaManager = new MetaManager(mRepository.getConnection(), CONTENT_CONTEXT, META_CONTEXT);
+    LookupService geoLookup = new LookupService("/usr/share/GeoIP/GeoLiteCity.dat",
+      LookupService.GEOIP_MEMORY_CACHE );
+    mLogManager = new LogManager(mRepository.getConnection(), LOG_CONTEXT, geoLookup);
   }
 
   public MenuTreeNode getTreeNode(String nodeName) throws RepositoryException, MalformedQueryException, QueryEvaluationException
@@ -98,7 +110,6 @@ public class TreborStore
       node.setTitle(result.getBinding("title").getValue().stringValue());
       node.setSummary(result.getBinding("summary").getValue().stringValue());
       node.setIconName(result.getBinding("icon").getValue().stringValue());
-      log.debug("hits: " + result.getBinding("hits"));
       node.setHitCount(((Literal)result.getBinding("hits").getValue()).integerValue().intValue());
       node.setCreated(((Literal)result.getBinding("created").getValue()).calendarValue().toGregorianCalendar().getTime());
       node.setUpdated(((Literal)result.getBinding("updated").getValue()).calendarValue().toGregorianCalendar().getTime());
@@ -191,10 +202,6 @@ public class TreborStore
 
  public TupleQueryResult describe(String longUri) throws RepositoryException, MalformedQueryException, QueryEvaluationException
  {
-   log.debug("quering for: " + longUri);
-   
-   // query for nodes
-   
    String queryString = String.format(mDescribeQuery, "<" + longUri + ">");
    TupleQuery query = mRepository.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, queryString);
    return query.evaluate();
@@ -237,5 +244,10 @@ public class TreborStore
   {
     MetaData meta = mMetaManager.registerHit(nodeName, new Date());
     return null != meta ? meta.getHitCount() : -1;
+  }
+  
+  public LogEvent log(HttpServletRequest hsr) throws RepositoryException
+  {
+    return mLogManager.log(hsr);
   }
 }

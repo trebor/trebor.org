@@ -1,7 +1,7 @@
 package org.trebor.data;
 
 import static org.junit.Assert.*;
-import static org.trebor.www.RdfNames.*;
+import static org.trebor.commons.RdfNames.*;
 import static org.trebor.data.Install.TREBOR_CONTENT_DIR;
 
 import java.io.IOException;
@@ -23,6 +23,9 @@ import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.config.RepositoryConfigException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.trebor.commons.Util;
+import org.trebor.data.dto.MetaData;
+import org.trebor.data.dto.Node;
 import org.trebor.util.rdf.MockRepositoryFactory;
 import org.trebor.util.rdf.RdfUtil;
 
@@ -35,7 +38,7 @@ public class TestMetaManager
   private RepositoryConnection mConnection;
   private MetaManager mMeta;
   private ValueFactory mVf;
-  
+
   @Before
   public void init() throws RepositoryException, RepositoryConfigException, RDFParseException, MalformedQueryException, QueryEvaluationException, IOException
   {
