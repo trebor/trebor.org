@@ -30,6 +30,8 @@ public class LogEvent
   private String mLanguage;    
   @Iri(HAS_REFERRER)
   private String mReferrer;
+  @Iri(HAS_BROWSER)
+  private String mBrowser;
   
   // from geographic lookup
   
@@ -60,8 +62,12 @@ public class LogEvent
     mRemoteHost = hsr.getRemoteHost();
     mLanguage = hsr.getLocale().getDisplayLanguage();
     mReferrer = hsr.getHeader("referer");     
+    mBrowser = hsr.getHeader("User-Agent");
     mTime = RdfUtil.millisecondsToXmlGregorianCalendar(hsr.getSession()
       .getLastAccessedTime());
+    
+    // location details
+    
     Location location = geoLookup.getLocation(mRemoteHost);
     if (null != location)
     {
@@ -161,6 +167,16 @@ public class LogEvent
     mReferrer = referrer;
   }
 
+  public String getBrowser()
+  {
+    return mBrowser;
+  }
+
+  public void setBrowser(String browser)
+  {
+    mBrowser = browser;
+  }
+
   public float getLatiutde()
   {
     return mLatiutde;
@@ -246,8 +262,8 @@ public class LogEvent
     return "LogEvent [mRequestUrl=" + mRequestUrl + ", mRequestQuery=" +
       mRequestQuery + ", mRemoteIp=" + mRemoteIp + ", mRemoteHost=" +
       mRemoteHost + ", mTime=" + mTime + ", mLanguage=" + mLanguage +
-      ", mReferrer=" + mReferrer + ", mLatiutde=" + mLatiutde +
-      ", mLongitude=" + mLongitude + ", mMetoCode=" + mMetoCode +
+      ", mReferrer=" + mReferrer + ", mBrowser=" + mBrowser + ", mLatiutde=" +
+      mLatiutde + ", mLongitude=" + mLongitude + ", mMetoCode=" + mMetoCode +
       ", mAreaCode=" + mAreaCode + ", mCity=" + mCity + ", mCountryCode=" +
       mCountryCode + ", mCountry=" + mCountry + ", mRegion=" + mRegion + "]";
   }

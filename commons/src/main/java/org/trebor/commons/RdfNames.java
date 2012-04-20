@@ -81,6 +81,7 @@ public class RdfNames
   public static final String HAS_EVENT_TIME   = TOO + "hasEventTime";
   public static final String HAS_LANGUAGE     = TOO + "hasLanguage";
   public static final String HAS_REFERRER     = TOO + "hasReferrer";
+  public static final String HAS_BROWSER      = TOO + "hasBrowser";
   public static final String HAS_LATITUDE     = TOO + "hasLatitude";
   public static final String HAS_LONGITUDE    = TOO + "hasLongitude";
   public static final String HAS_METRO_CODE   = TOO + "hasMetroCode";
