@@ -12,7 +12,7 @@ toi:software        a                   too:treeNode;
                     too:hasNodeIcon     "disk";
                     too:hasNodeChild     toi:trebor_org;
                     too:hasNodeChild     toi:earthquake;
-                    too:hasNodeChild     toi:fukushima;
+#                    too:hasNodeChild     toi:fukushima;
                     too:hasNodeChild     toi:splink;
                     too:hasNodeChild     toi:freesand;
                     too:hasNodeChild     toi:sarynpaint;

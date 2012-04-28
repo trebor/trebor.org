@@ -33,6 +33,8 @@ import static org.trebor.util.rdf.RdfUtil.*;
 
 public class TestMetaManager
 {
+  private static final int CONTENT_COUNT = 252;
+
   private static Logger log = Logger.getLogger(TestMetaManager.class);
   
   private RepositoryConnection mConnection;
@@ -48,7 +50,7 @@ public class TestMetaManager
     assertEquals(0, mConnection.size());
     URI contentContext = mConnection.getValueFactory().createURI(CONTENT_CONTEXT);
     RdfUtil.loadAll(mConnection, Util.findResourceFile(TREBOR_CONTENT_DIR), contentContext, RDFFormat.TURTLE);
-    assertEquals(253, mConnection.size());
+    assertEquals(CONTENT_COUNT, mConnection.size());
     mMeta = new MetaManager(mConnection, CONTENT_CONTEXT, META_CONTEXT);
   }
 
@@ -65,7 +67,7 @@ public class TestMetaManager
     MetaData md = mMeta.createMetaInstance("home", new Date());
     
     testContext(META_CONTEXT, 5, false);
-    testContext(CONTENT_CONTEXT, 253, false);
+    testContext(CONTENT_CONTEXT, CONTENT_COUNT, false);
     
     assertEquals(0, md.getHitCount());
     assertTrue(ask(mConnection, "ASK {?meta too:hasHitCount \"0\"^^xsd:int.}"));
@@ -74,7 +76,7 @@ public class TestMetaManager
     assertTrue(ask(mConnection, "ASK {?meta too:hasHitCount \"0\"^^xsd:int.}"));
     
     testContext(META_CONTEXT, 5, true);
-    testContext(CONTENT_CONTEXT, 253, false);
+    testContext(CONTENT_CONTEXT, CONTENT_COUNT, false);
   }
   
   @Test
@@ -85,7 +87,7 @@ public class TestMetaManager
     assertNotNull(md);
     
     testContext(META_CONTEXT, 5, false);
-    testContext(CONTENT_CONTEXT, 253, false);
+    testContext(CONTENT_CONTEXT, CONTENT_COUNT, false);
     
     assertEquals(0, md.getHitCount());
     assertTrue(ask(mConnection, "ASK {?meta too:hasHitCount \"0\"^^xsd:int}"));
@@ -98,7 +100,7 @@ public class TestMetaManager
     assertEquals(created, getDate(mConnection, PREFIX + "SELECT ?date WHERE {?meta too:hasUpdatedDate ?date}"));
     
     testContext(META_CONTEXT, 5, true);
-    testContext(CONTENT_CONTEXT, 253, false);
+    testContext(CONTENT_CONTEXT, CONTENT_COUNT, false);
   }
 
   @Test
@@ -122,7 +124,7 @@ public class TestMetaManager
     // confirm counts;
     
     testContext(META_CONTEXT, 5, true);
-    testContext(CONTENT_CONTEXT, 253, false);
+    testContext(CONTENT_CONTEXT, CONTENT_COUNT, false);
   }
   
   

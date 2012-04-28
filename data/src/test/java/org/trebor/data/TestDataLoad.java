@@ -46,6 +46,6 @@ public class TestDataLoad
 
     // there should be some triples in there
     
-    assertTrue(count >= 253);
+    assertTrue(count >= 252);
   }
 }
