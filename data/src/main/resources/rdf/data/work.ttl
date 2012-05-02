@@ -14,6 +14,7 @@ toi:work            a                   too:treeNode;
                   	too:hasNodeChild     toi:nasa;
                     too:hasNodeChild     toi:xuggle;
                     too:hasNodeChild     toi:connectsolutions;
+                    too:hasNodeChild     toi:twitter;
                     too:hasNodeSummary
 
 """
@@ -132,5 +133,18 @@ at connectsolutions i learned about [http://jersey.java.net/ jersey] and the pow
 web services.
 
 |java, tomcat, spring, jersey, goeserver, rdf, fms, jmeter, maven, git
+}}
+""".
+
+toi:twitter         a                   too:treeNode;
+                    too:hasName         "twitter";
+                    too:hasTitle        "[http://twitter.com/ twitter, inc.]";
+                    too:hasNodeIcon     "larry";
+                    too:hasNodeSummary
+
+"""
+{{resume:data visualization scientist|apr '12 - present|
+i have only just begun at twitter, i'm sure i'll have more to say in a bit.
+|java, java-script, hadoop, html5, r
 }}
 """.

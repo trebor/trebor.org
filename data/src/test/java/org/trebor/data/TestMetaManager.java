@@ -33,7 +33,7 @@ import static org.trebor.util.rdf.RdfUtil.*;
 
 public class TestMetaManager
 {
-  private static final int CONTENT_COUNT = 252;
+  private static final int CONTENT_COUNT = 258;
 
   private static Logger log = Logger.getLogger(TestMetaManager.class);
   
