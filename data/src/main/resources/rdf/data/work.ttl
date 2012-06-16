@@ -144,7 +144,8 @@ toi:twitter         a                   too:treeNode;
 
 """
 {{resume:data visualization scientist|apr '12 - present|
-i have only just begun at twitter, i'm sure i'll have more to say in a bit.
+i have only just begun at twitter, and so far i love it.  you can follow me at 
+[https://twitter.com/#!/trebor @trebor], though i don't really tweet that much.
 |java, java-script, hadoop, html5, r
 }}
 """.
