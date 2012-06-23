@@ -236,7 +236,7 @@ in an
 [http://www.openrdf.org/ openrdf]
 [[wikipedia:Sesame_(framework)|sesame]]
 [[wikipedia:Triplestore|triple store]].
-this data can be rendered in an number of ways,
+this data can be rendered in any number of ways,
 for example the [[sitemap:home|site map]]
 is a different view of the exact same data which drives the site.
 
