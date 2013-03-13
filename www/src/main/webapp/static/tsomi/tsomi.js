@@ -28,20 +28,14 @@ var force = d3.layout.force()
   .size([width, height]);
 
 var centerPerson;
-var hoveredPerson;
 
 // fire everything off when the document is ready
 
 $(document).ready(function() {
-  // querySubject(subjects.bacon);
-  // querySubject(subjects.vonnegut);
-  // querySubject(subjects.oats);
-  // querySubject(subjects.obama);
-  // querySubject(subjects.egoldman);
-  querySubject(subjects.sontag);
-  // querySubject(subjects.chomsky);
-  // querySubject(subjects.bohm);
-  // querySubject(subjects.einstein);
+  var subject = subjects.oats;
+  // var subject = subjects.sontag;
+  
+  querySubject("<http://dbpedia.org/resource/" + subject + ">");
 });
 
 function querySubject(subjectId) {
@@ -50,6 +44,8 @@ function querySubject(subjectId) {
     console.log(subjectId + " has nodes ", graph.getNodes().length);
     if (graph.getNodes().length > 0) {
       centerPerson = graph.getNode(subjectId);
+      d3.select("#wikiframe")
+        .attr("src", centerPerson.getProperty("wikiTopic") + "?printable=no");
       console.log("centerPerson", centerPerson.getProperty("name"));
       updateChart(graph);
     }
@@ -120,18 +116,29 @@ function updateChart(graph) {
     .data(renderedNodes, function(d) {return d.id;});
 
   var enterNodes = allNodes.enter();
-
   var exitNodes = allNodes.exit().remove();
+
 
   var nodeGroups = enterNodes
     .append("g")
+    .each(function(d){console.log("enter", d.getProperty("name"));})
     .classed("node", true)
     .on("click", onNodeClick)
     .on("mouseover", onNodeMouseOver)
     .on("mouseout", onNodeMouseOut)
     .call(force.drag);
 
-  nodeGroups
+  allNodes
+    .selectAll(".scale")
+    .each(function(d){console.log("update", d.getProperty("name"));})
+    .attr("transform", function(d) {console.log("!"); return "scale(" + computeNodeScale(d) + ")"});
+
+  var scaleGroups = nodeGroups
+    .append("g")
+    .attr("transform", function(d) {return "scale(" + computeNodeScale(d) + ")"})
+    .classed("scale", true);
+
+  scaleGroups
     .append("rect")
     .classed("backdrop", true)
     .attr("rx", 15)
@@ -141,7 +148,8 @@ function updateChart(graph) {
     .attr("width", 300)
     .attr("height", 300);
 
-  nodeGroups
+
+  scaleGroups
     .append("image")
     .filter(function(d) {return !d.getProperty("hidden")})
     .attr("xlink:href", function(d) {
@@ -170,24 +178,18 @@ function updateChart(graph) {
       return d.images.shift(); 
     })
     .on("error", function(d) {this.setAttribute("href", d.images.shift());})
+    // .on("click", onImageClick)
     .attr("x", -100)
     .attr("y", -100)
     .attr("width", 200)
     .attr("height", 200);
 
-  nodeGroups
+  scaleGroups
     .append("text")
     .attr("y", 100)
     .attr("dy", "1em")
     .attr("text-anchor", "middle")
     .text(function(d) {return d.getProperty("name")});
-
-  nodeGroups
-    .append("text")
-    .attr("y", -100)
-    .attr("dy", "-.5em")
-    .attr("text-anchor", "middle")
-    .text(function(d) {return d.getProperty("occupation")});
 
   force.on("tick", function() {
 
@@ -198,20 +200,36 @@ function updateChart(graph) {
     
     d3.selectAll("g.node")
       .attr("transform", function(d) {
-        var scale = d == centerPerson ? 1 : (d == hoveredPerson ? 0.7 : 0.4);
-        return populate_path("translate(X0, Y0) scale(" + scale + ")", [d])
+        return populate_path("translate(X0, Y0)", [d])
       });
   });
 }
 
+function computeNodeScale(node, isMouseOver) {
+  var scale = 1;
+  if (node.getId() == centerPerson.getId())
+    scale = isMouseOver ? 1.2 : 1.0;
+  else
+    scale = isMouseOver ? 0.7 : 0.4;
+  return scale;
+}
+
+function scaleNode(node, isMouseOver) {
+  var scale = computeNodeScale(node, isMouseOver);
+
+  d3.selectAll("g.scale")
+    .filter(function(d) {return d.getId() == node.getId()})
+    .transition()
+    .attr("transform", function(d) {return "scale(" + scale + ")"});
+}
+
 function onNodeMouseOut(node) {
-  hoveredPerson = undefined;
-  console.log("onNodeMouseOut", node.getProperty("name"));
+//  console.log("mouse out", node.getProperty("name"));
+  scaleNode(node, false);
 }
 
 function onNodeMouseOver(node) {
-  hoveredPerson = node;
-  console.log("onNodeMouseOver", node.getProperty("name"));
+//  console.log("mouse over", node.getProperty("name"));
   nodeGroup
     .selectAll("g.node")
     .sort(function(a, b) {
@@ -227,17 +245,18 @@ function onNodeMouseOver(node) {
       return a.getProperty("name").localeCompare(b.getProperty("name"));
     });
 
-
-    // .each(function(d) {console.log(d.getProperty("name"))})
-    // .order();
-     
-  
-  // console.log(node);
-  // $(node).appendTo();
-
-//  $(node).();
-//  console.log("mouse over", node.getProperty("name"));
+  scaleNode(node, true);
 }
+
+function onImageClick(node) {
+  node.open = !node.open || false;
+  console.log(node.getProperty("name") + " image", node.open);
+  if (node.open) 
+    $("#wikidiv").animate({left: "100px"});
+  else
+    $("#wikidiv").animate({right: "100px"});
+}
+
 
 function onNodeClick(node) {
   querySubject(node.getId());
