@@ -4,6 +4,12 @@ var height = $("#chart").height() - $("#header").height();
 var color = d3.scale.category20();
 var nextMidId = 0;
 
+var CHARGE_HIDDEN = 200;
+var CHARGE_BASE = 800;
+var CHARGE_RANDOM = 250;
+var LINK_BASE = 80;
+var LINK_RANDOM = 150;
+
 // image for unknown person
 
 var UNKNOWN_PERSON = "images/unknown.png";
@@ -23,8 +29,13 @@ var nodeGroup = svg.append("g").classed("nodes", true);
 // create the fdl instance
 
 var force = d3.layout.force()
-  .charge(function(d) {return d.getProperty("hidden") ? -1000 : -1000 })
-  .linkDistance(function(link) {return Math.random() * 0 + 150;})
+  .gravity(0.01)
+  .charge(function(d) {
+    return d.getProperty("hidden") 
+      ? -CHARGE_HIDDEN
+      : -(Math.random() * CHARGE_RANDOM + CHARGE_BASE)})
+  .linkDistance(function(link) {
+    return Math.random() * LINK_RANDOM + LINK_BASE;})
   .size([width, height]);
 
 var centerPerson;
@@ -32,11 +43,25 @@ var centerPerson;
 // fire everything off when the document is ready
 
 $(document).ready(function() {
-  var subject = subjects.oats;
-  // var subject = subjects.sontag;
+  //var subject = subjects.oats;
+  //var subject = subjects.sontag;
+  //var subject = subjects.einstein;
+  var subject = subjects.vonnegut;
   
   querySubject("<http://dbpedia.org/resource/" + subject + ">");
+
+  $('#wikiframe').load(function(uri) {
+    wikichange(uri);
+  });
+
+  // $("#wikiframe").contents().change(url)
+  // });
+  // onLoad="wikichange(this.contentWindow.location)"
 });
+
+function wikichange(url) {
+  console.log("changed!", url);
+}
 
 function querySubject(subjectId) {
   console.log("query for subject", subjectId);
@@ -191,7 +216,11 @@ function updateChart(graph) {
     .attr("text-anchor", "middle")
     .text(function(d) {return d.getProperty("name")});
 
-  force.on("tick", function() {
+  force.on("tick", function(event) {
+
+    var k = .1 * event.alpha;
+    centerPerson.x += (width  / 2 - centerPerson.x) * k;
+    centerPerson.y += (height / 2 - centerPerson.y) * k;
 
     d3.selectAll("path.link").attr("d", function(d) {
 //      return populate_path("M X0 Y0 L X1 Y1", [d.source, d.target]);
