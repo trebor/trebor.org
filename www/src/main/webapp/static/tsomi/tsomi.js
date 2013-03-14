@@ -9,6 +9,8 @@ var CHARGE_BASE = 800;
 var CHARGE_RANDOM = 250;
 var LINK_BASE = 80;
 var LINK_RANDOM = 150;
+var NODE_SIZE = 300;
+var IMAGE_SIZE = 200;
 
 // image for unknown person
 
@@ -168,10 +170,10 @@ function updateChart(graph) {
     .classed("backdrop", true)
     .attr("rx", 15)
     .attr("ry", 15)
-    .attr("x", -150)
-    .attr("y", -150)
-    .attr("width", 300)
-    .attr("height", 300);
+    .attr("x", -NODE_SIZE / 2)
+    .attr("y", -NODE_SIZE / 2)
+    .attr("width", NODE_SIZE)
+    .attr("height", NODE_SIZE);
 
 
   scaleGroups
@@ -204,10 +206,10 @@ function updateChart(graph) {
     })
     .on("error", function(d) {this.setAttribute("href", d.images.shift());})
     // .on("click", onImageClick)
-    .attr("x", -100)
-    .attr("y", -100)
-    .attr("width", 200)
-    .attr("height", 200);
+    .attr("x", -IMAGE_SIZE / 2)
+    .attr("y", -IMAGE_SIZE / 2)
+    .attr("width", IMAGE_SIZE)
+    .attr("height", IMAGE_SIZE);
 
   scaleGroups
     .append("text")
