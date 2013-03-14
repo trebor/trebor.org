@@ -46,14 +46,13 @@ $(document).ready(function() {
   //var subject = subjects.oats;
   //var subject = subjects.sontag;
   //var subject = subjects.einstein;
-  var subject = subjects.vonnegut;
+  //var subject = subjects.vonnegut;
+  var subject = subjects.mock;
   
-  querySubject("<http://dbpedia.org/resource/" + subject + ">");
-
-  $('#wikiframe').load(function(uri) {
-    wikichange(uri);
-  });
-
+  querySubject(lengthen(subject, true));
+  // $('#wikiframe').load(function(uri) {
+  //   wikichange(uri);
+  // });
   // $("#wikiframe").contents().change(url)
   // });
   // onLoad="wikichange(this.contentWindow.location)"

@@ -33,20 +33,21 @@ var predicates = {
 };
 
 var subjects = {
-  bacon:      "Kevin_Bacon",
-  duckworth:  "Eleanor_Duckworth",
-  vonnegut:   "Kurt_Vonnegut",
-  plath:      "Silvia_Plath",
-  egoldman:   "Emma_Goldman",
-  oats:       "Joyce_Carol_Oates",
-  kahlo:      "Frida_Kahlo",
-  bohm:       "David_Bohm",
-  obama:      "Barack_Obama",
-  chomsky:    "Noam_Chomsky",
-  eroosevelt: "Eleanor_Roosevelt(Hato_Rey)",
-  pinker:     "Steven_Pinker",
-  sontag:     "Susan_Sontag",
-  einstein:   "Albert_Einstein",
+  mock:       "dbpedia:Mock_Data",
+  bacon:      "dbpedia:Kevin_Bacon",
+  duckworth:  "dbpedia:Eleanor_Duckworth",
+  vonnegut:   "dbpedia:Kurt_Vonnegut",
+  plath:      "dbpedia:Silvia_Plath",
+  egoldman:   "dbpedia:Emma_Goldman",
+  oats:       "dbpedia:Joyce_Carol_Oates",
+  kahlo:      "dbpedia:Frida_Kahlo",
+  bohm:       "dbpedia:David_Bohm",
+  obama:      "dbpedia:Barack_Obama",
+  chomsky:    "dbpedia:Noam_Chomsky",
+  eroosevelt: "dbpedia:Eleanor_Roosevelt(Hato_Rey)",
+  pinker:     "dbpedia:Steven_Pinker",
+  sontag:     "dbpedia:Susan_Sontag",
+  einstein:   "dbpedia:Albert_Einstein",
 };
 
 var personalDetails = [
@@ -57,6 +58,10 @@ var personalDetails = [
   {name: "dob",        optional: true,  type: "literal"},
   {name: "dod",        optional: true,  type: "literal"},
 ];
+
+var personCache = {};
+
+personCache[lengthen(subjects.mock, true)] = createMockData();
 
 var person_details = ["thumbnail", "depiction", "occupation", "name", "dob", "dod"];
 
@@ -179,6 +184,28 @@ function prefix_uri(prefixies, uri) {
   return result;
 }
 
+function lengthen(uri, bracket) {
+  var result = uri;
+  bracket = bracket || false;
+
+  if (uri.indexOf(':') < 0)
+    return result;
+
+  var symbols = uri.split(':');
+  var prefixName = symbols[0];
+  var id = symbols[1];
+
+  prefixies.some(function(prefix) {
+    if (prefix.prefix == prefixName) {
+      result = prefix.uri + id;
+      if (bracket) result = '<' + result + '>';
+      return true;
+    }
+    return false;
+  });
+  return result;
+}
+
 function shorten(uri) {
   return prefix_uri(prefixies, uri);
 }
@@ -193,15 +220,43 @@ function prefix_table_to_string(prefixies) {
   return result;
 }
 
-var personCache = {};
+function createMockData() {
+
+  var mockData = [
+    {id: lengthen(subjects.mock, true), name: "Mock Data"},
+    {id: lengthen("dbpedia:foo"), name: "Foo Mock"},
+    {id: lengthen("dbpedia:bar"), name: "Bar Mock"},
+  ];
+
+  var mock = mockData[0];
+  var foo = mockData[1];
+  var bar = mockData[2];
+
+  var mockGraph = new TGraph();
+
+  mockGraph.addLink(mock.id, foo.id);
+  mockGraph.addLink(mock.id, bar.id);
+
+  mockGraph.getNodes().forEach(function(node) {
+    mockData.forEach(function(datum) {
+      if (datum.id == node.getId()) {
+        node.setProperty("name", datum.name);
+        node.setProperty("thumbnail", "images/unknown.png");
+      }
+    });
+  });
+
+  return  mockGraph;
+}
 
 function getPerson(id, callback) {
 
   // if the person is in the chache, use that
 
   var personGraph = personCache[id];
-  if (personGraph !== undefined)
+  if (personGraph !== undefined) {
     callback(personGraph);
+  }
 
   // otherwise query for the person and be sure to cache that
 
