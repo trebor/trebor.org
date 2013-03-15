@@ -1,7 +1,7 @@
 html
 {
   position: absolute;
-  font-size: 20px;
+  font-size: 18px;
   font-family: helvetica;
   margin: 0px;
 	padding: 0px;
@@ -95,6 +95,11 @@ div
   stroke: #ccc;
   /* opacity: 0.5; */
   /* stroke: red; */
+}
+
+.name
+{
+  fill: #444;
 }
 
 .node > text

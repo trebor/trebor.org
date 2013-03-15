@@ -208,6 +208,9 @@ function lengthen(uri, bracket) {
 }
 
 function shorten(uri) {
+  var len = uri.length;
+  if (uri[0] == '<' && uri[len - 1] == '>')
+    uri = uri.substring(1, len - 1);
   return prefix_uri(prefixies, uri);
 }
 

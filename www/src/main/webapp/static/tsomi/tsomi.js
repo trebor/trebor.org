@@ -9,14 +9,9 @@ var CHARGE_BASE = 400;
 var CHARGE_RANDOM = 0;
 var LINK_BASE = 30;
 var LINK_RANDOM = 150;
-// var CHARGE_HIDDEN = 200;
-// var CHARGE_BASE = 800;
-// var CHARGE_RANDOM = 0;
-// var LINK_BASE = 40;
-// var LINK_RANDOM = 100;
-var RIM_SIZE = 20;
+var RIM_SIZE = 22;
 var NODE_SIZE = 150;
-var IMAGE_SIZE = 100;
+var IMAGE_SIZE = 108;
 
 // image for unknown person
 
@@ -28,6 +23,17 @@ var svg = d3.select("#chart")
   .append("svg:svg")
   .attr("width", width)
   .attr("height", height);
+
+// create path for names
+
+svg.append("defs")
+  .append("path")
+  .attr("id", "namepath")
+  .attr("d", function() {
+    var r = (NODE_SIZE - RIM_SIZE) / 2;
+    return "M 0 " + (-r) + " a " + r + " " + r + " 0 1 0 0.01 0 Z";
+  });
+
 
 // add groups for links and nodes
 
@@ -51,11 +57,11 @@ var centerPerson;
 // fire everything off when the document is ready
 
 $(document).ready(function() {
-  //var subject = subjects.oats;
+  var subject = subjects.oats;
   //var subject = subjects.sontag;
   //var subject = subjects.einstein;
-  // var subject = subjects.vonnegut;
-   var subject = subjects.kant;
+  //var subject = subjects.vonnegut;
+  //var subject = subjects.kant;
   //var subject = subjects.mock;
   
   querySubject(lengthen(subject, true));
@@ -216,17 +222,21 @@ function updateChart(graph) {
     .attr("y", -IMAGE_SIZE / 2)
     .attr("width", IMAGE_SIZE)
     .attr("height", IMAGE_SIZE);
-
+  
   scaleGroups
     .append("circle")
     .classed("rim", true)
     .attr("r", (NODE_SIZE - RIM_SIZE) / 2)
     .style("stroke-width", RIM_SIZE);
 
+
   scaleGroups
     .append("text")
-    .attr("y", 100)
-    .attr("dy", "1em")
+     .attr("dx", "203")
+     .attr("dy", "0.3em")
+    .append("textPath")
+    .classed("name", true)
+    .attr("xlink:href", "#namepath")
     .attr("text-anchor", "middle")
     .text(function(d) {return d.getProperty("name")});
 
@@ -237,23 +247,23 @@ function updateChart(graph) {
     centerPerson.y += (height / 2 - centerPerson.y) * k;
 
     d3.selectAll("path.link").attr("d", function(d) {
-//      return populate_path("M X0 Y0 L X1 Y1", [d.source, d.target]);
       return populate_path("M X0 Y0 Q X1 Y1 X2 Y2", [d.source, d.mid, d.target]);
     });
     
     var nodes = d3.selectAll("g.node");
+    var margin = NODE_SIZE / 2 / 2;
+    var x1 = margin;
+    var x2 = width - margin;
+    var y1 = margin;
+    var y2 = height - margin;
+    var delta = 1;
 
-      var margin = NODE_SIZE / 2 / 2;
-      var x1 = margin;
-      var x2 = width - margin;;
-      var y1 = margin;
-      var y2 = height - margin;;
 
     nodes.each(function(d) {
-      if (d.x < x1) d.x += 1;
-      if (d.x > x2) d.x -= 1;
-      if (d.y < y1) d.y += 1;
-      if (d.y > y2) d.y -= 1;
+      if (d.x < x1) d.x += delta;
+      if (d.x > x2) d.x -= delta;
+      if (d.y < y1) d.y += delta;
+      if (d.y > y2) d.y -= delta;
     });
 
     // update transoform
