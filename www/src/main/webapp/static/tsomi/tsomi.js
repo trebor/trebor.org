@@ -4,13 +4,19 @@ var height = $("#chart").height() - $("#header").height();
 var color = d3.scale.category20();
 var nextMidId = 0;
 
-var CHARGE_HIDDEN = 200;
-var CHARGE_BASE = 800;
-var CHARGE_RANDOM = 250;
-var LINK_BASE = 80;
+var CHARGE_HIDDEN = 50;
+var CHARGE_BASE = 400;
+var CHARGE_RANDOM = 0;
+var LINK_BASE = 30;
 var LINK_RANDOM = 150;
-var NODE_SIZE = 300;
-var IMAGE_SIZE = 200;
+// var CHARGE_HIDDEN = 200;
+// var CHARGE_BASE = 800;
+// var CHARGE_RANDOM = 0;
+// var LINK_BASE = 40;
+// var LINK_RANDOM = 100;
+var RIM_SIZE = 20;
+var NODE_SIZE = 150;
+var IMAGE_SIZE = 100;
 
 // image for unknown person
 
@@ -48,16 +54,14 @@ $(document).ready(function() {
   //var subject = subjects.oats;
   //var subject = subjects.sontag;
   //var subject = subjects.einstein;
-  //var subject = subjects.vonnegut;
-  var subject = subjects.mock;
+  // var subject = subjects.vonnegut;
+   var subject = subjects.kant;
+  //var subject = subjects.mock;
   
   querySubject(lengthen(subject, true));
   // $('#wikiframe').load(function(uri) {
   //   wikichange(uri);
   // });
-  // $("#wikiframe").contents().change(url)
-  // });
-  // onLoad="wikichange(this.contentWindow.location)"
 });
 
 function wikichange(url) {
@@ -69,11 +73,22 @@ function querySubject(subjectId) {
   getPerson(subjectId, function(graph) {
     console.log(subjectId + " has nodes ", graph.getNodes().length);
     if (graph.getNodes().length > 0) {
+
       centerPerson = graph.getNode(subjectId);
-      d3.select("#wikiframe")
-        .attr("src", centerPerson.getProperty("wikiTopic") + "?printable=no");
       console.log("centerPerson", centerPerson.getProperty("name"));
       updateChart(graph);
+      
+      // set wiki page
+
+      var wiki = d3.select("#wikiframe");
+      wiki.attr("src", centerPerson.getProperty("wikiTopic") + "?printable=yes");
+
+      // wkike font size
+
+      //var iframe = top.frames['iframe'].document;
+      //console.log("iframe", iframe);
+      wiki.selectAll('p').style('font-size','5px');
+
     }
   });
 }
@@ -147,7 +162,6 @@ function updateChart(graph) {
 
   var nodeGroups = enterNodes
     .append("g")
-    .each(function(d){console.log("enter", d.getProperty("name"));})
     .classed("node", true)
     .on("click", onNodeClick)
     .on("mouseover", onNodeMouseOver)
@@ -156,8 +170,7 @@ function updateChart(graph) {
 
   allNodes
     .selectAll(".scale")
-    .each(function(d){console.log("update", d.getProperty("name"));})
-    .attr("transform", function(d) {console.log("!"); return "scale(" + computeNodeScale(d) + ")"});
+    .attr("transform", function(d) {return "scale(" + computeNodeScale(d) + ")"});
 
   var scaleGroups = nodeGroups
     .append("g")
@@ -165,15 +178,9 @@ function updateChart(graph) {
     .classed("scale", true);
 
   scaleGroups
-    .append("rect")
+    .append("circle")
     .classed("backdrop", true)
-    .attr("rx", 15)
-    .attr("ry", 15)
-    .attr("x", -NODE_SIZE / 2)
-    .attr("y", -NODE_SIZE / 2)
-    .attr("width", NODE_SIZE)
-    .attr("height", NODE_SIZE);
-
+    .attr("r", NODE_SIZE / 2);
 
   scaleGroups
     .append("image")
@@ -211,6 +218,12 @@ function updateChart(graph) {
     .attr("height", IMAGE_SIZE);
 
   scaleGroups
+    .append("circle")
+    .classed("rim", true)
+    .attr("r", (NODE_SIZE - RIM_SIZE) / 2)
+    .style("stroke-width", RIM_SIZE);
+
+  scaleGroups
     .append("text")
     .attr("y", 100)
     .attr("dy", "1em")
@@ -228,20 +241,39 @@ function updateChart(graph) {
       return populate_path("M X0 Y0 Q X1 Y1 X2 Y2", [d.source, d.mid, d.target]);
     });
     
-    d3.selectAll("g.node")
-      .attr("transform", function(d) {
+    var nodes = d3.selectAll("g.node");
+
+      var margin = NODE_SIZE / 2 / 2;
+      var x1 = margin;
+      var x2 = width - margin;;
+      var y1 = margin;
+      var y2 = height - margin;;
+
+    nodes.each(function(d) {
+      if (d.x < x1) d.x += 1;
+      if (d.x > x2) d.x -= 1;
+      if (d.y < y1) d.y += 1;
+      if (d.y > y2) d.y -= 1;
+    });
+
+    // update transoform
+    
+    nodes.attr("transform", function(d) {
         return populate_path("translate(X0, Y0)", [d])
-      });
+    });
   });
 }
 
 function computeNodeScale(node, isMouseOver) {
+  isMouseOver = isMouseOver || false;
   var scale = 1;
+
   if (node.getId() == centerPerson.getId())
-    scale = isMouseOver ? 1.2 : 1.0;
+    scale = 1.0;
   else
-    scale = isMouseOver ? 0.7 : 0.4;
-  return scale;
+    scale = 0.5;
+
+  return scale * (isMouseOver ? 2 : 1);
 }
 
 function scaleNode(node, isMouseOver) {
@@ -254,26 +286,23 @@ function scaleNode(node, isMouseOver) {
 }
 
 function onNodeMouseOut(node) {
-//  console.log("mouse out", node.getProperty("name"));
   scaleNode(node, false);
 }
 
 function onNodeMouseOver(node) {
-//  console.log("mouse over", node.getProperty("name"));
-  nodeGroup
-    .selectAll("g.node")
-    .sort(function(a, b) {
 
-      if (a == node) 
-        return 1;
+  // move node to top of the stack
 
-      if (b == node)
-        return -1;
+  $("g.node").each(function(i, e) {
+    if (e.__data__ == node) {
+      $e = $(e);
+      var parent = $e.parent();
+      $e.remove();
+      parent.append($e);
+    }
+  });
 
-      //console.log("foo", a.getId().localeCompare(b.getId()));
-
-      return a.getProperty("name").localeCompare(b.getProperty("name"));
-    });
+  // scale node
 
   scaleNode(node, true);
 }

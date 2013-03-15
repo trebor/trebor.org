@@ -48,6 +48,7 @@ var subjects = {
   pinker:     "dbpedia:Steven_Pinker",
   sontag:     "dbpedia:Susan_Sontag",
   einstein:   "dbpedia:Albert_Einstein",
+  kant:       "dbpedia:Immanuel_Kant",
 };
 
 var personalDetails = [
@@ -224,7 +225,7 @@ function createMockData() {
 
   var mockData = [
     {id: lengthen(subjects.mock, true), name: "Mock Data"},
-    {id: lengthen("dbpedia:foo"), name: "Foo Mock"},
+    {id: lengthen("dbpedia:foo"), name: "Foo Has A Long Mock Name"},
     {id: lengthen("dbpedia:bar"), name: "Bar Mock"},
   ];
 

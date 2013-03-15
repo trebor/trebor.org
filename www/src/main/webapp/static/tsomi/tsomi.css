@@ -88,6 +88,15 @@ div
   stroke: #aaa;
 }
 
+.rim
+{
+  fill: none;
+  stroke-width: 2px;
+  stroke: #ccc;
+  /* opacity: 0.5; */
+  /* stroke: red; */
+}
+
 .node > text
 {
   fill: black;
