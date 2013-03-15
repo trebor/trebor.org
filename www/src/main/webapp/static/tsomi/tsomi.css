@@ -57,6 +57,9 @@ div
 {
 }
 
+.wikibutton {
+  cursor: pointer;
+}
 
 #wikiframe {
   position: absolute;

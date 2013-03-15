@@ -12,10 +12,11 @@ var LINK_RANDOM = 150;
 var RIM_SIZE = 22;
 var NODE_SIZE = 150;
 var IMAGE_SIZE = 108;
-
+var PRINTABLE = true;
 // image for unknown person
 
 var UNKNOWN_PERSON = "images/unknown.png";
+var WIKI_LOGO = "images/50px-Wikipedia_logo_silver.png";
 
 // create the svg instance
 
@@ -86,17 +87,19 @@ function querySubject(subjectId) {
       
       // set wiki page
 
-      var wiki = d3.select("#wikiframe");
-      wiki.attr("src", centerPerson.getProperty("wikiTopic") + "?printable=yes");
-
-      // wkike font size
-
-      //var iframe = top.frames['iframe'].document;
-      //console.log("iframe", iframe);
-      wiki.selectAll('p').style('font-size','5px');
-
+      setWikiPage(centerPerson);
     }
   });
+}
+
+function setWikiPage(node) {
+  var page = node.getProperty("wikiTopic") + (PRINTABLE ? "?printable=yes" : "");
+  var wiki = d3.select("#wikiframe").attr("src", page);
+
+  // wike font size
+  //var iframe = top.frames['iframe'].document;
+  //console.log("iframe", iframe);
+  //wiki.selectAll('p').style('font-size','5px');
 }
 
 function updateChart(graph) {
@@ -222,7 +225,8 @@ function updateChart(graph) {
     .attr("y", -IMAGE_SIZE / 2)
     .attr("width", IMAGE_SIZE)
     .attr("height", IMAGE_SIZE);
-  
+
+
   scaleGroups
     .append("circle")
     .classed("rim", true)
@@ -240,6 +244,16 @@ function updateChart(graph) {
     .attr("text-anchor", "middle")
     .text(function(d) {return d.getProperty("name")});
 
+  scaleGroups
+    .append("image")
+    .classed("wikibutton", true)
+    .attr("xlink:href", WIKI_LOGO)
+    .attr("x", 6)
+    .attr("y", 18)
+    .attr("width", 30)
+    .attr("height", 30)
+    .on("click", onWikipediaClick);
+  
   force.on("tick", function(event) {
 
     var k = .1 * event.alpha;
@@ -324,6 +338,12 @@ function onImageClick(node) {
     $("#wikidiv").animate({left: "100px"});
   else
     $("#wikidiv").animate({right: "100px"});
+}
+
+function onWikipediaClick(node) {
+  var event = d3.event;
+  setWikiPage(node);
+  event.stopPropagation();
 }
 
 

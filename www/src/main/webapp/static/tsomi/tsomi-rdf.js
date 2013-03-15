@@ -64,8 +64,6 @@ var personCache = {};
 
 personCache[lengthen(subjects.mock, true)] = createMockData();
 
-var person_details = ["thumbnail", "depiction", "occupation", "name", "dob", "dod"];
-
 var personDetailsSelect = function() {
   var result = "";
   personalDetails.forEach(function(detail) {
@@ -309,12 +307,7 @@ function queryForInfluencedBy(targetGraph, targetId, callback) {
 
         // add personal details for the other person in this relationship
 
-        var other = targetGraph.getNode(otherId);
-        person_details.forEach(function(detail) {
-          other.setProperty(detail, binding[detail] !== undefined 
-                            ? binding[detail].value 
-                            : undefined);
-        });
+        applyDetails(targetGraph.getNode(otherId), binding);
       });
     }
 
@@ -346,12 +339,7 @@ function queryForInfluenced(targetGraph, targetId, callback) {
 
         // add personal details for the other person in this relationship
 
-        var other = targetGraph.getNode(otherId);
-        person_details.forEach(function(detail) {
-          other.setProperty(detail, binding[detail] !== undefined
-                            ? binding[detail].value 
-                            : undefined);
-        });
+        applyDetails(targetGraph.getNode(otherId), binding);
       });
     }
 
@@ -360,11 +348,10 @@ function queryForInfluenced(targetGraph, targetId, callback) {
 }
 
 function applyDetails(node, binding) {
-  var other = targetGraph.getNode(otherId);
-  person_details.forEach(function(detail) {
-    other.setProperty(detail, binding[detail] !== undefined
-                      ? binding[detail].value 
-                      : undefined);
+  personalDetails.forEach(function(detail) {
+    node.setProperty(detail.name, binding[detail.name] !== undefined
+                     ? binding[detail.name].value 
+                     : undefined);
   });
 }
 
