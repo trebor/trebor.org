@@ -278,6 +278,7 @@ function updateChart(graph) {
   scaleGroups
     .append("image")
     .filter(function(d) {return !d.getProperty("hidden")})
+    .attr("pointer-events", "none")
     .attr("xlink:href", function(d) {
 
       // create the list of all plausible images in preference order
@@ -314,12 +315,14 @@ function updateChart(graph) {
   scaleGroups
     .append("circle")
     .classed("rim", true)
+    .attr("pointer-events", "none")
     .attr("r", (NODE_SIZE - RIM_SIZE) / 2)
     .style("stroke-width", RIM_SIZE);
 
 
   scaleGroups
     .append("text")
+    .attr("pointer-events", "none")
     .attr("dx", BrowserDetect.browser == "Firefox" ? "403" : "203")
     .attr("dy", "0.3em")
     .attr("text-anchor", "middle")
