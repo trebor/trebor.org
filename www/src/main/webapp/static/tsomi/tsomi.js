@@ -6,7 +6,7 @@ var nextMidId = 0;
 
 var HEAD_ANGLE = Math.PI / 6;
 var ARROW_WIDTH = 6;
-
+var WIKI_ICON_WIDTH = 30;
 
 var CHARGE_HIDDEN = 50;
 var CHARGE_BASE = 400;
@@ -17,6 +17,9 @@ var RIM_SIZE = 22;
 var NODE_SIZE = 150;
 var IMAGE_SIZE = 108;
 var PRINTABLE = true;
+var STOCK_EASE = "elastic";
+var DEFAULT_DURATION = 600;
+
 // image for unknown person
 
 var UNKNOWN_PERSON = "images/unknown.png";
@@ -29,15 +32,48 @@ var svg = d3.select("#chart")
   .attr("width", width)
   .attr("height", height);
 
+// create a definitions section
+
+var defs = svg.append("defs");
+
 // create path for names
 
-svg.append("defs")
-  .append("path")
+defs.append("path")
   .attr("id", "namepath")
   .attr("d", function() {
     var r = (NODE_SIZE - RIM_SIZE) / 2;
     return "M 0 " + (-r) + " a " + r + " " + r + " 0 1 0 0.01 0 Z";
   });
+
+// create path for titles
+
+defs.append("path")
+  .attr("id", "titlepath")
+  .attr("d", function() {
+    var inset = 60;
+    var len = 550;
+    var curve = 130;
+    return populate_path(
+      "M X0 Y0 L X1 Y1 A X2 Y2 0 0 1 X3 Y3 L X4 Y4", [
+        {x: inset, y: len},
+        {x: inset, y: inset + curve},
+        {x: curve, y: curve},
+        {x: inset + curve, y: inset},
+        {x: len, y: inset},
+      ]);
+  });
+
+// add title
+
+svg.append("text")
+  .classed("title", true)
+  // .attr("dx", "203")
+  // .attr("dy", "0.3em")
+  .attr("dx", "120")
+  .append("textPath")
+  .attr("xlink:href", "#titlepath")
+  // .attr("text-anchor", "middle")
+  .text("The Sphere of my Influences");
 
 
 // add groups for links and nodes
@@ -48,7 +84,7 @@ var nodeGroup = svg.append("g").classed("nodes", true);
 // create the fdl instance
 
 var force = d3.layout.force()
-  .gravity(0.01)
+  .gravity(0.00)
   .charge(function(d) {
     return d.getProperty("hidden") 
       ? -CHARGE_HIDDEN
@@ -71,8 +107,7 @@ $(document).ready(function() {
   //var subject = subjects.einstein;
   //var subject = subjects.vonnegut;
   //var subject = subjects.kant;
-  //var subject = subjects.mock;
-  
+  var subject = subjects.mock;
   querySubject(lengthen(subject, true));
   // $('#wikiframe').load(function(uri) {
   //   wikichange(uri);
@@ -260,13 +295,21 @@ function updateChart(graph) {
     .text(function(d) {return d.getProperty("name")});
 
   scaleGroups
+    .append("g")
+    .attr("transform", "translate(" + 
+          (WIKI_ICON_WIDTH / 2 + 6) + ", " + 
+          (WIKI_ICON_WIDTH / 2 + 18) + ")")
+
     .append("image")
     .classed("wikibutton", true)
     .attr("xlink:href", WIKI_LOGO)
-    .attr("x", 6)
-    .attr("y", 18)
-    .attr("width", 30)
-    .attr("height", 30)
+    .attr("x", -WIKI_ICON_WIDTH / 2)
+    .attr("y", -WIKI_ICON_WIDTH / 2)
+    .attr("width", WIKI_ICON_WIDTH)
+    .attr("height", WIKI_ICON_WIDTH)
+    .attr("transform", "scale(1)")
+    .on("mouseover", onWikipediaMouseOver)
+    .on("mouseout", onWikipediaMouseOut)
     .on("click", onWikipediaClick);
   
   force.on("tick", function(event) {
@@ -348,6 +391,8 @@ function scaleNode(node, isMouseOver) {
   d3.selectAll("g.scale")
     .filter(function(d) {return d.getId() == node.getId()})
     .transition()
+    .duration(DEFAULT_DURATION)
+    .ease(STOCK_EASE)
     .attr("transform", function(d) {return "scale(" + scale + ")"});
 }
 
@@ -380,6 +425,22 @@ function onImageClick(node) {
     $("#wikidiv").animate({left: "100px"});
   else
     $("#wikidiv").animate({right: "100px"});
+}
+
+function onWikipediaMouseOver(node) {
+  d3.select(d3.event.target)
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .ease(STOCK_EASE)
+    .attr("transform", "scale(1.8)");
+}
+
+function onWikipediaMouseOut(node) {
+  d3.select(d3.event.target)
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .ease(STOCK_EASE)
+    .attr("transform", "scale(1)");
 }
 
 function onWikipediaClick(node) {

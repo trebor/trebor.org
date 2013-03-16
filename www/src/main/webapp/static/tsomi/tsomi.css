@@ -1,8 +1,8 @@
-html
-{
+html {
   position: absolute;
   font-size: 18px;
-  font-family: helvetica;
+  font-family: Impact, Charcoal, sans-serif;
+  /* font-family: helvetica; */
   margin: 0px;
 	padding: 0px;
 	border: 0px;
@@ -10,8 +10,7 @@ html
   height: 100%;
 }
 
-body
-{
+body {
   position: absolute;
   margin: 0px;
 	padding: 0px;
@@ -20,8 +19,7 @@ body
   height: 99.5%;
 }
 
-div
-{
+div {
   margin: 0px;
 	padding: 0px;
 	border: 0px;
@@ -53,8 +51,7 @@ div
 	float: left;
 }
 
-#chart
-{
+#chart {
 }
 
 .wikibutton {
@@ -82,21 +79,24 @@ div
   /* opacity: 0.5; */
 }
 
-.node > circle 
-{
+.node > circle {
   stroke: #fff;
   stroke-width: 1.5px;
 }
 
-.backdrop
-{
+.backdrop {
   fill: #ccc;
   stroke-width: 2px;
   stroke: #aaa;
 }
 
-.rim
-{
+.title {
+  font-family: Impact, Charcoal, sans-serif;
+  fill: #ddd;
+  font-size: 60px;
+}
+
+.rim {
   fill: none;
   stroke-width: 2px;
   stroke: #ccc;
@@ -104,19 +104,16 @@ div
   /* stroke: red; */
 }
 
-.name
-{
+.name {
   fill: #444;
 }
 
-.node > text
-{
+.node > text {
   fill: black;
   text-shadow: 0px 0px 5px #fff;
 }
 
-path.link 
-{
+path.link  {
   opacity: 0.2;
   stroke: #000;
   fill: none;
