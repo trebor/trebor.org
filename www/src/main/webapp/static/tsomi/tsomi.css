@@ -1,7 +1,8 @@
 html {
   position: absolute;
   font-size: 18px;
-  font-family: Impact, Charcoal, sans-serif;
+  font-family: Times New Roman, Times, serif;
+  /* font-family: Impact, Charcoal, sans-serif; */
   /* font-family: helvetica; */
   margin: 0px;
 	padding: 0px;
@@ -92,6 +93,7 @@ div {
 
 .title {
   font-family: Impact, Charcoal, sans-serif;
+  font-weght: bold;
   fill: #bbb;
   font-size: 60px;
 }

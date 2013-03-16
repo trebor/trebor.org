@@ -12,7 +12,8 @@ var CHARGE_HIDDEN = 50;
 var CHARGE_BASE = 400;
 var CHARGE_RANDOM = 0;
 var LINK_BASE = 40;
-var LINK_RANDOM = 90;
+var LINK_RANDOM = 100;
+var LINK_MIN_OFFSET = 25;
 var RIM_SIZE = 22;
 var NODE_SIZE = 150;
 var IMAGE_SIZE = 108;
@@ -81,16 +82,20 @@ var nodeGroup = svg.append("g").classed("nodes", true);
 
 var force = d3.layout.force()
   .gravity(0.00)
+  .linkStrength(0.6)
   .charge(function(d) {
     return d.getProperty("hidden") 
       ? -CHARGE_HIDDEN
       : -(Math.random() * CHARGE_RANDOM + CHARGE_BASE)})
   .linkDistance(function(link) {
+    var base = LINK_BASE;
 
     if (link.source == centerPerson || link.target == centerPerson)
-      return NODE_SIZE;
+      base = NODE_SIZE / 2 + LINK_MIN_OFFSET;
+    else
+      base = NODE_SIZE / 4 + LINK_MIN_OFFSET;
 
-    return Math.random() * LINK_RANDOM + LINK_BASE;})
+    return Math.random() * LINK_RANDOM + base;})
   .size([width, height]);
 
 var centerPerson;
@@ -98,8 +103,8 @@ var centerPerson;
 // fire everything off when the document is ready
 
 $(document).ready(function() {
-  var subject = subjects.oats;
-  //var subject = subjects.sontag;
+  //var subject = subjects.oats;
+  var subject = subjects.sontag;
   //var subject = subjects.einstein;
   //var subject = subjects.vonnegut;
   //var subject = subjects.kant;
@@ -173,7 +178,7 @@ function updateChart(graph) {
 
   graph.getLinks().forEach(function(link) {
     var src = link.getSource();
-    var mid = new TNode("mid" + nextMidId++, {hidden: true});
+    var mid = new TNode("mid" + nextMidId++, {isMiddel: true, hidden: true});
     var trg = link.getTarget();
 
     // if src and target have old values, place this node right between them
@@ -184,10 +189,9 @@ function updateChart(graph) {
     // }
 
     physicalNodes.push(mid);
-    physicalLinks.push({source: src, target: mid, value: 3});
-    physicalLinks.push({source: mid, target: trg, value: 3});
+    physicalLinks.push({source: src, target: mid});
+    physicalLinks.push({source: mid, target: trg});
     link.mid = mid;
-    link.value = 3;
     renderedLinks.push(link);
   });
 
@@ -446,6 +450,7 @@ function onNodeMouseOver(node) {
   // scale node
 
   scaleNode(node, true);
+  event.stopPropagation();
 }
 
 function onImageClick(node) {
