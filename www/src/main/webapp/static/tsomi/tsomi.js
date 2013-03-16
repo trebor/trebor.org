@@ -4,6 +4,10 @@ var height = $("#chart").height() - $("#header").height();
 var color = d3.scale.category20();
 var nextMidId = 0;
 
+var HEAD_ANGLE = Math.PI / 6;
+var ARROW_WIDTH = 6;
+
+
 var CHARGE_HIDDEN = 50;
 var CHARGE_BASE = 400;
 var CHARGE_RANDOM = 0;
@@ -50,6 +54,10 @@ var force = d3.layout.force()
       ? -CHARGE_HIDDEN
       : -(Math.random() * CHARGE_RANDOM + CHARGE_BASE)})
   .linkDistance(function(link) {
+
+    if (link.source == centerPerson || link.target == centerPerson)
+      return NODE_SIZE / 2 + 20;
+
     return Math.random() * LINK_RANDOM + LINK_BASE;})
   .size([width, height]);
 
@@ -94,7 +102,10 @@ function querySubject(subjectId) {
 
 function setWikiPage(node) {
   var page = node.getProperty("wikiTopic") + (PRINTABLE ? "?printable=yes" : "");
-  var wiki = d3.select("#wikiframe").attr("src", page);
+  var wiki = d3.select("#wikiframe")
+    // .style({"visibility":"hidden"})
+    // .attr("onload", "this.style.visibility = 'visible';")
+    .attr("src", page);
 
   // wike font size
   //var iframe = top.frames['iframe'].document;
@@ -137,7 +148,9 @@ function updateChart(graph) {
     physicalNodes.push(mid);
     physicalLinks.push({source: src, target: mid, value: 3});
     physicalLinks.push({source: mid, target: trg, value: 3});
-    renderedLinks.push({source: src, mid: mid, target: trg, value: 3});
+    link.mid = mid;
+    link.value = 3;
+    renderedLinks.push(link);
   });
 
   // filter out hidden nodes so they are not rendered
@@ -158,7 +171,9 @@ function updateChart(graph) {
   var enterLinks = allLink
     .enter().append("path")
     .attr("class", "link")
-    .style("stroke-width", function(d) { return 2;});
+    .style("stroke-width", ARROW_WIDTH)
+    .append("title")
+    .text(function(d) {return d.getProperty("type")});
 
   var exitLinks = allLink.exit().remove();
   
@@ -260,9 +275,7 @@ function updateChart(graph) {
     centerPerson.x += (width  / 2 - centerPerson.x) * k;
     centerPerson.y += (height / 2 - centerPerson.y) * k;
 
-    d3.selectAll("path.link").attr("d", function(d) {
-      return populate_path("M X0 Y0 Q X1 Y1 X2 Y2", [d.source, d.mid, d.target]);
-    });
+    d3.selectAll("path.link").attr("d", arrowPath);
     
     var nodes = d3.selectAll("g.node");
     var margin = NODE_SIZE / 2 / 2;
@@ -287,6 +300,35 @@ function updateChart(graph) {
     });
   });
 }
+
+function arrowPath(link) {
+  var s = link.source;
+  var m = link.mid;  
+  var t = link.target;
+
+  var angle = angleRadians(t, m);
+  var nodeRadius = (NODE_SIZE / 2) * computeNodeScale(t) + ARROW_WIDTH;
+
+  var tip = radial(t, nodeRadius, angle);
+  var left = radial(tip, 20, angle + HEAD_ANGLE);
+  var right = radial(tip, 20, angle - HEAD_ANGLE);
+
+  //return populate_path("M X0 Y0 L X1 Y1 L X2 Y2 M X3 Y3 L X4 Y4 L X5 Y5",
+  return populate_path("M X0 Y0 Q X1 Y1 X2 Y2 M X3 Y3 L X4 Y4 L X5 Y5",
+                       [s, m, tip, left, tip, right]);
+}
+
+function angleRadians(p1, p2) {
+  return Math.atan2(p2.y - p1.y, p2.x - p1.x);
+}
+
+function radial(point, radius, radians) {
+  return {
+    x: Math.cos(radians) * radius + point.x,
+    y: Math.sin(radians) * radius + point.y,
+  };
+}
+
 
 function computeNodeScale(node, isMouseOver) {
   isMouseOver = isMouseOver || false;

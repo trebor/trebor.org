@@ -78,6 +78,10 @@ div
 	/* height: 99.7%; */
 }
 
+.node {
+  /* opacity: 0.5; */
+}
+
 .node > circle 
 {
   stroke: #fff;
@@ -113,7 +117,8 @@ div
 
 path.link 
 {
-  stroke: black;
+  opacity: 0.2;
+  stroke: #000;
   fill: none;
   stroke-linecap: round;
 }

@@ -1,6 +1,6 @@
 var QUERY_URL = "http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&format=json&query=";
 
-var debugging = false;
+var debugging = true;
 
 var prefixies = [
   {prefix: "rdf",         uri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"},
@@ -91,7 +91,7 @@ var query_relationship_details = "\n\
 SELECT DISTINCT ?subject" + personDetailsSelect() + "\n\
 WHERE\n\
 {\n\
-  %domain% %relationship% %range% .\n" +
+  %subject% %predicate% %object% .\n" +
   personDetailsWhere("?subject") + "\n\
 }";
 
@@ -271,79 +271,73 @@ function getPerson(id, callback) {
 
 function queryForPerson(targetId, callback) {
   var targetGraph = new TGraph();
-   queryForInfluencedBy(targetGraph, targetId, function() {
-     queryForInfluenced(targetGraph, targetId, function() {
-      var targetNode = targetGraph.getNode(targetId);
-      if (targetNode !== undefined) {
-        queryDetails(targetNode, function() {callback(targetGraph);});
-      } else {
-        callback(targetGraph);
-      }
-    });
-   });
+  queryForInfluencedBy1(targetGraph, targetId, function() {
+    queryForInfluencedBy2(targetGraph, targetId, function() {
+      queryForInfluenced1(targetGraph, targetId, function() {
+        queryForInfluenced2(targetGraph, targetId, function() {
+          var targetNode = targetGraph.getNode(targetId);
+          if (targetNode !== undefined) {
+            queryDetails(targetNode, function() {callback(targetGraph);});
+          } else {
+            callback(targetGraph);
+          }
+        })
+      })
+    })
+  });
 }
 
-function queryForInfluencedBy(targetGraph, targetId, callback) {
-  var parameters = {
-    domain: "?subject", 
-    relationship: predicates.influencedBy,
-    range: targetId,
-  };
-
-  sparqlQuery(query_relationship_details, parameters, function(data) {
-    if (data !== undefined) {
-      data.results.bindings.forEach(function(binding) {
-
-        // add relationship
-
-        var otherId = "<" + binding.subject.value + ">";
-        targetGraph.addLink(otherId, targetId, {type: parameters.relationship});
-        if (debugging) {
-          console.log(
-            "[" + targetId + "]",
-            parameters.relationship,
-            "[" + shorten(binding.subject.value) + "]");
-        }
-
-        // add personal details for the other person in this relationship
-
-        applyDetails(targetGraph.getNode(otherId), binding);
-      });
-    }
-
+function queryForInfluenced1(targetGraph, targetId, callback) {
+  queryForRelationship("?subject", predicates.influenced, targetId, function (binding) {
+    var subjectId = "<" + binding.subject.value + ">";
+    targetGraph.addLink(subjectId, targetId, {type: predicates.influenced});
+    applyDetails(targetGraph.getNode(subjectId), binding);
+  }, function() {
     callback(targetGraph);
   });
 }
 
-function queryForInfluenced(targetGraph, targetId, callback) {
-  var parameters = {
-    domain: targetId,
-    relationship: predicates.influencedBy,
-    range: "?subject",
-  };
+function queryForInfluenced2(targetGraph, targetId, callback) {
+  queryForRelationship(targetId, predicates.influenced, "?subject", function (binding) {
+    var subjectId = "<" + binding.subject.value + ">";
+    targetGraph.addLink(targetId, subjectId, {type: predicates.influenced});
+    applyDetails(targetGraph.getNode(subjectId), binding);
+  }, function() {
+    callback(targetGraph);
+  });
+}
 
+function queryForInfluencedBy1(targetGraph, targetId, callback) {
+  queryForRelationship("?subject", predicates.influencedBy, targetId, function (binding) {
+    var subjectId = "<" + binding.subject.value + ">";
+    targetGraph.addLink(targetId, subjectId, {type: predicates.influenced});
+    applyDetails(targetGraph.getNode(subjectId), binding);
+  }, function() {
+    callback(targetGraph);
+  });
+}
+
+function queryForInfluencedBy2(targetGraph, targetId, callback) {
+  queryForRelationship(targetId, predicates.influencedBy, "?subject", function (binding) {
+    var subjectId = "<" + binding.subject.value + ">";
+    targetGraph.addLink(subjectId, targetId, {type: predicates.influenced});
+    applyDetails(targetGraph.getNode(subjectId), binding);
+  }, function() {
+    callback(targetGraph);
+  });
+}
+
+function queryForRelationship(subject, predicate, object, bind, callback) {
+  var parameters = {
+    subject: subject,
+    predicate: predicate,
+    object: object,
+  };
   sparqlQuery(query_relationship_details, parameters, function(data) {
     if (data !== undefined) {
-      data.results.bindings.forEach(function(binding) {
-
-        // add relationship
-
-        var otherId = "<" + binding.subject.value + ">";
-        targetGraph.addLink(otherId, targetId, {type: parameters.relationship});
-        if (debugging) {
-          console.log(
-            "[" + shorten(binding.subject.value) + "]",
-            parameters.relationship,
-            "[" + targetId + "]");
-        }
-
-        // add personal details for the other person in this relationship
-
-        applyDetails(targetGraph.getNode(otherId), binding);
-      });
+      data.results.bindings.forEach(bind);
     }
-
-    callback(targetGraph);
+    callback();
   });
 }
 
