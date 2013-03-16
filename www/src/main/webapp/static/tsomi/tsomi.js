@@ -11,8 +11,8 @@ var WIKI_ICON_WIDTH = 30;
 var CHARGE_HIDDEN = 50;
 var CHARGE_BASE = 400;
 var CHARGE_RANDOM = 0;
-var LINK_BASE = 30;
-var LINK_RANDOM = 150;
+var LINK_BASE = 40;
+var LINK_RANDOM = 90;
 var RIM_SIZE = 22;
 var NODE_SIZE = 150;
 var IMAGE_SIZE = 108;
@@ -67,14 +67,10 @@ defs.append("path")
 
 svg.append("text")
   .classed("title", true)
-  // .attr("dx", "203")
-  // .attr("dy", "0.3em")
   .attr("dx", "120")
   .append("textPath")
   .attr("xlink:href", "#titlepath")
-  // .attr("text-anchor", "middle")
-  .text("The Sphere of my Influences");
-
+  .text("The Sphere Of My Influences");
 
 // add groups for links and nodes
 
@@ -92,7 +88,7 @@ var force = d3.layout.force()
   .linkDistance(function(link) {
 
     if (link.source == centerPerson || link.target == centerPerson)
-      return NODE_SIZE / 2 + 20;
+      return NODE_SIZE;
 
     return Math.random() * LINK_RANDOM + LINK_BASE;})
   .size([width, height]);
@@ -107,7 +103,7 @@ $(document).ready(function() {
   //var subject = subjects.einstein;
   //var subject = subjects.vonnegut;
   //var subject = subjects.kant;
-  var subject = subjects.mock;
+  //var subject = subjects.mock;
   querySubject(lengthen(subject, true));
   // $('#wikiframe').load(function(uri) {
   //   wikichange(uri);
@@ -155,13 +151,20 @@ function updateChart(graph) {
   var physicalNodes = [];
   graph.getNodes().forEach(function(physicalNode) {
     physicalNodes.push(physicalNode);
-    physicalNode.x = width/2 + (Math.random() - 0.5) * width/2;
-    physicalNode.y = height/2 + (Math.random() - 0.5) * height/2;
+    // physicalNode.x = width/2 + (Math.random() - 0.5) * width/2;
+    // physicalNode.y = height/2 + (Math.random() - 0.5) * height/2;
+    // physicalNode.x = width/2;
+    // physicalNode.y = height/2;
     force.nodes().forEach(function(oldNode) {
-      if (physicalNode.getId() == oldNode.getId()) {
-        physicalNode.x = oldNode.x;
-        physicalNode.y = oldNode.y;
+      if (centerPerson.getId() == oldNode.getId()) {
+        centerPerson.x = oldNode.x;
+        centerPerson.y = oldNode.y;
+        centerPerson.weight = 0;
       }
+      // if (physicalNode.getId() == oldNode.getId()) {
+      //   physicalNode.x = oldNode.x;
+      //   physicalNode.y = oldNode.y;
+      // }
     });
   });
 
@@ -175,10 +178,10 @@ function updateChart(graph) {
 
     // if src and target have old values, place this node right between them
 
-    if (src.x !== undefined && trg.x != undefined) {
-      mid.x = (src.x + trg.x) / 2;
-      mid.y = (src.y + trg.y) / 2;
-    }
+    // if (src.x !== undefined && trg.x != undefined) {
+    //   mid.x = (src.x + trg.x) / 2;
+    //   mid.y = (src.y + trg.y) / 2;
+    // }
 
     physicalNodes.push(mid);
     physicalLinks.push({source: src, target: mid, value: 3});
@@ -204,11 +207,22 @@ function updateChart(graph) {
     .data(renderedLinks);
 
   var enterLinks = allLink
-    .enter().append("path")
-    .attr("class", "link")
+    .enter();
+
+  enterLinks
+    .append("path")
+    .attr("visibility", "hidden")
+    .classed("link", true)
     .style("stroke-width", ARROW_WIDTH)
     .append("title")
     .text(function(d) {return d.getProperty("type")});
+
+  svg.selectAll("path.link")
+    .transition()
+    .duration(0)
+    .delay(DEFAULT_DURATION)
+    .attr("visibility", "visibile");
+
 
   var exitLinks = allLink.exit().remove();
   
@@ -216,7 +230,18 @@ function updateChart(graph) {
     .data(renderedNodes, function(d) {return d.id;});
 
   var enterNodes = allNodes.enter();
-  var exitNodes = allNodes.exit().remove();
+  var exitNodes = allNodes.exit();
+
+  exitNodes
+    .selectAll(".scale")
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .attr("transform", "scale(0)");
+
+  exitNodes
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .remove();
 
 
   var nodeGroups = enterNodes
@@ -233,8 +258,13 @@ function updateChart(graph) {
 
   var scaleGroups = nodeGroups
     .append("g")
-    .attr("transform", function(d) {return "scale(" + computeNodeScale(d) + ")"})
+    .attr("transform", "scale(0)")
     .classed("scale", true);
+
+  scaleGroups
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .attr("transform", function(d) {return "scale(" + computeNodeScale(d) + ")"});
 
   scaleGroups
     .append("circle")
@@ -286,13 +316,13 @@ function updateChart(graph) {
 
   scaleGroups
     .append("text")
-     .attr("dx", "203")
-     .attr("dy", "0.3em")
+    .attr("dx", BrowserDetect.browser == "Firefox" ? "403" : "203")
+    .attr("dy", "0.3em")
+    .attr("text-anchor", "middle")
     .append("textPath")
     .classed("name", true)
     .attr("xlink:href", "#namepath")
-    .attr("text-anchor", "middle")
-    .text(function(d) {return d.getProperty("name")});
+    .text(function(d) { return d.getProperty("name")});
 
   scaleGroups
     .append("g")
@@ -314,7 +344,7 @@ function updateChart(graph) {
   
   force.on("tick", function(event) {
 
-    var k = .1 * event.alpha;
+    var k = .5 * event.alpha;
     centerPerson.x += (width  / 2 - centerPerson.x) * k;
     centerPerson.y += (height / 2 - centerPerson.y) * k;
 
@@ -444,6 +474,8 @@ function onWikipediaMouseOut(node) {
 }
 
 function onWikipediaClick(node) {
+  d3.select(d3.event.target)
+    .attr("transform", "scale(1)");
   var event = d3.event;
   setWikiPage(node);
   event.stopPropagation();
@@ -451,6 +483,9 @@ function onWikipediaClick(node) {
 
 
 function onNodeClick(node) {
+  d3.selectAll("g.scale")
+    .filter(function(d) {return d.getId() == node.getId()})
+    .attr("transform", function(d) {return "scale(" + computeNodeScale(node, false) + ")"});
   querySubject(node.getId());
 }
 
