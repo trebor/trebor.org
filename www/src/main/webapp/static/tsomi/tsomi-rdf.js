@@ -240,7 +240,7 @@ function createMockData() {
   var mockGraph = new TGraph();
 
   mockGraph.addLink(mock.id, foo.id);
-  mockGraph.addLink(mock.id, bar.id);
+  mockGraph.addLink(bar.id, mock.id);
 
   mockGraph.getNodes().forEach(function(node) {
     mockData.forEach(function(datum) {

@@ -103,19 +103,37 @@ var centerPerson;
 // fire everything off when the document is ready
 
 $(document).ready(function() {
-  //var subject = subjects.oats;
-  var subject = subjects.bronte;
+  var subject = estabishInitialSubject();
+  querySubject(lengthen(subject, true));
+});
+
+function estabishInitialSubject() {
+  var subject = subjects.oats;
+  //var subject = subjects.bronte;
   //var subject = subjects.munro;
   //var subject = subjects.sontag;
   //var subject = subjects.einstein;
   //var subject = subjects.vonnegut;
   //var subject = subjects.kant;
-  //var subject = subjects.mock;
-  querySubject(lengthen(subject, true));
-  // $('#wikiframe').load(function(uri) {
-  //   wikichange(uri);
-  // });
-});
+  var subject = subjects.mock;
+
+  var urlSubject = getURLParameter("subject");
+
+  if (urlSubject != "null") {
+    urlSubject = urlSubject.replace("%20", "_");
+    urlSubject = urlSubject.replace(" ", "_");
+    subject = "dbpedia:" + urlSubject;
+  }
+  else {
+    urlSubject = getURLParameter("subject_raw");
+    if (urlSubject != "null") {
+      subject = "dbpedia:" + urlSubject;
+    }
+  }
+
+  return subject;
+}
+
 
 function wikichange(url) {
   console.log("changed!", url);
@@ -553,4 +571,10 @@ function populate_path(path, points) {
       .replace("Y" + index, points[index].y);
   };
   return path;
+}
+
+function getURLParameter(name) {
+    return decodeURI(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+    );
 }
