@@ -4,6 +4,8 @@ html {
   font-family: Times New Roman, Times, serif;
   /* font-family: Impact, Charcoal, sans-serif; */
   /* font-family: helvetica; */
+  background: white;
+  border-image-width: 0px;
   margin: 0px;
 	padding: 0px;
 	border: 0px;
@@ -29,18 +31,30 @@ div {
 }
 
 #container {
-  margin: 0px;
-	padding: 0px;
-	border: 0px;
+  /* margin: 0px; */
+	/* padding: 0px; */
+	/* border: 0px; */
 }
 
 #chartdiv {
-  margin: 0px;
-	padding: 0px;
-	border: 0px;
+  position: relative;
+  overflow:hidden;
   /* width: 100%; */
   width: 60%;
 	float: left;
+	/* padding: 100px; */
+	/* margin: 100px; */
+	/* border: 10px solid blue; */
+}
+
+#chart {
+  position: absolute;
+  right: 0;
+  clear: both;
+  /* margin: 10px solid red; */
+	margin: 0px;
+	padding: 0px;
+	/* border: 10px solid green; */
 }
 
 #wikidiv {
@@ -51,10 +65,6 @@ div {
   width: 40%;
 	float: left;
 }
-
-#chart {
-}
-
 .wikibutton {
   cursor: pointer;
 }
@@ -80,30 +90,40 @@ div {
   /* opacity: 0.5; */
 }
 
-.node > circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
 
 .backdrop {
-  fill: #ccc;
+  /* fill: #E5F5D2; */
+  fill: #eee;
   stroke-width: 2px;
-  stroke: #aaa;
+  stroke: #ddd;
+}
+
+
+
+.rim {
+  fill: none;
+  stroke-width: 2px;
+  /* stroke: #E5F5D2; */
+  stroke: #eee;
+  /* opacity: 0.5; */
+  /* stroke: red; */
+}
+
+path.link.from {
+  /* stroke: #D6FBF9; */
+  stroke: #eec;
+}
+
+path.link.to {
+  stroke: #cee;
 }
 
 .title {
   font-family: Impact, Charcoal, sans-serif;
   font-weght: bold;
-  fill: #bbb;
+  /* fill: #DEDAB7; */
+  fill: #ccc;
   font-size: 60px;
-}
-
-.rim {
-  fill: none;
-  stroke-width: 2px;
-  stroke: #ccc;
-  /* opacity: 0.5; */
-  /* stroke: red; */
 }
 
 .name {
@@ -115,19 +135,12 @@ div {
   text-shadow: 0px 0px 5px #fff;
 }
 
-path.link  {
-  opacity: 0.2;
-  stroke: #000;
+path.link {
+  /* opacity: 0.2; */
+  /* stroke: #000; */
   fill: none;
   stroke-linecap: round;
 }
 
-.unfocused
-{
-  visibility: hidden;
-}
 
-.selector-label
-{
-  text-align: right;
-}
+

@@ -217,6 +217,8 @@ function updateChart(graph) {
     .append("path")
     .attr("visibility", "hidden")
     .classed("link", true)
+    .classed("to", function(d) {return d.target.getId() == centerPerson.getId();})
+    .classed("from", function(d) {return d.source.getId() == centerPerson.getId();})
     .style("stroke-width", ARROW_WIDTH)
     .append("title")
     .text(function(d) {return d.getProperty("type")});
