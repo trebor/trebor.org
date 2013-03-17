@@ -7,7 +7,7 @@ var nextMidId = 0;
 var HEAD_ANGLE = Math.PI / 6;
 var ARROW_WIDTH = 6;
 var WIKI_ICON_WIDTH = 30;
-
+var PRINTABLE_PARAM = "?printable=yes";
 var CHARGE_HIDDEN = 10;
 var CHARGE_BASE = 400;
 var CHARGE_RANDOM = 0;
@@ -24,7 +24,7 @@ var DEFAULT_DURATION = 600;
 // image for unknown person
 
 var UNKNOWN_PERSON = "images/unknown.png";
-var WIKI_LOGO = "images/50px-Wikipedia_logo_silver.png";
+var WIKI_LOGO = "images/Wikipedia-logo.png";
 
 // create the svg instance
 
@@ -121,6 +121,10 @@ function wikichange(url) {
   console.log("changed!", url);
 }
 
+function connectToWiki() {
+  window.open(d3.select("#wikiframe").attr("src").replace(PRINTABLE_PARAM, ""),'_blank');
+}
+
 function querySubject(subjectId) {
   console.log("query for subject", subjectId);
   getPerson(subjectId, function(graph) {
@@ -139,16 +143,44 @@ function querySubject(subjectId) {
 }
 
 function setWikiPage(node) {
-  var page = node.getProperty("wikiTopic") + (PRINTABLE ? "?printable=yes" : "");
+  setWikiConnectButtonVisibility(false);
+  var page = node.getProperty("wikiTopic") + (PRINTABLE ? PRINTABLE_PARAM : "");
   var wiki = d3.select("#wikiframe")
-    // .style({"visibility":"hidden"})
-    // .attr("onload", "this.style.visibility = 'visible';")
+    .attr("onload", "setWikiConnectButtonVisibility(true)")
     .attr("src", page);
 
+      //document.getElementById("#wikiconnect").style.visibility = 'visibile';
   // wike font size
   //var iframe = top.frames['iframe'].document;
   //console.log("iframe", iframe);
   //wiki.selectAll('p').style('font-size','5px');
+}
+
+function wcMouseEvent(over) {
+  var wc = d3.select("#wikiconnect");
+  scaleElement(wc, over ? 1.2 : 1, DEFAULT_DURATION, STOCK_EASE);
+}
+
+function setWikiConnectButtonVisibility(visible) {
+  var wc = d3.select("#wikiconnect");
+  if (visible) {
+    scaleElement(wc, 1, DEFAULT_DURATION, STOCK_EASE);
+  } else {
+    scaleElement(wc, 0, DEFAULT_DURATION);
+  }
+}
+
+function scaleElement(element, scale, duration, ease) {
+  var te = element
+      .transition()
+      .style("transform", "scale(" + scale + ")")
+      .style("-o-transform", "scale(" + scale + ")")
+      .style("-ms-transform", "scale(" + scale + ")")
+      .style("-moz-transform", "scale(" + scale + ")")
+      .style("-webkit-transform", "scale(" + scale + ")");
+
+  if (ease !== undefined) te.ease(ease);
+  if (duration !== undefined) te.duration(duration);
 }
 
 function updateChart(graph) {
@@ -207,7 +239,6 @@ function updateChart(graph) {
     .nodes(physicalNodes)
     .links(physicalLinks)
     .start();
-
 
   // remove all links, they will all be created from scratch
 

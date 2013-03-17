@@ -14,7 +14,6 @@ html {
 }
 
 body {
-  position: absolute;
   margin: 0px;
 	padding: 0px;
 	border: 0px;
@@ -84,6 +83,25 @@ div {
 	/* height: 100%; */
 	/* width: 39.8%; */
 	/* height: 99.7%; */
+}
+
+#wikiconnect {
+  position: absolute;
+  transform: scale(0);
+  -o-transform: scale(0);
+  -ms-transform: scale(0);
+  -moz-transform: scale(0);
+  -webkit-transform: scale(0);
+  top: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+}
+
+#wikiconnect > img {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
 }
 
 .node {
