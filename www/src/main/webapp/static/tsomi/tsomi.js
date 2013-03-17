@@ -115,7 +115,7 @@ function estabishInitialSubject() {
   //var subject = subjects.einstein;
   //var subject = subjects.vonnegut;
   //var subject = subjects.kant;
-  var subject = subjects.mock;
+  //var subject = subjects.mock;
 
   var urlSubject = getURLParameter("subject");
 
