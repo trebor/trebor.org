@@ -33,6 +33,9 @@ var predicates = {
 };
 
 var subjects = {
+  bronte:     "dbpedia:Charlotte_Brontë",
+  basil:      "dbpedia:Priya_Basil",
+  munro:      "dbpedia:Alice_Munro",
   mock:       "dbpedia:Mock_Data",
   bacon:      "dbpedia:Kevin_Bacon",
   duckworth:  "dbpedia:Eleanor_Duckworth",
@@ -197,7 +200,7 @@ function lengthen(uri, bracket) {
   prefixies.some(function(prefix) {
     if (prefix.prefix == prefixName) {
       result = prefix.uri + id;
-      if (bracket) result = '<' + result + '>';
+      if (bracket) result = '<' + encodeURI(result) + '>';
       return true;
     }
     return false;

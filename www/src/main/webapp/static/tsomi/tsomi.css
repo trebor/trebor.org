@@ -119,10 +119,11 @@ path.link.to {
 }
 
 .title {
-  font-family: Impact, Charcoal, sans-serif;
+  /* font-family: Impact, Charcoal, sans-serif; */
   font-weght: bold;
   /* fill: #DEDAB7; */
-  fill: #ccc;
+  /* fill: #ccc; */
+  fill: #444;
   font-size: 60px;
 }
 

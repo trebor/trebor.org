@@ -104,7 +104,9 @@ var centerPerson;
 
 $(document).ready(function() {
   //var subject = subjects.oats;
-  var subject = subjects.sontag;
+  var subject = subjects.bronte;
+  //var subject = subjects.munro;
+  //var subject = subjects.sontag;
   //var subject = subjects.einstein;
   //var subject = subjects.vonnegut;
   //var subject = subjects.kant;
@@ -202,10 +204,14 @@ function updateChart(graph) {
   // create the force directed layout
 
   force
-      .nodes(physicalNodes)
-      .links(physicalLinks)
-      .start();
+    .nodes(physicalNodes)
+    .links(physicalLinks)
+    .start();
 
+
+  // remove all links, they will all be created from scratch
+
+  linkGroup.selectAll(".link").remove();
 
   var allLink = linkGroup.selectAll(".link")
     .data(renderedLinks);
@@ -230,7 +236,7 @@ function updateChart(graph) {
     .attr("visibility", "visibile");
 
 
-  var exitLinks = allLink.exit().remove();
+  //var exitLinks = allLink.exit().remove();
   
   var allNodes = nodeGroup.selectAll(".node")
     .data(renderedNodes, function(d) {return d.id;});
