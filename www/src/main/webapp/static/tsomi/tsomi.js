@@ -8,7 +8,7 @@ var HEAD_ANGLE = Math.PI / 6;
 var ARROW_WIDTH = 6;
 var WIKI_ICON_WIDTH = 30;
 
-var CHARGE_HIDDEN = 50;
+var CHARGE_HIDDEN = 10;
 var CHARGE_BASE = 400;
 var CHARGE_RANDOM = 0;
 var LINK_BASE = 40;
@@ -351,11 +351,21 @@ function updateChart(graph) {
   
   force.on("tick", function(event) {
 
+    var k2 = 15 * event.alpha;
     var k = .5 * event.alpha;
     centerPerson.x += (width  / 2 - centerPerson.x) * k;
     centerPerson.y += (height / 2 - centerPerson.y) * k;
 
-    d3.selectAll("path.link").attr("d", arrowPath);
+    d3.selectAll("path.link")
+      .each(function(link) {
+        if (link.source.getId() == centerPerson.getId()) {
+          link.target.x += k2;
+        }
+        if (link.target.getId() == centerPerson.getId()) {
+          link.source.x -= k2;
+        }
+      })
+      .attr("d", arrowPath);
     
     var nodes = d3.selectAll("g.node");
     var margin = NODE_SIZE / 2 / 2;
