@@ -16,17 +16,17 @@
     <div id="container">
       <div id="chartdiv">
         <div id="chart"> </div>
+        <div id="wikiconnect">
+          <img src="images/Wikipedia-logo.png"
+               onClick="connectToWiki()"
+               onmouseover="wcMouseEvent(true)"
+               onmouseout="wcMouseEvent(false)">
+        </img>
+      </div>
       </div>
       <div id="wikidiv">
         <iframe name="wiki" id="wikiframe" src="">
         </iframe>
-      </div>
-      <div id="wikiconnect">
-        <img src="images/Wikipedia-logo.png"
-             onClick="connectToWiki()"
-             onmouseover="wcMouseEvent(true)"
-             onmouseout="wcMouseEvent(false)">
-        </img>
       </div>
     </div>
     <script type="text/javascript" src="tsomi.js"></script>

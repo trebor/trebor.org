@@ -108,15 +108,12 @@ div {
   /* opacity: 0.5; */
 }
 
-
 .backdrop {
   /* fill: #E5F5D2; */
   fill: #eee;
   stroke-width: 2px;
   stroke: #ddd;
 }
-
-
 
 .rim {
   fill: none;
@@ -161,5 +158,23 @@ path.link {
   stroke-linecap: round;
 }
 
+.axis {
+  shape-rendering: crispEdges;
+  color: green;
+  stroke: #444;
+  /* stroke: blue; */
+}
 
+.axis text {
+  stroke: none;
+  fill: #888;
+}
 
+.timeline {
+  fill: #black;
+  opacity: 0.03;
+}
+
+/* .timeline.highlight { */
+/*   opacity: 0.2; */
+/* } */

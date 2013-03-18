@@ -28,8 +28,8 @@ var predicates = {
   name: "foaf:name",
   wikiTopic: "foaf:isPrimaryTopicOf",
   occupation: "dbpprop:occupation",
-  dob: "dbprop:dateOfBirth",
-  dod: "dbprop:dateOfDeath",
+  dob: "dbpedia-owl:birthDate",
+  dod: "dbpedia-owl:deathDate",
 };
 
 var subjects = {
@@ -114,6 +114,7 @@ var display_results = function(data){
     var line = "";
     keys.forEach(function(key) {
       line += binding_to_string(result[key]) + " ";
+      //console.log(key, result[key]);
     });
     console.log(line);
   });
@@ -132,7 +133,7 @@ function binding_to_string(binding) {
       result = "[" + binding.value.substring(0, 30) + "]";
       break;
     default:
-      result = "{" + binding.value.substring(0, 30) + "}";
+      result = binding.value.substring(0, 30) + "{" + binding.type + "}";
     }
   }
 
@@ -228,9 +229,9 @@ function prefix_table_to_string(prefixies) {
 function createMockData() {
 
   var mockData = [
-    {id: lengthen(subjects.mock, true), name: "Mock Data"},
-    {id: lengthen("dbpedia:foo"), name: "Foo Has A Long Mock Name"},
-    {id: lengthen("dbpedia:bar"), name: "Bar Mock"},
+    {dob: "1955-1-1", dod: "2004-1-1", id: lengthen(subjects.mock, true), name: "Mock Data"},
+    {dob: "1859-1-1", dod: "1933-1-1", id: lengthen("dbpedia:foo"), name: "Foo Has A Long Mock Name"},
+    {dob: "1776-1-1", dod: "1854-1-1", id: lengthen("dbpedia:bar"), name: "Bar Mock"},
   ];
 
   var mock = mockData[0];
@@ -245,6 +246,8 @@ function createMockData() {
   mockGraph.getNodes().forEach(function(node) {
     mockData.forEach(function(datum) {
       if (datum.id == node.getId()) {
+        node.setProperty("dob", datum.dob);
+        node.setProperty("dod", datum.dod);
         node.setProperty("name", datum.name);
         node.setProperty("thumbnail", "images/unknown.png");
       }

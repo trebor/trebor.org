@@ -4,6 +4,8 @@ var height = $("#chart").height() - $("#header").height();
 var color = d3.scale.category20();
 var nextMidId = 0;
 
+var TIMELINE_OPACITY = 0.03;
+var TIMELINE_HIGHLIGHT_OPACITY = 0.2;
 var HEAD_ANGLE = Math.PI / 6;
 var ARROW_WIDTH = 6;
 var WIKI_ICON_WIDTH = 30;
@@ -20,11 +22,16 @@ var IMAGE_SIZE = 108;
 var PRINTABLE = true;
 var STOCK_EASE = "elastic";
 var DEFAULT_DURATION = 600;
+var TIMELINE_MARGIN = 50;
+var TIMELINE_Y = (height - 20);
 
 // image for unknown person
 
 var UNKNOWN_PERSON = "images/unknown.png";
 var WIKI_LOGO = "images/Wikipedia-logo.png";
+
+// .tickSize(-height)
+// .tickSubdivide(true);
 
 // create the svg instance
 
@@ -73,10 +80,21 @@ svg.append("text")
   .attr("xlink:href", "#titlepath")
   .text("The Sphere Of My Influences");
 
+// axis elements
+
+var xScale = d3.time.scale().range([0, width - 1]).domain([new Date(1955, 12, 15), new Date()]);
+var xAxis = d3.svg.axis().scale(xScale).tickSize(-20, -10, 0).tickSubdivide(true);
+
 // add groups for links and nodes
 
+var timelinesGroup = svg.append("g").classed("timelines", true);
 var linkGroup = svg.append("g").classed("links", true);
 var nodeGroup = svg.append("g").classed("nodes", true);
+var axiesGroup = svg
+  .append("g")
+  .attr("transform", "translate(0, " + TIMELINE_Y + ")")
+  .classed("axies", true)
+  .attr("class", "axis");
 
 // create the fdl instance
 
@@ -206,8 +224,43 @@ function updateChart(graph) {
   // check each physicalNode and, if it already exited, reestablish it's old positions
 
   var physicalNodes = [];
+  var minDate = null;
+  var maxDate = null;
+
+  var sampleDate = function(date) {
+    if (minDate == null || date < minDate)
+      minDate = date;
+    if (maxDate == null || date > maxDate)
+      maxDate = date;
+  };
+
   graph.getNodes().forEach(function(physicalNode) {
     physicalNodes.push(physicalNode);
+
+    // establish date of birth
+    
+    var dobStr = physicalNode.getProperty("dob");
+    var dob = undefined;
+    if (dobStr !== undefined) {
+      var dob = new Date(dobStr);
+      physicalNode.setProperty("birthDate", dob);
+      sampleDate(dob);
+    }
+      
+    // establish date of death
+
+    var dodStr = physicalNode.getProperty("dod");
+    if (dodStr !== undefined) {
+      var dod = new Date(dodStr);
+      physicalNode.setProperty("deathDate", dod);
+      sampleDate(dod);
+    }
+    else if (dob != undefined) {
+      var dod = new Date();
+      physicalNode.setProperty("deathDate", dod);
+      sampleDate(dod);
+    }
+      
     // physicalNode.x = width/2 + (Math.random() - 0.5) * width/2;
     // physicalNode.y = height/2 + (Math.random() - 0.5) * height/2;
     // physicalNode.x = width/2;
@@ -224,6 +277,14 @@ function updateChart(graph) {
       // }
     });
   });
+
+  // adjust scale
+
+  xScale.domain([minDate, maxDate]);
+  xScale.domain([
+    xScale.invert(xScale.range()[0] - TIMELINE_MARGIN), 
+    xScale.invert(xScale.range()[1] + TIMELINE_MARGIN)
+  ]);
 
   var physicalLinks = [];
   var renderedLinks = [];
@@ -284,6 +345,18 @@ function updateChart(graph) {
     .delay(DEFAULT_DURATION)
     .attr("visibility", "visibile");
 
+  // add timeline paths for each node
+
+  timelinesGroup.selectAll("path.timeline")
+    .remove();
+
+  timelinesGroup.selectAll("path.timeline")
+    .data(renderedNodes)
+    .enter()
+    .append("path")
+    .filter(function(d) {return d.getProperty("birthDate") !== undefined;})
+    .classed("timeline", true)
+    .style("opacity", function(d) {return d == centerPerson ? TIMELINE_HIGHLIGHT_OPACITY : TIMELINE_OPACITY});
 
   //var exitLinks = allLink.exit().remove();
   
@@ -321,7 +394,7 @@ function updateChart(graph) {
     .append("g")
     .attr("transform", "scale(0)")
     .classed("scale", true);
-
+  
   scaleGroups
     .transition()
     .duration(DEFAULT_DURATION)
@@ -389,6 +462,12 @@ function updateChart(graph) {
     .text(function(d) { return d.getProperty("name")});
 
   scaleGroups
+    .append("title")
+    .text(function(d) {
+      return "dob: " + d.getProperty("dob") + " dod: " + d.getProperty("dod");
+    });
+
+  scaleGroups
     .append("g")
     .attr("transform", "translate(" + 
           (WIKI_ICON_WIDTH / 2 + 6) + ", " + 
@@ -405,7 +484,9 @@ function updateChart(graph) {
     .on("mouseover", onWikipediaMouseOver)
     .on("mouseout", onWikipediaMouseOut)
     .on("click", onWikipediaClick);
-  
+
+  axiesGroup.call(xAxis);
+
   force.on("tick", function(event) {
 
     var k2 = 15 * event.alpha;
@@ -423,8 +504,12 @@ function updateChart(graph) {
         }
       })
       .attr("d", arrowPath);
+
+    timelinesGroup.selectAll(".timeline")
+      .classed("highlight", function(d) {return d == centerPerson;})
+      .attr("d", timelinePath);
     
-    var nodes = d3.selectAll("g.node");
+    var nodes = nodeGroup.selectAll("g.node");
     var margin = NODE_SIZE / 2 / 2;
     var x1 = margin;
     var x2 = width - margin;
@@ -446,6 +531,20 @@ function updateChart(graph) {
         return populate_path("translate(X0, Y0)", [d])
     });
   });
+}
+
+function timelinePath(node) {
+  var TIMELINE_UPSET = 50;
+
+  var birth = {x: xScale(node.getProperty("birthDate")), y: TIMELINE_Y};
+  var bc1 = {x: node.x, y: TIMELINE_Y - TIMELINE_UPSET};
+  var bc2 = {x: birth.x, y: TIMELINE_Y - TIMELINE_UPSET};
+  var death = {x: xScale(node.getProperty("deathDate")), y: TIMELINE_Y};
+  var dc1 = {x: death.x, y: TIMELINE_Y - TIMELINE_UPSET};
+  var dc2 = {x: node.x, y: TIMELINE_Y - TIMELINE_UPSET};
+
+  return populate_path(
+    "M X0 Y0 C X1 Y1 X2 Y2 X3 Y3 L X4 Y4 C X5 Y5 X6 Y6 X7 Y7", [node, bc1, bc2, birth, death, dc1, dc2, node]);
 }
 
 function arrowPath(link) {
@@ -502,6 +601,16 @@ function scaleNode(node, isMouseOver) {
 
 function onNodeMouseOut(node) {
   scaleNode(node, false);
+
+  timelinesGroup.selectAll(".timeline")
+    .filter(function(d) {return d == node && d != centerPerson;})
+    .classed("highlight", false)
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .ease(STOCK_EASE)
+    .style("opacity", TIMELINE_OPACITY);
+
+  event.stopPropagation();
 }
 
 function onNodeMouseOver(node) {
@@ -520,6 +629,15 @@ function onNodeMouseOver(node) {
   // scale node
 
   scaleNode(node, true);
+
+  timelinesGroup.selectAll(".timeline")
+    .filter(function(d) {return d == node && d != centerPerson;})
+    .classed("highlight", true)
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .ease(STOCK_EASE)
+    .style("opacity", TIMELINE_HIGHLIGHT_OPACITY);
+
   event.stopPropagation();
 }
 
@@ -533,6 +651,7 @@ function onImageClick(node) {
 }
 
 function onWikipediaMouseOver(node) {
+
   d3.select(d3.event.target)
     .transition()
     .duration(DEFAULT_DURATION)
