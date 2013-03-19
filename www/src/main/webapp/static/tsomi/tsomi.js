@@ -80,11 +80,6 @@ svg.append("text")
   .attr("xlink:href", "#titlepath")
   .text("The Sphere Of My Influences");
 
-// axis elements
-
-var xScale = d3.time.scale().range([0, width - 1]).domain([new Date(1955, 12, 15), new Date()]);
-var xAxis = d3.svg.axis().scale(xScale).tickSize(-20, -10, 0).tickSubdivide(true);
-
 // add groups for links and nodes
 
 var timelinesGroup = svg.append("g").classed("timelines", true);
@@ -95,6 +90,18 @@ var axiesGroup = svg
   .attr("transform", "translate(0, " + TIMELINE_Y + ")")
   .classed("axies", true)
   .attr("class", "axis");
+
+// setup the axies
+
+var timelineScale = d3.time.scale()
+  .range([0, width - 1])
+  .domain([new Date(1900, 12, 15), new Date()]);
+
+var timelineAxis = d3.svg.axis()
+  .scale(timelineScale).tickSize(-20, -10, 0)
+  .tickSubdivide(true);
+
+axiesGroup.call(timelineAxis);
 
 // create the fdl instance
 
@@ -244,23 +251,29 @@ function updateChart(graph) {
     if (dobStr !== undefined) {
       var dob = new Date(dobStr);
       physicalNode.setProperty("birthDate", dob);
-      sampleDate(dob);
     }
       
     // establish date of death
 
     var dodStr = physicalNode.getProperty("dod");
+    var dod = undefined;
+
     if (dodStr !== undefined) {
-      var dod = new Date(dodStr);
+      dod = new Date(dodStr);
       physicalNode.setProperty("deathDate", dod);
-      sampleDate(dod);
     }
     else if (dob != undefined) {
-      var dod = new Date();
+      dod = new Date();
       physicalNode.setProperty("deathDate", dod);
-      sampleDate(dod);
     }
+
+    // establish min max dates
       
+    if (dob !== undefined && dod !== undefined) {
+      sampleDate(dod);
+      sampleDate(dob);
+    }
+
     // physicalNode.x = width/2 + (Math.random() - 0.5) * width/2;
     // physicalNode.y = height/2 + (Math.random() - 0.5) * height/2;
     // physicalNode.x = width/2;
@@ -278,13 +291,23 @@ function updateChart(graph) {
     });
   });
 
+  console.log("minDate", minDate);
+  console.log("maxDate", maxDate);
+
   // adjust scale
 
-  xScale.domain([minDate, maxDate]);
-  xScale.domain([
-    xScale.invert(xScale.range()[0] - TIMELINE_MARGIN), 
-    xScale.invert(xScale.range()[1] + TIMELINE_MARGIN)
+  timelineScale.domain([minDate, maxDate]);
+  timelineScale.domain([
+    timelineScale.invert(timelineScale.range()[0] - TIMELINE_MARGIN), 
+    timelineScale.invert(timelineScale.range()[1] + TIMELINE_MARGIN)
   ]);
+
+  // transition in the new scale
+
+  svg.transition()
+    .duration(2000)
+    .select(".axis")
+    .call(timelineAxis);
 
   var physicalLinks = [];
   var renderedLinks = [];
@@ -335,9 +358,9 @@ function updateChart(graph) {
     .classed("link", true)
     .classed("to", function(d) {return d.target.getId() == centerPerson.getId();})
     .classed("from", function(d) {return d.source.getId() == centerPerson.getId();})
-    .style("stroke-width", ARROW_WIDTH)
-    .append("title")
-    .text(function(d) {return d.getProperty("type")});
+    .style("stroke-width", ARROW_WIDTH);
+    // .append("title")
+    // .text(function(d) {return d.getProperty("type")});
 
   svg.selectAll("path.link")
     .transition()
@@ -356,6 +379,9 @@ function updateChart(graph) {
     .append("path")
     .filter(function(d) {return d.getProperty("birthDate") !== undefined;})
     .classed("timeline", true)
+    .style("opacity", 0)
+    .transition()
+    .duration(2000)
     .style("opacity", function(d) {return d == centerPerson ? TIMELINE_HIGHLIGHT_OPACITY : TIMELINE_OPACITY});
 
   //var exitLinks = allLink.exit().remove();
@@ -461,11 +487,11 @@ function updateChart(graph) {
     .attr("xlink:href", "#namepath")
     .text(function(d) { return d.getProperty("name")});
 
-  scaleGroups
-    .append("title")
-    .text(function(d) {
-      return "dob: " + d.getProperty("dob") + " dod: " + d.getProperty("dod");
-    });
+  // scaleGroups
+  //   .append("title")
+  //   .text(function(d) {
+  //     return "dob: " + d.getProperty("dob") + " dod: " + d.getProperty("dod");
+  //   });
 
   scaleGroups
     .append("g")
@@ -484,8 +510,6 @@ function updateChart(graph) {
     .on("mouseover", onWikipediaMouseOver)
     .on("mouseout", onWikipediaMouseOut)
     .on("click", onWikipediaClick);
-
-  axiesGroup.call(xAxis);
 
   force.on("tick", function(event) {
 
@@ -536,10 +560,10 @@ function updateChart(graph) {
 function timelinePath(node) {
   var TIMELINE_UPSET = 50;
 
-  var birth = {x: xScale(node.getProperty("birthDate")), y: TIMELINE_Y};
+  var birth = {x: timelineScale(node.getProperty("birthDate")), y: TIMELINE_Y};
   var bc1 = {x: node.x, y: TIMELINE_Y - TIMELINE_UPSET};
   var bc2 = {x: birth.x, y: TIMELINE_Y - TIMELINE_UPSET};
-  var death = {x: xScale(node.getProperty("deathDate")), y: TIMELINE_Y};
+  var death = {x: timelineScale(node.getProperty("deathDate")), y: TIMELINE_Y};
   var dc1 = {x: death.x, y: TIMELINE_Y - TIMELINE_UPSET};
   var dc2 = {x: node.x, y: TIMELINE_Y - TIMELINE_UPSET};
 
