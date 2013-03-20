@@ -19,7 +19,7 @@ var LINK_RANDOM = 100;
 var LINK_MIN_OFFSET = 25;
 var RIM_SIZE = 22;
 var NODE_SIZE = 150;
-var IMAGE_SIZE = 108;
+var IMAGE_SIZE = 106;
 var PRINTABLE = true;
 var STOCK_EASE = "elastic";
 var DEFAULT_DURATION = 600;
@@ -29,12 +29,14 @@ var TIMELINE_Y = (height - 20);
 // image for unknown person
 
 var BACK_BUTTON = "images/backbutton.png";
+var FORWARD_BUTTON = "images/forwardbutton.png";
 var UNKNOWN_PERSON = "images/unknown.png";
 var WIKI_LOGO = "images/Wikipedia-logo.png";
 
 // the history of tsomi
 
-var tsmoiHistory = [];
+var tsomiPast = [];
+var tsomiFuture = [];
 
 // create the svg instance
 
@@ -85,21 +87,42 @@ svg.append("text")
 
 // add back button
 
-var BACK_BUTTON_SIZE = 41;
+var FB_BUTTON_SIZE = 34;
+var FB_BUTTON_X_OFF = (80 - FB_BUTTON_SIZE) / 2;
+var FB_BUTTON_X = width - 60;
+var FB_BUTTON_Y = 125;
 
 svg.append("g")
   .attr("transform", "translate(" +
-        (20 + BACK_BUTTON_SIZE / 2) + ", " +
-        (20 + BACK_BUTTON_SIZE / 2) + ")")
+        (FB_BUTTON_X - FB_BUTTON_X_OFF) + ", " +
+        (FB_BUTTON_Y) + ")")
   .append("image")
   .classed("backbutton", true)
   .attr("transform", "scale(0)")
   .attr("xlink:href", BACK_BUTTON)
   .style("opacity", .7)
-  .attr("x", BACK_BUTTON_SIZE / -2)
-  .attr("y", BACK_BUTTON_SIZE / -2)
-  .attr("width", BACK_BUTTON_SIZE)
-  .attr("height", BACK_BUTTON_SIZE);
+  .attr("x", FB_BUTTON_SIZE / -2)
+  .attr("y", FB_BUTTON_SIZE / -2)
+  .attr("width", FB_BUTTON_SIZE)
+  .attr("height", FB_BUTTON_SIZE)
+  .append("title")
+  .text("Go Back (Left Arrow)");
+
+svg.append("g")
+  .attr("transform", "translate(" +
+        (FB_BUTTON_X + FB_BUTTON_X_OFF) + ", " +
+        (FB_BUTTON_Y) + ")")
+  .append("image")
+  .classed("forwardbutton", true)
+  .attr("transform", "scale(0)")
+  .attr("xlink:href", FORWARD_BUTTON)
+  .style("opacity", .7)
+  .attr("x", FB_BUTTON_SIZE / -2)
+  .attr("y", FB_BUTTON_SIZE / -2)
+  .attr("width", FB_BUTTON_SIZE)
+  .attr("height", FB_BUTTON_SIZE)
+  .append("title")
+  .text("Go Forward (Right Arrow)");
 
 // add groups for links and nodes
 
@@ -151,6 +174,16 @@ var centerPerson;
 $(document).ready(function() {
   var subject = estabishInitialSubject();
   querySubject(lengthen(subject, true));
+  $(document).keydown(function(e){
+    switch (e.keyCode) {
+    case 37:
+      goBack();
+      break;
+    case 39:
+      goForward();
+      break;
+    }
+  });
 });
 
 function estabishInitialSubject() {
@@ -189,8 +222,10 @@ function connectToWiki() {
   window.open(d3.select("#wikiframe").attr("src").replace(PRINTABLE_PARAM, ""),'_blank');
 }
 
-function querySubject(subjectId, recordHistory) {
-  recordHistory = recordHistory !== undefined ? recordHistory : true;
+function querySubject(subjectId, recordPast, recordFuture) {
+  recordPast = recordPast !== undefined ? recordPast : true;
+  recordFuture = recordFuture !== undefined ? recordFuture : false;
+
   console.log("query for subject", subjectId);
 
 
@@ -198,8 +233,8 @@ function querySubject(subjectId, recordHistory) {
     console.log(subjectId + " has nodes ", graph.getNodes().length);
     if (graph.getNodes().length > 0) {
 
-      if (recordHistory)
-        saveHistory();
+      if (recordPast) savePast();
+      if (recordFuture) saveFuture();
 
       centerPerson = graph.getNode(subjectId);
       updateChart(graph);
@@ -532,7 +567,9 @@ function updateChart(graph) {
     .attr("transform", "scale(1)")
     .on("mouseover", onWikipediaMouseOver)
     .on("mouseout", onWikipediaMouseOut)
-    .on("click", onWikipediaClick);
+    .on("click", onWikipediaClick)
+    .append("title")
+    .text("Show Wiki Text");
 
   force.on("tick", function(event) {
 
@@ -722,23 +759,66 @@ function onBackbuttonMouseOut(node) {
 }
 
 function onBackbuttonClick(node) {
-  querySubject(tsmoiHistory.shift(), false);
-  if (tsmoiHistory.length == 0)
-    hideBackButton();
+  goBack();
 }
 
-function saveHistory() {
+function onForwardbuttonMouseOver(node) {
+  scaleForwardButton(1.4);
+}
+
+function onForwardbuttonMouseOut(node) {
+  scaleForwardButton(1.0);
+}
+
+function onForwardbuttonClick(node) {
+  goForward();
+}
+
+function goBack() {
+  if (tsomiPast.length > 0) {
+    querySubject(tsomiPast.shift(), false, true);
+    if (tsomiPast.length == 0)
+      hideBackButton();
+  }
+}
+
+function goForward() {
+  if (tsomiFuture.length > 0) {
+    querySubject(tsomiFuture.shift(), true, false);
+    if (tsomiFuture.length == 0)
+      hideForwardButton();
+  }
+}
+
+function savePast() {
   if (centerPerson !== undefined) {
-    tsmoiHistory.unshift(centerPerson.getId());
-    if (tsmoiHistory.length == 1)
+    tsomiPast.unshift(centerPerson.getId());
+    if (tsomiPast.length == 1)
       showBackButton();
   }
+}
+
+function saveFuture() {
+  if (centerPerson !== undefined) {
+    tsomiFuture.unshift(centerPerson.getId());
+    if (tsomiFuture.length == 1)
+      showForwardButton();
+  }
+}
+
+function clearFuture() {
+  tsomiFuture = [];
+  hideForwardButton();
 }
 
 
 function onWikipediaClick(node) {
   d3.select(d3.event.target)
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .ease(STOCK_EASE)
     .attr("transform", "scale(1)");
+
   var event = d3.event;
   setWikiPage(node);
   event.stopPropagation();
@@ -760,6 +840,22 @@ function hideBackButton() {
   scaleBackButton(0);
 }
 
+function showForwardButton() {
+  d3.select(".forwardbutton")
+    .on("mouseover", onForwardbuttonMouseOver)
+    .on("mouseout", onForwardbuttonMouseOut)
+    .on("click", onForwardbuttonClick);
+  scaleForwardButton(1);
+}
+
+function hideForwardButton() {
+  d3.select(".forwardbutton")
+    .on("mouseover", undefined)
+    .on("mouseout", undefined)
+    .on("click", undefined);
+  scaleForwardButton(0);
+}
+
 function scaleBackButton(scale) {
   d3.select(".backbutton")
     .transition()
@@ -768,11 +864,18 @@ function scaleBackButton(scale) {
     .attr("transform", "scale(" + scale + ")");
 }
 
+function scaleForwardButton(scale) {
+  d3.select(".forwardbutton")
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .ease(STOCK_EASE)
+    .attr("transform", "scale(" + scale + ")");
+}
+
 function onNodeClick(node) {
-  d3.selectAll("g.scale")
-    .filter(function(d) {return d.getId() == node.getId()})
-    .attr("transform", function(d) {return "scale(" + computeNodeScale(node, false) + ")"});
+  scaleNode(node, false);
   querySubject(node.getId());
+  clearFuture();
 }
 
 function populate_path(path, points) {

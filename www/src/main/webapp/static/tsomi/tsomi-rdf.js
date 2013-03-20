@@ -33,6 +33,7 @@ var predicates = {
 };
 
 var subjects = {
+  dylan:      "dbpedia:Bob_Dylan",
   bronte:     "dbpedia:Charlotte_Brontë",
   basil:      "dbpedia:Priya_Basil",
   munro:      "dbpedia:Alice_Munro",
