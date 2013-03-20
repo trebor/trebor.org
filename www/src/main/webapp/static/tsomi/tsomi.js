@@ -5,6 +5,7 @@ var color = d3.scale.category20();
 var nextMidId = 0;
 
 var TIMELINE_OPACITY = 0.03;
+var TIMELINE_OPACITY = 0.03;
 var TIMELINE_HIGHLIGHT_OPACITY = 0.2;
 var HEAD_ANGLE = Math.PI / 6;
 var ARROW_WIDTH = 6;
@@ -27,11 +28,13 @@ var TIMELINE_Y = (height - 20);
 
 // image for unknown person
 
+var BACK_BUTTON = "images/backbutton.png";
 var UNKNOWN_PERSON = "images/unknown.png";
 var WIKI_LOGO = "images/Wikipedia-logo.png";
 
-// .tickSize(-height)
-// .tickSubdivide(true);
+// the history of tsomi
+
+var tsmoiHistory = [];
 
 // create the svg instance
 
@@ -79,6 +82,24 @@ svg.append("text")
   .append("textPath")
   .attr("xlink:href", "#titlepath")
   .text("The Sphere Of My Influences");
+
+// add back button
+
+var BACK_BUTTON_SIZE = 41;
+
+svg.append("g")
+  .attr("transform", "translate(" +
+        (20 + BACK_BUTTON_SIZE / 2) + ", " +
+        (20 + BACK_BUTTON_SIZE / 2) + ")")
+  .append("image")
+  .classed("backbutton", true)
+  .attr("transform", "scale(0)")
+  .attr("xlink:href", BACK_BUTTON)
+  .style("opacity", .7)
+  .attr("x", BACK_BUTTON_SIZE / -2)
+  .attr("y", BACK_BUTTON_SIZE / -2)
+  .attr("width", BACK_BUTTON_SIZE)
+  .attr("height", BACK_BUTTON_SIZE);
 
 // add groups for links and nodes
 
@@ -168,14 +189,19 @@ function connectToWiki() {
   window.open(d3.select("#wikiframe").attr("src").replace(PRINTABLE_PARAM, ""),'_blank');
 }
 
-function querySubject(subjectId) {
+function querySubject(subjectId, recordHistory) {
+  recordHistory = recordHistory !== undefined ? recordHistory : true;
   console.log("query for subject", subjectId);
+
+
   getPerson(subjectId, function(graph) {
     console.log(subjectId + " has nodes ", graph.getNodes().length);
     if (graph.getNodes().length > 0) {
 
+      if (recordHistory)
+        saveHistory();
+
       centerPerson = graph.getNode(subjectId);
-      console.log("centerPerson", centerPerson.getProperty("name"));
       updateChart(graph);
       
       // set wiki page
@@ -290,9 +316,6 @@ function updateChart(graph) {
       // }
     });
   });
-
-  console.log("minDate", minDate);
-  console.log("maxDate", maxDate);
 
   // adjust scale
 
@@ -667,7 +690,6 @@ function onNodeMouseOver(node) {
 
 function onImageClick(node) {
   node.open = !node.open || false;
-  console.log(node.getProperty("name") + " image", node.open);
   if (node.open) 
     $("#wikidiv").animate({left: "100px"});
   else
@@ -691,6 +713,29 @@ function onWikipediaMouseOut(node) {
     .attr("transform", "scale(1)");
 }
 
+function onBackbuttonMouseOver(node) {
+  scaleBackButton(1.4);
+}
+
+function onBackbuttonMouseOut(node) {
+  scaleBackButton(1.0);
+}
+
+function onBackbuttonClick(node) {
+  querySubject(tsmoiHistory.shift(), false);
+  if (tsmoiHistory.length == 0)
+    hideBackButton();
+}
+
+function saveHistory() {
+  if (centerPerson !== undefined) {
+    tsmoiHistory.unshift(centerPerson.getId());
+    if (tsmoiHistory.length == 1)
+      showBackButton();
+  }
+}
+
+
 function onWikipediaClick(node) {
   d3.select(d3.event.target)
     .attr("transform", "scale(1)");
@@ -699,6 +744,29 @@ function onWikipediaClick(node) {
   event.stopPropagation();
 }
 
+function showBackButton() {
+  d3.select(".backbutton")
+    .on("mouseover", onBackbuttonMouseOver)
+    .on("mouseout", onBackbuttonMouseOut)
+    .on("click", onBackbuttonClick);
+  scaleBackButton(1);
+}
+
+function hideBackButton() {
+  d3.select(".backbutton")
+    .on("mouseover", undefined)
+    .on("mouseout", undefined)
+    .on("click", undefined);
+  scaleBackButton(0);
+}
+
+function scaleBackButton(scale) {
+  d3.select(".backbutton")
+    .transition()
+    .duration(DEFAULT_DURATION)
+    .ease(STOCK_EASE)
+    .attr("transform", "scale(" + scale + ")");
+}
 
 function onNodeClick(node) {
   d3.selectAll("g.scale")
