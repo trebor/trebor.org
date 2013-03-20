@@ -52,6 +52,7 @@ var subjects = {
   pinker:     "dbpedia:Steven_Pinker",
   sontag:     "dbpedia:Susan_Sontag",
   einstein:   "dbpedia:Albert_Einstein",
+  silverman:  "dbpedia:Sarah_Silverman",
   kant:       "dbpedia:Immanuel_Kant",
 };
 
