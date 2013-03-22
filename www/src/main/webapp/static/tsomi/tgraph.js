@@ -148,16 +148,12 @@ TGraph.prototype = {
     var self = this;
 
     this.getLinks().some(function(existingLink) {
-      console.log("existing", source.getId(), target.getId());
       if (existingLink.getSource() == source 
           && existingLink.getTarget() == target 
           && self.tEquals.call(link_properties, existingLink.getProperties())) {
         link = existingLink;
-        console.log("TRUE!");
         return true;
       }
-      else
-        console.log("FALSE!");
 
       return false;
     });
@@ -342,8 +338,6 @@ TGraph.instanceOf = function(thing) {
 }
 
 var exports = exports || {};
-
 exports.TGraph = TGraph;
 exports.TNode = TNode;
 exports.TLink = TLink;
-

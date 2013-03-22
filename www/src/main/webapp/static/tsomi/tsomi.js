@@ -172,6 +172,8 @@ var centerPerson;
 // fire everything off when the document is ready
 
 $(document).ready(function() {
+
+  createSpecialData();
   var subject = estabishInitialSubject();
   querySubject(lengthen(subject, true));
   $(document).keydown(function(e){
@@ -248,7 +250,11 @@ function querySubject(subjectId, recordPast, recordFuture) {
 
 function setWikiPage(node) {
   setWikiConnectButtonVisibility(false);
-  var page = node.getProperty("wikiTopic") + (PRINTABLE ? PRINTABLE_PARAM : "");
+  var page = node.getProperty("wikiTopic");
+
+  if (PRINTABLE && page.indexOf("wikipedia.org") >= 0)
+    page += PRINTABLE_PARAM;
+
   var wiki = d3.select("#wikiframe")
     .attr("onload", "setWikiConnectButtonVisibility(true)")
     .attr("src", page);

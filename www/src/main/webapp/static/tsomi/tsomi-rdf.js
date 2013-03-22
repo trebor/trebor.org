@@ -49,11 +49,17 @@ var subjects = {
   obama:      "dbpedia:Barack_Obama",
   chomsky:    "dbpedia:Noam_Chomsky",
   eroosevelt: "dbpedia:Eleanor_Roosevelt(Hato_Rey)",
-  pinker:     "dbpedia:Steven_Pinker",
   sontag:     "dbpedia:Susan_Sontag",
   einstein:   "dbpedia:Albert_Einstein",
   silverman:  "dbpedia:Sarah_Silverman",
+  trebor:     "dbpedia:Robert_Boyd_Harris",
+  geerlings:  "dbpedia:Stephanie_Geerlings",
   kant:       "dbpedia:Immanuel_Kant",
+  tufte:      "dbpedia:Edward_Tufte",
+  dawkins:    "dbpedia:Richard_Dawkins",
+  norman:     "dbpedia:Donald_Norman",
+  mccloud:    "dbpedia:Scott_McCloud",
+  pinker:     "dbpedia:Steven_Pinker",
 };
 
 var personalDetails = [
@@ -68,6 +74,87 @@ var personalDetails = [
 var personCache = {};
 
 personCache[lengthen(subjects.mock, true)] = createMockData();
+
+var specialPeople = {};
+
+var specialPeopleData = [
+  {id: "dbpedia:Robert_Boyd_Harris", 
+   name: "Robert Harris", 
+   thumbnail: "images/trebor3.png",
+   wikiTopic: "http://www.trebor.org",
+   dob: "1966-02-08",
+   influenced: [],
+   influencedBy: [
+     subjects.geerlings,
+     subjects.tufte,
+     subjects.dawkins,
+     subjects.norman,
+     subjects.pinker,
+     subjects.mccloud,
+   ]
+  },
+  {id: "dbpedia:Stephanie_Geerlings", 
+   name: "Stephanie_Geerlings", 
+   thumbnail: "images/Stephanie_Geerlings.jpg",
+   wikiTopic: "http://pinterest.com/stillsmall",
+   influenced: [
+     subjects.trebor,
+   ],
+   influencedBy: [
+     subjects.sontag,
+   ]
+  },
+];
+
+createSpecialData = function () {
+
+  // great graph for each person
+
+  specialPeopleData.forEach(function(person) {
+    var g = new TGraph();
+    var id = lengthen(person.id, true);
+    var node = g.addNode(id);
+    node.setProperty("name", person.name);
+    node.setProperty("thumbnail", person.thumbnail);
+    node.setProperty("wikiTopic", person.wikiTopic);
+    node.setProperty("dob", person.dob);
+    personCache[id] = g;
+    specialPeople[id] = g;
+  });
+
+  specialPeopleData.forEach(function(person) {
+    var id = lengthen(person.id, true);
+    var g = specialPeople[id];
+
+    person.influencedBy.forEach(function(influencedBy) {
+      var influencedById = lengthen(influencedBy, true);
+      
+      var otherG = specialPeople[influencedById];
+      if (otherG !== undefined) {
+        g.addLink(otherG.getNode(influencedById), id);
+      }
+      else {
+        queryDetails(g, influencedById, function() {
+          g.addLink(influencedById, id);
+        });
+      }
+    });
+
+    person.influenced.forEach(function(influenced) {
+      var influencedId = lengthen(influenced, true);
+
+      var otherG = specialPeople[influencedId];
+      if (otherG !== undefined) {
+        g.addLink(id, otherG.getNode(influencedId));
+      }
+      else {
+        queryDetails(g, influencedId, function() {
+          g.addLink(id, influencedId);
+        });
+      }
+    });
+  });
+}
 
 var personDetailsSelect = function() {
   var result = "";
@@ -261,7 +348,7 @@ function createMockData() {
 
 function getPerson(id, callback) {
 
-  // if the person is in the chache, use that
+  // if the person is in the cache, use that
 
   var personGraph = personCache[id];
   if (personGraph !== undefined) {
@@ -279,19 +366,41 @@ function getPerson(id, callback) {
 
 function queryForPerson(targetId, callback) {
   var targetGraph = new TGraph();
-  queryForInfluencedBy1(targetGraph, targetId, function() {
-    queryForInfluencedBy2(targetGraph, targetId, function() {
-      queryForInfluenced1(targetGraph, targetId, function() {
-        queryForInfluenced2(targetGraph, targetId, function() {
-          var targetNode = targetGraph.getNode(targetId);
-          if (targetNode !== undefined) {
-            queryDetails(targetNode, function() {callback(targetGraph);});
-          } else {
+
+  queryDetails(targetGraph, targetId, function() {
+
+    // if no data the wat wah!
+
+    if (targetGraph.getNode(targetId) === undefined) {
+      bindSpecialPeople(targetId, targetGraph);
+      callback(targetGraph);
+      return;
+    }
+
+    // get the relationships
+    
+    queryForInfluencedBy1(targetGraph, targetId, function() {
+      queryForInfluencedBy2(targetGraph, targetId, function() {
+        queryForInfluenced1(targetGraph, targetId, function() {
+          queryForInfluenced2(targetGraph, targetId, function() {
+            bindSpecialPeople(targetId, targetGraph);
             callback(targetGraph);
-          }
+          })
         })
       })
     })
+  });
+}
+
+function bindSpecialPeople(targetId, targetGraph) {
+  Object.keys(specialPeople).forEach(function(specialPersonId) {
+    var specialPerson = specialPeople[specialPersonId];
+    var specialNode = specialPerson.getNode(specialPersonId);
+    specialPerson.getArrivingLinks(specialPersonId).forEach(function(link) {
+      if (link.getSource().getId() == targetId) {
+        targetGraph.addLink(targetId, specialNode);
+      }
+    });
   });
 }
 
@@ -357,26 +466,16 @@ function applyDetails(node, binding) {
   });
 }
 
-function queryAllDetails(personNodes, callback) {
+function queryDetails(targetGraph, targetId, callback) {
 
-  if (personNodes.length == 0) {
-    callback();
-  }
-  else {
-    queryDetails(personNodes.shift(), function() {
-      queryAllDetails(personNodes, callback);
-    });
-  }
-}
-
-function queryDetails(personNode, callback) {
-  sparqlQuery(query_details, {target: personNode.getId()}, function(details) {
+  sparqlQuery(query_details, {target: targetId}, function(details) {
     if (details !== undefined) {
       if (details.results.bindings.length > 0) {
         var detailsBinding = details.results.bindings[0];
+        var targetNode = targetGraph.addNode(targetId);
         details.head.vars.forEach(function(key) {
           if (detailsBinding[key] !== undefined)
-            personNode.setProperty(key, detailsBinding[key].value);
+            targetNode.setProperty(key, detailsBinding[key].value);
         });
       }
     }
