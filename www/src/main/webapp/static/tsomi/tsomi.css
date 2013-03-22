@@ -111,13 +111,20 @@ div {
 .backdrop {
   /* fill: #E5F5D2; */
   fill: #eee;
-  stroke-width: 2px;
+  stroke-width: 1px;
+  stroke: #ddd;
+}
+
+.backdrop.clicked {
+  /* fill: #E5F5D2; */
+  fill: #eee;
+  stroke-width: 10px;
   stroke: #ddd;
 }
 
 .rim {
   fill: none;
-  stroke-width: 2px;
+  /* stroke-width: 2px; */
   /* stroke: #E5F5D2; */
   stroke: #eee;
   /* opacity: 0.5; */

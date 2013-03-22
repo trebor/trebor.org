@@ -881,8 +881,41 @@ function scaleForwardButton(scale) {
 function onNodeClick(node) {
   // scaleNode(node, false);
   //onNodeMouseOut(node);
-  querySubject(node.getId());
-  clearFuture();
+
+  // timelinesGroup.selectAll(".backdrop")
+  //   .filter(function(d) {return d == node})
+  //   .classed("clicked", true);
+
+  var clickEase = "cubic-in-out";
+  var clickDuration = DEFAULT_DURATION / 3;
+  var scale = computeNodeScale(node, true);
+  d3.selectAll("g.scale")
+    .filter(function(d) {return d.getId() == node.getId()})
+    .attr("transform", function(d) {return "scale(" + scale + ") rotate(0)"})
+    // .attr("transform", function(d) {return "scale(" + scale + ") translate(0, 0)"})
+    // .attr("transform", function(d) {return "scale(" + scale + ") rotate(0) translate(0, 0)"})
+    .transition()
+    .duration(clickDuration)
+    .ease(clickEase)
+    .attr("transform", function(d) {return "scale(" + scale + ") rotate(-10)"})
+    // .attr("transform", function(d) {return "scale(" + scale + ") translate(0, 10)"})
+    // .attr("transform", function(d) {return "scale(" + scale + ") rotate(-10) translate(0, 10)"})
+    .transition()
+    .duration(clickDuration)
+    .ease(clickEase)
+    .attr("transform", function(d) {return "scale(" + scale + ") rotate(10)"})
+    // .attr("transform", function(d) {return "scale(" + scale + ") translate(0, -10)"})
+    // .attr("transform", function(d) {return "scale(" + scale + ") rotate(10) translate(0, -10)"})
+    .transition()
+    .duration(clickDuration)
+    .ease(clickEase)
+    .attr("transform", function(d) {return "scale(" + scale + ") rotate(0)"})
+    // .attr("transform", function(d) {return "scale(" + scale + ") translate(0, 0)"})
+    // .attr("transform", function(d) {return "scale(" + scale + ") rotate(0) translate(0, 0)"})
+    .each("end", function() {
+      querySubject(node.getId());
+      clearFuture();
+    });
 }
 
 function populate_path(path, points) {
