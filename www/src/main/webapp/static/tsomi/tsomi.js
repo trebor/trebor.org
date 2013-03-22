@@ -879,7 +879,8 @@ function scaleForwardButton(scale) {
 }
 
 function onNodeClick(node) {
-  scaleNode(node, false);
+  // scaleNode(node, false);
+  //onNodeMouseOut(node);
   querySubject(node.getId());
   clearFuture();
 }
