@@ -17,9 +17,9 @@ var CHARGE_RANDOM = 0;
 var LINK_BASE = 40;
 var LINK_RANDOM = 100;
 var LINK_MIN_OFFSET = 25;
-var RIM_SIZE = 22;
+var RIM_SIZE = 15;
 var NODE_SIZE = 150;
-var IMAGE_SIZE = 106;
+var IMAGE_SIZE = 180;
 var PRINTABLE = true;
 var STOCK_EASE = "elastic";
 var DEFAULT_DURATION = 600;
@@ -48,6 +48,19 @@ var svg = d3.select("#chart")
 // create a definitions section
 
 var defs = svg.append("defs");
+
+// create clip path for image
+
+defs.append("svg:clipPath")
+  .attr("id", "image-clip")
+  .on("mouseover", onNodeMouseOver)
+  .on("mouseout", onNodeMouseOut)
+  .append("svg:circle")
+  .on("mouseover", onNodeMouseOver)
+  .on("mouseout", onNodeMouseOut)
+  .attr("cx", 0)
+  .attr("cy", 0)
+  .attr("r", IMAGE_SIZE / 2);
 
 // create path for names
 
@@ -467,7 +480,6 @@ function updateChart(graph) {
     .duration(DEFAULT_DURATION)
     .remove();
 
-
   var nodeGroups = enterNodes
     .append("g")
     .classed("node", true)
@@ -482,6 +494,7 @@ function updateChart(graph) {
 
   var scaleGroups = nodeGroups
     .append("g")
+    .attr("clip-path", "url(#image-clip)")
     .attr("transform", "scale(0)")
     .classed("scale", true);
   
@@ -493,10 +506,12 @@ function updateChart(graph) {
   scaleGroups
     .append("circle")
     .classed("backdrop", true)
-    .attr("r", NODE_SIZE / 2);
+    .attr("r", IMAGE_SIZE / 2);
 
   scaleGroups
     .append("image")
+    .on("mouseover", onNodeMouseOver)
+    .on("mouseout", onNodeMouseOut)
     .filter(function(d) {return !d.getProperty("hidden")})
     .attr("pointer-events", "none")
     .attr("xlink:href", function(d) {
@@ -531,25 +546,45 @@ function updateChart(graph) {
     .attr("width", IMAGE_SIZE)
     .attr("height", IMAGE_SIZE);
 
+  // scaleGroups
+  //   .append("circle")
+  //   .classed("rim", true)
+  //   .attr("pointer-events", "none")
+  //   .attr("r", (NODE_SIZE - RIM_SIZE) / 2)
+  //   .style("stroke-width", RIM_SIZE);
+
+  // scaleGroups
+  //   .append("text")
+  //   .attr("pointer-events", "none")
+  //   .attr("dx", BrowserDetect.browser == "Firefox" ? "403" : "203")
+  //   .attr("dy", "0.3em")
+  //   .attr("text-anchor", "middle")
+  //   .append("textPath")
+  //   .classed("name", true)
+  //   .attr("xlink:href", "#namepath")
+  //   .text(function(d) { return d.getProperty("name")});
+
+  var BANNER_X = IMAGE_SIZE;
+  var BANNER_Y = 50;
 
   scaleGroups
-    .append("circle")
-    .classed("rim", true)
-    .attr("pointer-events", "none")
-    .attr("r", (NODE_SIZE - RIM_SIZE) / 2)
-    .style("stroke-width", RIM_SIZE);
-
+    .append("path")
+    .classed("banner", true)
+    .style("stroke-width", RIM_SIZE)
+    .attr("d", populate_path(
+      "M X0 Y0 L X1 Y1", 
+      [{x: -BANNER_X, y: BANNER_Y},
+       {x: +BANNER_X, y: BANNER_Y}]));
 
   scaleGroups
     .append("text")
-    .attr("pointer-events", "none")
-    .attr("dx", BrowserDetect.browser == "Firefox" ? "403" : "203")
-    .attr("dy", "0.3em")
-    .attr("text-anchor", "middle")
-    .append("textPath")
     .classed("name", true)
-    .attr("xlink:href", "#namepath")
+    .attr("pointer-events", "none")
+    .attr("text-anchor", "middle")
+    .attr("y", BANNER_Y)
+    .attr("dy", "0.3em")
     .text(function(d) { return d.getProperty("name")});
+
 
   // scaleGroups
   //   .append("title")
@@ -643,7 +678,7 @@ function arrowPath(link) {
   var t = link.target;
 
   var angle = angleRadians(t, m);
-  var nodeRadius = (NODE_SIZE / 2) * computeNodeScale(t) + ARROW_WIDTH;
+  var nodeRadius = (IMAGE_SIZE / 2) * computeNodeScale(t) + ARROW_WIDTH;
 
   var tip = radial(t, nodeRadius, angle);
   var left = radial(tip, 20, angle + HEAD_ANGLE);
@@ -690,6 +725,7 @@ function scaleNode(node, isMouseOver) {
 }
 
 function onNodeMouseOut(node) {
+  console.log("onNodeMouseOut", node);
   scaleNode(node, false);
 
   timelinesGroup.selectAll(".timeline")
@@ -700,10 +736,11 @@ function onNodeMouseOut(node) {
     .ease(STOCK_EASE)
     .style("opacity", TIMELINE_OPACITY);
 
-  event.stopPropagation();
+  // event.stopPropagation();
 }
 
 function onNodeMouseOver(node) {
+  console.log("onNodeMouseOver", node);
 
   // move node to top of the stack
 
@@ -728,7 +765,7 @@ function onNodeMouseOver(node) {
     .ease(STOCK_EASE)
     .style("opacity", TIMELINE_HIGHLIGHT_OPACITY);
 
-  event.stopPropagation();
+//  event.stopPropagation();
 }
 
 function onImageClick(node) {

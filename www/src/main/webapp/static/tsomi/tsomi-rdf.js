@@ -1,6 +1,7 @@
 var QUERY_URL = "http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&format=json&query=";
 
-var debugging = false;
+var LANGUAGE = "en";
+var debugging = true;
 
 var prefixies = [
   {prefix: "rdf",         uri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"},
@@ -25,7 +26,8 @@ var predicates = {
   influencedBy: "dbpedia-owl:influencedBy",
   depiction: "foaf:depiction",
   thumbnail: "dbpedia-owl:thumbnail",
-  name: "foaf:name",
+  //name: "foaf:name",
+  name: "rdfs:label",
   wikiTopic: "foaf:isPrimaryTopicOf",
   occupation: "dbpprop:occupation",
   dob: "dbpedia-owl:birthDate",
@@ -63,12 +65,12 @@ var subjects = {
 };
 
 var personalDetails = [
-  {name: "name",       optional: false, type: "literal"},
-  {name: "thumbnail",  optional: true,  type: "url"},
-  {name: "depiction",  optional: true,  type: "url"},
-  {name: "wikiTopic",  optional: false, type: "url"},
-  {name: "dob",        optional: true,  type: "literal"},
-  {name: "dod",        optional: true,  type: "literal"},
+  {name: "name",       optional: false, language: true,  type: "literal"},
+  {name: "thumbnail",  optional: true,  language: false, type: "url"},
+  {name: "depiction",  optional: true,  language: false, type: "url"},
+  {name: "wikiTopic",  optional: false, language: false, type: "url"},
+  {name: "dob",        optional: true,  language: false, type: "literal"},
+  {name: "dod",        optional: true,  language: false, type: "literal"},
 ];
 
 var personCache = {};
@@ -94,7 +96,7 @@ var specialPeopleData = [
    ]
   },
   {id: "dbpedia:Stephanie_Geerlings", 
-   name: "Stephanie_Geerlings", 
+   name: "Stephanie Geerlings", 
    thumbnail: "images/Stephanie_Geerlings.jpg",
    wikiTopic: "http://pinterest.com/stillsmall",
    influenced: [
@@ -170,11 +172,22 @@ var personDetailsWhere = function(target) {
     var name = detail.name;
     var predicate = predicates[name];
 
-    if (detail.optional) {
-      result += "  OPTIONAL {" + target + " " + predicate + " ?" + name + " . }\n";
-    } else {
-      result += "  " + target + " " + predicate + " ?" + name + " .\n";
-    }
+    var optional = detail.optional 
+      ? "OPTIONAL "
+      : "";
+
+    var filter = detail.language 
+      ? "FILTER (" + " LANG(?" + name + ") = \"" + LANGUAGE + "\") "
+      : "";
+
+    result += optional + 
+      "{" + target + " " + predicate + " ?" + name + " . " + filter + "}\n";
+
+    // if (detail.optional) {
+    //   result += "  OPTIONAL {" + target + " " + predicate + " ?" + name + " . }\n";
+    // } else {
+    //   result += "  " + target + " " + predicate + " ?" + name + " .\n";
+    // }
   });
   return result; // + "\n  FILTER(langMatches(lang(?name), 'EN'))";
 };
