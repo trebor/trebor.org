@@ -20,9 +20,12 @@ var LINK_MIN_OFFSET = 25;
 var RIM_SIZE = 15;
 var NODE_SIZE = 150;
 var IMAGE_SIZE = 180;
+var BANNER_SIZE = 25;
+var BANNER_X = IMAGE_SIZE;
+var BANNER_Y = 45;
 var PRINTABLE = true;
 var STOCK_EASE = "elastic";
-var DEFAULT_DURATION = 600;
+var DEFAULT_DURATION = 1000;
 var TIMELINE_MARGIN = 50;
 var TIMELINE_Y = (height - 20);
 
@@ -30,7 +33,7 @@ var TIMELINE_Y = (height - 20);
 
 var BACK_BUTTON = "images/backbutton.png";
 var FORWARD_BUTTON = "images/forwardbutton.png";
-var UNKNOWN_PERSON = "images/unknown.png";
+var UNKNOWN_PERSON = "images/unknown2.png";
 var WIKI_LOGO = "images/Wikipedia-logo.png";
 
 // the history of tsomi
@@ -53,23 +56,55 @@ var defs = svg.append("defs");
 
 defs.append("svg:clipPath")
   .attr("id", "image-clip")
-  .on("mouseover", onNodeMouseOver)
-  .on("mouseout", onNodeMouseOut)
   .append("svg:circle")
-  .on("mouseover", onNodeMouseOver)
-  .on("mouseout", onNodeMouseOut)
   .attr("cx", 0)
   .attr("cy", 0)
   .attr("r", IMAGE_SIZE / 2);
+
+defs.append('svg:linearGradient')
+  .attr('id', 'loading-gradient')
+  .attr('x1', "0%")
+  .attr('y1', "0%")
+  .attr('x2', "100%")
+  .attr('y2', "0%")
+  .call(function(gradient) {
+    gradient.append('svg:stop')
+      .attr('offset', '0%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '1');
+    gradient.append('svg:stop')
+      .attr('offset', '50%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+    gradient.append('svg:stop')
+      .attr('offset', '100%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+//      .attr('style', 'stop-color:rgb(0,0,0);stop-opacity:0');
+  });
+ 
+defs.append("svg:clipPath")
+  .attr("id", "loading-clip")
+  .append("svg:circle")
+  .attr("cx", 0)
+  .attr("cy", 0)
+  .attr("r", IMAGE_SIZE / 2 + 10);
 
 // create path for names
 
 defs.append("path")
   .attr("id", "namepath")
   .attr("d", function() {
-    var r = (NODE_SIZE - RIM_SIZE) / 2;
+    var r = (NODE_SIZE - BANNER_SIZE) / 2;
     return "M 0 " + (-r) + " a " + r + " " + r + " 0 1 0 0.01 0 Z";
   });
+
+defs.append("path")
+  .attr("id", "bannerpath")
+  .attr("d", populate_path(
+    "M X0 Y0 L X1 Y1", 
+    [{x: -BANNER_X, y: BANNER_Y},
+     {x: +BANNER_X, y: BANNER_Y}]));
 
 // create path for titles
 
@@ -237,15 +272,16 @@ function connectToWiki() {
   window.open(d3.select("#wikiframe").attr("src").replace(PRINTABLE_PARAM, ""),'_blank');
 }
 
-function querySubject(subjectId, recordPast, recordFuture) {
+function querySubject(subjectId, recordPast, recordFuture, callback) {
+  callback = callback || function() {};
   recordPast = recordPast !== undefined ? recordPast : true;
   recordFuture = recordFuture !== undefined ? recordFuture : false;
 
-  console.log("query for subject", subjectId);
+  //console.log("query for subject", subjectId);
 
 
   getPerson(subjectId, function(graph) {
-    console.log(subjectId + " has nodes ", graph.getNodes().length);
+    //console.log(subjectId + " has nodes ", graph.getNodes().length);
     if (graph.getNodes().length > 0) {
 
       if (recordPast) savePast();
@@ -258,6 +294,7 @@ function querySubject(subjectId, recordPast, recordFuture) {
 
       setWikiPage(centerPerson);
     }
+    callback();
   });
 }
 
@@ -497,7 +534,7 @@ function updateChart(graph) {
     .attr("clip-path", "url(#image-clip)")
     .attr("transform", "scale(0)")
     .classed("scale", true);
-  
+
   scaleGroups
     .transition()
     .duration(DEFAULT_DURATION)
@@ -510,9 +547,6 @@ function updateChart(graph) {
 
   scaleGroups
     .append("image")
-    .on("mouseover", onNodeMouseOver)
-    .on("mouseout", onNodeMouseOut)
-    .filter(function(d) {return !d.getProperty("hidden")})
     .attr("pointer-events", "none")
     .attr("xlink:href", function(d) {
 
@@ -540,41 +574,40 @@ function updateChart(graph) {
       return d.images.shift(); 
     })
     .on("error", function(d) {this.setAttribute("href", d.images.shift());})
-    // .on("click", onImageClick)
     .attr("x", -IMAGE_SIZE / 2)
     .attr("y", -IMAGE_SIZE / 2)
     .attr("width", IMAGE_SIZE)
     .attr("height", IMAGE_SIZE);
 
-  // scaleGroups
-  //   .append("circle")
-  //   .classed("rim", true)
-  //   .attr("pointer-events", "none")
-  //   .attr("r", (NODE_SIZE - RIM_SIZE) / 2)
-  //   .style("stroke-width", RIM_SIZE);
-
-  // scaleGroups
-  //   .append("text")
-  //   .attr("pointer-events", "none")
-  //   .attr("dx", BrowserDetect.browser == "Firefox" ? "403" : "203")
-  //   .attr("dy", "0.3em")
-  //   .attr("text-anchor", "middle")
-  //   .append("textPath")
-  //   .classed("name", true)
-  //   .attr("xlink:href", "#namepath")
-  //   .text(function(d) { return d.getProperty("name")});
-
-  var BANNER_X = IMAGE_SIZE;
-  var BANNER_Y = 50;
-
   scaleGroups
     .append("path")
     .classed("banner", true)
-    .style("stroke-width", RIM_SIZE)
+    .style("stroke-width", BANNER_SIZE)
     .attr("d", populate_path(
       "M X0 Y0 L X1 Y1", 
       [{x: -BANNER_X, y: BANNER_Y},
        {x: +BANNER_X, y: BANNER_Y}]));
+
+ // scaleGroups
+ //    .append("text")
+ //    .attr("pointer-events", "none")
+ //    .attr("dx", BrowserDetect.browser == "Firefox" ? "403" : "203")
+ //    .attr("dy", "0.3em")
+ //    .attr("text-anchor", "middle")
+ //    .append("textPath")
+ //    .classed("name", true)
+ //    .attr("xlink:href", "#namepath")
+ //    .text(function(d) { return d.getProperty("name")});
+
+  // scaleGroups
+  //   .append("text")
+  //   .attr("pointer-events", "none")
+  //   .attr("text-anchor", "middle")
+  //   .attr("x", 50)
+  //   .append("textPath")
+  //   .classed("name", true)
+  //   .attr("xlink:href", "#bannerpath")
+  //   .text(function(d) { return d.getProperty("name")});
 
   scaleGroups
     .append("text")
@@ -585,12 +618,14 @@ function updateChart(graph) {
     .attr("dy", "0.3em")
     .text(function(d) { return d.getProperty("name")});
 
-
-  // scaleGroups
-  //   .append("title")
-  //   .text(function(d) {
-  //     return "dob: " + d.getProperty("dob") + " dod: " + d.getProperty("dod");
-  //   });
+  scaleGroups
+    .append("circle")
+    .classed("loading-ring", true)
+    .attr('fill', 'none')
+    .attr('visibility', 'hidden')
+    .attr('stroke', 'url(#loading-gradient)')
+    .attr('stroke-width', RIM_SIZE)
+    .attr("r", (IMAGE_SIZE - RIM_SIZE) / 2 + 1);
 
   scaleGroups
     .append("g")
@@ -721,11 +756,21 @@ function scaleNode(node, isMouseOver) {
     .transition()
     .duration(DEFAULT_DURATION)
     .ease(STOCK_EASE)
+    // .styleTween("font-size", function(d) {
+    //   console.log("tween", d);
+    //   var self = this;
+    //   return function(i, j) {
+    //     // console.log("i", i);
+    //     // console.log("this", this);
+    //     d3.select(self).select(".name").style("font-size", 25); //i * 10 + "px");
+    //     //d3.interpolate(self.style.getPropertyValue("font-size"), i)(i);
+    //   }
+    // })
     .attr("transform", function(d) {return "scale(" + scale + ")"});
 }
 
 function onNodeMouseOut(node) {
-  console.log("onNodeMouseOut", node);
+  //console.log("onNodeMouseOut", node);
   scaleNode(node, false);
 
   timelinesGroup.selectAll(".timeline")
@@ -740,7 +785,7 @@ function onNodeMouseOut(node) {
 }
 
 function onNodeMouseOver(node) {
-  console.log("onNodeMouseOver", node);
+  //console.log("onNodeMouseOver", node);
 
   // move node to top of the stack
 
@@ -916,43 +961,47 @@ function scaleForwardButton(scale) {
 }
 
 function onNodeClick(node) {
-  // scaleNode(node, false);
-  //onNodeMouseOut(node);
+  var stopSinner = startSpinner(node);
+  querySubject(node.getId(), true, false, stopSinner);
+  clearFuture();
+}
 
-  // timelinesGroup.selectAll(".backdrop")
-  //   .filter(function(d) {return d == node})
-  //   .classed("clicked", true);
+function startSpinner(node) {
 
-  var clickEase = "cubic-in-out";
-  var clickDuration = DEFAULT_DURATION / 3;
-  var scale = computeNodeScale(node, true);
-  d3.selectAll("g.scale")
-    .filter(function(d) {return d.getId() == node.getId()})
-    .attr("transform", function(d) {return "scale(" + scale + ") rotate(0)"})
-    // .attr("transform", function(d) {return "scale(" + scale + ") translate(0, 0)"})
-    // .attr("transform", function(d) {return "scale(" + scale + ") rotate(0) translate(0, 0)"})
+  console.log("startSpinner", node.getProperty("name"));
+
+  var loadingDuration = 500;
+  var stop = false;
+  
+  var ring = d3.selectAll(".loading-ring")
+    .filter(function(d) {return d.getId() == node.getId()});
+
+  ring
+    .attr('visibility', 'visibile')
+    .attr("transform", function(d) {return "rotate(0)"})
     .transition()
-    .duration(clickDuration)
-    .ease(clickEase)
-    .attr("transform", function(d) {return "scale(" + scale + ") rotate(-10)"})
-    // .attr("transform", function(d) {return "scale(" + scale + ") translate(0, 10)"})
-    // .attr("transform", function(d) {return "scale(" + scale + ") rotate(-10) translate(0, 10)"})
+    .duration(loadingDuration)
+    .ease("linear")
+    .attr("transform", function(d) {return "rotate(120)"})
     .transition()
-    .duration(clickDuration)
-    .ease(clickEase)
-    .attr("transform", function(d) {return "scale(" + scale + ") rotate(10)"})
-    // .attr("transform", function(d) {return "scale(" + scale + ") translate(0, -10)"})
-    // .attr("transform", function(d) {return "scale(" + scale + ") rotate(10) translate(0, -10)"})
+    .duration(loadingDuration)
+    .ease("linear")
+    .attr("transform", function(d) {return "rotate(240)"})
     .transition()
-    .duration(clickDuration)
-    .ease(clickEase)
-    .attr("transform", function(d) {return "scale(" + scale + ") rotate(0)"})
-    // .attr("transform", function(d) {return "scale(" + scale + ") translate(0, 0)"})
-    // .attr("transform", function(d) {return "scale(" + scale + ") rotate(0) translate(0, 0)"})
+    .duration(loadingDuration)
+    .ease("linear")
+    .attr("transform", function(d) {return "rotate(360)"})
     .each("end", function() {
-      querySubject(node.getId());
-      clearFuture();
+      if (ring.attr('visibility') == 'visibile')
+        startSpinner(node);
     });
+
+  // return the function to stop the spinner
+
+  return function() {
+    console.log("stopSpinner", node.getProperty("name"));
+    ring.attr('visibility', 'hidden');
+  };
 }
 
 function populate_path(path, points) {
