@@ -50,6 +50,13 @@
     <to last="true">/static/$1</to>
   </rule>
 
+  <!-- given no subject, default to oates -->
+
+  <rule>
+    <from>^/tsomi/?$</from>
+    <to last="true" type="redirect">/tsomi/Joyce_Carol_Oates</to>
+  </rule>
+
   <!-- cases where the subject is entered, may not contain periods -->
 
   <rule>
