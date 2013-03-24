@@ -269,24 +269,25 @@ var centerPerson;
 // fire everything off when the document is ready
 
 $(document).ready(function() {
-  createSpecialData();
-  var subject = estabishInitialSubject();
-  querySubject(lengthen(subject, true), true, false, function () {
-    svg.selectAll("text.static-text")
-      .transition()
-      .duration(2000)
-      .style("fill", "#bbb");
-  });
+  createSpecialData(function() {
+    var subject = estabishInitialSubject();
+    querySubject(lengthen(subject, true), true, false, function () {
+      svg.selectAll("text.static-text")
+        .transition()
+        .duration(2000)
+        .style("fill", "#bbb");
+    });
 
-  $(document).keydown(function(e){
-    switch (e.keyCode) {
-    case 37:
-      goBack();
-      break;
-    case 39:
-      goForward();
-      break;
-    }
+    $(document).keydown(function(e){
+      switch (e.keyCode) {
+      case 37:
+        goBack();
+        break;
+      case 39:
+        goForward();
+        break;
+      }
+    });
   });
 });
 

@@ -108,7 +108,7 @@ var specialPeopleData = [
   },
 ];
 
-createSpecialData = function () {
+createSpecialData = function (callback) {
 
   // great graph for each person
 
@@ -128,6 +128,10 @@ createSpecialData = function () {
     var id = lengthen(person.id, true);
     var g = specialPeople[id];
 
+    // all the 
+
+    var queries = [];
+
     person.influencedBy.forEach(function(influencedBy) {
       var influencedById = lengthen(influencedBy, true);
       
@@ -136,8 +140,11 @@ createSpecialData = function () {
         g.addLink(otherG.getNode(influencedById), id);
       }
       else {
-        queryDetails(g, influencedById, function() {
-          g.addLink(influencedById, id);
+        queries.push(function(callback) {
+          queryDetails(g, influencedById, function() {
+            g.addLink(influencedById, id);
+            callback();
+          });
         });
       }
     });
@@ -150,11 +157,30 @@ createSpecialData = function () {
         g.addLink(id, otherG.getNode(influencedId));
       }
       else {
-        queryDetails(g, influencedId, function() {
-          g.addLink(id, influencedId);
+        queries.push(function(callback) {
+          queryDetails(g, influencedId, function() {
+            g.addLink(id, influencedId);
+            callback();
+          });
         });
       }
     });
+
+    // recursivy perform on the queries and block until done
+
+    function performQuery(queries, callback) {
+      if (queries.length == 0) {
+        callback();
+      }
+      else {
+        var queryFunc = queries.pop();
+        queryFunc(function() {
+          performQuery(queries, callback);
+        });
+      }
+    };
+
+    performQuery(queries, callback);
   });
 }
 
