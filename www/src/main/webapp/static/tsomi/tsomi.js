@@ -22,7 +22,7 @@ var NODE_SIZE = 150;
 var IMAGE_SIZE = 180;
 var BANNER_SIZE = 25;
 var BANNER_X = IMAGE_SIZE;
-var BANNER_Y = 45;
+var BANNER_Y = 52;
 var PRINTABLE = true;
 var STOCK_EASE = "elastic";
 var DEFAULT_DURATION = 1000;
@@ -33,7 +33,7 @@ var TIMELINE_Y = (height - 20);
 
 var BACK_BUTTON = "images/backbutton.png";
 var FORWARD_BUTTON = "images/forwardbutton.png";
-var UNKNOWN_PERSON = "images/unknown2.png";
+var UNKNOWN_PERSON = "images/unknown.png";
 var WIKI_LOGO = "images/Wikipedia-logo.png";
 
 // the history of tsomi
@@ -80,8 +80,49 @@ defs.append('svg:linearGradient')
       .attr('offset', '100%')
       .style('stop-color', 'white')
       .style('stop-opacity', '0');
-//      .attr('style', 'stop-color:rgb(0,0,0);stop-opacity:0');
   });
+ 
+defs.append('svg:linearGradient')
+  .attr('id', 'image-gradient')
+  .attr('x1', "0%")
+  .attr('y1', "0%")
+  .attr('x2', "100%")
+  .attr('y2', "0%")
+  .call(function(gradient) {
+    gradient.append('svg:stop')
+      .attr('offset', '0%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+    gradient.append('svg:stop')
+      .attr('offset', '10%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+    gradient.append('svg:stop')
+      .attr('offset', '15%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '1');
+    gradient.append('svg:stop')
+      .attr('offset', '85%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '1');
+    gradient.append('svg:stop')
+      .attr('offset', '90%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+    gradient.append('svg:stop')
+      .attr('offset', '100%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+  });
+ 
+defs.append('mask')
+  .attr('id', 'image-mask')
+  .append("rect")
+  .attr('x', IMAGE_SIZE / -2)
+  .attr('y', IMAGE_SIZE / -2)
+  .attr('width', IMAGE_SIZE)
+  .attr('height', IMAGE_SIZE)
+  .style("fill", "url(#image-gradient)");
  
 defs.append("svg:clipPath")
   .attr("id", "loading-clip")
@@ -263,11 +304,6 @@ function estabishInitialSubject() {
   return subject;
 }
 
-
-function wikichange(url) {
-  console.log("changed!", url);
-}
-
 function connectToWiki() {
   window.open(d3.select("#wikiframe").attr("src").replace(PRINTABLE_PARAM, ""),'_blank');
 }
@@ -308,12 +344,6 @@ function setWikiPage(node) {
   var wiki = d3.select("#wikiframe")
     .attr("onload", "setWikiConnectButtonVisibility(true)")
     .attr("src", page);
-
-      //document.getElementById("#wikiconnect").style.visibility = 'visibile';
-  // wike font size
-  //var iframe = top.frames['iframe'].document;
-  //console.log("iframe", iframe);
-  //wiki.selectAll('p').style('font-size','5px');
 }
 
 function wcMouseEvent(over) {
@@ -496,7 +526,7 @@ function updateChart(graph) {
     .style("opacity", 0)
     .transition()
     .duration(2000)
-    .style("opacity", function(d) {return d == centerPerson ? TIMELINE_HIGHLIGHT_OPACITY : TIMELINE_OPACITY});
+    .style("opacity", function(d) {return d.getId() == centerPerson.getId() ? TIMELINE_HIGHLIGHT_OPACITY : TIMELINE_OPACITY});
 
   //var exitLinks = allLink.exit().remove();
   
@@ -625,14 +655,13 @@ function updateChart(graph) {
     .attr('visibility', 'hidden')
     .attr('stroke', 'url(#loading-gradient)')
     .attr('stroke-width', RIM_SIZE)
-    .attr("r", (IMAGE_SIZE - RIM_SIZE) / 2 + 1);
+    .attr("r", (IMAGE_SIZE - RIM_SIZE) / 2 - RIM_SIZE / 2);
 
   scaleGroups
     .append("g")
     .attr("transform", "translate(" + 
-          (WIKI_ICON_WIDTH / 2 + 6) + ", " + 
-          (WIKI_ICON_WIDTH / 2 + 18) + ")")
-
+          (IMAGE_SIZE - 2 * WIKI_ICON_WIDTH) / 2 + ", " + 
+          WIKI_ICON_WIDTH + ")")
     .append("image")
     .classed("wikibutton", true)
     .attr("xlink:href", WIKI_LOGO)
@@ -640,7 +669,7 @@ function updateChart(graph) {
     .attr("y", -WIKI_ICON_WIDTH / 2)
     .attr("width", WIKI_ICON_WIDTH)
     .attr("height", WIKI_ICON_WIDTH)
-    .attr("transform", "scale(1)")
+    .attr("transform", "scale(0)")
     .on("mouseover", onWikipediaMouseOver)
     .on("mouseout", onWikipediaMouseOut)
     .on("click", onWikipediaClick)
@@ -666,7 +695,7 @@ function updateChart(graph) {
       .attr("d", arrowPath);
 
     timelinesGroup.selectAll(".timeline")
-      .classed("highlight", function(d) {return d == centerPerson;})
+      .classed("highlight", function(d) {return d.getId() == centerPerson.getId();})
       .attr("d", timelinePath);
     
     var nodes = nodeGroup.selectAll("g.node");
@@ -749,43 +778,28 @@ function computeNodeScale(node, isMouseOver) {
 }
 
 function scaleNode(node, isMouseOver) {
-  var scale = computeNodeScale(node, isMouseOver);
-
-  d3.selectAll("g.scale")
-    .filter(function(d) {return d.getId() == node.getId()})
-    .transition()
-    .duration(DEFAULT_DURATION)
-    .ease(STOCK_EASE)
-    // .styleTween("font-size", function(d) {
-    //   console.log("tween", d);
-    //   var self = this;
-    //   return function(i, j) {
-    //     // console.log("i", i);
-    //     // console.log("this", this);
-    //     d3.select(self).select(".name").style("font-size", 25); //i * 10 + "px");
-    //     //d3.interpolate(self.style.getPropertyValue("font-size"), i)(i);
-    //   }
-    // })
-    .attr("transform", function(d) {return "scale(" + scale + ")"});
+  scaleNodeThing(node, "g.scale", computeNodeScale(node, isMouseOver));
 }
 
 function onNodeMouseOut(node) {
-  //console.log("onNodeMouseOut", node);
-  scaleNode(node, false);
+  if (d3.event.target.tagName != "image")
+    scaleNodeThing(node, ".wikibutton", 0);
 
+  scaleNode(node, false);
   timelinesGroup.selectAll(".timeline")
-    .filter(function(d) {return d == node && d != centerPerson;})
+    .filter(function(d) {
+      return d.getId() == node.getId() && d.getId() != centerPerson.getId();
+    })
     .classed("highlight", false)
     .transition()
     .duration(DEFAULT_DURATION)
     .ease(STOCK_EASE)
     .style("opacity", TIMELINE_OPACITY);
-
-  // event.stopPropagation();
 }
 
 function onNodeMouseOver(node) {
-  //console.log("onNodeMouseOver", node);
+  if (d3.event.target.tagName != "image")
+    scaleNodeThing(node, ".wikibutton", 1);
 
   // move node to top of the stack
 
@@ -803,7 +817,7 @@ function onNodeMouseOver(node) {
   scaleNode(node, true);
 
   timelinesGroup.selectAll(".timeline")
-    .filter(function(d) {return d == node && d != centerPerson;})
+    .filter(function(d) {return d.getId() == node.getId() && d.getId() != centerPerson.getId();})
     .classed("highlight", true)
     .transition()
     .duration(DEFAULT_DURATION)
@@ -822,20 +836,20 @@ function onImageClick(node) {
 }
 
 function onWikipediaMouseOver(node) {
-
-  d3.select(d3.event.target)
-    .transition()
-    .duration(DEFAULT_DURATION)
-    .ease(STOCK_EASE)
-    .attr("transform", "scale(1.8)");
+  scaleNodeThing(node, ".wikibutton", 1.5);
 }
 
 function onWikipediaMouseOut(node) {
-  d3.select(d3.event.target)
+  scaleNodeThing(node, ".wikibutton", 1);
+}
+
+function scaleNodeThing(node, selector, scale) {
+  svg.selectAll(selector)
+    .filter(function(d) {return d.getId() == node.getId();})
     .transition()
     .duration(DEFAULT_DURATION)
     .ease(STOCK_EASE)
-    .attr("transform", "scale(1)");
+    .attr("transform", "scale(" + scale + ")");
 }
 
 function onBackbuttonMouseOver(node) {
@@ -967,9 +981,6 @@ function onNodeClick(node) {
 }
 
 function startSpinner(node) {
-
-  console.log("startSpinner", node.getProperty("name"));
-
   var loadingDuration = 500;
   var stop = false;
   
@@ -999,7 +1010,6 @@ function startSpinner(node) {
   // return the function to stop the spinner
 
   return function() {
-    console.log("stopSpinner", node.getProperty("name"));
     ring.attr('visibility', 'hidden');
   };
 }
