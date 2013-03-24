@@ -6,7 +6,7 @@ var nextMidId = 0;
 
 var TIMELINE_OPACITY = 0.03;
 var TIMELINE_OPACITY = 0.03;
-var TIMELINE_HIGHLIGHT_OPACITY = 0.2;
+var TIMELINE_HIGHLIGHT_OPACITY = 0.4;
 var HEAD_ANGLE = Math.PI / 6;
 var ARROW_WIDTH = 6;
 var WIKI_ICON_WIDTH = 30;
@@ -17,12 +17,15 @@ var CHARGE_RANDOM = 0;
 var LINK_BASE = 40;
 var LINK_RANDOM = 100;
 var LINK_MIN_OFFSET = 25;
-var RIM_SIZE = 22;
+var RIM_SIZE = 15;
 var NODE_SIZE = 150;
-var IMAGE_SIZE = 106;
+var IMAGE_SIZE = 180;
+var BANNER_SIZE = 25;
+var BANNER_X = IMAGE_SIZE;
+var BANNER_Y = 52;
 var PRINTABLE = true;
 var STOCK_EASE = "elastic";
-var DEFAULT_DURATION = 600;
+var DEFAULT_DURATION = 1000;
 var TIMELINE_MARGIN = 50;
 var TIMELINE_Y = (height - 20);
 
@@ -49,14 +52,100 @@ var svg = d3.select("#chart")
 
 var defs = svg.append("defs");
 
+// create clip path for image
+
+defs.append("svg:clipPath")
+  .attr("id", "image-clip")
+  .append("svg:circle")
+  .attr("cx", 0)
+  .attr("cy", 0)
+  .attr("r", IMAGE_SIZE / 2);
+
+defs.append('svg:linearGradient')
+  .attr('id', 'loading-gradient')
+  .attr('x1', "0%")
+  .attr('y1', "0%")
+  .attr('x2', "100%")
+  .attr('y2', "0%")
+  .call(function(gradient) {
+    gradient.append('svg:stop')
+      .attr('offset', '0%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '1');
+    gradient.append('svg:stop')
+      .attr('offset', '50%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+    gradient.append('svg:stop')
+      .attr('offset', '100%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+  });
+ 
+defs.append('svg:linearGradient')
+  .attr('id', 'image-gradient')
+  .attr('x1', "0%")
+  .attr('y1', "0%")
+  .attr('x2', "100%")
+  .attr('y2', "0%")
+  .call(function(gradient) {
+    gradient.append('svg:stop')
+      .attr('offset', '0%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+    gradient.append('svg:stop')
+      .attr('offset', '10%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+    gradient.append('svg:stop')
+      .attr('offset', '15%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '1');
+    gradient.append('svg:stop')
+      .attr('offset', '85%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '1');
+    gradient.append('svg:stop')
+      .attr('offset', '90%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+    gradient.append('svg:stop')
+      .attr('offset', '100%')
+      .style('stop-color', 'white')
+      .style('stop-opacity', '0');
+  });
+ 
+defs.append('mask')
+  .attr('id', 'image-mask')
+  .append("rect")
+  .attr('x', IMAGE_SIZE / -2)
+  .attr('y', IMAGE_SIZE / -2)
+  .attr('width', IMAGE_SIZE)
+  .attr('height', IMAGE_SIZE)
+  .style("fill", "url(#image-gradient)");
+ 
+defs.append("svg:clipPath")
+  .attr("id", "loading-clip")
+  .append("svg:circle")
+  .attr("cx", 0)
+  .attr("cy", 0)
+  .attr("r", IMAGE_SIZE / 2 + 10);
+
 // create path for names
 
 defs.append("path")
   .attr("id", "namepath")
   .attr("d", function() {
-    var r = (NODE_SIZE - RIM_SIZE) / 2;
+    var r = (NODE_SIZE - BANNER_SIZE) / 2;
     return "M 0 " + (-r) + " a " + r + " " + r + " 0 1 0 0.01 0 Z";
   });
+
+defs.append("path")
+  .attr("id", "bannerpath")
+  .attr("d", populate_path(
+    "M X0 Y0 L X1 Y1", 
+    [{x: -BANNER_X, y: BANNER_Y},
+     {x: +BANNER_X, y: BANNER_Y}]));
 
 // create path for titles
 
@@ -80,10 +169,25 @@ defs.append("path")
 
 svg.append("text")
   .classed("title", true)
+  .classed("static-text", true)
   .attr("dx", "120")
   .append("textPath")
   .attr("xlink:href", "#titlepath")
   .text("The Sphere Of My Influences");
+
+svg.append("text")
+  .classed("about", true)
+  .classed("static-text", true)
+  .attr("x", "440")
+  .attr("y", "88")
+  .text("About");
+
+svg.append("text")
+  .classed("loading", true)
+  .attr("x", width / 2)
+  .attr("y", height / 2)
+  .attr("text-anchor", "middle")
+  .text("Loading...");
 
 // add back button
 
@@ -172,17 +276,30 @@ var centerPerson;
 // fire everything off when the document is ready
 
 $(document).ready(function() {
-  var subject = estabishInitialSubject();
-  querySubject(lengthen(subject, true));
-  $(document).keydown(function(e){
-    switch (e.keyCode) {
-    case 37:
-      goBack();
-      break;
-    case 39:
-      goForward();
-      break;
-    }
+  createSpecialData(function() {
+    var subject = estabishInitialSubject();
+    querySubject(lengthen(subject, true), true, false, function () {
+      svg.selectAll("text.static-text")
+        .transition()
+        .duration(2000)
+        .style("fill", "#bbb");
+
+      svg.selectAll("text.loading")
+        .transition()
+        .style("fill", "white")
+        .remove();
+    });
+
+    $(document).keydown(function(e){
+      switch (e.keyCode) {
+      case 37:
+        goBack();
+        break;
+      case 39:
+        goForward();
+        break;
+      }
+    });
   });
 });
 
@@ -196,41 +313,45 @@ function estabishInitialSubject() {
   //var subject = subjects.kant;
   //var subject = subjects.mock;
 
+  var convertSpaces = function(element) {
+    element = element.replace("%20", "_");
+    element = element.replace(" ", "_");
+    return element;
+  }
+
   var urlSubject = getURLParameter("subject");
 
   if (urlSubject != "null") {
-    urlSubject = urlSubject.replace("%20", "_");
-    urlSubject = urlSubject.replace(" ", "_");
-    subject = "dbpedia:" + urlSubject;
+    subject = "dbpedia:" + convertSpaces(urlSubject);
   }
   else {
     urlSubject = getURLParameter("subject_raw");
     if (urlSubject != "null") {
       subject = "dbpedia:" + urlSubject;
     }
+    else {
+      var elementSubject = getURLElement();
+      if (elementSubject != "null") {
+        subject = "dbpedia:" + convertSpaces(elementSubject);
+      }
+    }
   }
 
   return subject;
-}
-
-
-function wikichange(url) {
-  console.log("changed!", url);
 }
 
 function connectToWiki() {
   window.open(d3.select("#wikiframe").attr("src").replace(PRINTABLE_PARAM, ""),'_blank');
 }
 
-function querySubject(subjectId, recordPast, recordFuture) {
+function querySubject(subjectId, recordPast, recordFuture, callback) {
+  callback = callback || function() {};
   recordPast = recordPast !== undefined ? recordPast : true;
   recordFuture = recordFuture !== undefined ? recordFuture : false;
 
-  console.log("query for subject", subjectId);
-
-
+  //console.log("query for subject", subjectId);
   getPerson(subjectId, function(graph) {
-    console.log(subjectId + " has nodes ", graph.getNodes().length);
+    //console.log(subjectId + " has nodes ", graph.getNodes().length);
     if (graph.getNodes().length > 0) {
 
       if (recordPast) savePast();
@@ -243,21 +364,20 @@ function querySubject(subjectId, recordPast, recordFuture) {
 
       setWikiPage(centerPerson);
     }
+    callback();
   });
 }
 
 function setWikiPage(node) {
   setWikiConnectButtonVisibility(false);
-  var page = node.getProperty("wikiTopic") + (PRINTABLE ? PRINTABLE_PARAM : "");
+  var page = node.getProperty("wikiTopic");
+
+  if (PRINTABLE && page.indexOf("wikipedia.org") >= 0)
+    page += PRINTABLE_PARAM;
+
   var wiki = d3.select("#wikiframe")
     .attr("onload", "setWikiConnectButtonVisibility(true)")
     .attr("src", page);
-
-      //document.getElementById("#wikiconnect").style.visibility = 'visibile';
-  // wike font size
-  //var iframe = top.frames['iframe'].document;
-  //console.log("iframe", iframe);
-  //wiki.selectAll('p').style('font-size','5px');
 }
 
 function wcMouseEvent(over) {
@@ -440,7 +560,7 @@ function updateChart(graph) {
     .style("opacity", 0)
     .transition()
     .duration(2000)
-    .style("opacity", function(d) {return d == centerPerson ? TIMELINE_HIGHLIGHT_OPACITY : TIMELINE_OPACITY});
+    .style("opacity", function(d) {return d.getId() == centerPerson.getId() ? TIMELINE_HIGHLIGHT_OPACITY : TIMELINE_OPACITY});
 
   //var exitLinks = allLink.exit().remove();
   
@@ -461,7 +581,6 @@ function updateChart(graph) {
     .duration(DEFAULT_DURATION)
     .remove();
 
-
   var nodeGroups = enterNodes
     .append("g")
     .classed("node", true)
@@ -476,9 +595,10 @@ function updateChart(graph) {
 
   var scaleGroups = nodeGroups
     .append("g")
+    .attr("clip-path", "url(#image-clip)")
     .attr("transform", "scale(0)")
     .classed("scale", true);
-  
+
   scaleGroups
     .transition()
     .duration(DEFAULT_DURATION)
@@ -487,11 +607,10 @@ function updateChart(graph) {
   scaleGroups
     .append("circle")
     .classed("backdrop", true)
-    .attr("r", NODE_SIZE / 2);
+    .attr("r", IMAGE_SIZE / 2);
 
   scaleGroups
     .append("image")
-    .filter(function(d) {return !d.getProperty("hidden")})
     .attr("pointer-events", "none")
     .attr("xlink:href", function(d) {
 
@@ -519,44 +638,64 @@ function updateChart(graph) {
       return d.images.shift(); 
     })
     .on("error", function(d) {this.setAttribute("href", d.images.shift());})
-    // .on("click", onImageClick)
     .attr("x", -IMAGE_SIZE / 2)
     .attr("y", -IMAGE_SIZE / 2)
     .attr("width", IMAGE_SIZE)
     .attr("height", IMAGE_SIZE);
 
-
   scaleGroups
-    .append("circle")
-    .classed("rim", true)
-    .attr("pointer-events", "none")
-    .attr("r", (NODE_SIZE - RIM_SIZE) / 2)
-    .style("stroke-width", RIM_SIZE);
+    .append("path")
+    .classed("banner", true)
+    .style("stroke-width", BANNER_SIZE)
+    .attr("d", populate_path(
+      "M X0 Y0 L X1 Y1", 
+      [{x: -BANNER_X, y: BANNER_Y},
+       {x: +BANNER_X, y: BANNER_Y}]));
 
+ // scaleGroups
+ //    .append("text")
+ //    .attr("pointer-events", "none")
+ //    .attr("dx", BrowserDetect.browser == "Firefox" ? "403" : "203")
+ //    .attr("dy", "0.3em")
+ //    .attr("text-anchor", "middle")
+ //    .append("textPath")
+ //    .classed("name", true)
+ //    .attr("xlink:href", "#namepath")
+ //    .text(function(d) { return d.getProperty("name")});
+
+  // scaleGroups
+  //   .append("text")
+  //   .attr("pointer-events", "none")
+  //   .attr("text-anchor", "middle")
+  //   .attr("x", 50)
+  //   .append("textPath")
+  //   .classed("name", true)
+  //   .attr("xlink:href", "#bannerpath")
+  //   .text(function(d) { return d.getProperty("name")});
 
   scaleGroups
     .append("text")
-    .attr("pointer-events", "none")
-    .attr("dx", BrowserDetect.browser == "Firefox" ? "403" : "203")
-    .attr("dy", "0.3em")
-    .attr("text-anchor", "middle")
-    .append("textPath")
     .classed("name", true)
-    .attr("xlink:href", "#namepath")
+    .attr("pointer-events", "none")
+    .attr("text-anchor", "middle")
+    .attr("y", BANNER_Y)
+    .attr("dy", "0.3em")
     .text(function(d) { return d.getProperty("name")});
 
-  // scaleGroups
-  //   .append("title")
-  //   .text(function(d) {
-  //     return "dob: " + d.getProperty("dob") + " dod: " + d.getProperty("dod");
-  //   });
+  scaleGroups
+    .append("circle")
+    .classed("loading-ring", true)
+    .attr('fill', 'none')
+    .attr('visibility', 'hidden')
+    .attr('stroke', 'url(#loading-gradient)')
+    .attr('stroke-width', RIM_SIZE)
+    .attr("r", (IMAGE_SIZE - RIM_SIZE) / 2 - RIM_SIZE / 2);
 
   scaleGroups
     .append("g")
     .attr("transform", "translate(" + 
-          (WIKI_ICON_WIDTH / 2 + 6) + ", " + 
-          (WIKI_ICON_WIDTH / 2 + 18) + ")")
-
+          (IMAGE_SIZE - 2 * WIKI_ICON_WIDTH) / 2 + ", " + 
+          WIKI_ICON_WIDTH + ")")
     .append("image")
     .classed("wikibutton", true)
     .attr("xlink:href", WIKI_LOGO)
@@ -564,7 +703,7 @@ function updateChart(graph) {
     .attr("y", -WIKI_ICON_WIDTH / 2)
     .attr("width", WIKI_ICON_WIDTH)
     .attr("height", WIKI_ICON_WIDTH)
-    .attr("transform", "scale(1)")
+    .attr("transform", "scale(0)")
     .on("mouseover", onWikipediaMouseOver)
     .on("mouseout", onWikipediaMouseOut)
     .on("click", onWikipediaClick)
@@ -590,7 +729,7 @@ function updateChart(graph) {
       .attr("d", arrowPath);
 
     timelinesGroup.selectAll(".timeline")
-      .classed("highlight", function(d) {return d == centerPerson;})
+      .classed("highlight", function(d) {return d.getId() == centerPerson.getId();})
       .attr("d", timelinePath);
     
     var nodes = nodeGroup.selectAll("g.node");
@@ -637,7 +776,7 @@ function arrowPath(link) {
   var t = link.target;
 
   var angle = angleRadians(t, m);
-  var nodeRadius = (NODE_SIZE / 2) * computeNodeScale(t) + ARROW_WIDTH;
+  var nodeRadius = (IMAGE_SIZE / 2) * computeNodeScale(t) + ARROW_WIDTH;
 
   var tip = radial(t, nodeRadius, angle);
   var left = radial(tip, 20, angle + HEAD_ANGLE);
@@ -673,31 +812,28 @@ function computeNodeScale(node, isMouseOver) {
 }
 
 function scaleNode(node, isMouseOver) {
-  var scale = computeNodeScale(node, isMouseOver);
-
-  d3.selectAll("g.scale")
-    .filter(function(d) {return d.getId() == node.getId()})
-    .transition()
-    .duration(DEFAULT_DURATION)
-    .ease(STOCK_EASE)
-    .attr("transform", function(d) {return "scale(" + scale + ")"});
+  scaleNodeThing(node, "g.scale", computeNodeScale(node, isMouseOver));
 }
 
 function onNodeMouseOut(node) {
-  scaleNode(node, false);
+  if (d3.event.target.tagName != "image")
+    scaleNodeThing(node, ".wikibutton", 0);
 
+  scaleNode(node, false);
   timelinesGroup.selectAll(".timeline")
-    .filter(function(d) {return d == node && d != centerPerson;})
+    .filter(function(d) {
+      return d.getId() == node.getId() && d.getId() != centerPerson.getId();
+    })
     .classed("highlight", false)
     .transition()
     .duration(DEFAULT_DURATION)
     .ease(STOCK_EASE)
     .style("opacity", TIMELINE_OPACITY);
-
-  event.stopPropagation();
 }
 
 function onNodeMouseOver(node) {
+  if (d3.event.target.tagName != "image")
+    scaleNodeThing(node, ".wikibutton", 1);
 
   // move node to top of the stack
 
@@ -715,14 +851,14 @@ function onNodeMouseOver(node) {
   scaleNode(node, true);
 
   timelinesGroup.selectAll(".timeline")
-    .filter(function(d) {return d == node && d != centerPerson;})
+    .filter(function(d) {return d.getId() == node.getId() && d.getId() != centerPerson.getId();})
     .classed("highlight", true)
     .transition()
     .duration(DEFAULT_DURATION)
     .ease(STOCK_EASE)
     .style("opacity", TIMELINE_HIGHLIGHT_OPACITY);
 
-  event.stopPropagation();
+//  event.stopPropagation();
 }
 
 function onImageClick(node) {
@@ -734,20 +870,20 @@ function onImageClick(node) {
 }
 
 function onWikipediaMouseOver(node) {
-
-  d3.select(d3.event.target)
-    .transition()
-    .duration(DEFAULT_DURATION)
-    .ease(STOCK_EASE)
-    .attr("transform", "scale(1.8)");
+  scaleNodeThing(node, ".wikibutton", 1.5);
 }
 
 function onWikipediaMouseOut(node) {
-  d3.select(d3.event.target)
+  scaleNodeThing(node, ".wikibutton", 1);
+}
+
+function scaleNodeThing(node, selector, scale) {
+  svg.selectAll(selector)
+    .filter(function(d) {return d.getId() == node.getId();})
     .transition()
     .duration(DEFAULT_DURATION)
     .ease(STOCK_EASE)
-    .attr("transform", "scale(1)");
+    .attr("transform", "scale(" + scale + ")");
 }
 
 function onBackbuttonMouseOver(node) {
@@ -873,9 +1009,43 @@ function scaleForwardButton(scale) {
 }
 
 function onNodeClick(node) {
-  scaleNode(node, false);
-  querySubject(node.getId());
+  var stopSinner = startSpinner(node);
+  querySubject(node.getId(), true, false, stopSinner);
   clearFuture();
+}
+
+function startSpinner(node) {
+  var loadingDuration = 500;
+  var stop = false;
+  
+  var ring = d3.selectAll(".loading-ring")
+    .filter(function(d) {return d.getId() == node.getId()});
+
+  ring
+    .attr('visibility', 'visibile')
+    .attr("transform", function(d) {return "rotate(0)"})
+    .transition()
+    .duration(loadingDuration)
+    .ease("linear")
+    .attr("transform", function(d) {return "rotate(120)"})
+    .transition()
+    .duration(loadingDuration)
+    .ease("linear")
+    .attr("transform", function(d) {return "rotate(240)"})
+    .transition()
+    .duration(loadingDuration)
+    .ease("linear")
+    .attr("transform", function(d) {return "rotate(360)"})
+    .each("end", function() {
+      if (ring.attr('visibility') == 'visibile')
+        startSpinner(node);
+    });
+
+  // return the function to stop the spinner
+
+  return function() {
+    ring.attr('visibility', 'hidden');
+  };
 }
 
 function populate_path(path, points) {
@@ -888,7 +1058,17 @@ function populate_path(path, points) {
 }
 
 function getURLParameter(name) {
-    return decodeURI(
-        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
-    );
+  return decodeURI(
+    (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+  );
+}
+
+function getURLElement(name) {
+  var sections = location.pathname.split("/");
+  var e1 = sections[sections.length - 2];
+  var e2 = sections[sections.length - 1];
+
+  return e1 == "tsomi"
+    ? decodeURI(e2)
+    : "null";
 }

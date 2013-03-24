@@ -1,5 +1,6 @@
 var QUERY_URL = "http://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&format=json&query=";
 
+var LANGUAGE = "en";
 var debugging = false;
 
 var prefixies = [
@@ -25,7 +26,8 @@ var predicates = {
   influencedBy: "dbpedia-owl:influencedBy",
   depiction: "foaf:depiction",
   thumbnail: "dbpedia-owl:thumbnail",
-  name: "foaf:name",
+  //name: "foaf:name",
+  name: "rdfs:label",
   wikiTopic: "foaf:isPrimaryTopicOf",
   occupation: "dbpprop:occupation",
   dob: "dbpedia-owl:birthDate",
@@ -49,25 +51,138 @@ var subjects = {
   obama:      "dbpedia:Barack_Obama",
   chomsky:    "dbpedia:Noam_Chomsky",
   eroosevelt: "dbpedia:Eleanor_Roosevelt(Hato_Rey)",
-  pinker:     "dbpedia:Steven_Pinker",
   sontag:     "dbpedia:Susan_Sontag",
   einstein:   "dbpedia:Albert_Einstein",
   silverman:  "dbpedia:Sarah_Silverman",
+  trebor:     "dbpedia:Robert_Boyd_Harris",
+  geerlings:  "dbpedia:Stephanie_Geerlings",
   kant:       "dbpedia:Immanuel_Kant",
+  tufte:      "dbpedia:Edward_Tufte",
+  dawkins:    "dbpedia:Richard_Dawkins",
+  norman:     "dbpedia:Donald_Norman",
+  mccloud:    "dbpedia:Scott_McCloud",
+  pinker:     "dbpedia:Steven_Pinker",
 };
 
 var personalDetails = [
-  {name: "name",       optional: false, type: "literal"},
-  {name: "thumbnail",  optional: true,  type: "url"},
-  {name: "depiction",  optional: true,  type: "url"},
-  {name: "wikiTopic",  optional: false, type: "url"},
-  {name: "dob",        optional: true,  type: "literal"},
-  {name: "dod",        optional: true,  type: "literal"},
+  {name: "name",       optional: false, language: true,  type: "literal"},
+  {name: "thumbnail",  optional: true,  language: false, type: "url"},
+  {name: "depiction",  optional: true,  language: false, type: "url"},
+  {name: "wikiTopic",  optional: false, language: false, type: "url"},
+  {name: "dob",        optional: true,  language: false, type: "literal"},
+  {name: "dod",        optional: true,  language: false, type: "literal"},
 ];
 
 var personCache = {};
 
 personCache[lengthen(subjects.mock, true)] = createMockData();
+
+var specialPeople = {};
+
+var specialPeopleData = [
+  {id: "dbpedia:Robert_Boyd_Harris", 
+   name: "Robert Harris", 
+   thumbnail: "images/trebor3.png",
+   wikiTopic: "http://www.trebor.org",
+   dob: "1966-02-08",
+   influenced: [],
+   influencedBy: [
+     subjects.geerlings,
+     subjects.tufte,
+     subjects.dawkins,
+     subjects.norman,
+     subjects.pinker,
+     subjects.mccloud,
+   ]
+  },
+  {id: "dbpedia:Stephanie_Geerlings", 
+   name: "Stephanie Geerlings", 
+   thumbnail: "images/Stephanie_Geerlings.jpg",
+   wikiTopic: "http://pinterest.com/stillsmall",
+   influenced: [
+     subjects.trebor,
+   ],
+   influencedBy: [
+     subjects.sontag,
+   ]
+  },
+];
+
+createSpecialData = function (callback) {
+
+  // great graph for each person
+
+  specialPeopleData.forEach(function(person) {
+    var g = new TGraph();
+    var id = lengthen(person.id, true);
+    var node = g.addNode(id);
+    node.setProperty("name", person.name);
+    node.setProperty("thumbnail", person.thumbnail);
+    node.setProperty("wikiTopic", person.wikiTopic);
+    node.setProperty("dob", person.dob);
+    personCache[id] = g;
+    specialPeople[id] = g;
+  });
+
+  specialPeopleData.forEach(function(person) {
+    var id = lengthen(person.id, true);
+    var g = specialPeople[id];
+
+    // all the 
+
+    var queries = [];
+
+    person.influencedBy.forEach(function(influencedBy) {
+      var influencedById = lengthen(influencedBy, true);
+      
+      var otherG = specialPeople[influencedById];
+      if (otherG !== undefined) {
+        g.addLink(otherG.getNode(influencedById), id);
+      }
+      else {
+        queries.push(function(callback) {
+          queryDetails(g, influencedById, function() {
+            g.addLink(influencedById, id);
+            callback();
+          });
+        });
+      }
+    });
+
+    person.influenced.forEach(function(influenced) {
+      var influencedId = lengthen(influenced, true);
+
+      var otherG = specialPeople[influencedId];
+      if (otherG !== undefined) {
+        g.addLink(id, otherG.getNode(influencedId));
+      }
+      else {
+        queries.push(function(callback) {
+          queryDetails(g, influencedId, function() {
+            g.addLink(id, influencedId);
+            callback();
+          });
+        });
+      }
+    });
+
+    // recursivy perform on the queries and block until done
+
+    function performQuery(queries, callback) {
+      if (queries.length == 0) {
+        callback();
+      }
+      else {
+        var queryFunc = queries.pop();
+        queryFunc(function() {
+          performQuery(queries, callback);
+        });
+      }
+    };
+
+    performQuery(queries, callback);
+  });
+}
 
 var personDetailsSelect = function() {
   var result = "";
@@ -83,11 +198,22 @@ var personDetailsWhere = function(target) {
     var name = detail.name;
     var predicate = predicates[name];
 
-    if (detail.optional) {
-      result += "  OPTIONAL {" + target + " " + predicate + " ?" + name + " . }\n";
-    } else {
-      result += "  " + target + " " + predicate + " ?" + name + " .\n";
-    }
+    var optional = detail.optional 
+      ? "OPTIONAL "
+      : "";
+
+    var filter = detail.language 
+      ? "FILTER (" + " LANG(?" + name + ") = \"" + LANGUAGE + "\") "
+      : "";
+
+    result += optional + 
+      "{" + target + " " + predicate + " ?" + name + " . " + filter + "}\n";
+
+    // if (detail.optional) {
+    //   result += "  OPTIONAL {" + target + " " + predicate + " ?" + name + " . }\n";
+    // } else {
+    //   result += "  " + target + " " + predicate + " ?" + name + " .\n";
+    // }
   });
   return result; // + "\n  FILTER(langMatches(lang(?name), 'EN'))";
 };
@@ -261,7 +387,7 @@ function createMockData() {
 
 function getPerson(id, callback) {
 
-  // if the person is in the chache, use that
+  // if the person is in the cache, use that
 
   var personGraph = personCache[id];
   if (personGraph !== undefined) {
@@ -279,19 +405,41 @@ function getPerson(id, callback) {
 
 function queryForPerson(targetId, callback) {
   var targetGraph = new TGraph();
-  queryForInfluencedBy1(targetGraph, targetId, function() {
-    queryForInfluencedBy2(targetGraph, targetId, function() {
-      queryForInfluenced1(targetGraph, targetId, function() {
-        queryForInfluenced2(targetGraph, targetId, function() {
-          var targetNode = targetGraph.getNode(targetId);
-          if (targetNode !== undefined) {
-            queryDetails(targetNode, function() {callback(targetGraph);});
-          } else {
+
+  queryDetails(targetGraph, targetId, function() {
+
+    // if no data the wat wah!
+
+    if (targetGraph.getNode(targetId) === undefined) {
+      bindSpecialPeople(targetId, targetGraph);
+      callback(targetGraph);
+      return;
+    }
+
+    // get the relationships
+    
+    queryForInfluencedBy1(targetGraph, targetId, function() {
+      queryForInfluencedBy2(targetGraph, targetId, function() {
+        queryForInfluenced1(targetGraph, targetId, function() {
+          queryForInfluenced2(targetGraph, targetId, function() {
+            bindSpecialPeople(targetId, targetGraph);
             callback(targetGraph);
-          }
+          })
         })
       })
     })
+  });
+}
+
+function bindSpecialPeople(targetId, targetGraph) {
+  Object.keys(specialPeople).forEach(function(specialPersonId) {
+    var specialPerson = specialPeople[specialPersonId];
+    var specialNode = specialPerson.getNode(specialPersonId);
+    specialPerson.getArrivingLinks(specialPersonId).forEach(function(link) {
+      if (link.getSource().getId() == targetId) {
+        targetGraph.addLink(targetId, specialNode);
+      }
+    });
   });
 }
 
@@ -357,26 +505,16 @@ function applyDetails(node, binding) {
   });
 }
 
-function queryAllDetails(personNodes, callback) {
+function queryDetails(targetGraph, targetId, callback) {
 
-  if (personNodes.length == 0) {
-    callback();
-  }
-  else {
-    queryDetails(personNodes.shift(), function() {
-      queryAllDetails(personNodes, callback);
-    });
-  }
-}
-
-function queryDetails(personNode, callback) {
-  sparqlQuery(query_details, {target: personNode.getId()}, function(details) {
+  sparqlQuery(query_details, {target: targetId}, function(details) {
     if (details !== undefined) {
       if (details.results.bindings.length > 0) {
         var detailsBinding = details.results.bindings[0];
+        var targetNode = targetGraph.addNode(targetId);
         details.head.vars.forEach(function(key) {
           if (detailsBinding[key] !== undefined)
-            personNode.setProperty(key, detailsBinding[key].value);
+            targetNode.setProperty(key, detailsBinding[key].value);
         });
       }
     }
