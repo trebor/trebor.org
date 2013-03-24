@@ -269,7 +269,6 @@ var centerPerson;
 // fire everything off when the document is ready
 
 $(document).ready(function() {
-
   createSpecialData();
   var subject = estabishInitialSubject();
   querySubject(lengthen(subject, true), true, false, function () {
@@ -301,17 +300,27 @@ function estabishInitialSubject() {
   //var subject = subjects.kant;
   //var subject = subjects.mock;
 
+  var convertSpaces = function(element) {
+    element = element.replace("%20", "_");
+    element = element.replace(" ", "_");
+    return element;
+  }
+
   var urlSubject = getURLParameter("subject");
 
   if (urlSubject != "null") {
-    urlSubject = urlSubject.replace("%20", "_");
-    urlSubject = urlSubject.replace(" ", "_");
-    subject = "dbpedia:" + urlSubject;
+    subject = "dbpedia:" + convertSpaces(urlSubject);
   }
   else {
     urlSubject = getURLParameter("subject_raw");
     if (urlSubject != "null") {
       subject = "dbpedia:" + urlSubject;
+    }
+    else {
+      var elementSubject = getURLElement();
+      if (elementSubject != "null") {
+        subject = "dbpedia:" + convertSpaces(elementSubject);
+      }
     }
   }
 
@@ -1036,7 +1045,17 @@ function populate_path(path, points) {
 }
 
 function getURLParameter(name) {
-    return decodeURI(
-        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
-    );
+  return decodeURI(
+    (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+  );
+}
+
+function getURLElement(name) {
+  var sections = location.pathname.split("/");
+  var e1 = sections[sections.length - 2];
+  var e2 = sections[sections.length - 1];
+
+  return e1 == "tsomi"
+    ? decodeURI(e2)
+    : "null";
 }
