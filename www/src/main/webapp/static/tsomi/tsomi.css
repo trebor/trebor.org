@@ -172,23 +172,33 @@ div {
   opacity: 0.8;
 }
 
+path.link {
+  opacity: 0.3;
+}
 path.link.from {
   /* stroke: #D6FBF9; */
-  stroke: #eec;
+  /* stroke: #eec; */
+  stroke: #888;
 }
 
 path.link.to {
-  stroke: #cee;
+  /* stroke: #cee; */
+  stroke: #888;
 }
 
 .title {
-  /* font-family: Impact, Charcoal, sans-serif; */
   font-weght: bold;
-  /* fill: #DEDAB7; */
-  /* fill: #ccc; */
-  fill: #444;
+  fill: #222;
   font-size: 60px;
 }
+
+.about {
+  font-weght: bold;
+  fill: #222;
+  font-size: 25px;
+  cursor: pointer;
+}
+
 
 .name {
   fill: white;

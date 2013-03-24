@@ -6,7 +6,7 @@ var nextMidId = 0;
 
 var TIMELINE_OPACITY = 0.03;
 var TIMELINE_OPACITY = 0.03;
-var TIMELINE_HIGHLIGHT_OPACITY = 0.2;
+var TIMELINE_HIGHLIGHT_OPACITY = 0.4;
 var HEAD_ANGLE = Math.PI / 6;
 var ARROW_WIDTH = 6;
 var WIKI_ICON_WIDTH = 30;
@@ -169,10 +169,18 @@ defs.append("path")
 
 svg.append("text")
   .classed("title", true)
+  .classed("static-text", true)
   .attr("dx", "120")
   .append("textPath")
   .attr("xlink:href", "#titlepath")
   .text("The Sphere Of My Influences");
+
+svg.append("text")
+  .classed("about", true)
+  .classed("static-text", true)
+  .attr("x", "440")
+  .attr("y", "88")
+  .text("About");
 
 // add back button
 
@@ -264,7 +272,13 @@ $(document).ready(function() {
 
   createSpecialData();
   var subject = estabishInitialSubject();
-  querySubject(lengthen(subject, true));
+  querySubject(lengthen(subject, true), true, false, function () {
+    svg.selectAll("text.static-text")
+      .transition()
+      .duration(2000)
+      .style("fill", "#bbb");
+  });
+
   $(document).keydown(function(e){
     switch (e.keyCode) {
     case 37:
@@ -314,8 +328,6 @@ function querySubject(subjectId, recordPast, recordFuture, callback) {
   recordFuture = recordFuture !== undefined ? recordFuture : false;
 
   //console.log("query for subject", subjectId);
-
-
   getPerson(subjectId, function(graph) {
     //console.log(subjectId + " has nodes ", graph.getNodes().length);
     if (graph.getNodes().length > 0) {
