@@ -182,6 +182,13 @@ svg.append("text")
   .attr("y", "88")
   .text("About");
 
+svg.append("text")
+  .classed("loading", true)
+  .attr("x", width / 2)
+  .attr("y", height / 2)
+  .attr("text-anchor", "middle")
+  .text("Loading...");
+
 // add back button
 
 var FB_BUTTON_SIZE = 34;
@@ -276,6 +283,11 @@ $(document).ready(function() {
         .transition()
         .duration(2000)
         .style("fill", "#bbb");
+
+      svg.selectAll("text.loading")
+        .transition()
+        .style("fill", "white")
+        .remove();
     });
 
     $(document).keydown(function(e){
