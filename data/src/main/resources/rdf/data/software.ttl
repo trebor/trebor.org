@@ -65,23 +65,23 @@ earthquakes can be selected for viewing.
 
 toi:tsomi           a                   too:treeNode;
                     too:hasName         "tsomi";
-                    too:hasTitle        "[[static:tsomi/|the&nbsp;sphere&nbsp;of&nbsp;my&nbsp;influence]]";
+                    too:hasTitle        "[[local:tsomi/|the&nbsp;sphere&nbsp;of&nbsp;my&nbsp;influence]]";
                     too:hasNodeIcon     "tsomi";
                     too:hasNodeSummary
 """
-from the wonderful mind of
-[[static:tsomi/Stephanie_Geerlings|stephanie geerlings]]
-comes an extraordinary idea for visual tool to explore the relationships
-between the creative people of note.  "the sphere of my influence" was
-built using
+[[local:tsomi/|the&nbsp;sphere&nbsp;of&nbsp;my&nbsp;influence]]
+is a visual tool to explore the relationships between people of note,
+and sprung from the wonderful mind of
+[[local:tsomi/Stephanie_Geerlings|stephanie geerlings]].
+it was built using
 [http://mbostock.github.com/d3/ d3.js], and [[wikipedia:SPARQL|sparql]]
 to query the [http://dbpedia.org/ dbpedia] for influance links between
-persons who appear in the wikipeida. explore starting from such people as
-:[[static:tsomi/Silvia_Plath|silvia plath]]
-:[[static:tsomi/Bob_Dylan|bob dylan]]
-:[[static:tsomi/Sacagawea|sacagawea]]
-:[[static:tsomi/Albert_Einstein|albert einstein]]
-:[[static:tsomi/Sarah_Silverman|sarah silverman]].
+persons who appear in the wikipeida. you can explore such people as:
+:[[local:tsomi/Silvia_Plath|silvia plath]]
+:[[local:tsomi/Bob_Dylan|bob dylan]]
+:[[local:tsomi/Sacagawea|sacagawea]]
+:[[local:tsomi/Albert_Einstein|albert einstein]]
+:[[local:tsomi/Sarah_Silverman|sarah silverman]]
 """.
 
 toi:splink            a                   too:treeNode;
