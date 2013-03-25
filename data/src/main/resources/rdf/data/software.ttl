@@ -69,24 +69,19 @@ toi:tsomi           a                   too:treeNode;
                     too:hasNodeIcon     "tsomi";
                     too:hasNodeSummary
 """
-
-from the wonderful mind of 
-[[static:tsomi?subject=Stephanie_Geerlings|stephanie geerlings]]
-
+from the wonderful mind of
+[[static:tsomi/Stephanie_Geerlings|stephanie geerlings]]
 comes an extraordinary idea for visual tool to explore the relationships
 between the creative people of note.  "the sphere of my influence" was
 built using
-
 [http://mbostock.github.com/d3/ d3.js], and [[wikipedia:SPARQL|sparql]]
-
 to query the [http://dbpedia.org/ dbpedia] for influance links between
-persons who appear in the wikipeida. explore staring from 
-[[static:tsomi?subject=Joyce_Carol_Oates|joyce carol oates]]
-[[static:tsomi?subject=Bob_Dylan|bob dylan]]
-[[static:tsomi?subject=|]]
-[[static:tsomi?subject=Albert_Einstein|albert einstein]]
-[[static:tsomi?subject=Sarah_Silverman|sarah silverman]]
-
+persons who appear in the wikipeida. explore starting from such people as
+:[[static:tsomi/Silvia_Plath|silvia plath]]
+:[[static:tsomi/Bob_Dylan|bob dylan]]
+:[[static:tsomi/Sacagawea|sacagawea]]
+:[[static:tsomi/Albert_Einstein|albert einstein]]
+:[[static:tsomi/Sarah_Silverman|sarah silverman]].
 """.
 
 toi:splink            a                   too:treeNode;
