@@ -110,6 +110,10 @@ var specialPeopleData = [
 
 createSpecialData = function (callback) {
 
+  // all the accumulated queries
+
+  var queries = [];
+
   // great graph for each person
 
   specialPeopleData.forEach(function(person) {
@@ -127,10 +131,6 @@ createSpecialData = function (callback) {
   specialPeopleData.forEach(function(person) {
     var id = lengthen(person.id, true);
     var g = specialPeople[id];
-
-    // all the 
-
-    var queries = [];
 
     person.influencedBy.forEach(function(influencedBy) {
       var influencedById = lengthen(influencedBy, true);
@@ -165,23 +165,23 @@ createSpecialData = function (callback) {
         });
       }
     });
-
-    // recursivy perform on the queries and block until done
-
-    function performQuery(queries, callback) {
-      if (queries.length == 0) {
-        callback();
-      }
-      else {
-        var queryFunc = queries.pop();
-        queryFunc(function() {
-          performQuery(queries, callback);
-        });
-      }
-    };
-
-    performQuery(queries, callback);
   });
+
+  // recursivy perform on the queries and block until done
+
+  function performQuery(queries, callback) {
+    if (queries.length == 0) {
+      callback();
+    }
+    else {
+      var queryFunc = queries.pop();
+      queryFunc(function() {
+        performQuery(queries, callback);
+      });
+    }
+  };
+
+  performQuery(queries, callback);
 }
 
 var personDetailsSelect = function() {
