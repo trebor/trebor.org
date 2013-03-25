@@ -180,6 +180,9 @@ svg.append("text")
   .classed("static-text", true)
   .attr("x", "415")
   .attr("y", "88")
+  .on("click", function() {window.open("/fdl/tsomi",'_blank');})
+//   .on("mouseover", function() {select(this).style("fill", "red")})
+//   .on("mouseout", function() {select(this).style("fill", "blue")})
   .text("About");
 
 svg.append("text")
