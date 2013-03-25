@@ -70,8 +70,8 @@ toi:tsomi           a                   too:treeNode;
                     too:hasNodeSummary
 """
 [[local:tsomi/|the&nbsp;sphere&nbsp;of&nbsp;my&nbsp;influence]]
-is a visual tool to explore the relationships between people of note,
-and sprung from the wonderful mind of
+is a visual tool to explore the flow of influances between people of
+note, and sprung from the wonderful mind of
 [[local:tsomi/Stephanie_Geerlings|stephanie geerlings]].
 it was built using
 [http://mbostock.github.com/d3/ d3.js], and [[wikipedia:SPARQL|sparql]]
