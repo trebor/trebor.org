@@ -178,7 +178,7 @@ svg.append("text")
 svg.append("text")
   .classed("about", true)
   .classed("static-text", true)
-  .attr("x", "440")
+  .attr("x", "415")
   .attr("y", "88")
   .text("About");
 
@@ -188,6 +188,14 @@ svg.append("text")
   .attr("y", height / 2)
   .attr("text-anchor", "middle")
   .text("Loading...");
+
+svg.append("text")
+  .classed("nodata", true)
+  .attr("visibility", "hidden")
+  .attr("x", width / 2)
+  .attr("y", height / 2)
+  .attr("text-anchor", "middle")
+  .text("No Data.");
 
 // add back button
 
