@@ -32,7 +32,8 @@
         <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
-        <repository-host>ec2-50-18-8-157.us-west-1.compute.amazonaws.com:80</repository-host>
+        <!-- <repository-host>trebor.org:80</repository-host> -->
+        <repository-host>ec2-54-241-46-192.us-west-1.compute.amazonaws.com:80</repository-host>
         <repository-name>trebor.org</repository-name>
       </properties>
     </profile>
