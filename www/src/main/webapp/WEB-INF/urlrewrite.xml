@@ -49,5 +49,26 @@
     <from>^/map/(.+)$</from>
     <to last="true">/static/$1</to>
   </rule>
+
+  <!-- given no subject, default to oates -->
+
+  <rule>
+    <from>^/tsomi/?$</from>
+    <to last="true" type="redirect">/tsomi/Joyce_Carol_Oates</to>
+  </rule>
+
+  <!-- cases where the subject is entered, may not contain periods -->
+
+  <rule>
+    <from>^/tsomi/([^\.]+)$</from>
+    <to last="true">/static/tsomi/index.html</to>
+  </rule>
+
+  <!-- cases where a resource is requested, must contain periods otherwise it will be capture above -->
+
+  <rule>
+    <from>^/tsomi/(.+)$</from>
+    <to last="true">/static/tsomi/$1</to>
+  </rule>
   
 </urlrewrite>

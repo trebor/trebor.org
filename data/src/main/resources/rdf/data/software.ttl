@@ -12,6 +12,7 @@ toi:software        a                   too:treeNode;
                     too:hasNodeIcon     "disk";
                     too:hasNodeChild     toi:trebor_org;
                     too:hasNodeChild     toi:earthquake;
+                    too:hasNodeChild     toi:tsomi;
 #                    too:hasNodeChild     toi:fukushima;
                     too:hasNodeChild     toi:splink;
                     too:hasNodeChild     toi:freesand;
@@ -60,6 +61,27 @@ my [[static:earthquake.html|earthquake&nbsp;map]] combines up-to-date
 the relative area of each earthquake marker approximates the energy described 
 by it's magnitude.  hour, day, and week time scales can be chosen, and a subset of 
 earthquakes can be selected for viewing.
+""".
+
+toi:tsomi           a                   too:treeNode;
+                    too:hasName         "tsomi";
+                    too:hasTitle        "[[local:tsomi/|the&nbsp;sphere&nbsp;of&nbsp;my&nbsp;influence]]";
+                    too:hasNodeIcon     "tsomi";
+                    too:hasNodeSummary
+"""
+[[local:tsomi/|the&nbsp;sphere&nbsp;of&nbsp;my&nbsp;influence]]
+is a visual tool to explore the flow of influances between people of
+note. this project sprung from the wonderful mind of
+[[local:tsomi/Stephanie_Geerlings|stephanie geerlings]], 
+and was hand crafted using
+[http://mbostock.github.com/d3/ d3.js], and [[wikipedia:SPARQL|sparql]]
+to query the [http://dbpedia.org/ dbpedia] for influance links between
+persons who appear in the wikipeida. explore starting with such people as:
+:[[local:tsomi/Simone_de_Beauvoir|simone de beauvoir]]
+:[[local:tsomi/Bob_Dylan|bob dylan]]
+:[[local:tsomi/Frida_Kahlo|frida kahlo]]
+:[[local:tsomi/Albert_Einstein|albert einstein]]
+:[[local:tsomi/Sarah_Silverman|sarah silverman]]
 """.
 
 toi:splink            a                   too:treeNode;
