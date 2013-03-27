@@ -29,7 +29,7 @@ var predicates = {
   //name: "foaf:name",
   name: "rdfs:label",
   wikiTopic: "foaf:isPrimaryTopicOf",
-  occupation: "dbpprop:occupation",
+  occupation: "dbprop:occupation",
   dob: "dbpedia-owl:birthDate",
   dod: "dbpedia-owl:deathDate",
 };
@@ -106,6 +106,7 @@ var specialPeopleData = [
    ],
    influencedBy: [
      subjects.sontag,
+	 subjects.pinker,
    ]
   },
 ];
