@@ -14,20 +14,23 @@
   </head>
 
   <body>
+    <div id="header">
+      <p>The Sphere of My Influence</p>
+    </div>
     <div id="container">
-      <div id="header"><p>The Sphere of My Influence</p></div> 
       <div id="chartdiv">
         <div id="chart"> </div>
         <div id="wikiconnect">
-          <img src="images/Wikipedia-logo.png"
-               onClick="connectToWiki()"
-               onmouseover="wcMouseEvent(true)"
-               onmouseout="wcMouseEvent(false)"
-               title="View in Wikipedia">
-        </img>
+          <img
+             src="images/Wikipedia-logo.png"
+             onClick="connectToWiki()"
+             onmouseover="wcMouseEvent(true)"
+             onmouseout="wcMouseEvent(false)"
+             title="View in Wikipedia">
+          </img>
+        </div>
       </div>
-      </div>
-          <div id="wikidiv">
+      <div id="wikidiv">
         <iframe name="wiki" id="wikiframe" src="">
         </iframe>
       </div>

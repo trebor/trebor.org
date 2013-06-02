@@ -1,5 +1,5 @@
 var width = $("#chart").width();
-var height = $("#chart").height() - $("#header").height();
+var height = $("#chart").height();
 
 var color = d3.scale.category20();
 var nextMidId = 0;

@@ -1,17 +1,4 @@
-/* @font-face */
-/* { */
-/* font-family: myFirstFont; */
-/* src: url('http://www.w3schools.com/css3/Sansation_Light.ttf'), */
-/*      url('http://www.w3schools.com/css3/Sansation_Light.eot'); /\* IE9 *\/ */
-/* }  */
-
-/* @font-face */
-/* { */
-/*   font-family: capita-light-qux; */
-/*   src: url('fonts/capita-light.svg'); */
-/* /\* url('fonts/capita-light.ttf'), *\/ */
-/* /\* url('fonts/capita-light.eot'); /\\* IE9 *\\/ *\/ */
-/* } */
+/* specify the font face */
 
 @font-face
 {
@@ -21,130 +8,67 @@
   url('fonts/capita-light.eot'); /* IE9 */
 }
 
-/* @media screen and (-webkit-min-device-pixel-ratio:0) { */
-/*   @font-face { */
-/*     font-family: 'capita-light-svg'; */
-/*     src: url('fonts/capita-light.svg') format('svg'); */
-/*   } */
-/* } */
+/* default to zero padding and margin for all */
+
+* {
+  margin: 0px;
+  padding: 0px;
+	border: 0px;
+}
 
 html {
   position: absolute;
   font-size: 11px;
   font-family: capita-light-cat;
-  /* font-family: capita-light-svg, capita-light-qux; */
-  /* font-family: myFirstFont; */
-  /* font-family: Times New Roman, Times, serif; */
-  /* font-family: Impact, Charcoal, sans-serif; */
-  /* font-family: helvetica; */
-  background: white;
-  border-image-width: 0px;
-  margin: 0px;
-	padding: 0px;
-	border: 0px;
+  width: 100%;
+  height: calc(100% - 5px);
+  height: -webkit-calc(100% - 5px);
+}
+
+body {
   width: 100%;
   height: 100%;
 }
 
-
 #header {
-  height: 2em;
   width: 100%;
-  padding: 0px;
-  margin: 0px;
-  position: relative;
-  border-bottom: solid;, #ff0000;
+  border-bottom: solid;
+  border-width: 2px;
+  border-color: #888;
 }
 
 #header p {
+  padding: 3px;
   font-size: 14px;
-  margin: 15px;
   font-weight: bold;
 }
 
-
-body {
-  margin: 0px;
-	padding: 0px;
-	border: 0px;
+#container {
   width: 100%;
-  height: 99.5%;
+  height: calc(100% - ((2 * 3px) + 1.9em));
+  height: -webkit-calc(100% - ((2 * 3px) + 1.9em));
 }
 
-div {
-  margin: 0px;
-	padding: 0px;
-	border: 0px;
+#chartdiv {
+  width: 65%;
+  height: 100%;
+	float: left;
+}
+
+#chart {
   width: 100%;
   height: 100%;
 }
 
-#container {
-  /* margin: 0px; */
-	/* padding: 0px; */
-	/* border: 0px; */
-}
-
-#chartdiv {
-  position: relative;
-  overflow:hidden;
-  /* width: 100%; */
-  width: 60%;
-	float: left;
-	/* padding: 100px; */
-	/* margin: 100px; */
-	/* border: 10px solid blue; */
-}
-
-#chart {
-  position: absolute;
-  right: 0;
-  clear: both;
-  /* margin: 10px solid red; */
-	margin: 0px;
-	padding: 0px;
-	/* border: 10px solid green; */
-}
-
-#wikidiv {
-  /* position: absolute; */
-  margin: 0px;
-	padding: 0px;
-	border: 0px;
-  width: 20%;
-	float: left;
-}
-.wikibutton {
-  visibility: visible;
-  cursor: pointer;
-}
-
-#wikiframe {
-  position: absolute;
-	width: 20%;
-	height: 100%;
-  seamless:seamless;
-  padding: 0px;
-  margin: 0px;
-	border: 0px;
-  /* border: 30px; */
-	/* margin: 30px; */
-  /* padding: 30px; */
-	/* float: left; */
-	/* height: 100%; */
-	/* width: 39.8%; */
-	/* height: 99.7%; */
-}
-
 #wikiconnect {
-  position: absolute;
-  transform: scale(0);
+  position:relative;
   -o-transform: scale(0);
   -ms-transform: scale(0);
   -moz-transform: scale(0);
   -webkit-transform: scale(0);
-  top: 20px;
-  right: 20px;
+  top: -100%;
+  padding: 20px;
+  float: right;
   width: 80px;
   height: 80px;
 }
@@ -153,6 +77,24 @@ div {
   width: 80px;
   height: 80px;
   cursor: pointer;
+}
+
+#wikidiv {
+  /* position: absolute; */
+  width: 35%;
+  height: 100%;
+	float: right;
+}
+
+.wikibutton {
+  visibility: visible;
+  cursor: pointer;
+}
+
+#wikiframe {
+	width: 100%;
+	height: 100%;
+  /* seamless:seamless; */
 }
 
 .node {
@@ -204,20 +146,20 @@ path.link.to {
 }
 
 .title {
-  font-weght: bold;
+  font-weight: bold;
   fill: #222;
   font-size: 60px;
 }
 
 .about {
-  font-weght: bold;
+  font-weight: bold;
   fill: #222;
   font-size: 25px;
   cursor: pointer;
 }
 
 .loading {
-  font-weght: bold;
+  font-weight: bold;
   fill: #222;
   font-size: 18px;
   cursor: pointer;
@@ -252,7 +194,7 @@ path.link {
 }
 
 .timeline {
-  fill: #black;
+  fill: black;
   opacity: 0.03;
 }
 
