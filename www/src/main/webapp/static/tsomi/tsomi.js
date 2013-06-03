@@ -165,26 +165,6 @@ defs.append("path")
       ]);
   });
 
-// add title
-
-// svg.append("text")
-//   .classed("title", true)
-//   .classed("static-text", true)
-//   .attr("dx", "120")
-//   .append("textPath")
-//   .attr("xlink:href", "#titlepath")
-//   .text("The Sphere Of My Influence");
-
-svg.append("text")
-  .classed("about", true)
-  .classed("static-text", true)
-  .attr("x", "415")
-  .attr("y", "88")
-  .on("click", function() {window.open("/fdl/tsomi",'_blank');})
-//   .on("mouseover", function() {select(this).style("fill", "red")})
-//   .on("mouseout", function() {select(this).style("fill", "blue")})
-  .text("About");
-
 svg.append("text")
   .classed("loading", true)
   .attr("x", width / 2)
