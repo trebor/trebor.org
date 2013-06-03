@@ -192,6 +192,7 @@ var personDetailsSelect = function() {
   personalDetails.forEach(function(detail) {
     result += " ?" + detail.name;
   });
+  result += " COUNT(distinct ?inf) AS ?score";
   return result;
 };
 
@@ -211,14 +212,21 @@ var personDetailsWhere = function(target) {
 
     result += optional + 
       "{" + target + " " + predicate + " ?" + name + " . " + filter + "}\n";
-
-    // if (detail.optional) {
-    //   result += "  OPTIONAL {" + target + " " + predicate + " ?" + name + " . }\n";
-    // } else {
-    //   result += "  " + target + " " + predicate + " ?" + name + " .\n";
-    // }
   });
-  return result; // + "\n  FILTER(langMatches(lang(?name), 'EN'))";
+
+  // add the score
+
+  result += "  {\n";
+  result += "     {?inf dbpedia-owl:influencedBy " + target + ".}\n";
+  result += "     UNION\n";
+  result += "     {" + target + " dbpedia-owl:influencedBy ?inf.}\n";
+  result += "     UNION\n";
+  result += "     {?inf dbpedia-owl:influenced " + target + ".}\n";
+  result += "     UNION\n";
+  result += "     {" + target + " dbpedia-owl:influenced ?inf.}\n";
+  result += "  }\n";
+
+  return result;
 };
 
 var query_relationship_details = "\n\
@@ -506,6 +514,10 @@ function applyDetails(node, binding) {
                      ? binding[detail.name].value 
                      : undefined);
   });
+
+  node.setProperty("score", binding["score"] !== undefined
+                     ? +binding["score"].value
+                     : undefined);
 }
 
 function queryDetails(targetGraph, targetId, callback) {

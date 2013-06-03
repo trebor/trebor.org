@@ -28,6 +28,7 @@ var STOCK_EASE = "elastic";
 var DEFAULT_DURATION = 1000;
 var TIMELINE_MARGIN = 50;
 var TIMELINE_Y = (height - 20);
+var MAX_SCREEN_NODES = 25;
 
 // image for unknown person
 
@@ -342,6 +343,7 @@ function querySubject(subjectId, recordPast, recordFuture, callback) {
 
   //console.log("query for subject", subjectId);
   getPerson(subjectId, function(graph) {
+
     //console.log(subjectId + " has nodes ", graph.getNodes().length);
     if (graph.getNodes().length > 0) {
 
@@ -349,14 +351,36 @@ function querySubject(subjectId, recordPast, recordFuture, callback) {
       if (recordFuture) saveFuture();
 
       centerPerson = graph.getNode(subjectId);
+      limitScreenNodes(graph);
       updateChart(graph);
       
       // set wiki page
 
       setWikiPage(centerPerson);
     }
+
     callback();
   });
+}
+
+// if there are too many nodes, remove nodes which are less interesting
+
+function limitScreenNodes(graph) {
+
+  var nodes = graph.getNodes();
+  if (nodes.length > MAX_SCREEN_NODES) {
+
+    // this overly simple algorithm sorts nodes by influence score and keeps
+    // only those with the highest scores.  it would probably be better to represent
+    // influencers and influencies proportionally.
+
+    nodes.sort(function(a, b) {return b.getProperty("score") - a.getProperty("score")});
+    nodes.forEach(function(node, i) {
+      if (i >= MAX_SCREEN_NODES && node != centerPerson) {
+        graph.removeNode(node);
+      }
+    });
+  }
 }
 
 function setWikiPage(node) {
