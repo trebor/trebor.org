@@ -472,10 +472,14 @@ function updateChart(graph) {
       sampleDate(dob);
     }
 
-    // physicalNode.x = width/2 + (Math.random() - 0.5) * width/2;
-    // physicalNode.y = height/2 + (Math.random() - 0.5) * height/2;
-    // physicalNode.x = width/2;
-    // physicalNode.y = height/2;
+    // default node to center of screen
+
+    // physicalNode.x = width/2 + (Math.random() - 0.5) * 10;
+    // physicalNode.y = height/2 + (Math.random() - 0.5) * 10;
+
+    // physicalNode.px = physicalNode.x = width/2 + (Math.random() - 0.5) * width/2;
+    // physicalNode.py = physicalNode.y = height/2 + (Math.random() - 0.5) * height/2;
+
     force.nodes().forEach(function(oldNode) {
       if (centerPerson.getId() == oldNode.getId()) {
         centerPerson.px = centerPerson.x = oldNode.x;
@@ -507,17 +511,17 @@ function updateChart(graph) {
   var physicalLinks = [];
   var renderedLinks = [];
 
+  // creat the virtual nodes which are used to create the arrow bend
+
   graph.getLinks().forEach(function(link) {
     var src = link.getSource();
     var mid = new TNode("mid" + nextMidId++, {isMiddel: true, hidden: true});
     var trg = link.getTarget();
 
-    // if src and target have old values, place this node right between them
+    // place the virtual node right between the source and the the target
 
-    // if (src.x !== undefined && trg.x != undefined) {
-    //   mid.x = (src.x + trg.x) / 2;
-    //   mid.y = (src.y + trg.y) / 2;
-    // }
+    mid.px = mid.x = (src.x + trg.x) / 2;
+    mid.py = mid.y = (src.y + trg.y) / 2;
 
     physicalNodes.push(mid);
     physicalLinks.push({source: src, target: mid});
@@ -756,7 +760,6 @@ function updateChart(graph) {
     var y1 = margin;
     var y2 = height - margin;
     var delta = 1;
-
 
     nodes.each(function(d) {
       if (d.x < x1) d.x += delta;
