@@ -11,10 +11,12 @@ var HEAD_ANGLE = Math.PI / 6;
 var ARROW_WIDTH = 6;
 var WIKI_ICON_WIDTH = 30;
 var PRINTABLE_PARAM = "?printable=yes";
-var CHARGE_HIDDEN = 10;
-var CHARGE_BASE = 400;
+var GRAVITY = 0;
+var CHARGE_HIDDEN = 50;
+var CHARGE_BASE = 200;
 var CHARGE_RANDOM = 0;
 var LINK_BASE = 40;
+var LINK_STRENGHT = 0.3;
 var LINK_RANDOM = 100;
 var LINK_MIN_OFFSET = 25;
 var RIM_SIZE = 15;
@@ -246,8 +248,8 @@ axiesGroup.call(timelineAxis);
 // create the fdl instance
 
 var force = d3.layout.force()
-  .gravity(0.00)
-  .linkStrength(0.6)
+  .gravity(GRAVITY)
+  .linkStrength(LINK_STRENGHT)
   .charge(function(d) {
     return d.getProperty("hidden") 
       ? -CHARGE_HIDDEN
@@ -476,14 +478,14 @@ function updateChart(graph) {
     // physicalNode.y = height/2;
     force.nodes().forEach(function(oldNode) {
       if (centerPerson.getId() == oldNode.getId()) {
-        centerPerson.x = oldNode.x;
-        centerPerson.y = oldNode.y;
+        centerPerson.px = centerPerson.x = oldNode.x;
+        centerPerson.py = centerPerson.y = oldNode.y;
         centerPerson.weight = 0;
       }
-      // if (physicalNode.getId() == oldNode.getId()) {
-      //   physicalNode.x = oldNode.x;
-      //   physicalNode.y = oldNode.y;
-      // }
+      if (physicalNode.getId() == oldNode.getId()) {
+        physicalNode.px = physicalNode.x = oldNode.x;
+        physicalNode.py = physicalNode.y = oldNode.y;
+      }
     });
   });
 
