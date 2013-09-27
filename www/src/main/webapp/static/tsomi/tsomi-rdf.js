@@ -106,7 +106,7 @@ var specialPeopleData = [
    ],
    influencedBy: [
      subjects.sontag,
-	 subjects.pinker,
+	   subjects.pinker,
    ]
   },
 ];
@@ -117,7 +117,7 @@ createSpecialData = function (callback) {
 
   var queries = [];
 
-  // great graph for each person
+  // create graph for each person
 
   specialPeopleData.forEach(function(person) {
     var g = new TGraph();
@@ -454,6 +454,34 @@ function bindSpecialPeople(targetId, targetGraph) {
   });
 }
 
+
+function queryForPredicate(targetGraph, targetId, predicate, reverse, callback) {
+  queryForPredicateForward(targetGraph, targetId, predicate, reverse, function() {
+    queryForPredicateReverse(targetGraph, targetId, predicate, reverse, function() {
+      callback(targetGraph);
+  });
+}
+
+function queryForPredicateForward(targetGraph, targetId, predicate, reverse, callback) {
+  queryForRelationship(targetId, predicate, "?subject", function (binding) {
+    var subjectId = "<" + binding.subject.value + ">";
+    targetGraph.addLink(targetId, subjectId, {type: predicate});
+    applyDetails(targetGraph.getNode(subjectId), binding);
+  }, function() {
+    callback(targetGraph);
+  });
+}
+
+function queryForPredicateReverse(targetGraph, targetId, predicate, reverse, callback) {
+  queryForRelationship("?subject", predicate, targetId, function (binding) {
+    var subjectId = "<" + binding.subject.value + ">";
+    targetGraph.addLink(subjectId, targetId, {type: predicate});
+    applyDetails(targetGraph.getNode(subjectId), binding);
+  }, function() {
+    callback(targetGraph);
+  });
+}
+
 function queryForInfluenced1(targetGraph, targetId, callback) {
   queryForRelationship("?subject", predicates.influenced, targetId, function (binding) {
     var subjectId = "<" + binding.subject.value + ">";
@@ -494,7 +522,7 @@ function queryForInfluencedBy2(targetGraph, targetId, callback) {
   });
 }
 
-function queryForRelationship(subject, predicate, object, bind, callback) {
+ function queryForRelationship(subject, predicate, object, bind, callback) {
   var parameters = {
     subject: subject,
     predicate: predicate,
