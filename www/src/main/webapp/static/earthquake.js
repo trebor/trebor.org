@@ -884,7 +884,7 @@ function createQuakeChart(svg)
       .data(quakeData.filter(
         function (d) 
         {
-          return d.date >= dateWindowMin && d.date < dateWindowMax;
+          return d.Magnitude >= 0 && d.date >= dateWindowMin && d.date < dateWindowMax;
         }), function(d) {return d.Eqid;});
     
     // add the new circles
