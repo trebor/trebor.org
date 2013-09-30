@@ -14,9 +14,10 @@ var USE_TEST_DATA = false;
 var UI_UPDATE_MILLISECONDS = 10 * MILLISECONDS_INA_SECOND;
 var REMOTE_DATA_UPDATE_MILLISECONDS = 60 * MILLISECONDS_INA_SECOND;
 
-var HOUR_DATA_SETS = ["eqs1hour-M0"];
-var DAY_DATA_SETS = ["eqs1day-M0"];
-var WEEK_DATA_SETS = ["eqs7day-M1", "eqs1day-M0"];
+var BASE_URL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_";
+var HOUR_DATA_SETS = ["hour"];
+var DAY_DATA_SETS = ["day"];
+var WEEK_DATA_SETS = ["week"];
 var TEST_DATA_SETS = ["data1", "data2"];
 var DATE_FORMAT = d3.time.format("%d %b %Y");
 var TIME_FORMAT = d3.time.format("%H:%M:%S");
@@ -46,10 +47,15 @@ var CHART_QUAKE_ROLLIN_MILLISECONDS = 2000;
 var FADE_IN_DURATION = function (d) {return d.Magnitude * 500;};
 var FADE_OUT_DURATION = function (d) {return d.Magnitude * 100;};
 var QUAKE_OPACITY = function(d) {return 0.7;};
-//var QUAKE_OPACITY = function(d) {return timeScale(d.date);};
 var QUAKE_FILL = function(d) {return currentTimeScale.colors.getColor(currentTimeScale.dateToColorScale(d.date));};
 var QUAKE_FILL_HIGHLIGHT = function(d) {return "green";};
 var QUAKE_RADIUS = function(d) {return d.radius;};
+var RADIUS_SCALE = d3.scale.pow()
+  .exponent(.29)
+  .domain([0, Math.pow(10, MAX_MAGNITUDE)])
+  .range([1.5, 500]);
+
+
 // usgs colors
 
 var usgsMarkerColorScale = new chroma.ColorScale(
@@ -87,10 +93,8 @@ var quakesByDate = null;
 var projection = null;
 var dateWindowMax = null;
 var dateWindowMin = null;
-var observedMinMag = null;
-var observedMaxMag = null;
-var observedMinDate = null;
-var observedMaxDate = null;
+var observedMagnitudeExtent = null;
+var observedDateExtent = null;
 var timeScale = null;
 var dateLimitScale = null;
 var magLimitScale = null;
@@ -207,11 +211,30 @@ function updateDataHelper(dataSets, dataAccumulation)
 
   // load data set
 
-  d3.csv("/quake?test=" + USE_TEST_DATA + "&name=" + dataSets.pop() + ".txt", 
-         function(data)
-         {
-           updateDataHelper(dataSets, dataAccumulation.concat(data));
-         });
+  performJsonpQuery(BASE_URL + dataSets.pop() + ".geojsonp", function(data) {
+
+    // extract the data into a clean array form
+
+    var data2 = data.features.map(function(datum) {
+      var props = datum.properties;
+      props.Lat = datum.geometry.coordinates[1];
+      props.Lon = datum.geometry.coordinates[0];
+      props.Magnitude = props.mag;
+      props.Region = props.place;
+      props.Src = props.sources.split(",").filter(function(d) {return d !== ""})[0];
+      props.date = new Date(props.time);
+      props.Eqid = props.ids.split(",").filter(function(d) {return d !== ""})[0];
+      return props;
+    });
+    updateDataHelper(dataSets, dataAccumulation.concat(data2));
+  });
+}
+
+function performJsonpQuery(url, callback) {
+  eqfeed_callback = callback;
+  var script = document.createElement('script');
+  script.src = url;
+  document.getElementsByTagName('head')[0].appendChild(script);
 }
 
 function registerQuakeData(data)
@@ -231,13 +254,10 @@ function registerQuakeData(data)
     });
 
   // pre compute radius and date
-  
-  for (var i in data)
-  {
-    var d = data[i];
-    d.radius = computeMarkerRadius(d.Magnitude) + MARKER_STROKE_WIDTH / 2;
-    d.date = QUAKE_DATE_FORMAT.parse(d.Datetime);
-  }
+
+  data.forEach(function(datum) {
+    datum.radius = computeMarkerRadius(datum.Magnitude) + MARKER_STROKE_WIDTH / 2;
+  });
 
   // initialize tesseract
 
@@ -248,24 +268,13 @@ function registerQuakeData(data)
 
   // establish observed size, date and date ranges
 
-  var magData = quakesByMag.top(Infinity);
-  if (magData.length > 0)
-  {
-    observedMaxMag = magData[0].Magnitude;
-    observedMinMag = magData[magData.length - 1].Magnitude;
-  }
-
-  var dateData = quakesByDate.top(Infinity);
-  if (dateData.length > 0)
-  {
-    observedMaxDate = dateData[0].date;
-    observedMinDate = dateData[dateData.length - 1].date;
-  }
+  observedMagnitudeExtent = d3.extent(data, function(d) {return d.Magnitude});
+  observedDateExtent = d3.extent(data, function(d) {return d.date});
 
   // estalish date window
 
   dateWindowMax = new Date();
-  dateWindowMin = USE_TEST_DATA ? observedMinDate : new Date(dateWindowMax.getTime() - currentTimeScale.dateWindowExtent);
+  dateWindowMin = USE_TEST_DATA ? observedDateExtent[0] : new Date(dateWindowMax.getTime() - currentTimeScale.dateWindowExtent);
   timeScale = d3.time.scale.utc().domain([dateWindowMin, dateWindowMax]).range([MIN_OPACITY, MAX_OPACITY]);
 
   // apply any filters to data
@@ -453,7 +462,7 @@ function constructSummaryHtml(quake)
   var result = 
     table({id: "summary"},
           tRow({},
-               tCell({id: "magnitudeText"}, quake.Magnitude) +
+               tCell({id: "magnitudeText"}, quake.Magnitude.toFixed(1)) +
                tCell({},
                      table({id: "timeTable"}, 
                            tRow({},
@@ -654,18 +663,9 @@ function quakeDetailLine(quake)
 
 function computeMarkerRadius(magnitude)
 {
-  // compute the ideal area (10^magnitude)
+  // scale based on energy (10^magnitude) of the quake
 
-  var area = Math.pow(10, magnitude);
-
-  // establish the radius which will produce that visual area
-
-  var radius = Math.sqrt(area / Math.PI);
-
-  // scale down the radius (add error) so markes fit on screen
-  // note: error increased with magnitude
-
-  return 2.5 + radius / (1 - 1/(0.02 * (magnitude - MAX_MAGNITUDE)));
+  return RADIUS_SCALE(Math.pow(10, magnitude));
 }
 
 function testRadiusComputation()
@@ -822,10 +822,10 @@ function createQuakeChart(svg)
     else if (lastTimeScaleChange && lastTimeScaleChange.getTime() + CHART_QUAKE_ROLLIN_MILLISECONDS > now.getTime())
       return;
 
-    // set the domain of the chat scales
+    // set the domain of the chart scales
 
     quakeChartTimeScale.domain(timeScale.domain());
-    quakeChartMagScale.domain([0, parseFloat(observedMaxMag) + 0.001]).nice();
+    quakeChartMagScale.domain([0, parseFloat(observedMagnitudeExtent[1]) + 0.001]).nice();
 
     // set the x-axis scale
 
