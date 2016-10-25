@@ -5,6 +5,14 @@
    "http://www.tuckey.org/res/dtds/urlrewrite3.2.dtd">
 
 <urlrewrite>
+
+  <rule>
+    <name>Domain Name Check</name>
+    <condition name="host" operator="notequal">www.trebor.org</condition>
+    <from>^/(.*)$</from>
+    <to last="true" type="permanent-redirect">http://www.trebor.org/$1</to>
+  </rule>
+
   <rule>
     <from>^/?$</from>
     <to last="true" type="redirect">/fdl/home</to>

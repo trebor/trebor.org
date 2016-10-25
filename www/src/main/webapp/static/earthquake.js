@@ -381,6 +381,7 @@ function initializeOverlay()
         .attr("r", 0)
         .on("mouseover", function(d) {mouseoverQuake(d, proParent);})
         .on("mouseout", function(d) {mouseoutQuake(d, proParent);})
+        .on("click", function(d) {window.open(d.url,'_blank')})
         .transition()
         .duration(FADE_IN_DURATION)
         .attr("r", QUAKE_RADIUS);
@@ -895,7 +896,7 @@ function createQuakeChart(svg)
       .attr("opacity", 1)
       .style("fill", QUAKE_FILL)
       .attr("class", "chartQuakes")
-      .attr("r", 3);
+      .attr("r", 2.5);
 
     // if timescale changed, roll in new points from left edge
 
